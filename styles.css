@@ -20,9 +20,13 @@ html,body{height:100%}
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  background: radial-gradient(1200px 700px at 20% 0%, rgba(110,231,255,.12), transparent 60%),
-              radial-gradient(900px 600px at 100% 20%, rgba(167,139,250,.12), transparent 55%),
-              var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1200px 700px at 20% 0%, rgba(110,231,255,.12), transparent 60%),
+    radial-gradient(900px 600px at 100% 20%, rgba(167,139,250,.12), transparent 55%);
+  background-repeat: no-repeat;
+  background-size: 1200px 700px, 900px 600px;
+  background-position: 20% 0%, 100% 20%;
   color:var(--text);
 }
 header{
