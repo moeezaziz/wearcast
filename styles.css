@@ -57,7 +57,7 @@ header{
 main{
   max-width: 980px;
   margin: 0 auto;
-  padding: 0 calc(var(--page-pad) + env(safe-area-inset-right)) 28px calc(var(--page-pad) + env(safe-area-inset-left));
+  padding: 0 calc(var(--page-pad) + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom) + 74px) calc(var(--page-pad) + env(safe-area-inset-left));
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -76,6 +76,37 @@ footer{
 }
 .footer-actions{display:flex; gap:10px; align-items:center; flex-wrap: wrap;}
 
+/* Sticky install banner */
+.install-banner{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px calc(var(--page-pad) + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(var(--page-pad) + env(safe-area-inset-left));
+  z-index: 50;
+}
+.install-banner-inner{
+  max-width: 980px;
+  margin: 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(17,26,46,.98);
+  box-shadow: var(--shadow);
+  padding: 12px 12px;
+}
+.install-banner-title{font-weight: 700; letter-spacing: .2px;}
+.install-banner-subtitle{color: var(--muted); font-size: 13px; margin-top: 2px;}
+.install-banner-actions{display:flex; gap:10px; align-items:center; flex-wrap: wrap;}
+@media (max-width: 520px){
+  .install-banner-inner{flex-direction:column; align-items:stretch;}
+  .install-banner-actions{width:100%;}
+  .install-banner-actions .btn{width:100%;}
+}
+
 .grid{display:grid; grid-template-columns: 1.25fr .95fr; gap:16px;}
 @media (max-width: 860px){
   .grid{grid-template-columns:1fr;}
@@ -84,7 +115,6 @@ footer{
   footer{flex-direction:column; align-items:stretch; gap:10px;}
   footer .footer-actions{flex-direction:column; align-items:stretch;}
   footer #privacyBtn{width: 100%;}
-  footer #installBtn{width: 100%;}
 }
 
 /* Mobile ergonomics */

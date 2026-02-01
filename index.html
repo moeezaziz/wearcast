@@ -116,10 +116,22 @@
   <footer>
     <span class="muted">WearCast • Weather-powered outfit suggestions</span>
     <div class="footer-actions">
-      <button id="installBtn" class="btn" style="padding:8px 10px; min-height: 36px; display:none;">Add to Home Screen</button>
       <button id="privacyBtn" class="btn secondary" style="padding:8px 10px; min-height: 36px;">Privacy</button>
     </div>
   </footer>
+
+  <div id="installBanner" class="install-banner" role="status" aria-live="polite" style="display:none;">
+    <div class="install-banner-inner">
+      <div class="install-banner-text">
+        <div class="install-banner-title">Install WearCast</div>
+        <div id="installBannerSubtitle" class="install-banner-subtitle">Add WearCast to your Home Screen for faster access.</div>
+      </div>
+      <div class="install-banner-actions">
+        <button id="installBtn" class="btn">Add</button>
+        <button id="installCloseBtn" class="btn secondary" aria-label="Close">Close</button>
+      </div>
+    </div>
+  </div>
 
   <dialog id="installDialog" class="consent" aria-labelledby="installTitle">
     <form method="dialog" class="consent-inner">

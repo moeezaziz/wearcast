@@ -40,7 +40,10 @@ const els = {
   prefBike: $("prefBike"),
 
   privacyBtn: $("privacyBtn"),
+  installBanner: $("installBanner"),
+  installBannerSubtitle: $("installBannerSubtitle"),
   installBtn: $("installBtn"),
+  installCloseBtn: $("installCloseBtn"),
   installDialog: $("installDialog"),
   installText: $("installText"),
   consentDialog: $("consentDialog"),
@@ -970,6 +973,7 @@ function bindPrefs() {
 }
 
 let deferredInstallPrompt = null;
+let installBannerDismissed = false;
 
 function isStandalone() {
   return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
@@ -998,22 +1002,43 @@ function showInstallHelp() {
   else alert(els.installText?.textContent || "Use your browser menu to add to home screen.");
 }
 
+function showInstallBanner(show) {
+  if (!els.installBanner) return;
+  if (installBannerDismissed || isStandalone()) {
+    els.installBanner.style.display = "none";
+    return;
+  }
+  els.installBanner.style.display = show ? "block" : "none";
+}
+
 function setupInstallUI() {
+  // Close button (session-only dismissal; no storage)
+  els.installCloseBtn?.addEventListener("click", () => {
+    installBannerDismissed = true;
+    showInstallBanner(false);
+  });
+
   // Android/Chromium provides beforeinstallprompt.
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    if (els.installBtn && !isStandalone()) els.installBtn.style.display = "inline-flex";
+    if (els.installBannerSubtitle) {
+      els.installBannerSubtitle.textContent = "Install WearCast for faster access and an app-like experience.";
+    }
+    showInstallBanner(true);
   });
 
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
-    if (els.installBtn) els.installBtn.style.display = "none";
+    showInstallBanner(false);
   });
 
-  // Show an install button on iOS too (it will display instructions).
-  if (els.installBtn && !isStandalone()) {
-    if (isIOS()) els.installBtn.style.display = "inline-flex";
+  // iOS: show banner with instructions (no programmatic prompt exists)
+  if (isIOS() && !isStandalone()) {
+    if (els.installBannerSubtitle) {
+      els.installBannerSubtitle.textContent = "On iPhone/iPad: Share → Add to Home Screen.";
+    }
+    showInstallBanner(true);
   }
 
   els.installBtn?.addEventListener("click", async () => {
@@ -1025,7 +1050,6 @@ function setupInstallUI() {
         await deferredInstallPrompt.userChoice;
       } catch {}
       deferredInstallPrompt = null;
-      // The button will hide via appinstalled or can remain if user dismissed.
       return;
     }
 
