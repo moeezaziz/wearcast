@@ -1,13 +1,16 @@
 // WearCast Service Worker
 // Goal: when a newer version is available, update cached assets and reload clients.
 
-const CACHE = "wearcast-v2";
+const VERSION = "v3";
+const CACHE = `wearcast-${VERSION}`;
+
+// Cache-busted asset URLs so clients don't get stuck on old JS/CSS.
 const ASSETS = [
-  "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.webmanifest",
-  "./icon.svg",
+  `./index.html?v=${VERSION}`,
+  `./styles.css?v=${VERSION}`,
+  `./app.js?v=${VERSION}`,
+  `./manifest.webmanifest?v=${VERSION}`,
+  `./icon.svg?v=${VERSION}`,
   "./.nojekyll"
 ];
 
@@ -53,10 +56,10 @@ self.addEventListener("fetch", (event) => {
         try {
           const fresh = await fetch(req, { cache: "no-store" });
           const cache = await caches.open(CACHE);
-          cache.put("./index.html", fresh.clone());
+          cache.put(`./index.html?v=${VERSION}`, fresh.clone());
           return fresh;
         } catch {
-          const cached = await caches.match("./index.html");
+          const cached = await caches.match(`./index.html?v=${VERSION}`);
           return cached || new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } });
         }
       })()

@@ -939,7 +939,7 @@ function registerSW() {
 
   window.addEventListener("load", async () => {
     try {
-      const reg = await navigator.serviceWorker.register("./sw.js");
+      const reg = await navigator.serviceWorker.register("./sw.js?v=3");
 
       // If there's an update waiting (rare here because SW calls skipWaiting), activate it.
       if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
