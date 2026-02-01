@@ -134,7 +134,31 @@ input[type="text"]:focus{border-color: rgba(110,231,255,.35); box-shadow: 0 0 0 
 .kv > div{display:flex; justify-content:space-between; gap:10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: rgba(0,0,0,.18)}
 .k{color: var(--muted)}
 .muted{color: var(--muted); font-size: 12px;}
-.recommendation{font-size: 15px; line-height: 1.45; white-space: pre-line}
+.recommendation{margin-top: 12px;}
+
+.rec-block{display:grid; gap:12px;}
+.rec-section{border: 1px solid var(--border); background: rgba(0,0,0,.16); border-radius: 12px; padding: 12px 12px;}
+.rec-section h3{margin:0 0 8px; font-size: 13px; color: rgba(230,233,242,.95); letter-spacing: .2px;}
+.rec-section ul{margin:0; padding-left: 18px;}
+.rec-section li{margin: 6px 0; color: rgba(230,233,242,.92)}
+.rec-tip{color: var(--muted); font-size: 13px; line-height: 1.4}
+
+.alert{
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px 12px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,.20);
+}
+.alert-top{display:flex; justify-content:space-between; gap:12px; align-items:baseline;}
+.alert-title{font-weight: 650; letter-spacing:.2px;}
+.alert-meta{color: var(--muted); font-size: 12px;}
+.alert-detail{margin-top: 6px; color: rgba(230,233,242,.92); font-size: 13px; line-height: 1.4}
+
+.alert.good{border-color: rgba(52,211,153,.30); background: rgba(52,211,153,.10)}
+.alert.warn{border-color: rgba(251,191,36,.30); background: rgba(251,191,36,.10)}
+.alert.bad{border-color: rgba(251,113,133,.30); background: rgba(251,113,133,.10)}
+
 .chip{
   display:inline-flex;
   align-items:center;

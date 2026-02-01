@@ -14,6 +14,11 @@ const els = {
   recommendation: $("recommendation"),
   reasons: $("reasons"),
 
+  severity: $("severity"),
+  severityTitle: $("severityTitle"),
+  severityMeta: $("severityMeta"),
+  severityDetail: $("severityDetail"),
+
   updatedAt: $("updatedAt"),
   temp: $("temp"),
   apparent: $("apparent"),
@@ -126,6 +131,74 @@ function setBadge(type, text) {
   els.recBadge.className = "badge";
   if (type) els.recBadge.classList.add(type);
   els.recBadge.textContent = text;
+}
+
+function setSeverity(level, title, meta, detail) {
+  // level: good|warn|bad
+  els.severity.className = "alert";
+  if (level) els.severity.classList.add(level);
+  els.severityTitle.textContent = title || "—";
+  els.severityMeta.textContent = meta || "";
+  els.severityDetail.textContent = detail || "";
+}
+
+function classifySeverity(current, ctx, effectiveC) {
+  const gust = current.wind_gusts_10m ?? 0;
+  const wind = current.wind_speed_10m ?? 0;
+  const uv = current.uv_index ?? 0;
+  const code = current.weather_code;
+  const precipProb = ctx?.precipProb ?? null;
+  const next2h = ctx?.next2hPrecip ?? null;
+
+  const wetCodes = [51,53,55,56,57,61,63,65,66,67,80,81,82];
+  const snowCodes = [71,73,75,77,85,86];
+  const stormCodes = [95,96,99];
+
+  const storm = stormCodes.includes(code);
+  const snowy = snowCodes.includes(code) || ((ctx?.snowfall ?? 0) > 0);
+  const wet = wetCodes.includes(code) || ((precipProb ?? 0) >= 50) || ((next2h ?? 0) >= 1.0);
+
+  const extremeCold = effectiveC != null && effectiveC <= -5;
+  const veryCold = effectiveC != null && effectiveC <= 2;
+  const extremeHeat = effectiveC != null && effectiveC >= 33;
+  const veryHot = effectiveC != null && effectiveC >= 28;
+
+  const veryWindy = gust >= 60 || wind >= 35;
+  const windy = gust >= 40 || wind >= 25;
+
+  // Score-based severity (simple & explainable)
+  let score = 0;
+  const flags = [];
+
+  if (storm) { score += 4; flags.push("thunderstorm"); }
+  if (snowy) { score += 3; flags.push("snow/ice risk"); }
+  if (wet) { score += 2; flags.push("rain risk"); }
+  if (veryWindy) { score += 3; flags.push("strong gusts"); }
+  else if (windy) { score += 2; flags.push("windy"); }
+
+  if (extremeCold) { score += 3; flags.push("very cold"); }
+  else if (veryCold) { score += 1; flags.push("cold"); }
+
+  if (extremeHeat) { score += 3; flags.push("very hot"); }
+  else if (veryHot) { score += 1; flags.push("hot"); }
+
+  if (uv >= 8) { score += 2; flags.push("very high UV"); }
+  else if (uv >= 6) { score += 1; flags.push("high UV"); }
+
+  let level = "good";
+  let title = "All clear";
+
+  if (score >= 6) { level = "bad"; title = "Severe conditions"; }
+  else if (score >= 3) { level = "warn"; title = "Be prepared"; }
+
+  const metaParts = [];
+  if (effectiveC != null) metaParts.push(`Effective ${fmt1(effectiveC, "°C")}`);
+  if (precipProb != null) metaParts.push(`Precip ${fmt(precipProb, "%")}`);
+  if (gust) metaParts.push(`Gusts ${fmt(gust, " km/h")}`);
+
+  const detail = flags.length ? `Key factors: ${flags.join(", ")}.` : "No major weather stressors detected.";
+
+  return { level, title, meta: metaParts.join(" • "), detail };
 }
 
 function weatherCodeLabel(code) {
@@ -443,24 +516,21 @@ function deriveRecommendation(current, ctx, prefs) {
   if (storm || snow) { badgeType = "bad"; badgeText = "Severe"; }
   else if (wet || windy || comfort <= 2 || comfort >= 28) { badgeType = "warn"; badgeText = "Be prepared"; }
 
-  // Final message
-  const parts = [];
-  if (outer.length) parts.push(`Outer layer: ${outer.join(", ")}`);
-  if (top.length) parts.push(`Upper body: ${top.join(", ")}`);
-  if (bottom.length) parts.push(`Lower body: ${bottom.join(", ")}`);
-  if (extras.length) parts.push(`Accessories/notes: ${extras.join(", ")}`);
-
-  // A couple of situational “if/then” tips
+  // Tips
   const tips = [];
   if ((ctx?.precipProb ?? 0) >= 50 || (precip ?? 0) >= 0.5) tips.push("If you’ll be out >15 min: pick a hooded shell + water-resistant shoes.");
   if (windy && comfort <= 10) tips.push("If you get cold easily: add a windproof layer (wind matters more than temperature)." );
   if ((uv ?? 0) >= 6) tips.push("If you’re outdoors mid-day: SPF + hat." );
-  if (tips.length) parts.push(`\nTips: ${tips.join(" ")}`);
 
   return {
     badgeType,
     badgeText,
-    text: parts.join("\n"),
+    // structured fields for nicer UI
+    outer,
+    top,
+    bottom,
+    extras,
+    tips,
     reasons,
   };
 }
@@ -484,6 +554,9 @@ function renderWeather(current, derived) {
   els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
   els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
 
+  const sev = classifySeverity(current, derived, effective);
+  setSeverity(sev.level, sev.title, sev.meta, sev.detail);
+
   els.uv.textContent = `${fmt1(current.uv_index, "")}`;
   els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
   els.isDay.textContent = current.is_day === 1 ? "Yes" : current.is_day === 0 ? "No" : "—";
@@ -492,9 +565,36 @@ function renderWeather(current, derived) {
 
 function renderRecommendation(rec) {
   setBadge(rec.badgeType, rec.badgeText);
-  els.recommendation.textContent = rec.text;
+
+  // More readable structured output
+  const section = (title, items) => {
+    if (!items || items.length === 0) return "";
+    const lis = items.map((x) => `<li>${escapeHtml(x)}</li>`).join("");
+    return `<div class="rec-section"><h3>${escapeHtml(title)}</h3><ul>${lis}</ul></div>`;
+  };
+
+  const tips = rec.tips?.length
+    ? `<div class="rec-section"><h3>Tips</h3><div class="rec-tip">${escapeHtml(rec.tips.join(" "))}</div></div>`
+    : "";
+
+  els.recommendation.innerHTML = `<div class="rec-block">${
+    section("Outer layer", rec.outer)
+  }${section("Upper body", rec.top)}${section("Lower body", rec.bottom)}${section(
+    "Accessories / notes",
+    rec.extras
+  )}${tips}</div>`;
+
   clearReasons();
   rec.reasons.forEach(addReason);
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 async function runForLocation(loc) {
