@@ -21,7 +21,10 @@ const els = {
   humidity: $("humidity"),
   cloud: $("cloud"),
   precip: $("precip"),
+  precipProb: $("precipProb"),
   uv: $("uv"),
+  dewPoint: $("dewPoint"),
+  effTemp: $("effTemp"),
   vis: $("vis"),
   isDay: $("isDay"),
   wcode: $("wcode"),
@@ -78,6 +81,35 @@ function fmt1(n, unit = "") {
 
 function setStatus(msg) {
   els.placeStatus.textContent = msg || "";
+}
+
+function clamp(n, a, b) {
+  return Math.max(a, Math.min(b, n));
+}
+
+function dewPointC(tempC, rhPct) {
+  // Magnus formula (good enough for consumer guidance)
+  if (tempC == null || rhPct == null) return null;
+  const rh = clamp(rhPct, 1, 100) / 100;
+  const a = 17.62;
+  const b = 243.12;
+  const gamma = (a * tempC) / (b + tempC) + Math.log(rh);
+  return (b * gamma) / (a - gamma);
+}
+
+function humidex(tempC, dewC) {
+  // Canadian humidex (uses dew point)
+  if (tempC == null || dewC == null) return null;
+  const e = 6.11 * Math.exp(5417.7530 * (1 / 273.16 - 1 / (dewC + 273.15)));
+  return tempC + 0.5555 * (e - 10);
+}
+
+function windChillC(tempC, windKmh) {
+  // Environment Canada wind chill (valid when T<=10C and wind>4.8km/h)
+  if (tempC == null || windKmh == null) return null;
+  if (tempC > 10 || windKmh <= 4.8) return null;
+  const v = Math.max(0, windKmh);
+  return 13.12 + 0.6215 * tempC - 11.37 * Math.pow(v, 0.16) + 0.3965 * tempC * Math.pow(v, 0.16);
 }
 
 function clearReasons() {
@@ -159,19 +191,41 @@ async function fetchWeather(lat, lon) {
   const url = new URL("https://api.open-meteo.com/v1/forecast");
   url.searchParams.set("latitude", String(lat));
   url.searchParams.set("longitude", String(lon));
-  url.searchParams.set("current", [
-    "temperature_2m",
-    "apparent_temperature",
-    "relative_humidity_2m",
-    "cloud_cover",
-    "precipitation",
-    "weather_code",
-    "wind_speed_10m",
-    "wind_gusts_10m",
-    "uv_index",
-    "visibility",
-    "is_day",
-  ].join(","));
+  url.searchParams.set(
+    "current",
+    [
+      "temperature_2m",
+      "apparent_temperature",
+      "relative_humidity_2m",
+      "cloud_cover",
+      "precipitation",
+      "weather_code",
+      "wind_speed_10m",
+      "wind_gusts_10m",
+      "uv_index",
+      "visibility",
+      "is_day",
+    ].join(",")
+  );
+
+  // Pull a few hourly values to make recommendations smarter (rain risk, near-term trend)
+  url.searchParams.set(
+    "hourly",
+    [
+      "precipitation_probability",
+      "precipitation",
+      "rain",
+      "snowfall",
+      "temperature_2m",
+      "apparent_temperature",
+      "wind_speed_10m",
+      "relative_humidity_2m",
+      "cloud_cover",
+      "uv_index",
+    ].join(",")
+  );
+
+  url.searchParams.set("forecast_days", "2");
   url.searchParams.set("wind_speed_unit", "kmh");
   url.searchParams.set("timezone", "auto");
 
@@ -180,7 +234,46 @@ async function fetchWeather(lat, lon) {
   return res.json();
 }
 
-function deriveRecommendation(current, prefs) {
+function pickHourlyAtTime(hourly, isoTime) {
+  if (!hourly?.time || !Array.isArray(hourly.time)) return null;
+  const idx = hourly.time.indexOf(isoTime);
+  if (idx === -1) return null;
+
+  const get = (key) => {
+    const arr = hourly[key];
+    if (!Array.isArray(arr)) return null;
+    return arr[idx] ?? null;
+  };
+
+  return {
+    time: isoTime,
+    precipProb: get("precipitation_probability"),
+    precip: get("precipitation"),
+    rain: get("rain"),
+    snowfall: get("snowfall"),
+    t: get("temperature_2m"),
+    feels: get("apparent_temperature"),
+    wind: get("wind_speed_10m"),
+    rh: get("relative_humidity_2m"),
+    cloud: get("cloud_cover"),
+    uv: get("uv_index"),
+  };
+}
+
+function sumNextHours(hourly, isoTime, key, hours = 2) {
+  if (!hourly?.time || !Array.isArray(hourly.time) || !Array.isArray(hourly[key])) return null;
+  const start = hourly.time.indexOf(isoTime);
+  if (start === -1) return null;
+  let sum = 0;
+  for (let i = 0; i < hours; i++) {
+    const v = hourly[key][start + i];
+    if (v == null) continue;
+    sum += Number(v);
+  }
+  return sum;
+}
+
+function deriveRecommendation(current, ctx, prefs) {
   // Inputs
   const t = current.temperature_2m; // °C
   const feels = current.apparent_temperature;
@@ -192,22 +285,42 @@ function deriveRecommendation(current, prefs) {
   const uv = current.uv_index;
   const code = current.weather_code;
 
-  // Preference adjustments
+  // Derived metrics
+  const dew = dewPointC(t, rh);
+  const hx = humidex(t, dew);
+  const wc = windChillC(t, wind);
+
+  // "Effective" temp: prefer wind chill when cold+windy; humidex when warm+muggy; else apparent
+  let effective = feels;
+  let effectiveLabel = "apparent";
+  if (wc != null) {
+    effective = wc;
+    effectiveLabel = "wind chill";
+  } else if (hx != null && hx >= t + 1.0) {
+    effective = hx;
+    effectiveLabel = "humidex";
+  }
+
+  // Preference adjustments (how you personally feel)
   const bias = prefs.cold ? -2 : prefs.hot ? 2 : 0; // shift perceived comfort
-  const comfort = feels + bias;
+  const comfort = effective + bias;
 
   const reasons = [];
 
   // Rain/wet
-  const wet = (precip ?? 0) >= 0.2 || [51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code);
-  const snow = [71,73,75,77,85,86].includes(code);
-  const storm = [95,96,99].includes(code);
+  const wetCodes = [51,53,55,56,57,61,63,65,66,67,80,81,82];
+  const snowCodes = [71,73,75,77,85,86];
+  const stormCodes = [95,96,99];
 
-  // Wind chill-ish
+  const wet = (precip ?? 0) >= 0.2 || wetCodes.includes(code) || ((ctx?.precipProb ?? 0) >= 40);
+  const snow = snowCodes.includes(code) || ((ctx?.snowfall ?? 0) > 0);
+  const storm = stormCodes.includes(code);
+
+  // Wind
   const windy = (wind ?? 0) >= 25 || (gust ?? 0) >= 40;
 
-  // Heat/humidity
-  const humid = (rh ?? 0) >= 75;
+  // Heat/humidity/sun
+  const humid = (rh ?? 0) >= 75 || (dew ?? 0) >= 16;
   const sunny = (cloud ?? 100) <= 25 && (uv ?? 0) >= 3;
 
   // Base layers by comfort temperature
@@ -216,56 +329,69 @@ function deriveRecommendation(current, prefs) {
   let outer = [];
   let extras = [];
 
+  reasons.push(`Effective temp: ~${fmt1(effective, "°C")} (${effectiveLabel})${bias ? `, adjusted to ~${fmt1(comfort, "°C")} for your preference` : ""}.`);
+  if (dew != null) reasons.push(`Dew point ~${fmt1(dew, "°C")} (${dew >= 18 ? "very muggy" : dew >= 16 ? "muggy" : dew >= 12 ? "a bit humid" : "dry-ish"}).`);
+  if (ctx?.precipProb != null) reasons.push(`Precip chance this hour: ~${fmt(ctx.precipProb, "%")}.`);
+  if (ctx?.next2hPrecip != null && ctx.next2hPrecip >= 0.5) reasons.push(`Next ~2h precip: ~${fmt1(ctx.next2hPrecip, " mm")}.`);
+
   // Very cold
   if (comfort <= 0) {
-    top.push("thermal base layer", "sweater/hoodie");
-    outer.push("warm coat");
-    bottom.push("long pants");
+    top.push("thermal base layer (merino/synthetic)", "mid-layer sweater/fleece");
+    outer.push("insulated coat (windproof if possible)");
+    bottom.push("long pants", "optional thermal leggings if outside >30 min");
     extras.push("warm socks", "closed shoes/boots");
-    if (windy) extras.push("beanie", "gloves", "scarf");
-    reasons.push(`Feels like ~${fmt1(feels, "°C")} (you ${prefs.cold ? "run cold" : prefs.hot ? "run hot" : "run neutral"}).`);
+    if (windy) extras.push("beanie", "gloves", "scarf/neck gaiter");
   }
   // Cold
   else if (comfort <= 8) {
-    top.push("long-sleeve", "sweater/hoodie");
-    outer.push("jacket");
+    top.push("long-sleeve", "mid-layer (sweater/light fleece)");
+    outer.push("jacket (wind-resistant)");
     bottom.push("pants");
     extras.push("closed shoes");
-    if (windy) extras.push("windproof layer");
-    reasons.push(`Cool conditions: feels like ~${fmt1(feels, "°C")}.`);
+    if (windy) extras.push("windproof outer layer");
   }
-  // Mild
-  else if (comfort <= 16) {
+  // Cool / Mild
+  else if (comfort <= 14) {
     top.push("t-shirt", "light layer (overshirt/cardigan)");
-    bottom.push("pants or jeans");
-    outer.push("optional light jacket");
+    outer.push("optional light jacket if you’ll be out late");
+    bottom.push("jeans/chinos");
     extras.push("sneakers");
-    reasons.push(`Mild: feels like ~${fmt1(feels, "°C")}.`);
   }
-  // Warm
-  else if (comfort <= 23) {
-    top.push("t-shirt");
-    bottom.push("light pants or shorts");
+  // Mild / Warm
+  else if (comfort <= 20) {
+    top.push("t-shirt or light long-sleeve");
+    bottom.push("light pants or jeans");
+    outer.push("optional thin layer for wind/AC");
     extras.push("breathable shoes");
     if (sunny) extras.push("sunglasses");
-    reasons.push(`Warm: feels like ~${fmt1(feels, "°C")}.`);
+    if (windy) extras.push("thin windbreaker (packable)");
+  }
+  // Warm
+  else if (comfort <= 25) {
+    top.push("t-shirt (breathable)");
+    bottom.push("light pants or shorts");
+    extras.push("breathable shoes");
+    if (sunny) extras.push("sunglasses", "SPF (face/neck)");
+    if (humid) extras.push("choose moisture-wicking fabric");
   }
   // Hot
   else {
-    top.push("light t-shirt/tank");
+    top.push("very light top (linen/mesh/cotton)");
     bottom.push("shorts or very light pants");
     extras.push("breathable shoes/sandals");
-    if (sunny) extras.push("sunglasses", "hat", "SPF 30+");
-    if (humid) extras.push("consider moisture-wicking fabric");
-    reasons.push(`Hot: feels like ~${fmt1(feels, "°C")}${humid ? " with high humidity" : ""}.`);
+    extras.push("water bottle (if outside)");
+    if (sunny) extras.push("hat", "SPF 30+", "sunglasses");
+    if (humid) extras.push("moisture-wicking underwear/socks", "avoid heavy denim");
   }
 
   // Wet/snow modifiers
   if (wet) {
-    outer.unshift("rain jacket / shell");
-    extras.push("umbrella (optional)");
+    // Umbrella vs shell: if windy, prefer shell.
+    outer.unshift(windy ? "waterproof shell (hood)" : "rain jacket / shell");
+    if (!windy) extras.push("umbrella (optional)");
     extras.push("water-resistant shoes");
-    reasons.push(`Precipitation likely now (~${fmt1(precip ?? 0, "mm/h")} or weather: ${weatherCodeLabel(code)}).`);
+    if ((ctx?.precipProb ?? 0) >= 60 || (precip ?? 0) >= 1) extras.push("avoid suede / consider spare socks");
+    reasons.push(`Wet risk: ${weatherCodeLabel(code)}; precip ~${fmt1(precip ?? 0, "mm/h")}${ctx?.precipProb != null ? `, chance ~${fmt(ctx.precipProb, "%")}` : ""}.`);
   }
   if (snow) {
     outer.unshift("insulated shell");
@@ -278,19 +404,22 @@ function deriveRecommendation(current, prefs) {
   }
 
   // Wind
-  if (windy && !reasons.some(r => r.includes("Wind"))) {
-    reasons.push(`Windy: ${fmt(wind, " km/h")} (gusts ${fmt(gust, " km/h")}).`);
+  if (windy) {
+    reasons.push(`Wind: ${fmt(wind, " km/h")} (gusts ${fmt(gust, " km/h")}).`);
+    extras.push("secure hat/hood", "avoid very loose outerwear");
   }
 
   // UV
   if (sunny) {
-    reasons.push(`Sunny / UV ~${fmt1(uv, "")} with low cloud cover (${fmt(cloud, "%")}).`);
+    reasons.push(`Sun/UV: UV ~${fmt1(uv, "")} with low cloud cover (${fmt(cloud, "%")}).`);
+    if ((uv ?? 0) >= 6) extras.push("SPF 30+", "hat", "seek shade mid-day");
+    else extras.push("SPF (face/neck)");
   }
 
   // Bike/walk preference
   if (prefs.bike) {
-    extras.push("consider a light windbreaker", "avoid heavy fabrics");
-    reasons.push("You marked that you’ll bike/walk (wind + sweat management)." );
+    extras.push("light windbreaker (packable)", "avoid heavy fabrics", "prefer breathable layers you can vent");
+    reasons.push("Activity: bike/walk → plan for wind + sweat (layers > heavy coat)." );
   }
 
   // Formal preference
@@ -316,10 +445,17 @@ function deriveRecommendation(current, prefs) {
 
   // Final message
   const parts = [];
-  if (outer.length) parts.push(`Outer: ${outer.join(", ")}`);
-  if (top.length) parts.push(`Top: ${top.join(", ")}`);
-  if (bottom.length) parts.push(`Bottom: ${bottom.join(", ")}`);
-  if (extras.length) parts.push(`Extras: ${extras.join(", ")}`);
+  if (outer.length) parts.push(`Outer layer: ${outer.join(", ")}`);
+  if (top.length) parts.push(`Upper body: ${top.join(", ")}`);
+  if (bottom.length) parts.push(`Lower body: ${bottom.join(", ")}`);
+  if (extras.length) parts.push(`Accessories/notes: ${extras.join(", ")}`);
+
+  // A couple of situational “if/then” tips
+  const tips = [];
+  if ((ctx?.precipProb ?? 0) >= 50 || (precip ?? 0) >= 0.5) tips.push("If you’ll be out >15 min: pick a hooded shell + water-resistant shoes.");
+  if (windy && comfort <= 10) tips.push("If you get cold easily: add a windproof layer (wind matters more than temperature)." );
+  if ((uv ?? 0) >= 6) tips.push("If you’re outdoors mid-day: SPF + hat." );
+  if (tips.length) parts.push(`\nTips: ${tips.join(" ")}`);
 
   return {
     badgeType,
@@ -329,13 +465,25 @@ function deriveRecommendation(current, prefs) {
   };
 }
 
-function renderWeather(current) {
+function renderWeather(current, derived) {
   els.temp.textContent = `${fmt1(current.temperature_2m, "°C")}`;
   els.apparent.textContent = `${fmt1(current.apparent_temperature, "°C")}`;
   els.wind.textContent = `${fmt(current.wind_speed_10m, " km/h")} (gusts ${fmt(current.wind_gusts_10m, " km/h")})`;
   els.humidity.textContent = `${fmt(current.relative_humidity_2m, "%")}`;
   els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
   els.precip.textContent = `${fmt1(current.precipitation, " mm")}`;
+  els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
+
+  const dew = dewPointC(current.temperature_2m, current.relative_humidity_2m);
+  const hx = humidex(current.temperature_2m, dew);
+  const wc = windChillC(current.temperature_2m, current.wind_speed_10m);
+  let effective = current.apparent_temperature;
+  if (wc != null) effective = wc;
+  else if (hx != null && hx >= current.temperature_2m + 1.0) effective = hx;
+
+  els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
+  els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
+
   els.uv.textContent = `${fmt1(current.uv_index, "")}`;
   els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
   els.isDay.textContent = current.is_day === 1 ? "Yes" : current.is_day === 0 ? "No" : "—";
@@ -359,9 +507,18 @@ async function runForLocation(loc) {
     if (!current) throw new Error("No current weather in response");
 
     const state = loadState();
-    renderWeather(current);
 
-    const rec = deriveRecommendation(current, state.prefs);
+    const ctx = (() => {
+      const hourlyNow = pickHourlyAtTime(data.hourly, data.current.time);
+      return {
+        ...hourlyNow,
+        next2hPrecip: sumNextHours(data.hourly, data.current.time, "precipitation", 2),
+      };
+    })();
+
+    renderWeather(current, ctx);
+
+    const rec = deriveRecommendation(current, ctx, state.prefs);
     renderRecommendation(rec);
 
     const updated = new Date(data.current.time || Date.now());
