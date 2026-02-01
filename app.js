@@ -823,30 +823,46 @@ async function reverseGeocode(lat, lon) {
   return { name, lat, lon };
 }
 
-async function onUseMyLocation() {
-  // GDPR-style choices: we show the dialog on first use, but we do NOT block the browser's
-  // geolocation permission prompt (the browser prompt is the actual permission gate).
-  if (!consent.seen) {
-    showConsentDialog({ forceModal: true });
-  } else if (!consent.deviceLocation) {
-    // User chose not to enable the toggle; still allow use on demand.
-    setStatus("Your browser will ask for location permission. You can also review Privacy settings anytime.");
-  }
+function onUseMyLocation() {
+  // IMPORTANT (mobile Safari/Chrome): the geolocation permission prompt often only appears
+  // when geolocation is requested *synchronously* from a user gesture.
+  // So: do NOT open dialogs/confirm prompts before calling geolocation.
 
   setStatus("Requesting location permission…");
-  try {
-    const pos = await getGeo();
-    const lat = pos.coords.latitude;
-    const lon = pos.coords.longitude;
-    setStatus("Resolving place name…");
-    const loc = await reverseGeocode(lat, lon);
-    els.placeInput.value = loc.name;
-    saveState({ lastQuery: "", lastLocation: loc });
-    await runForLocation(loc);
-  } catch (err) {
-    console.error(err);
-    setStatus(`Error: ${err.message}`);
+
+  if (!navigator.geolocation) {
+    setStatus("Geolocation is not supported in this browser. Search by city instead.");
+    return;
   }
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      try {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        setStatus("Resolving place name…");
+        const loc = await reverseGeocode(lat, lon);
+        els.placeInput.value = loc.name;
+        saveState({ lastQuery: "", lastLocation: loc });
+        await runForLocation(loc);
+
+        // After the user action succeeds, show privacy choices if not seen yet.
+        if (!consent.seen) showConsentDialog({ forceModal: true });
+      } catch (err) {
+        console.error(err);
+        setStatus(`Error: ${err.message}`);
+      }
+    },
+    (err) => {
+      // If permission was previously denied, many browsers won't prompt again.
+      const msg = err?.message || "Location request failed";
+      setStatus(`Location error: ${msg}. If you previously denied permission, enable it in your browser/site settings and try again.`);
+
+      // Still allow the user to review privacy settings.
+      if (!consent.seen) showConsentDialog({ forceModal: true });
+    },
+    { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 }
+  );
 }
 
 function bindPrefs() {
