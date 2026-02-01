@@ -228,6 +228,7 @@ function classifySeverity(current, ctx, effectiveC) {
   const gust = current.wind_gusts_10m ?? 0;
   const wind = current.wind_speed_10m ?? 0;
   const uv = current.uv_index ?? 0;
+  const visM = current.visibility ?? null;
   const code = current.weather_code;
   const precipProb = ctx?.precipProb ?? null;
   const next2h = ctx?.next2hPrecip ?? null;
@@ -238,12 +239,13 @@ function classifySeverity(current, ctx, effectiveC) {
 
   const storm = stormCodes.includes(code);
   const snowy = snowCodes.includes(code) || ((ctx?.snowfall ?? 0) > 0);
-  const wet = wetCodes.includes(code) || ((precipProb ?? 0) >= 50) || ((next2h ?? 0) >= 1.0);
+  const freezing = [56,57,66,67].includes(code);
+  const wet = wetCodes.includes(code) || ((precipProb ?? 0) >= 50) || ((next2h ?? 0) >= 1.0) || freezing;
 
-  const extremeCold = effectiveC != null && effectiveC <= -5;
+  const extremeCold = effectiveC != null && effectiveC <= -15;
   const veryCold = effectiveC != null && effectiveC <= 2;
-  const extremeHeat = effectiveC != null && effectiveC >= 33;
-  const veryHot = effectiveC != null && effectiveC >= 28;
+  const extremeHeat = effectiveC != null && effectiveC >= 38;
+  const veryHot = effectiveC != null && effectiveC >= 30;
 
   const veryWindy = gust >= 60 || wind >= 35;
   const windy = gust >= 40 || wind >= 25;
@@ -253,8 +255,17 @@ function classifySeverity(current, ctx, effectiveC) {
   const flags = [];
 
   if (storm) { score += 4; flags.push("thunderstorm"); }
-  if (snowy) { score += 3; flags.push("snow/ice risk"); }
-  if (wet) { score += 2; flags.push("rain risk"); }
+  if (freezing) { score += 4; flags.push("freezing rain / ice" ); }
+  if (snowy) {
+    score += 3;
+    flags.push("snow/ice risk");
+    if (windy) { score += 1; flags.push("blowing snow" ); }
+  }
+  if (wet) {
+    score += 2;
+    flags.push("rain risk");
+    if ((next2h ?? 0) >= 5) { score += 1; flags.push("heavy rain" ); }
+  }
   if (veryWindy) { score += 3; flags.push("strong gusts"); }
   else if (windy) { score += 2; flags.push("windy"); }
 
@@ -470,6 +481,7 @@ function deriveRecommendation(current, ctx, prefs) {
   const wet = (precip ?? 0) >= 0.2 || wetCodes.includes(code) || ((ctx?.precipProb ?? 0) >= 40);
   const snow = snowCodes.includes(code) || ((ctx?.snowfall ?? 0) > 0);
   const storm = stormCodes.includes(code);
+  const freezingRain = [56,57,66,67].includes(code) || (wet && (t ?? 99) <= 1 && (t ?? 99) >= -2);
 
   // Wind
   const windy = (wind ?? 0) >= 25 || (gust ?? 0) >= 40;
@@ -489,72 +501,106 @@ function deriveRecommendation(current, ctx, prefs) {
   if (ctx?.precipProb != null) reasons.push(`Precip chance this hour: ~${fmt(ctx.precipProb, "%")}.`);
   if (ctx?.next2hPrecip != null && ctx.next2hPrecip >= 0.5) reasons.push(`Next ~2h precip: ~${fmt1(ctx.next2hPrecip, " mm")}.`);
 
+  // Extreme cold (Svalbard-style)
+  if (comfort <= -20) {
+    top.push(
+      "thermal base (merino/synthetic)",
+      "thick mid-layer (fleece or wool)",
+      "insulated puffer/parka",
+      "windproof/waterproof shell (hood)"
+    );
+    bottom.push("thermal leggings", "insulated pants or shell pants", "thick socks (wool)");
+    extras.push(
+      "insulated winter boots (rated for subzero)",
+      "mittens (warmer than gloves)",
+      "balaclava/face cover",
+      "beanie",
+      "scarf/neck gaiter"
+    );
+    if (windy) extras.push("ski goggles (wind + snow)");
+    extras.push("avoid exposed skin (frostbite risk)", "hand warmers (optional)");
+  }
   // Very cold
-  if (comfort <= 0) {
+  else if (comfort <= -10) {
     top.push("thermal base layer (merino/synthetic)", "mid-layer sweater/fleece");
     outer.push("insulated coat (windproof if possible)");
-    bottom.push("long pants", "optional thermal leggings if outside >30 min");
-    extras.push("warm socks", "closed shoes/boots");
-    if (windy) extras.push("beanie", "gloves", "scarf/neck gaiter");
+    bottom.push("long pants", "thermal leggings if outside >30 min");
+    extras.push("warm socks", "winter boots (insulated)");
+    extras.push("beanie", "gloves/mittens", "scarf/neck gaiter");
+    if (windy) extras.push("windproof shell over insulation (if you have one)");
   }
   // Cold
-  else if (comfort <= 8) {
-    top.push("long-sleeve", "mid-layer (sweater/light fleece)");
+  else if (comfort <= 0) {
+    top.push("base layer", "mid-layer (sweater/light fleece)");
     outer.push("jacket (wind-resistant)");
     bottom.push("pants");
-    extras.push("closed shoes");
-    if (windy) extras.push("windproof outer layer");
+    extras.push("closed shoes", "warm socks");
+    if (windy) extras.push("windproof outer layer", "beanie");
   }
-  // Cool / Mild
-  else if (comfort <= 14) {
+  // Cool
+  else if (comfort <= 10) {
     top.push("t-shirt", "light layer (overshirt/cardigan)");
-    outer.push("optional light jacket if you’ll be out late");
+    outer.push("optional light jacket");
     bottom.push("jeans/chinos");
     extras.push("sneakers");
+    if (windy) extras.push("thin windbreaker (packable)");
   }
-  // Mild / Warm
-  else if (comfort <= 20) {
+  // Mild
+  else if (comfort <= 18) {
     top.push("t-shirt or light long-sleeve");
     bottom.push("light pants or jeans");
     outer.push("optional thin layer for wind/AC");
-    extras.push("breathable shoes");
+    extras.push("comfortable shoes");
     if (sunny) extras.push("sunglasses");
-    if (windy) extras.push("thin windbreaker (packable)");
   }
   // Warm
-  else if (comfort <= 25) {
+  else if (comfort <= 26) {
     top.push("t-shirt (breathable)");
     bottom.push("light pants or shorts");
     extras.push("breathable shoes");
-    if (sunny) extras.push("sunglasses", "SPF (face/neck)");
-    if (humid) extras.push("choose moisture-wicking fabric");
+    if (sunny) extras.push("SPF (face/neck)", "sunglasses");
+    if (humid) extras.push("moisture-wicking fabric");
   }
   // Hot
-  else {
+  else if (comfort <= 34) {
     top.push("very light top (linen/mesh/cotton)");
     bottom.push("shorts or very light pants");
-    extras.push("breathable shoes/sandals");
-    extras.push("water bottle (if outside)");
+    extras.push("breathable shoes/sandals", "water bottle (if outside)");
     if (sunny) extras.push("hat", "SPF 30+", "sunglasses");
-    if (humid) extras.push("moisture-wicking underwear/socks", "avoid heavy denim");
+    if (humid) extras.push("avoid heavy denim", "moisture-wicking underwear/socks");
+  }
+  // Extreme heat
+  else {
+    top.push("ultra-light, loose, light-colored clothing");
+    bottom.push("shorts or loose linen pants");
+    extras.push("SPF 50", "hat", "sunglasses", "water + electrolytes");
+    extras.push("avoid peak sun (11–16)", "take shade breaks");
   }
 
   // Wet/snow modifiers
   if (wet) {
     // Umbrella vs shell: if windy, prefer shell.
     outer.unshift(windy ? "waterproof shell (hood)" : "rain jacket / shell");
-    if (!windy) extras.push("umbrella (optional)");
+    if (!windy && !freezingRain) extras.push("umbrella (optional)");
     extras.push("water-resistant shoes");
-    if ((ctx?.precipProb ?? 0) >= 60 || (precip ?? 0) >= 1) extras.push("avoid suede / consider spare socks");
+    if ((ctx?.precipProb ?? 0) >= 60 || (precip ?? 0) >= 1 || (ctx?.next2hPrecip ?? 0) >= 3) {
+      extras.push("avoid suede", "consider spare socks");
+      extras.push("waterproof bag cover (optional)");
+    }
+    if (freezingRain) {
+      extras.push("non-slip footwear", "walk carefully (ice risk)");
+      outer.unshift("waterproof shell (hood)");
+    }
     reasons.push(`Wet risk: ${weatherCodeLabel(code)}; precip ~${fmt1(precip ?? 0, "mm/h")}${ctx?.precipProb != null ? `, chance ~${fmt(ctx.precipProb, "%")}` : ""}.`);
   }
   if (snow) {
     outer.unshift("insulated shell");
-    extras.push("boots with grip");
-    reasons.push(`Snowy conditions (${weatherCodeLabel(code)}).`);
+    extras.push("boots with grip", "warm socks");
+    if ((ctx?.snowfall ?? 0) >= 1) extras.push("gaiters (optional)");
+    reasons.push(`Snow/ice conditions (${weatherCodeLabel(code)}).`);
   }
   if (storm) {
-    extras.push("avoid umbrellas if gusty", "consider postponing if exposed");
+    extras.push("avoid open areas", "avoid umbrellas if gusty", "consider postponing if exposed");
     reasons.push("Thunderstorm conditions.");
   }
 
@@ -592,12 +638,6 @@ function deriveRecommendation(current, ctx, prefs) {
   outer = uniq(outer);
   extras = uniq(extras);
 
-  // Severity badge
-  let badgeType = "good";
-  let badgeText = "Comfortable";
-  if (storm || snow) { badgeType = "bad"; badgeText = "Severe"; }
-  else if (wet || windy || comfort <= 2 || comfort >= 28) { badgeType = "warn"; badgeText = "Be prepared"; }
-
   // Tips
   const tips = [];
   if ((ctx?.precipProb ?? 0) >= 50 || (precip ?? 0) >= 0.5) tips.push("If you’ll be out >15 min: pick a hooded shell + water-resistant shoes.");
@@ -605,8 +645,6 @@ function deriveRecommendation(current, ctx, prefs) {
   if ((uv ?? 0) >= 6) tips.push("If you’re outdoors mid-day: SPF + hat." );
 
   return {
-    badgeType,
-    badgeText,
     // structured fields for nicer UI
     outer,
     top,
@@ -638,6 +676,8 @@ function renderWeather(current, derived) {
 
   const sev = classifySeverity(current, derived, effective);
   setSeverity(sev.level, sev.title, sev.meta, sev.detail);
+  // Keep small badge in sync with the main severity alert.
+  setBadge(sev.level, sev.title);
 
   els.uv.textContent = `${fmt1(current.uv_index, "")}`;
   els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
@@ -646,7 +686,7 @@ function renderWeather(current, derived) {
 }
 
 function renderRecommendation(rec) {
-  setBadge(rec.badgeType, rec.badgeText);
+  // Badge now reflects the weather severity (kept in sync elsewhere).
 
   // More readable structured output
   const section = (title, items) => {
