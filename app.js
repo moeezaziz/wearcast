@@ -828,41 +828,69 @@ function onUseMyLocation() {
   // when geolocation is requested *synchronously* from a user gesture.
   // So: do NOT open dialogs/confirm prompts before calling geolocation.
 
-  setStatus("Requesting location permission…");
+  // Quick environment checks
+  if (typeof window !== "undefined" && window.isSecureContext === false) {
+    setStatus("Location requires HTTPS. Open WearCast via https://… (not a local file or http://)." );
+    return;
+  }
 
   if (!navigator.geolocation) {
     setStatus("Geolocation is not supported in this browser. Search by city instead.");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(
-    async (pos) => {
-      try {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        setStatus("Resolving place name…");
-        const loc = await reverseGeocode(lat, lon);
-        els.placeInput.value = loc.name;
-        saveState({ lastQuery: "", lastLocation: loc });
-        await runForLocation(loc);
+  setStatus("Requesting location permission…");
 
-        // After the user action succeeds, show privacy choices if not seen yet.
+  // Some browsers fail silently; provide progressive feedback.
+  const t1 = setTimeout(() => {
+    setStatus("Still waiting on the browser location prompt… If nothing appears, check site location settings and ensure Location Services are enabled.");
+  }, 2500);
+  const t2 = setTimeout(() => {
+    setStatus("Location still pending. On iOS: Settings → Privacy & Security → Location Services (ON), and Safari → Location (Ask/Allow for this site)." );
+  }, 9000);
+
+  const opts = { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 };
+
+  try {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        try {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          setStatus("Resolving place name…");
+          const loc = await reverseGeocode(lat, lon);
+          els.placeInput.value = loc.name;
+          saveState({ lastQuery: "", lastLocation: loc });
+          await runForLocation(loc);
+
+          // After the user action succeeds, show privacy choices if not seen yet.
+          if (!consent.seen) showConsentDialog({ forceModal: true });
+        } catch (err) {
+          console.error(err);
+          setStatus(`Error: ${err.message}`);
+        }
+      },
+      (err) => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        const code = err?.code;
+        const msg = err?.message || "Location request failed";
+        const codeLabel = code === 1 ? "PERMISSION_DENIED" : code === 2 ? "POSITION_UNAVAILABLE" : code === 3 ? "TIMEOUT" : "UNKNOWN";
+        setStatus(
+          `Location error (${codeLabel}): ${msg}. ` +
+          "If you previously denied permission, enable it in your browser/site settings and try again."
+        );
         if (!consent.seen) showConsentDialog({ forceModal: true });
-      } catch (err) {
-        console.error(err);
-        setStatus(`Error: ${err.message}`);
-      }
-    },
-    (err) => {
-      // If permission was previously denied, many browsers won't prompt again.
-      const msg = err?.message || "Location request failed";
-      setStatus(`Location error: ${msg}. If you previously denied permission, enable it in your browser/site settings and try again.`);
-
-      // Still allow the user to review privacy settings.
-      if (!consent.seen) showConsentDialog({ forceModal: true });
-    },
-    { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 }
-  );
+      },
+      opts
+    );
+  } catch (e) {
+    clearTimeout(t1);
+    clearTimeout(t2);
+    setStatus(`Location error: ${e?.message || e}`);
+  }
 }
 
 function bindPrefs() {
