@@ -1,6 +1,6 @@
 {
-  "name": "What to Wear",
-  "short_name": "Wear",
+  "name": "WearCast",
+  "short_name": "WearCast",
   "description": "Clothing suggestions based on local weather (Open‑Meteo).",
   "start_url": "./index.html",
   "display": "standalone",
