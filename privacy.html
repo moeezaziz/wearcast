@@ -52,7 +52,7 @@
           <li><strong>Location data (optional):</strong> If you choose “Use my location”, your browser may provide approximate coordinates. These coordinates are used to fetch local weather.</li>
           <li><strong>Search queries (optional):</strong> If you type a place name, that query is sent to a geocoding provider to resolve coordinates.</li>
           <li><strong>Functional storage (optional):</strong> If enabled, WearCast stores your preferences and last-used location in your browser storage.</li>
-          <li><strong>Usage analytics:</strong> WearCast uses GoatCounter to count page views and basic usage metrics.</li>
+          <li><strong>Usage analytics (always on):</strong> WearCast uses GoatCounter to count page views and basic usage metrics. GoatCounter is designed to be privacy-friendly and does not use cookies or localStorage for tracking page views.</li>
         </ul>
       </div>
     </section>
@@ -64,7 +64,7 @@
           <li><strong>Provide the service</strong> (weather lookup, recommendations): <strong>Art. 6(1)(b)</strong> (performance of a contract / providing a requested service) and/or <strong>Art. 6(1)(f)</strong> (legitimate interest in operating the website).</li>
           <li><strong>Device location</strong> (only if you choose it): <strong>Art. 6(1)(a)</strong> (consent). You can withdraw by disabling location permission in your browser/OS settings.</li>
           <li><strong>Functional storage</strong> (preferences/last location): <strong>Art. 6(1)(a)</strong> (consent). You can withdraw by disabling “Functional storage” in the Privacy choices dialog and clearing site data.</li>
-          <li><strong>Analytics (GoatCounter)</strong>: typically <strong>Art. 6(1)(f)</strong> (legitimate interest) or <strong>Art. 6(1)(a)</strong> (consent), depending on your configuration and jurisdiction. Configure GoatCounter in a privacy-friendly way and, if needed, gate it behind consent.</li>
+          <li><strong>Analytics (GoatCounter, always on)</strong>: we rely on <strong>Art. 6(1)(f)</strong> (legitimate interest) to understand general usage and improve the site. GoatCounter is configured as privacy-friendly analytics (no advertising, no cross-site tracking, no cookies used for pageview tracking). See GoatCounter’s GDPR notes: <a href="https://www.goatcounter.com/help/gdpr" target="_blank" rel="noreferrer">goatcounter.com/help/gdpr</a>.</li>
         </ul>
         <p class="muted">This section is a template; consult counsel if you need strict legal certainty.</p>
       </div>
@@ -112,8 +112,9 @@
       <div class="card-title"><h2>Cookies</h2></div>
       <div class="prose">
         <p>
-          WearCast does not use advertising cookies. Functional browser storage may be used if you enable it.
-          GoatCounter is designed to be privacy-friendly; review your GoatCounter configuration to ensure it matches your compliance needs.
+          WearCast does not use advertising cookies.
+          Functional browser storage may be used if you enable it.
+          GoatCounter analytics is always enabled and is designed to be privacy-friendly (see <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noreferrer">GoatCounter privacy policy</a>).
         </p>
       </div>
     </section>
