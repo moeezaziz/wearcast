@@ -849,13 +849,49 @@ function onUseMyLocation() {
     setStatus("Location still pending. On iOS: Settings → Privacy & Security → Location Services (ON), and Safari → Location (Ask/Allow for this site)." );
   }, 9000);
 
-  const opts = { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 };
+  // Use watchPosition with our own timeout: on iOS/Chrome the callback can sometimes never fire.
+  // We also try high accuracy to encourage GPS acquisition.
+  const opts = { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 };
+
+  // Try to read permission state when available (not supported on all iOS versions).
+  if (navigator.permissions?.query) {
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((p) => {
+        if (p?.state) setStatus(`Requesting location permission… (permission: ${p.state})`);
+      })
+      .catch(() => {});
+  }
+
+  let done = false;
+  const finish = () => {
+    done = true;
+    clearTimeout(t1);
+    clearTimeout(t2);
+    clearTimeout(tHard);
+    if (watchId != null) navigator.geolocation.clearWatch(watchId);
+  };
+
+  const hardFail = (extra) => {
+    if (done) return;
+    finish();
+    setStatus(
+      "Location did not respond on this device. This usually means location is blocked at the OS/site level. " +
+        (extra ? extra + " " : "") +
+        "Try: Settings → Privacy & Security → Location Services (ON), then Settings → Chrome → Location → While Using. " +
+        "Also check: Settings → Safari → Location → While Using (WebKit)."
+    );
+    if (!consent.seen) showConsentDialog({ forceModal: true });
+  };
+
+  let watchId = null;
+  const tHard = setTimeout(() => hardFail("(no callback received)"), 22000);
 
   try {
-    navigator.geolocation.getCurrentPosition(
+    watchId = navigator.geolocation.watchPosition(
       async (pos) => {
-        clearTimeout(t1);
-        clearTimeout(t2);
+        if (done) return;
+        finish();
         try {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
@@ -864,8 +900,6 @@ function onUseMyLocation() {
           els.placeInput.value = loc.name;
           saveState({ lastQuery: "", lastLocation: loc });
           await runForLocation(loc);
-
-          // After the user action succeeds, show privacy choices if not seen yet.
           if (!consent.seen) showConsentDialog({ forceModal: true });
         } catch (err) {
           console.error(err);
@@ -873,23 +907,21 @@ function onUseMyLocation() {
         }
       },
       (err) => {
-        clearTimeout(t1);
-        clearTimeout(t2);
+        if (done) return;
+        finish();
         const code = err?.code;
         const msg = err?.message || "Location request failed";
         const codeLabel = code === 1 ? "PERMISSION_DENIED" : code === 2 ? "POSITION_UNAVAILABLE" : code === 3 ? "TIMEOUT" : "UNKNOWN";
         setStatus(
           `Location error (${codeLabel}): ${msg}. ` +
-          "If you previously denied permission, enable it in your browser/site settings and try again."
+            "On iPhone Chrome, enable Location Services + allow Chrome location in Settings, then retry."
         );
         if (!consent.seen) showConsentDialog({ forceModal: true });
       },
       opts
     );
   } catch (e) {
-    clearTimeout(t1);
-    clearTimeout(t2);
-    setStatus(`Location error: ${e?.message || e}`);
+    hardFail(e?.message || String(e));
   }
 }
 
