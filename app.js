@@ -891,11 +891,47 @@ function bindPrefs() {
 }
 
 function registerSW() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
-    });
-  }
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", async () => {
+    try {
+      const reg = await navigator.serviceWorker.register("./sw.js");
+
+      // If there's an update waiting (rare here because SW calls skipWaiting), activate it.
+      if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+
+      reg.addEventListener("updatefound", () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener("statechange", () => {
+          if (sw.state === "installed" && navigator.serviceWorker.controller) {
+            // New version installed; the SW will claim control and notify.
+          }
+        });
+      });
+
+      // When the new SW takes control, reload to pick up fresh assets.
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (reloaded) return;
+        reloaded = true;
+        window.location.reload();
+      });
+
+      // Also listen for explicit update message.
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data?.type === "WEARCAST_UPDATED") {
+          // Avoid infinite reload loops.
+          if (!reloaded) {
+            reloaded = true;
+            window.location.reload();
+          }
+        }
+      });
+    } catch {
+      // ignore
+    }
+  });
 }
 
 function bindConsentUI() {
