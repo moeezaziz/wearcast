@@ -41,6 +41,7 @@ const els = {
 
   privacyBtn: $("privacyBtn"),
   consentDialog: $("consentDialog"),
+  consentSelectAll: $("consentSelectAll"),
   consentFunctional: $("consentFunctional"),
   consentLocation: $("consentLocation"),
   consentEssential: $("consentEssential"),
@@ -150,6 +151,10 @@ function showConsentDialog({ forceModal = false } = {}) {
   // Sync UI
   els.consentFunctional.checked = !!consent.functionalStorage;
   els.consentLocation.checked = !!consent.deviceLocation;
+  if (els.consentSelectAll) {
+    els.consentSelectAll.checked = !!(els.consentFunctional.checked && els.consentLocation.checked);
+    els.consentSelectAll.indeterminate = !!(els.consentFunctional.checked !== els.consentLocation.checked);
+  }
 
   // HTMLDialogElement isn't supported in some older browsers.
   if (typeof els.consentDialog.showModal === "function") {
@@ -833,6 +838,24 @@ function registerSW() {
 function bindConsentUI() {
   // Footer button
   els.privacyBtn?.addEventListener("click", () => showConsentDialog({ forceModal: true }));
+
+  // Select-all logic
+  const syncSelectAll = () => {
+    if (!els.consentSelectAll) return;
+    const a = !!els.consentFunctional?.checked;
+    const b = !!els.consentLocation?.checked;
+    els.consentSelectAll.checked = a && b;
+    els.consentSelectAll.indeterminate = a !== b;
+  };
+
+  els.consentSelectAll?.addEventListener("change", () => {
+    const on = !!els.consentSelectAll.checked;
+    if (els.consentFunctional) els.consentFunctional.checked = on;
+    if (els.consentLocation) els.consentLocation.checked = on;
+    syncSelectAll();
+  });
+  els.consentFunctional?.addEventListener("change", syncSelectAll);
+  els.consentLocation?.addEventListener("change", syncSelectAll);
 
   // Dialog buttons
   els.consentEssential?.addEventListener("click", (e) => {

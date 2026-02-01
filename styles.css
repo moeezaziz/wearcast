@@ -54,7 +54,14 @@ header{
 .title h1{margin:0; font-size: clamp(20px, 1.9vw, 24px); letter-spacing: .2px; line-height: 1.1;}
 .subtitle{margin:6px 0 0; color:var(--muted); font-size: 13px;}
 
-main{max-width: 980px; margin: 0 auto; padding: 0 calc(var(--page-pad) + env(safe-area-inset-right)) 28px calc(var(--page-pad) + env(safe-area-inset-left));}
+main{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 calc(var(--page-pad) + env(safe-area-inset-right)) 28px calc(var(--page-pad) + env(safe-area-inset-left));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 footer{
   max-width: 980px;
   margin: 0 auto;
@@ -64,9 +71,7 @@ footer{
   color:var(--muted);
   font-size: 12px;
 }
-main > * + *{ margin-top: 16px; }
-
-.grid{display:grid; grid-template-columns: 1.25fr .95fr; gap:16px; margin-top:0;}
+.grid{display:grid; grid-template-columns: 1.25fr .95fr; gap:16px;}
 @media (max-width: 860px){
   .grid{grid-template-columns:1fr;}
   header{flex-direction:column; align-items:stretch;}
@@ -77,7 +82,7 @@ main > * + *{ margin-top: 16px; }
 /* Mobile ergonomics */
 @media (max-width: 520px){
   header{padding-top: 18px;}
-  main{padding-bottom: 22px;}
+  main{padding-bottom: 22px; gap: 14px;}
   footer{padding-top: 14px; padding-bottom: 20px;}
 
   .logo{width: 34px; height: 34px; padding: 5px; border-radius: 12px;}
