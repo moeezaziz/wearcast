@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>What to Wear</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>What to Wear</h1>
+      <p class="subtitle">Local, free, no accounts. Uses Open‑Meteo.</p>
+    </div>
+    <div class="header-actions">
+      <button id="refreshBtn" class="btn">Refresh</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" aria-label="Location">
+      <div class="row" style="gap:12px; align-items: end;">
+        <div class="grow">
+          <label for="placeInput">Location</label>
+          <input id="placeInput" type="text" placeholder="e.g., Berlin" autocomplete="off" />
+          <div class="hint">Tip: leave blank and press “Use my location”.</div>
+        </div>
+        <button id="geoBtn" class="btn secondary">Use my location</button>
+        <button id="searchBtn" class="btn">Search</button>
+      </div>
+      <div id="placeStatus" class="status" role="status"></div>
+    </section>
+
+    <section class="grid">
+      <section class="card" aria-label="Recommendation">
+        <div class="card-title">
+          <h2>Recommendation</h2>
+          <span id="recBadge" class="badge">—</span>
+        </div>
+        <div id="recommendation" class="recommendation">Enter a location to get a suggestion.</div>
+        <div class="divider"></div>
+        <div class="row" style="gap:10px; flex-wrap: wrap;">
+          <label class="chip"><input type="checkbox" id="prefCold" /> I run cold</label>
+          <label class="chip"><input type="checkbox" id="prefHot" /> I run hot</label>
+          <label class="chip"><input type="checkbox" id="prefFormal" /> Prefer formal-ish</label>
+          <label class="chip"><input type="checkbox" id="prefBike" /> I’ll bike/walk</label>
+        </div>
+        <div class="hint" style="margin-top:10px;">These preferences only affect the decision rules on this device.</div>
+      </section>
+
+      <section class="card" aria-label="Conditions">
+        <div class="card-title">
+          <h2>Conditions now</h2>
+          <span id="updatedAt" class="muted">—</span>
+        </div>
+        <div class="kv">
+          <div><span class="k">Temp</span><span id="temp">—</span></div>
+          <div><span class="k">Feels like</span><span id="apparent">—</span></div>
+          <div><span class="k">Wind</span><span id="wind">—</span></div>
+          <div><span class="k">Humidity</span><span id="humidity">—</span></div>
+          <div><span class="k">Cloud cover</span><span id="cloud">—</span></div>
+          <div><span class="k">Precip (1h)</span><span id="precip">—</span></div>
+        </div>
+        <div class="divider"></div>
+        <details>
+          <summary>Show more</summary>
+          <div class="kv" style="margin-top:12px;">
+            <div><span class="k">UV index</span><span id="uv">—</span></div>
+            <div><span class="k">Visibility</span><span id="vis">—</span></div>
+            <div><span class="k">Is day</span><span id="isDay">—</span></div>
+            <div><span class="k">Weather</span><span id="wcode">—</span></div>
+          </div>
+        </details>
+      </section>
+    </section>
+
+    <section class="card" aria-label="What changed">
+      <div class="card-title">
+        <h2>Why this recommendation?</h2>
+        <span class="muted">transparent rules</span>
+      </div>
+      <ul id="reasons" class="reasons"></ul>
+    </section>
+
+    <section class="card" aria-label="About">
+      <details>
+        <summary>About & Privacy</summary>
+        <div class="prose">
+          <p><strong>Privacy:</strong> This app stores your last location + preferences in your browser. Weather comes from <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a> (no API key). Location search uses <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">OpenStreetMap Nominatim</a>.</p>
+          <p><strong>Accuracy:</strong> Recommendations are simple rules; tune them in <code>app.js</code> if you want.</p>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <span class="muted">Local-first • exportable • no accounts</span>
+    <span class="muted">v1</span>
+  </footer>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
