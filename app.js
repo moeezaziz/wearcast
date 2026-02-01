@@ -1,4 +1,4 @@
-// What to Wear (local-first)
+// WearCast
 // Weather: Open-Meteo (no key). Geocoding: Nominatim (OSM).
 
 const $ = (id) => document.getElementById(id);
@@ -38,9 +38,17 @@ const els = {
   prefHot: $("prefHot"),
   prefFormal: $("prefFormal"),
   prefBike: $("prefBike"),
+
+  privacyBtn: $("privacyBtn"),
+  consentDialog: $("consentDialog"),
+  consentFunctional: $("consentFunctional"),
+  consentLocation: $("consentLocation"),
+  consentEssential: $("consentEssential"),
+  consentAccept: $("consentAccept"),
 };
 
-const STORAGE_KEY = "wtw:v1";
+const STORAGE_KEY = "wearcast:v1";
+const CONSENT_KEY = "wearcast:consent:v1";
 
 const DEFAULT_STATE = {
   lastQuery: "",
@@ -48,7 +56,44 @@ const DEFAULT_STATE = {
   prefs: { cold: false, hot: false, formal: false, bike: false },
 };
 
+const DEFAULT_CONSENT = {
+  seen: false,
+  functionalStorage: false,
+  deviceLocation: false,
+  updatedAt: null,
+};
+
+let consent = loadConsent();
+let memoryState = structuredClone(DEFAULT_STATE);
+
+function loadConsent() {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return structuredClone(DEFAULT_CONSENT);
+    const parsed = JSON.parse(raw);
+    return { ...structuredClone(DEFAULT_CONSENT), ...parsed };
+  } catch {
+    return structuredClone(DEFAULT_CONSENT);
+  }
+}
+
+function saveConsent(patch) {
+  consent = { ...consent, ...patch, updatedAt: new Date().toISOString() };
+  try {
+    // Storing consent itself is considered strictly necessary to remember the choice.
+    localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
+  } catch {
+    // ignore
+  }
+  return consent;
+}
+
+function canUseFunctionalStorage() {
+  return !!consent.functionalStorage;
+}
+
 function loadState() {
+  if (!canUseFunctionalStorage()) return structuredClone(memoryState);
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return structuredClone(DEFAULT_STATE);
@@ -70,7 +115,18 @@ function saveState(partial) {
     ...partial,
     prefs: { ...prev.prefs, ...(partial.prefs || {}) },
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+
+  // Always keep an in-memory state so the app works without storage.
+  memoryState = structuredClone(next);
+
+  if (canUseFunctionalStorage()) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // ignore
+    }
+  }
+
   return next;
 }
 
@@ -86,6 +142,27 @@ function fmt1(n, unit = "") {
 
 function setStatus(msg) {
   els.placeStatus.textContent = msg || "";
+}
+
+function showConsentDialog({ forceModal = false } = {}) {
+  if (!els.consentDialog) return;
+
+  // Sync UI
+  els.consentFunctional.checked = !!consent.functionalStorage;
+  els.consentLocation.checked = !!consent.deviceLocation;
+
+  // HTMLDialogElement isn't supported in some older browsers.
+  if (typeof els.consentDialog.showModal === "function") {
+    if (forceModal) els.consentDialog.showModal();
+    else els.consentDialog.show();
+  } else {
+    alert("Privacy options are not supported in this browser UI. You can still use search without device location.");
+  }
+}
+
+function closeConsentDialog() {
+  if (!els.consentDialog) return;
+  if (typeof els.consentDialog.close === "function") els.consentDialog.close();
 }
 
 function clamp(n, a, b) {
@@ -682,6 +759,12 @@ async function reverseGeocode(lat, lon) {
 }
 
 async function onUseMyLocation() {
+  if (!consent.deviceLocation) {
+    setStatus("To use device location, open Privacy settings and enable ‘Use device location’. You can still search by city.");
+    showConsentDialog({ forceModal: true });
+    return;
+  }
+
   setStatus("Requesting location permission…");
   try {
     const pos = await getGeo();
@@ -747,7 +830,37 @@ function registerSW() {
   }
 }
 
+function bindConsentUI() {
+  // Footer button
+  els.privacyBtn?.addEventListener("click", () => showConsentDialog({ forceModal: true }));
+
+  // Dialog buttons
+  els.consentEssential?.addEventListener("click", (e) => {
+    // Continue without saving (no functional storage, no device location)
+    e.preventDefault();
+    saveConsent({ seen: true, functionalStorage: false, deviceLocation: false });
+    closeConsentDialog();
+  });
+
+  els.consentAccept?.addEventListener("click", (e) => {
+    e.preventDefault();
+    saveConsent({
+      seen: true,
+      functionalStorage: !!els.consentFunctional?.checked,
+      deviceLocation: !!els.consentLocation?.checked,
+    });
+
+    // If storage was just enabled, persist whatever is in memory now.
+    if (canUseFunctionalStorage()) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryState)); } catch {}
+    }
+
+    closeConsentDialog();
+  });
+}
+
 function init() {
+  bindConsentUI();
   bindPrefs();
 
   els.searchBtn.addEventListener("click", onSearch);
@@ -760,6 +873,11 @@ function init() {
   els.placeInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") onSearch();
   });
+
+  // Show GDPR-style privacy choices on first visit.
+  if (!consent.seen) {
+    showConsentDialog({ forceModal: true });
+  }
 
   const st = loadState();
   if (st.lastLocation) {

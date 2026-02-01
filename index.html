@@ -29,7 +29,7 @@
         <div class="grow">
           <label for="placeInput">Location</label>
           <input id="placeInput" type="text" placeholder="e.g., Berlin" autocomplete="off" />
-          <div class="hint">Tip: leave blank and press “Use my location”.</div>
+          <div class="hint">Search a city (e.g., “Berlin”) or use your device location.</div>
         </div>
         <button id="geoBtn" class="btn secondary">Use my location</button>
         <button id="searchBtn" class="btn">Search</button>
@@ -60,7 +60,7 @@
           <label class="chip"><input type="checkbox" id="prefFormal" /> Prefer formal-ish</label>
           <label class="chip"><input type="checkbox" id="prefBike" /> I’ll bike/walk</label>
         </div>
-        <div class="hint" style="margin-top:10px;">These preferences only affect the decision rules on this device.</div>
+        <div class="hint" style="margin-top:10px;">Preferences adjust how recommendations are generated.</div>
       </section>
 
       <section class="card" aria-label="Conditions">
@@ -104,17 +104,52 @@
       <details>
         <summary>About & Privacy</summary>
         <div class="prose">
-          <p><strong>Privacy:</strong> This app stores your last location + preferences in your browser. Weather comes from <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a> (no API key). Location search uses <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">OpenStreetMap Nominatim</a>.</p>
-          <p><strong>Accuracy:</strong> Recommendations are simple rules; tune them in <code>app.js</code> if you want.</p>
+          <p><strong>WearCast</strong> suggests clothing based on weather conditions (temperature, wind, humidity, rain risk, UV).</p>
+          <p><strong>Data sources:</strong> Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Place search / reverse geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">OpenStreetMap Nominatim</a>.</p>
+          <p><strong>Privacy notice:</strong> If you choose “Use my location”, your device may share approximate coordinates with the app to fetch weather. Location search terms and coordinates are sent to the providers above to retrieve results. If you enable “Functional storage”, WearCast stores your preferences and last-used location in your browser.</p>
+          <p><strong>Your choices:</strong> You can change these options anytime via the “Privacy” button in the footer.</p>
         </div>
       </details>
     </section>
   </main>
 
   <footer>
-    <span class="muted">Local-first • exportable • no accounts</span>
-    <span class="muted">v1</span>
+    <span class="muted">WearCast • Weather-powered outfit suggestions</span>
+    <button id="privacyBtn" class="btn secondary" style="padding:8px 10px; min-height: 36px;">Privacy</button>
   </footer>
+
+  <dialog id="consentDialog" class="consent" aria-labelledby="consentTitle">
+    <form method="dialog" class="consent-inner">
+      <h2 id="consentTitle">Privacy choices</h2>
+      <p class="muted" style="margin-top:6px;">WearCast uses third-party services to look up places and fetch weather. Choose what you’re comfortable with.</p>
+
+      <div class="consent-box">
+        <label class="consent-item">
+          <input type="checkbox" id="consentFunctional" />
+          <span>
+            <strong>Functional storage</strong><br/>
+            <span class="muted">Save preferences and last-used location in this browser.</span>
+          </span>
+        </label>
+        <label class="consent-item">
+          <input type="checkbox" id="consentLocation" />
+          <span>
+            <strong>Use device location</strong><br/>
+            <span class="muted">Allow “Use my location”. Your browser will still ask for permission when used.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="consent-actions">
+        <button id="consentEssential" class="btn secondary" value="essential">Continue without saving</button>
+        <button id="consentAccept" class="btn" value="accept">Accept selected</button>
+      </div>
+
+      <p class="muted" style="margin-top:10px; font-size:12px; line-height:1.4;">
+        Data recipients: Open‑Meteo and OpenStreetMap Nominatim. WearCast does not run analytics or track users.
+      </p>
+    </form>
+  </dialog>
 
   <script src="app.js" type="module"></script>
 </body>
