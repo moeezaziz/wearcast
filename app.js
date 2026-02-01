@@ -145,8 +145,28 @@ function setStatus(msg) {
   els.placeStatus.textContent = msg || "";
 }
 
+function privacyPromptFallback() {
+  // Minimal GDPR-style consent flow for browsers without <dialog> support (notably some mobile Safari versions).
+  // We ask for the same choices via confirm prompts.
+  const functional = confirm(
+    "WearCast privacy: Allow functional storage?\n\nThis saves your preferences and last-used location in this browser."
+  );
+  const location = confirm(
+    "WearCast privacy: Allow device location?\n\nThis enables the ‘Use my location’ button. Your browser will still ask for permission when used."
+  );
+  saveConsent({ seen: true, functionalStorage: functional, deviceLocation: location });
+
+  // If storage was enabled, persist whatever is currently in memory.
+  if (canUseFunctionalStorage()) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryState)); } catch {}
+  }
+}
+
 function showConsentDialog({ forceModal = false } = {}) {
-  if (!els.consentDialog) return;
+  if (!els.consentDialog) {
+    privacyPromptFallback();
+    return;
+  }
 
   // Sync UI
   els.consentFunctional.checked = !!consent.functionalStorage;
@@ -161,7 +181,7 @@ function showConsentDialog({ forceModal = false } = {}) {
     if (forceModal) els.consentDialog.showModal();
     else els.consentDialog.show();
   } else {
-    alert("Privacy options are not supported in this browser UI. You can still use search without device location.");
+    privacyPromptFallback();
   }
 }
 
@@ -804,10 +824,13 @@ async function reverseGeocode(lat, lon) {
 }
 
 async function onUseMyLocation() {
-  if (!consent.deviceLocation) {
-    setStatus("To use device location, open Privacy settings and enable ‘Use device location’. You can still search by city.");
+  // GDPR-style choices: we show the dialog on first use, but we do NOT block the browser's
+  // geolocation permission prompt (the browser prompt is the actual permission gate).
+  if (!consent.seen) {
     showConsentDialog({ forceModal: true });
-    return;
+  } else if (!consent.deviceLocation) {
+    // User chose not to enable the toggle; still allow use on demand.
+    setStatus("Your browser will ask for location permission. You can also review Privacy settings anytime.");
   }
 
   setStatus("Requesting location permission…");
