@@ -40,6 +40,9 @@ const els = {
   prefBike: $("prefBike"),
 
   privacyBtn: $("privacyBtn"),
+  installBtn: $("installBtn"),
+  installDialog: $("installDialog"),
+  installText: $("installText"),
   consentDialog: $("consentDialog"),
   consentSelectAll: $("consentSelectAll"),
   consentFunctional: $("consentFunctional"),
@@ -966,6 +969,71 @@ function bindPrefs() {
   });
 }
 
+let deferredInstallPrompt = null;
+
+function isStandalone() {
+  return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+}
+
+function isIOS() {
+  const ua = navigator.userAgent || "";
+  return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+}
+
+function showInstallHelp() {
+  if (!els.installDialog) {
+    alert("To install WearCast: use your browser menu and choose 'Add to Home Screen'.");
+    return;
+  }
+
+  if (els.installText) {
+    if (isIOS()) {
+      els.installText.textContent = "On iPhone/iPad: tap the Share icon, then ‘Add to Home Screen’.";
+    } else {
+      els.installText.textContent = "If your browser doesn’t show an install prompt, use the browser menu and choose ‘Install app’ or ‘Add to Home Screen’.";
+    }
+  }
+
+  if (typeof els.installDialog.showModal === "function") els.installDialog.showModal();
+  else alert(els.installText?.textContent || "Use your browser menu to add to home screen.");
+}
+
+function setupInstallUI() {
+  // Android/Chromium provides beforeinstallprompt.
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    if (els.installBtn && !isStandalone()) els.installBtn.style.display = "inline-flex";
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    if (els.installBtn) els.installBtn.style.display = "none";
+  });
+
+  // Show an install button on iOS too (it will display instructions).
+  if (els.installBtn && !isStandalone()) {
+    if (isIOS()) els.installBtn.style.display = "inline-flex";
+  }
+
+  els.installBtn?.addEventListener("click", async () => {
+    if (isStandalone()) return;
+
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      try {
+        await deferredInstallPrompt.userChoice;
+      } catch {}
+      deferredInstallPrompt = null;
+      // The button will hide via appinstalled or can remain if user dismissed.
+      return;
+    }
+
+    // iOS and other browsers: show instructions.
+    showInstallHelp();
+  });
+}
+
 function registerSW() {
   if (!("serviceWorker" in navigator)) return;
 
@@ -1058,6 +1126,7 @@ function bindConsentUI() {
 }
 
 function init() {
+  setupInstallUI();
   bindConsentUI();
   bindPrefs();
 

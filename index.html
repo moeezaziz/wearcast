@@ -115,8 +115,28 @@
 
   <footer>
     <span class="muted">WearCast • Weather-powered outfit suggestions</span>
-    <button id="privacyBtn" class="btn secondary" style="padding:8px 10px; min-height: 36px;">Privacy</button>
+    <div class="footer-actions">
+      <button id="installBtn" class="btn" style="padding:8px 10px; min-height: 36px; display:none;">Add to Home Screen</button>
+      <button id="privacyBtn" class="btn secondary" style="padding:8px 10px; min-height: 36px;">Privacy</button>
+    </div>
   </footer>
+
+  <dialog id="installDialog" class="consent" aria-labelledby="installTitle">
+    <form method="dialog" class="consent-inner">
+      <h2 id="installTitle">Add WearCast to Home Screen</h2>
+      <div class="prose" style="margin-top:10px;">
+        <p id="installText">—</p>
+        <ol style="margin:10px 0 0; padding-left: 18px;">
+          <li>Open the browser menu/share sheet</li>
+          <li>Select <strong>Add to Home Screen</strong></li>
+          <li>Confirm</li>
+        </ol>
+      </div>
+      <div class="consent-actions">
+        <button class="btn" value="ok">OK</button>
+      </div>
+    </form>
+  </dialog>
 
   <dialog id="consentDialog" class="consent" aria-labelledby="consentTitle">
     <form method="dialog" class="consent-inner">
