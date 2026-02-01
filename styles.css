@@ -13,6 +13,7 @@
   --shadow: 0 12px 30px rgba(0,0,0,.35);
   --radius: 14px;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --page-pad: clamp(14px, 3vw, 22px);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -29,17 +30,20 @@ header{
   gap:16px;
   align-items:center;
   justify-content:space-between;
-  padding:28px 22px 12px;
+  padding: 24px calc(var(--page-pad) + env(safe-area-inset-right)) 12px calc(var(--page-pad) + env(safe-area-inset-left));
   max-width: 980px;
   margin: 0 auto;
 }
-.title h1{margin:0; font-size: 22px; letter-spacing: .2px;}
+.header-actions{display:flex; gap:10px; align-items:center;}
+
+.title h1{margin:0; font-size: clamp(20px, 1.8vw, 22px); letter-spacing: .2px;}
 .subtitle{margin:6px 0 0; color:var(--muted); font-size: 13px;}
-main{max-width: 980px; margin: 0 auto; padding: 0 22px 28px;}
+
+main{max-width: 980px; margin: 0 auto; padding: 0 calc(var(--page-pad) + env(safe-area-inset-right)) 28px calc(var(--page-pad) + env(safe-area-inset-left));}
 footer{
   max-width: 980px;
   margin: 0 auto;
-  padding: 18px 22px 26px;
+  padding: 18px calc(var(--page-pad) + env(safe-area-inset-right)) 26px calc(var(--page-pad) + env(safe-area-inset-left));
   display:flex;
   justify-content:space-between;
   color:var(--muted);
@@ -54,11 +58,9 @@ footer{
 
 /* Mobile ergonomics */
 @media (max-width: 520px){
-  header{padding: 18px 14px 10px;}
-  main{padding: 0 14px 22px;}
-  footer{padding: 14px 14px 20px;}
-
-  .title h1{font-size: 20px;}
+  header{padding-top: 18px;}
+  main{padding-bottom: 22px;}
+  footer{padding-top: 14px; padding-bottom: 20px;}
 
   .card{padding: 14px 14px;}
 
@@ -66,7 +68,8 @@ footer{
   input[type="text"], .btn{font-size: 16px;}
 
   .row{flex-wrap: wrap;}
-  .btn{width: 100%;}
+  /* Keep buttons full-width only where they are in a row (location section uses .row) */
+  .row > .btn{width: 100%;}
 
   .kv{grid-template-columns: 1fr;}
 }
@@ -95,11 +98,13 @@ input[type="text"]{
 input[type="text"]:focus{border-color: rgba(110,231,255,.35); box-shadow: 0 0 0 4px rgba(110,231,255,.08)}
 .btn{
   padding: 11px 12px;
+  min-height: 44px; /* thumb-friendly */
   border-radius: 12px;
   border: 1px solid rgba(110,231,255,.22);
   background: rgba(110,231,255,.12);
   color: var(--text);
   cursor: pointer;
+  touch-action: manipulation;
 }
 .btn:hover{background: rgba(110,231,255,.18)}
 .btn.secondary{border-color: rgba(167,139,250,.22); background: rgba(167,139,250,.12)}
@@ -122,7 +127,7 @@ input[type="text"]:focus{border-color: rgba(110,231,255,.35); box-shadow: 0 0 0 
 .badge.bad{border-color: rgba(251,113,133,.25); color: rgba(255,220,228,.95); background: rgba(251,113,133,.12)}
 .divider{height:1px; background: var(--border); margin: 14px 0;}
 .kv{display:grid; grid-template-columns: 1fr 1fr; gap: 10px 14px;}
-.kv > div{display:flex; justify-content:space-between; gap:10px; padding: 10px 10px; border: 1px solid var(--border); border-radius: 12px; background: rgba(0,0,0,.18)}
+.kv > div{display:flex; justify-content:space-between; gap:10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: rgba(0,0,0,.18)}
 .k{color: var(--muted)}
 .muted{color: var(--muted); font-size: 12px;}
 .recommendation{font-size: 15px; line-height: 1.45; white-space: pre-line}
@@ -140,7 +145,7 @@ input[type="text"]:focus{border-color: rgba(110,231,255,.35); box-shadow: 0 0 0 
 .chip input{accent-color: var(--accent)}
 .reasons{margin: 0; padding-left: 18px; color: var(--text)}
 .reasons li{margin: 8px 0; color: rgba(230,233,242,.92)}
-summary{cursor:pointer; color: rgba(230,233,242,.92)}
+summary{cursor:pointer; color: rgba(230,233,242,.92); padding: 6px 2px}
 .prose{color: rgba(230,233,242,.92); font-size: 13px; line-height: 1.5; margin-top: 10px;}
 .prose a{color: var(--accent)}
 code{font-family: var(--mono); font-size: 12px; background: rgba(0,0,0,.24); border: 1px solid var(--border); padding: 2px 6px; border-radius: 8px}
