@@ -4,8 +4,8 @@
   "description": "Clothing suggestions based on local weather (Open‑Meteo).",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#0b1220",
+  "background_color": "#f0f7ff",
+  "theme_color": "#2979ff",
   "icons": [
     {
       "src": "icon.svg",

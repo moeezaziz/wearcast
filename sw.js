@@ -1,7 +1,7 @@
 // WearCast Service Worker
 // Goal: when a newer version is available, update cached assets and reload clients.
 
-const VERSION = "v3";
+const VERSION = "v12";
 const CACHE = `wearcast-${VERSION}`;
 
 // Cache-busted asset URLs so clients don't get stuck on old JS/CSS.
@@ -47,7 +47,10 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  if (url.origin !== location.origin) return; // never cache API calls
+  if (url.origin !== location.origin) return; // never cache external calls
+
+  // Never intercept API calls or non-GET requests
+  if (url.pathname.startsWith("/api/") || req.method !== "GET") return;
 
   // Network-first for navigations (HTML) so the shell updates quickly.
   if (req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html")) {

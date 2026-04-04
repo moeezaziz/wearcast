@@ -15,6 +15,7 @@ const els = {
   reasons: $("reasons"),
 
   severity: $("severity"),
+  severityIcon: $("severityIcon"),
   severityTitle: $("severityTitle"),
   severityMeta: $("severityMeta"),
   severityDetail: $("severityDetail"),
@@ -52,15 +53,137 @@ const els = {
   consentLocation: $("consentLocation"),
   consentEssential: $("consentEssential"),
   consentAccept: $("consentAccept"),
+
+  // Wardrobe
+  addItemBtn: $("addItemBtn"),
+  wardrobeList: $("wardrobeList"),
+  wardrobeEmpty: $("wardrobeEmpty"),
+  itemDialog: $("itemDialog"),
+  itemForm: $("itemForm"),
+  itemType: $("itemType"),
+  itemName: $("itemName"),
+  itemColor: $("itemColor"),
+  itemMaterial: $("itemMaterial"),
+  itemCare: $("itemCare"),
+  itemPhoto: $("itemPhoto"),
+  itemPhotoPreview: $("itemPhotoPreview"),
+  itemPhotoImg: $("itemPhotoImg"),
+  removePhotoBtn: $("removePhotoBtn"),
+  itemSaveBtn: $("itemSaveBtn"),
+  itemCancelBtn: $("itemCancelBtn"),
+  itemDeleteBtn: $("itemDeleteBtn"),
+  scanTagBtn: $("scanTagBtn"),
+
+  // Scan dialog
+  scanDialog: $("scanDialog"),
+  scanPhoto: $("scanPhoto"),
+  scanPreview: $("scanPreview"),
+  scanPreviewImg: $("scanPreviewImg"),
+  scanStatus: $("scanStatus"),
+  scanCancelBtn: $("scanCancelBtn"),
+  scanSubmitBtn: $("scanSubmitBtn"),
+
+  // AI recommendation
+  aiRecSection: $("aiRecSection"),
+  aiRecLoading: $("aiRecLoading"),
+  aiRecContent: $("aiRecContent"),
+  aiRecWarnings: $("aiRecWarnings"),
+  aiRecMissing: $("aiRecMissing"),
+
+  // Fashion notes
+  fashionNotes: $("fashionNotes"),
+
+  // New UI
+  weatherHero: $("weatherHero"),
+  emptyState: $("emptyState"),
+  bottomNav: $("bottomNav"),
+  ruleRecCard: $("ruleRecCard"),
+  weatherDetailsCard: $("weatherDetailsCard"),
+  reasonsCard: $("reasonsCard"),
+  addItemBtnEmpty: $("addItemBtnEmpty"),
+
+  // Wardrobe auth gate
+  wardrobeAuthGate: $("wardrobeAuthGate"),
+  wardrobeContent: $("wardrobeContent"),
+  wardrobeSignInBtn: $("wardrobeSignInBtn"),
+
+  // Auth
+  userBtn: $("userBtn"),
+  userBtnIcon: $("userBtnIcon"),
+  userBtnAvatar: $("userBtnAvatar"),
+  authDialog: $("authDialog"),
+  authDialogTitle: $("authDialogTitle"),
+  authFormWrap: $("authFormWrap"),
+  authLoggedIn: $("authLoggedIn"),
+  authForm: $("authForm"),
+  authName: $("authName"),
+  authEmail: $("authEmail"),
+  authPassword: $("authPassword"),
+  authError: $("authError"),
+  authSubmitBtn: $("authSubmitBtn"),
+  authToggleMode: $("authToggleMode"),
+  googleSignInBtn: $("googleSignInBtn"),
+  authAvatar: $("authAvatar"),
+  authUserName: $("authUserName"),
+  authUserEmail: $("authUserEmail"),
+  authLogoutBtn: $("authLogoutBtn"),
+  authCloseBtn: $("authCloseBtn"),
 };
 
 const STORAGE_KEY = "wearcast:v1";
 const CONSENT_KEY = "wearcast:consent:v1";
+const WARDROBE_KEY = "wearcast:wardrobe:v1";
+const AUTH_TOKEN_KEY = "wearcast:token";
+const AUTH_USER_KEY = "wearcast:user";
+const API_BASE = location.origin;
+
+// ─── Auth state ──────────────────────────────────────────────
+let authToken = localStorage.getItem(AUTH_TOKEN_KEY) || null;
+let authUser = (() => { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)); } catch { return null; } })();
+
+function setAuth(token, user) {
+  authToken = token;
+  authUser = user;
+  if (token) {
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_USER_KEY);
+  }
+  updateAuthUI();
+}
+
+function authHeaders() {
+  return authToken ? { Authorization: `Bearer ${authToken}` } : {};
+}
+
+function isLoggedIn() { return !!authToken; }
+
+function updateAuthUI() {
+  if (authUser) {
+    if (authUser.avatarUrl) {
+      els.userBtnAvatar.src = authUser.avatarUrl;
+      els.userBtnAvatar.style.display = "";
+      els.userBtnIcon.style.display = "none";
+    } else {
+      els.userBtnAvatar.style.display = "none";
+      els.userBtnIcon.style.display = "";
+    }
+  } else {
+    els.userBtnAvatar.style.display = "none";
+    els.userBtnIcon.style.display = "";
+  }
+  // Toggle wardrobe auth gate
+  const loggedIn = isLoggedIn();
+  els.wardrobeAuthGate.style.display = loggedIn ? "none" : "flex";
+  els.wardrobeContent.style.display = loggedIn ? "" : "none";
+}
 
 const DEFAULT_STATE = {
   lastQuery: "",
   lastLocation: null, // { name, lat, lon }
-  prefs: { cold: false, hot: false, formal: false, bike: false },
+  prefs: { cold: false, hot: false, formal: false, bike: false, fashionNotes: "" },
 };
 
 const DEFAULT_CONSENT = {
@@ -236,21 +359,22 @@ function addReason(text) {
 }
 
 function setBadge(type, text) {
-  els.recBadge.className = "badge";
-  if (type) els.recBadge.classList.add(type);
+  els.recBadge.className = "pill";
   els.recBadge.textContent = text;
 }
 
-function setSeverity(level, title, meta, detail) {
+function setSeverity(level, title, meta, detail, icon) {
   // level: good|warn|bad
-  els.severity.className = "alert";
+  els.severity.className = "severity-bar";
   if (level) els.severity.classList.add(level);
+  els.severity.style.display = "flex";
+  els.severityIcon.textContent = icon || "";
   els.severityTitle.textContent = title || "—";
   els.severityMeta.textContent = meta || "";
   els.severityDetail.textContent = detail || "";
 }
 
-function classifySeverity(current, ctx, effectiveC) {
+function classifySeverity(current, ctx, effectiveC, hourly) {
   const gust = current.wind_gusts_10m ?? 0;
   const wind = current.wind_speed_10m ?? 0;
   const uv = current.uv_index ?? 0;
@@ -276,48 +400,71 @@ function classifySeverity(current, ctx, effectiveC) {
   const veryWindy = gust >= 60 || wind >= 35;
   const windy = gust >= 40 || wind >= 25;
 
-  // Score-based severity (simple & explainable)
-  let score = 0;
-  const flags = [];
-
-  if (storm) { score += 4; flags.push("thunderstorm"); }
-  if (freezing) { score += 4; flags.push("freezing rain / ice" ); }
-  if (snowy) {
-    score += 3;
-    flags.push("snow/ice risk");
-    if (windy) { score += 1; flags.push("blowing snow" ); }
+  // Scan today's remaining hourly forecast for upcoming events
+  let dayRainMax = 0, daySnowMax = 0, dayTempMax = -Infinity, dayTempMin = Infinity, dayWindMax = 0, dayPrecipProbMax = precipProb ?? 0;
+  if (hourly?.time) {
+    const nowStr = current.time || new Date().toISOString();
+    const todayStr = nowStr.slice(0, 10); // "2026-04-04"
+    const nowMs = new Date(nowStr).getTime() || Date.now();
+    for (let i = 0; i < hourly.time.length; i++) {
+      const t = hourly.time[i];
+      if (!t.startsWith(todayStr)) continue;
+      if (new Date(t).getTime() < nowMs) continue; // only future hours
+      dayRainMax = Math.max(dayRainMax, hourly.precipitation?.[i] ?? 0);
+      daySnowMax = Math.max(daySnowMax, hourly.snowfall?.[i] ?? 0);
+      dayTempMax = Math.max(dayTempMax, hourly.apparent_temperature?.[i] ?? hourly.temperature_2m?.[i] ?? -Infinity);
+      dayTempMin = Math.min(dayTempMin, hourly.apparent_temperature?.[i] ?? hourly.temperature_2m?.[i] ?? Infinity);
+      dayWindMax = Math.max(dayWindMax, hourly.wind_speed_10m?.[i] ?? 0);
+      dayPrecipProbMax = Math.max(dayPrecipProbMax, hourly.precipitation_probability?.[i] ?? 0);
+    }
   }
-  if (wet) {
-    score += 2;
-    flags.push("rain risk");
-    if ((next2h ?? 0) >= 5) { score += 1; flags.push("heavy rain" ); }
+
+  // Each stressor: [score, flag label, icon, priority (higher = more important)]
+  const stressors = [];
+
+  if (storm) stressors.push({ s: 4, flag: "Thunderstorm", icon: "⛈️", p: 10 });
+  if (freezing) stressors.push({ s: 4, flag: "Freezing rain", icon: "🧊", p: 9 });
+  if (snowy || daySnowMax > 0) {
+    stressors.push({ s: 3, flag: daySnowMax > 0 && !snowy ? "Snow expected later" : "Snow / ice", icon: "🌨️", p: 8 });
+    if (windy) stressors.push({ s: 1, flag: "Blowing snow", icon: "🌨️", p: 7 });
   }
-  if (veryWindy) { score += 3; flags.push("strong gusts"); }
-  else if (windy) { score += 2; flags.push("windy"); }
+  if (wet || dayPrecipProbMax >= 50) {
+    const heavy = (next2h ?? 0) >= 5 || dayRainMax >= 5;
+    const label = heavy ? "Heavy rain" : dayPrecipProbMax >= 50 && !wet ? `Rain later (${Math.round(dayPrecipProbMax)}%)` : "Rain expected";
+    stressors.push({ s: heavy ? 3 : 2, flag: label, icon: heavy ? "🌧️" : "🌦️", p: heavy ? 6 : 5 });
+  }
+  if (veryWindy || dayWindMax >= 35) stressors.push({ s: 3, flag: dayWindMax >= 35 && !veryWindy ? "Strong gusts later" : "Strong gusts", icon: "💨", p: 6 });
+  else if (windy || dayWindMax >= 25) stressors.push({ s: 2, flag: dayWindMax >= 25 && !windy ? "Windy later" : "Windy", icon: "💨", p: 4 });
 
-  if (extremeCold) { score += 3; flags.push("very cold"); }
-  else if (veryCold) { score += 1; flags.push("cold"); }
+  if (extremeCold || dayTempMin <= -15) stressors.push({ s: 3, flag: dayTempMin <= -15 && !extremeCold ? "Very cold later" : "Very cold", icon: "🥶", p: 7 });
+  else if (veryCold || dayTempMin <= 2) stressors.push({ s: 1, flag: dayTempMin <= 2 && !veryCold ? "Cold later" : "Cold", icon: "❄️", p: 3 });
 
-  if (extremeHeat) { score += 3; flags.push("very hot"); }
-  else if (veryHot) { score += 1; flags.push("hot"); }
+  if (extremeHeat || dayTempMax >= 38) stressors.push({ s: 3, flag: dayTempMax >= 38 && !extremeHeat ? "Heatwave expected" : "Extreme heat", icon: "🔥", p: 7 });
+  else if (veryHot || dayTempMax >= 30) stressors.push({ s: 1, flag: dayTempMax >= 30 && !veryHot ? "Hot later" : "Hot", icon: "☀️", p: 3 });
 
-  if (uv >= 8) { score += 2; flags.push("very high UV"); }
-  else if (uv >= 6) { score += 1; flags.push("high UV"); }
+  if (uv >= 8) stressors.push({ s: 2, flag: "Very high UV", icon: "☀️", p: 5 });
+  else if (uv >= 6) stressors.push({ s: 1, flag: "High UV", icon: "🕶️", p: 2 });
+
+  const score = stressors.reduce((a, x) => a + x.s, 0);
+  const primary = [...stressors].sort((a, b) => b.p - a.p)[0] || null;
+  const flags = stressors.map(s => s.flag);
 
   let level = "good";
   let title = "All clear";
+  let icon = "✅";
 
-  if (score >= 6) { level = "bad"; title = "Severe conditions"; }
-  else if (score >= 3) { level = "warn"; title = "Be prepared"; }
+  if (score >= 6) { level = "bad"; title = primary?.flag || "Severe conditions"; icon = primary?.icon || "⚠️"; }
+  else if (stressors.length > 0) { level = "warn"; title = primary?.flag || "Be prepared"; icon = primary?.icon || "⚠️"; }
 
   const metaParts = [];
   if (effectiveC != null) metaParts.push(`Effective ${fmt1(effectiveC, "°C")}`);
-  if (precipProb != null) metaParts.push(`Precip ${fmt(precipProb, "%")}`);
+  if (dayPrecipProbMax > 0) metaParts.push(`Precip ${fmt(Math.round(dayPrecipProbMax), "%")}`);
   if (gust) metaParts.push(`Gusts ${fmt(gust, " km/h")}`);
 
-  const detail = flags.length ? `Key factors: ${flags.join(", ")}.` : "No major weather stressors detected.";
+  const others = flags.filter(f => f !== title);
+  const detail = others.length ? `Also: ${others.join(", ")}` : level === "good" ? "No major weather stressors today." : "";
 
-  return { level, title, meta: metaParts.join(" • "), detail };
+  return { level, title, meta: metaParts.join(" • "), detail, icon };
 }
 
 function weatherCodeLabel(code) {
@@ -681,13 +828,18 @@ function deriveRecommendation(current, ctx, prefs) {
   };
 }
 
-function renderWeather(current, derived) {
-  els.temp.textContent = `${fmt1(current.temperature_2m, "°C")}`;
+function renderWeather(current, derived, hourly) {
+  // Show hero + hide empty state
+  els.weatherHero.style.display = "";
+  els.emptyState.style.display = "none";
+  els.weatherDetailsCard.style.display = "";
+
+  els.temp.textContent = `${fmt1(current.temperature_2m, "°")}`;
   els.apparent.textContent = `${fmt1(current.apparent_temperature, "°C")}`;
-  els.wind.textContent = `${fmt(current.wind_speed_10m, " km/h")} (gusts ${fmt(current.wind_gusts_10m, " km/h")})`;
-  els.humidity.textContent = `${fmt(current.relative_humidity_2m, "%")}`;
+  els.wind.textContent = `${fmt(current.wind_speed_10m)} km/h`;
+  els.humidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
   els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
-  els.precip.textContent = `${fmt1(current.precipitation, " mm")}`;
+  els.precip.textContent = `${fmt1(current.precipitation)} mm`;
   els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
 
   const dew = dewPointC(current.temperature_2m, current.relative_humidity_2m);
@@ -700,15 +852,13 @@ function renderWeather(current, derived) {
   els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
   els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
 
-  const sev = classifySeverity(current, derived, effective);
-  setSeverity(sev.level, sev.title, sev.meta, sev.detail);
-  // Keep small badge in sync with the main severity alert.
-  setBadge(sev.level, sev.title);
+  const sev = classifySeverity(current, derived, effective, hourly);
+  setSeverity(sev.level, sev.title, sev.meta, sev.detail, sev.icon);
 
   els.uv.textContent = `${fmt1(current.uv_index, "")}`;
   els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
   els.isDay.textContent = current.is_day === 1 ? "Yes" : current.is_day === 0 ? "No" : "—";
-  els.wcode.textContent = `${weatherCodeLabel(current.weather_code)} (${current.weather_code})`;
+  els.wcode.textContent = weatherCodeLabel(current.weather_code);
 }
 
 function renderRecommendation(rec) {
@@ -764,10 +914,10 @@ async function runForLocation(loc) {
       };
     })();
 
-    renderWeather(current, ctx);
+    renderWeather(current, ctx, data.hourly);
 
-    const rec = deriveRecommendation(current, ctx, state.prefs);
-    renderRecommendation(rec);
+    // AI recommendation (non-blocking)
+    fetchAIRecommendation(data, current, ctx);
 
     const updated = new Date(data.current.time || Date.now());
     els.updatedAt.textContent = `Updated ${updated.toLocaleString()}`;
@@ -937,6 +1087,7 @@ function bindPrefs() {
   els.prefHot.checked = !!state.prefs.hot;
   els.prefFormal.checked = !!state.prefs.formal;
   els.prefBike.checked = !!state.prefs.bike;
+  els.fashionNotes.value = state.prefs.fashionNotes || "";
 
   function syncPrefs() {
     // cold/hot mutually exclusive
@@ -950,25 +1101,30 @@ function bindPrefs() {
 
   els.prefCold.addEventListener("change", () => {
     if (els.prefCold.checked) els.prefHot.checked = false;
-    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked } });
+    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked, fashionNotes: els.fashionNotes.value.trim() } });
     const st = loadState();
     if (st.lastLocation) runForLocation(st.lastLocation);
   });
   els.prefHot.addEventListener("change", () => {
     if (els.prefHot.checked) els.prefCold.checked = false;
-    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked } });
+    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked, fashionNotes: els.fashionNotes.value.trim() } });
     const st = loadState();
     if (st.lastLocation) runForLocation(st.lastLocation);
   });
   els.prefFormal.addEventListener("change", () => {
-    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked } });
+    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked, fashionNotes: els.fashionNotes.value.trim() } });
     const st = loadState();
     if (st.lastLocation) runForLocation(st.lastLocation);
   });
   els.prefBike.addEventListener("change", () => {
-    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked } });
+    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked, fashionNotes: els.fashionNotes.value.trim() } });
     const st = loadState();
     if (st.lastLocation) runForLocation(st.lastLocation);
+  });
+
+  // Save fashion notes on blur (no need to re-fetch weather)
+  els.fashionNotes?.addEventListener("blur", () => {
+    saveState({ prefs: { cold: els.prefCold.checked, hot: els.prefHot.checked, formal: els.prefFormal.checked, bike: els.prefBike.checked, fashionNotes: els.fashionNotes.value.trim() } });
   });
 }
 
@@ -1146,13 +1302,659 @@ function bindConsentUI() {
     }
 
     closeConsentDialog();
+
+    // Auto-trigger geolocation after consent if location was granted and no saved location
+    if (!!els.consentLocation?.checked) {
+      const st = loadState();
+      if (!st.lastLocation) onUseMyLocation();
+    }
+  });
+}
+
+// ─── Wardrobe ────────────────────────────────────────────────
+// ─── Wardrobe: API (logged in) or localStorage (guest) ───────
+let _wardrobeCache = null;
+
+function loadWardrobeLocal() {
+  if (!canUseFunctionalStorage()) return [];
+  try {
+    const raw = localStorage.getItem(WARDROBE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveWardrobeLocal(items) {
+  if (canUseFunctionalStorage()) {
+    try { localStorage.setItem(WARDROBE_KEY, JSON.stringify(items)); } catch {}
+  }
+}
+
+async function fetchWardrobeFromServer() {
+  const res = await fetch(`${API_BASE}/api/wardrobe`, { headers: authHeaders() });
+  if (!res.ok) throw new Error("Failed to load wardrobe");
+  return res.json();
+}
+
+function loadWardrobe() {
+  // synchronous — returns cached server data or local
+  if (isLoggedIn() && _wardrobeCache) return _wardrobeCache;
+  return loadWardrobeLocal();
+}
+
+async function loadWardrobeAsync() {
+  if (isLoggedIn()) {
+    try {
+      _wardrobeCache = await fetchWardrobeFromServer();
+      return _wardrobeCache;
+    } catch {
+      return loadWardrobeLocal();
+    }
+  }
+  return loadWardrobeLocal();
+}
+
+function saveWardrobe(items) {
+  // always keep local copy in sync
+  saveWardrobeLocal(items);
+  if (isLoggedIn()) _wardrobeCache = items;
+}
+
+async function syncLocalWardrobeToServer() {
+  // Upload localStorage items to server for first-time login migration
+  const local = loadWardrobeLocal();
+  if (!local.length) return;
+  for (const item of local) {
+    try {
+      await fetch(`${API_BASE}/api/wardrobe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders() },
+        body: JSON.stringify(item),
+      });
+    } catch {}
+  }
+  // Clear local wardrobe after sync
+  localStorage.removeItem(WARDROBE_KEY);
+}
+
+function typeEmoji(type) {
+  const m = {
+    "T-shirt":"👕","Shirt":"👔","Polo":"👕","Sweater":"🧶","Hoodie":"🧥",
+    "Jacket":"🧥","Coat":"🧥","Blazer":"🤵","Vest":"🦺","Tank top":"👕",
+    "Jeans":"👖","Chinos":"👖","Shorts":"🩳","Sweatpants":"👖","Dress pants":"👖",
+    "Skirt":"👗","Dress":"👗","Sneakers":"👟","Boots":"🥾","Sandals":"🩴",
+    "Dress shoes":"👞","Scarf":"🧣","Hat":"🧢","Gloves":"🧤","Sunglasses":"🕶️",
+    "Belt":"⬜","Bag":"🎒",
+  };
+  return m[type] || "👚";
+}
+
+async function renderWardrobe() {
+  const items = await loadWardrobeAsync();
+  els.wardrobeList.innerHTML = "";
+  els.wardrobeEmpty.style.display = items.length ? "none" : "flex";
+
+  items.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "wardrobe-item";
+    div.setAttribute("data-id", item.id);
+
+    const photoHtml = item.photoDataUrl
+      ? `<img class="wardrobe-item-photo" src="${escapeHtml(item.photoDataUrl)}" alt="" />`
+      : `<div class="wardrobe-item-placeholder">${typeEmoji(item.type)}</div>`;
+
+    const meta = [item.type, item.color, item.material].filter(Boolean).join(" · ");
+    div.innerHTML = `${photoHtml}<div class="wardrobe-item-info"><div class="wardrobe-item-name">${escapeHtml(item.name)}</div><div class="wardrobe-item-meta">${escapeHtml(meta)}</div></div>`;
+    div.addEventListener("click", () => openItemDialog(item));
+    els.wardrobeList.appendChild(div);
+  });
+}
+
+let editingItemId = null;
+let pendingPhotoDataUrl = null;
+
+function openItemDialog(item = null) {
+  editingItemId = item?.id || null;
+  els.itemForm.reset();
+  pendingPhotoDataUrl = null;
+  els.itemPhotoPreview.style.display = "none";
+
+  if (item) {
+    els.itemDialogTitle = $("itemDialogTitle");
+    if (els.itemDialogTitle) els.itemDialogTitle.textContent = "Edit Clothing Item";
+    els.itemType.value = item.type || "";
+    els.itemName.value = item.name || "";
+    els.itemColor.value = item.color || "";
+    els.itemMaterial.value = item.material || "";
+    els.itemCare.value = (item.careInstructions || []).join(", ");
+    if (item.photoDataUrl) {
+      pendingPhotoDataUrl = item.photoDataUrl;
+      els.itemPhotoImg.src = item.photoDataUrl;
+      els.itemPhotoPreview.style.display = "flex";
+    }
+    els.itemDeleteBtn.style.display = "inline-flex";
+  } else {
+    const title = $("itemDialogTitle");
+    if (title) title.textContent = "Add Clothing Item";
+    els.itemDeleteBtn.style.display = "none";
+  }
+
+  if (typeof els.itemDialog.showModal === "function") els.itemDialog.showModal();
+}
+
+function closeItemDialog() {
+  if (typeof els.itemDialog.close === "function") els.itemDialog.close();
+}
+
+async function saveItem() {
+  const type = els.itemType.value.trim();
+  const name = els.itemName.value.trim();
+  if (!type || !name) return;
+
+  const careRaw = els.itemCare.value.trim();
+  const careInstructions = careRaw ? careRaw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean) : [];
+
+  const itemData = {
+    type, name,
+    color: els.itemColor.value.trim() || null,
+    material: els.itemMaterial.value.trim() || null,
+    careInstructions,
+    photoDataUrl: pendingPhotoDataUrl || null,
+  };
+
+  if (isLoggedIn()) {
+    try {
+      if (editingItemId) {
+        await fetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify(itemData),
+        });
+      } else {
+        await fetch(`${API_BASE}/api/wardrobe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify(itemData),
+        });
+      }
+    } catch (err) {
+      console.error("save item error:", err);
+    }
+  } else {
+    const items = loadWardrobeLocal();
+    if (editingItemId) {
+      const idx = items.findIndex(i => i.id === editingItemId);
+      if (idx !== -1) items[idx] = { ...items[idx], ...itemData, photoDataUrl: pendingPhotoDataUrl || items[idx].photoDataUrl || null };
+    } else {
+      items.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), ...itemData, createdAt: new Date().toISOString() });
+    }
+    saveWardrobeLocal(items);
+  }
+
+  await renderWardrobe();
+  closeItemDialog();
+}
+
+async function deleteItem() {
+  if (!editingItemId) return;
+
+  if (isLoggedIn()) {
+    try {
+      await fetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
+        method: "DELETE",
+        headers: authHeaders(),
+      });
+    } catch (err) {
+      console.error("delete item error:", err);
+    }
+  } else {
+    const items = loadWardrobeLocal().filter(i => i.id !== editingItemId);
+    saveWardrobeLocal(items);
+  }
+
+  await renderWardrobe();
+  closeItemDialog();
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function bindWardrobeUI() {
+  els.addItemBtn?.addEventListener("click", () => openItemDialog());
+  els.itemCancelBtn?.addEventListener("click", closeItemDialog);
+  els.itemDeleteBtn?.addEventListener("click", deleteItem);
+
+  els.itemForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    saveItem();
+  });
+
+  els.itemPhoto?.addEventListener("change", async () => {
+    const file = els.itemPhoto.files?.[0];
+    if (!file) return;
+    try {
+      pendingPhotoDataUrl = await readFileAsDataUrl(file);
+      els.itemPhotoImg.src = pendingPhotoDataUrl;
+      els.itemPhotoPreview.style.display = "flex";
+    } catch {}
+  });
+
+  els.removePhotoBtn?.addEventListener("click", () => {
+    pendingPhotoDataUrl = null;
+    els.itemPhotoPreview.style.display = "none";
+    els.itemPhoto.value = "";
+  });
+
+  // Scan tag button opens scan dialog
+  els.scanTagBtn?.addEventListener("click", () => {
+    els.scanPhoto.value = "";
+    els.scanPreview.style.display = "none";
+    els.scanStatus.textContent = "";
+    els.scanSubmitBtn.disabled = true;
+    if (typeof els.scanDialog.showModal === "function") els.scanDialog.showModal();
+  });
+
+  els.scanCancelBtn?.addEventListener("click", () => {
+    if (typeof els.scanDialog.close === "function") els.scanDialog.close();
+  });
+
+  let scanImageDataUrl = null;
+
+  els.scanPhoto?.addEventListener("change", async () => {
+    const file = els.scanPhoto.files?.[0];
+    if (!file) return;
+    try {
+      scanImageDataUrl = await readFileAsDataUrl(file);
+      els.scanPreviewImg.src = scanImageDataUrl;
+      els.scanPreview.style.display = "block";
+      els.scanSubmitBtn.disabled = false;
+      els.scanStatus.textContent = "";
+    } catch {
+      els.scanStatus.textContent = "Could not load image.";
+    }
+  });
+
+  els.scanSubmitBtn?.addEventListener("click", async () => {
+    if (!scanImageDataUrl) return;
+    els.scanSubmitBtn.disabled = true;
+    els.scanStatus.textContent = "Scanning with Gemini… this may take a few seconds.";
+    try {
+      const res = await fetch(`${API_BASE}/api/scan-tag`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: scanImageDataUrl }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        els.scanStatus.textContent = `Could not read tag: ${data.error}`;
+        els.scanSubmitBtn.disabled = false;
+        return;
+      }
+      // Fill in the item form fields
+      if (data.material) els.itemMaterial.value = data.material;
+      if (data.careInstructions?.length) {
+        const existing = els.itemCare.value.trim();
+        els.itemCare.value = existing
+          ? existing + ", " + data.careInstructions.join(", ")
+          : data.careInstructions.join(", ");
+      }
+      if (data.brand && !els.itemName.value.trim()) {
+        els.itemName.value = data.brand;
+      }
+      els.scanStatus.textContent = "Done! Tag info added to the form.";
+      setTimeout(() => {
+        if (typeof els.scanDialog.close === "function") els.scanDialog.close();
+      }, 800);
+    } catch (err) {
+      els.scanStatus.textContent = `Error: ${err.message}. Is the server running on ${API_BASE}?`;
+      els.scanSubmitBtn.disabled = false;
+    }
+  });
+
+  renderWardrobe();
+}
+
+// ─── AI Recommendation (Gemini) ─────────────────────────────
+let lastWeatherForAI = null;
+
+async function fetchAIRecommendation(weatherData, current, ctx) {
+  const wardrobe = loadWardrobe().map(({ id, type, name, color, material, careInstructions }) => ({
+    id, type, name, color, material, careInstructions,
+  }));
+  const state = loadState();
+
+  // Build today's hourly forecast summary
+  const hourly = weatherData?.hourly;
+  let dayForecast = null;
+  if (hourly?.time) {
+    const todayStr = (current.time || new Date().toISOString()).slice(0, 10);
+    const indices = hourly.time.reduce((acc, t, i) => t.startsWith(todayStr) ? [...acc, i] : acc, []);
+    if (indices.length) {
+      const pick = (key) => indices.map(i => hourly[key]?.[i]).filter(v => v != null);
+      const min = (arr) => arr.length ? Math.min(...arr) : null;
+      const max = (arr) => arr.length ? Math.max(...arr) : null;
+      const avg = (arr) => arr.length ? +(arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : null;
+
+      const temps = pick("temperature_2m");
+      const feelsLike = pick("apparent_temperature");
+      const winds = pick("wind_speed_10m");
+      const precipProbs = pick("precipitation_probability");
+      const precips = pick("precipitation");
+      const uvs = pick("uv_index");
+
+      dayForecast = {
+        tempRange: `${min(temps)}°C – ${max(temps)}°C`,
+        feelsLikeRange: `${min(feelsLike)}°C – ${max(feelsLike)}°C`,
+        maxWind: `${max(winds)} km/h`,
+        maxPrecipProb: `${max(precipProbs)}%`,
+        totalPrecip: `${+(precips.reduce((a, b) => a + b, 0)).toFixed(1)} mm`,
+        peakUV: max(uvs),
+        avgHumidity: `${avg(pick("relative_humidity_2m"))}%`,
+      };
+    }
+  }
+
+  const weather = {
+    temperature: current.temperature_2m,
+    feelsLike: current.apparent_temperature,
+    wind: current.wind_speed_10m,
+    gusts: current.wind_gusts_10m,
+    humidity: current.relative_humidity_2m,
+    cloud: current.cloud_cover,
+    precip: current.precipitation,
+    precipProb: ctx?.precipProb ?? null,
+    uv: current.uv_index,
+    weatherLabel: weatherCodeLabel(current.weather_code),
+    isDay: current.is_day === 1,
+    dayForecast,
+  };
+
+  lastWeatherForAI = weather;
+
+  const preferences = {
+    ...state.prefs,
+    fashionNotes: state.prefs.fashionNotes || null,
+  };
+
+  els.aiRecSection.style.display = "";
+  els.aiRecLoading.style.display = "flex";
+  els.aiRecContent.innerHTML = "";
+  els.aiRecWarnings.innerHTML = "";
+  els.aiRecMissing.innerHTML = "";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/recommend`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ weather, wardrobe, preferences }),
+    });
+    const data = await res.json();
+    if (data.error) {
+      els.aiRecContent.innerHTML = `<div class="ai-error">Could not generate outfit recommendation. <button onclick="document.getElementById('refreshBtn').click()" class="ai-retry-btn">Retry</button></div>`;
+      return;
+    }
+    renderAIRecommendation(data);
+  } catch (err) {
+    els.aiRecContent.innerHTML = `<div class="ai-error">Could not reach the AI service. <button onclick="document.getElementById('refreshBtn').click()" class="ai-retry-btn">Retry</button></div>`;
+  } finally {
+    els.aiRecLoading.style.display = "none";
+  }
+}
+
+function renderAIRecommendation(data) {
+  const outfit = data.outfit || {};
+  const rows = [
+    ["Top", outfit.top],
+    ["Bottom", outfit.bottom],
+    ["Outer", outfit.outer],
+    ["Shoes", outfit.shoes],
+    ["Accessories", Array.isArray(outfit.accessories) ? outfit.accessories.join(", ") : outfit.accessories],
+  ].filter(([, v]) => v && v !== "null");
+
+  let html = '<div class="ai-outfit">';
+  rows.forEach(([label, value]) => {
+    html += `<div class="ai-outfit-row"><span class="ai-outfit-label">${escapeHtml(label)}</span><span class="ai-outfit-value">${escapeHtml(value)}</span></div>`;
+  });
+  html += "</div>";
+
+  if (data.reasoning) {
+    html += `<div class="ai-reasoning">${escapeHtml(data.reasoning)}</div>`;
+  }
+
+  els.aiRecContent.innerHTML = html;
+
+  if (data.warnings?.length) {
+    els.aiRecWarnings.innerHTML = '<div class="ai-warnings">' +
+      data.warnings.map(w => `<div class="ai-warning">⚠️ ${escapeHtml(w)}</div>`).join("") + "</div>";
+  }
+
+  if (data.missingItems?.length) {
+    els.aiRecMissing.innerHTML = '<div class="ai-missing"><div class="ai-missing-title">You might want to get:</div>' +
+      data.missingItems.map(m => `<div class="ai-missing-item">💡 ${escapeHtml(m)}</div>`).join("") + "</div>";
+  }
+}
+
+// ─── Tab navigation ──────────────────────────────────────────
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+  const page = document.getElementById(tabId);
+  if (page) page.classList.add("active");
+  const btn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+  if (btn) btn.classList.add("active");
+}
+
+function bindTabNav() {
+  els.bottomNav?.querySelectorAll(".nav-item").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+  });
+}
+
+// ─── Auto-geolocation (silent, no prompt) ────────────────────
+async function tryAutoGeo() {
+  if (!navigator.geolocation) return;
+  try {
+    setStatus("Detecting location…");
+    const pos = await getGeo(); // uses maximumAge:5min, won't prompt if already granted
+    const loc = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+    els.placeInput.value = loc.name;
+    saveState({ lastQuery: "", lastLocation: loc });
+    await runForLocation(loc);
+  } catch {
+    // Permission not granted yet or blocked — just show a nudge
+    setStatus("Tap the location button or search for a city to get started.");
+  }
+}
+
+// ─── Autocomplete with country flags ─────────────────────────
+function countryFlag(code) {
+  if (!code) return "\u{1F30D}"; // 🌍
+  return [...code.toUpperCase()]
+    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
+    .join("");
+}
+
+let _acCtrl = null;
+let _acTimer = null;
+let _acList = null;
+
+function hideAC() {
+  if (_acList) { _acList.innerHTML = ""; _acList.style.display = "none"; }
+}
+
+function setupAutocomplete() {
+  _acList = document.createElement("div");
+  _acList.className = "ac-dropdown";
+  els.placeInput.parentElement.style.position = "relative";
+  els.placeInput.parentElement.appendChild(_acList);
+
+  els.placeInput.addEventListener("input", () => {
+    clearTimeout(_acTimer);
+    const q = els.placeInput.value.trim();
+    if (q.length < 2) { hideAC(); return; }
+    _acTimer = setTimeout(() => fetchAC(q), 400);
+  });
+
+  els.placeInput.addEventListener("blur", () => setTimeout(hideAC, 200));
+}
+
+async function fetchAC(q) {
+  if (_acCtrl) _acCtrl.abort();
+  _acCtrl = new AbortController();
+  try {
+    const url = new URL("https://nominatim.openstreetmap.org/search");
+    url.searchParams.set("format", "json");
+    url.searchParams.set("q", q);
+    url.searchParams.set("limit", "5");
+    url.searchParams.set("addressdetails", "1");
+    const res = await fetch(url, {
+      signal: _acCtrl.signal,
+      headers: { Accept: "application/json" },
+    });
+    if (!res.ok) return;
+    renderAC(await res.json());
+  } catch (e) {
+    if (e.name !== "AbortError") console.warn("AC error", e);
+  }
+}
+
+function renderAC(results) {
+  if (!results.length) { hideAC(); return; }
+  _acList.innerHTML = "";
+  _acList.style.display = "block";
+  for (const r of results) {
+    const flag = countryFlag(r.address?.country_code);
+    const short = r.display_name.split(",").slice(0, 3).map((s) => s.trim()).join(", ");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ac-item";
+    btn.innerHTML = `<span class="ac-flag">${flag}</span><span class="ac-text">${short}</span>`;
+    btn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      els.placeInput.value = r.display_name;
+      hideAC();
+      const loc = { name: r.display_name, lat: Number(r.lat), lon: Number(r.lon) };
+      saveState({ lastQuery: "", lastLocation: loc });
+      runForLocation(loc);
+    });
+    _acList.appendChild(btn);
+  }
+}
+
+// ─── Auth UI binding ─────────────────────────────────────────
+let authIsSignup = false;
+
+function showAuthDialog() {
+  if (isLoggedIn()) {
+    els.authFormWrap.style.display = "none";
+    els.authLoggedIn.style.display = "";
+    els.authDialogTitle.textContent = "Account";
+    if (authUser) {
+      els.authAvatar.src = authUser.avatarUrl || "";
+      els.authAvatar.style.display = authUser.avatarUrl ? "" : "none";
+      els.authUserName.textContent = authUser.name || "User";
+      els.authUserEmail.textContent = authUser.email || "";
+    }
+  } else {
+    els.authFormWrap.style.display = "";
+    els.authLoggedIn.style.display = "none";
+    setAuthMode(false);
+  }
+  els.authError.style.display = "none";
+  if (typeof els.authDialog.showModal === "function") els.authDialog.showModal();
+}
+
+function setAuthMode(signup) {
+  authIsSignup = signup;
+  els.authDialogTitle.textContent = signup ? "Create account" : "Sign in";
+  els.authSubmitBtn.textContent = signup ? "Sign up" : "Sign in";
+  els.authName.style.display = signup ? "" : "none";
+  els.authToggleMode.innerHTML = signup
+    ? 'Already have an account? <strong>Sign in</strong>'
+    : "Don't have an account? <strong>Sign up</strong>";
+}
+
+function bindAuthUI() {
+  els.userBtn.addEventListener("click", showAuthDialog);
+  els.wardrobeSignInBtn?.addEventListener("click", showAuthDialog);
+  els.authCloseBtn.addEventListener("click", () => els.authDialog.close());
+  els.authToggleMode.addEventListener("click", () => setAuthMode(!authIsSignup));
+
+  els.authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    els.authError.style.display = "none";
+    const endpoint = authIsSignup ? "/api/auth/signup" : "/api/auth/login";
+    const body = {
+      email: els.authEmail.value.trim(),
+      password: els.authPassword.value,
+    };
+    if (authIsSignup) body.name = els.authName.value.trim();
+
+    els.authSubmitBtn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Auth failed");
+      setAuth(data.token, data.user);
+      // Sync local wardrobe to server
+      await syncLocalWardrobeToServer();
+      await renderWardrobe();
+      els.authDialog.close();
+    } catch (err) {
+      els.authError.textContent = err.message;
+      els.authError.style.display = "";
+    } finally {
+      els.authSubmitBtn.disabled = false;
+    }
+  });
+
+  els.googleSignInBtn.addEventListener("click", () => {
+    const w = window.open(`${API_BASE}/api/auth/google`, "wearcast-google-auth", "width=500,height=600");
+    window.addEventListener("message", async function handler(e) {
+      if (e.data?.type !== "wearcast-auth") return;
+      window.removeEventListener("message", handler);
+      setAuth(e.data.token, e.data.user);
+      await syncLocalWardrobeToServer();
+      await renderWardrobe();
+      els.authDialog.close();
+    });
+  });
+
+  els.authLogoutBtn.addEventListener("click", () => {
+    setAuth(null, null);
+    _wardrobeCache = null;
+    renderWardrobe();
+    els.authDialog.close();
+  });
+
+  // Listen for Google OAuth callback postMessage
+  window.addEventListener("message", (e) => {
+    if (e.data?.type === "wearcast-auth" && e.data.token) {
+      setAuth(e.data.token, e.data.user);
+    }
   });
 }
 
 function init() {
+  bindTabNav();
   setupInstallUI();
   bindConsentUI();
   bindPrefs();
+  bindWardrobeUI();
+  bindAuthUI();
+  updateAuthUI();
+
+  // Also bind the empty-state add button
+  els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog());
 
   els.searchBtn.addEventListener("click", onSearch);
   els.geoBtn.addEventListener("click", onUseMyLocation);
@@ -1162,8 +1964,12 @@ function init() {
   });
 
   els.placeInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") onSearch();
+    if (e.key === "Enter") { hideAC(); onSearch(); }
+    if (e.key === "Escape") hideAC();
   });
+
+  // ── Autocomplete dropdown ──
+  setupAutocomplete();
 
   // Show GDPR-style privacy choices on first visit.
   if (!consent.seen) {
@@ -1174,9 +1980,11 @@ function init() {
   if (st.lastLocation) {
     els.placeInput.value = st.lastLocation.name;
     runForLocation(st.lastLocation);
-  } else if (st.lastQuery) {
-    els.placeInput.value = st.lastQuery;
+  } else if (consent.seen) {
+    // No saved location — silently try cached/granted geolocation (no prompt)
+    tryAutoGeo();
   }
+  // If consent not yet seen, auto-geo triggers after consent accept (see bindConsentUI)
 
   registerSW();
 }
