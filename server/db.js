@@ -15,6 +15,9 @@ export async function initDB() {
       name          TEXT,
       avatar_url    TEXT,
       google_id     TEXT UNIQUE,
+      email_verified BOOLEAN DEFAULT TRUE,
+      verification_token_hash TEXT,
+      verification_expires_at TIMESTAMPTZ,
       created_at    TIMESTAMPTZ DEFAULT NOW()
     );
 
@@ -33,7 +36,20 @@ export async function initDB() {
 
     CREATE INDEX IF NOT EXISTS idx_wardrobe_user ON wardrobe_items(user_id);
   `);
-  console.log("DB schema ready");
+
+  await pool.query(`
+    ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT TRUE,
+      ADD COLUMN IF NOT EXISTS verification_token_hash TEXT,
+      ADD COLUMN IF NOT EXISTS verification_expires_at TIMESTAMPTZ;
+  `);
+
+  await pool.query(`
+    UPDATE users
+    SET email_verified = TRUE
+    WHERE email_verified IS NULL;
+  `);
+  console.info("DB schema ready");
 }
 
 export default pool;

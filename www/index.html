@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>WearCast</title>
+  <link rel="manifest" href="manifest.webmanifest?v=12" />
+  <meta name="theme-color" content="#2979ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" href="icon.svg?v=12" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css?v=12" />
+</head>
+<body>
+
+  <!-- ═══ Top bar ═══ -->
+  <header>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <img class="logo" src="/icon.svg?v=12" alt="" />
+      </span>
+      <span class="brand-name">WearCast</span>
+    </div>
+    <div class="header-right">
+      <button id="refreshBtn" class="icon-btn" aria-label="Refresh" title="Refresh">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+      <button id="privacyBtn" class="icon-btn" aria-label="Settings" title="Privacy settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="userBtn" class="user-btn" aria-label="Account" title="Account">
+        <svg id="userBtnIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <img id="userBtnAvatar" class="user-avatar" style="display:none" alt="" />
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ Tab pages ═══ -->
+  <main>
+
+    <!-- ── TAB: Today ── -->
+    <section id="tabToday" class="tab-page active">
+
+      <!-- Location bar -->
+      <div class="location-bar">
+        <div class="location-input-wrap">
+          <svg class="location-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <input id="placeInput" type="text" placeholder="Search city…" autocomplete="off" />
+          <button id="searchBtn" class="location-action" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+        </div>
+        <button id="geoBtn" class="geo-btn" aria-label="Use my location" title="Use my location">
+          <span class="geo-btn-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="4"/></svg>
+          </span>
+          <span class="geo-btn-spinner spinner spinner-sm" aria-hidden="true" style="display:none;"></span>
+        </button>
+      </div>
+      <div id="placeStatus" class="status-text" role="status"></div>
+
+      <div class="card today-cta">
+        <div class="today-cta-copy">
+          <span id="todayCtaKicker" class="today-cta-kicker">Level up</span>
+          <h3 id="todayCtaTitle">Build your closet to unlock sharper outfit picks.</h3>
+        </div>
+        <button id="todayWardrobeCtaBtn" class="btn-primary-sm today-cta-btn">Add wardrobe</button>
+      </div>
+
+      <!-- Weather hero -->
+      <div id="weatherHero" class="weather-hero" style="display:none;">
+        <div class="hero-main">
+          <span id="temp" class="hero-temp">—</span>
+          <div class="hero-meta">
+            <span id="wcode" class="hero-condition">—</span>
+            <span class="hero-feels">Feels <span id="apparent">—</span></span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg><span id="wind">—</span></div>
+          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg><span id="humidity">—</span></div>
+          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>UV <span id="uv">—</span></div>
+          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="15" x2="8" y2="21"/><line x1="12" y1="17" x2="12" y2="23"/><line x1="16" y1="15" x2="16" y2="21"/></svg><span id="precip">—</span></div>
+        </div>
+        <div id="updatedAt" class="hero-updated">—</div>
+      </div>
+
+      <!-- Severity alert -->
+      <div id="severity" class="severity-bar" role="status" style="display:none;">
+        <span id="severityIcon" class="severity-icon"></span>
+        <div class="severity-left">
+          <span id="severityTitle" class="severity-title">—</span>
+          <span id="severityDetail" class="severity-detail">—</span>
+        </div>
+        <span id="severityMeta" class="severity-meta">—</span>
+      </div>
+
+      <!-- AI Outfit -->
+      <div id="aiRecSection" class="card" style="display:none;">
+        <div class="card-header">
+          <h2>Today's Outfit</h2>
+          <span class="pill pill-ai">AI</span>
+        </div>
+        <div id="aiRecLoading" class="loading-state" style="display:none;">
+          <div class="spinner"></div>
+          <span>Picking your outfit…</span>
+        </div>
+        <div id="aiRecContent"></div>
+        <div id="aiRecWarnings"></div>
+        <div id="aiRecMissing"></div>
+      </div>
+
+      <!-- Expanded weather -->
+      <details class="card card-details" id="weatherDetailsCard" style="display:none;">
+        <summary class="card-header card-header-clickable">
+          <h2>Weather Details</h2>
+          <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Cloud cover</span><span id="cloud">—</span></div>
+          <div class="detail-item"><span class="detail-label">Precip chance</span><span id="precipProb">—</span></div>
+          <div class="detail-item"><span class="detail-label">Effective temp</span><span id="effTemp">—</span></div>
+          <div class="detail-item"><span class="detail-label">Dew point</span><span id="dewPoint">—</span></div>
+          <div class="detail-item"><span class="detail-label">Visibility</span><span id="vis">—</span></div>
+          <div class="detail-item"><span class="detail-label">Daytime</span><span id="isDay">—</span></div>
+        </div>
+      </details>
+
+      <!-- Empty state: no location yet -->
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>Where are you headed?</h3>
+        <p>Search a city or share your location to get weather-based outfit suggestions.</p>
+      </div>
+    </section>
+
+    <!-- ── TAB: Wardrobe ── -->
+    <section id="tabWardrobe" class="tab-page">
+      <!-- Auth gate -->
+      <div id="wardrobeAuthGate" class="empty-state" style="display:none;">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Sign in to use your wardrobe</h3>
+        <p>Create an account to save your clothing items and get personalised outfit recommendations.</p>
+        <button id="wardrobeSignInBtn" class="btn-primary" style="margin-top:16px;">Sign in / Sign up</button>
+      </div>
+
+      <!-- Logged-in content -->
+      <div id="wardrobeContent" style="display:none;">
+        <div class="tab-top-bar">
+          <h2>My Wardrobe</h2>
+          <button id="addItemBtn" class="btn-primary-sm">+ Add</button>
+        </div>
+        <div class="card wardrobe-explainer">
+          <div class="wardrobe-explainer-body">
+            <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Get personalized fast</span>
+            <h3 id="wardrobeExplainerTitle">Your wardrobe powers smarter outfit picks</h3>
+            <p id="wardrobeExplainerText">Add photos or care tags once, then WearCast can recommend pieces you actually own instead of generic outfits.</p>
+            <button id="wardrobeExplainerBtn" class="btn-primary-sm wardrobe-explainer-btn">Add an item</button>
+          </div>
+        </div>
+        <div id="wardrobeEmpty" class="empty-state">
+          <div class="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+          </div>
+          <h3>Your closet is empty</h3>
+          <p>Add your clothing items so WearCast can pick outfits from what you own.</p>
+          <button id="addItemBtnEmpty" class="btn-primary" style="margin-top:16px;">Add your first item</button>
+        </div>
+        <div id="wardrobeList" class="wardrobe-grid"></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Preferences ── -->
+    <section id="tabPrefs" class="tab-page">
+      <div class="tab-top-bar"><h2>Preferences</h2></div>
+
+      <div class="card">
+        <div class="card-header"><h3>Comfort</h3></div>
+        <div class="pref-toggles">
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="🥶">I am usually cold</span>
+            <input type="checkbox" id="prefCold" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="🥵">I am usually hot</span>
+            <input type="checkbox" id="prefHot" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Style</h3></div>
+        <div class="pref-toggles">
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="👔">Prefer polished</span>
+            <input type="checkbox" id="prefFormal" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="👟">Prefer casual</span>
+            <input type="checkbox" id="prefCasual" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="🏃">Prefer sporty</span>
+            <input type="checkbox" id="prefSporty" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="🧥">Prefer streetwear</span>
+            <input type="checkbox" id="prefStreetwear" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="✨">Prefer minimalist</span>
+            <input type="checkbox" id="prefMinimalist" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label" data-icon="🚶">I'll bike / walk</span>
+            <input type="checkbox" id="prefBike" class="toggle-input" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div style="padding:0 16px 16px;">
+          <label for="fashionNotes" class="input-label">Style Notes</label>
+          <input id="fashionNotes" type="text" class="text-input" placeholder="e.g. minimalist streetwear, earth tones" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>About</h3></div>
+        <div class="about-content">
+          <p><strong>WearCast</strong> suggests outfits based on real-time weather.</p>
+          <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. AI by <a href="https://ai.google.dev/" target="_blank" rel="noreferrer">Gemini</a>.</p>
+          <p><a href="./privacy.html">Privacy Policy</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ Bottom nav ═══ -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-tab="tabToday">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <span>Today</span>
+    </button>
+    <button class="nav-item" data-tab="tabWardrobe">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+      <span>Wardrobe</span>
+    </button>
+    <button class="nav-item" data-tab="tabPrefs">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Preferences</span>
+    </button>
+  </nav>
+
+  <!-- ═══ Install banner ═══ -->
+  <div id="installBanner" class="install-banner" role="status" aria-live="polite" style="display:none;">
+    <div class="install-inner">
+      <span>Add WearCast to your Home Screen</span>
+      <div style="display:flex; gap:8px;">
+        <button id="installBtn" class="btn-primary-sm">Install</button>
+        <button id="installCloseBtn" class="btn-ghost-sm">Later</button>
+      </div>
+    </div>
+  </div>
+  <div id="installBannerSubtitle" style="display:none;"></div>
+
+  <!-- ═══ Dialogs ═══ -->
+
+  <dialog id="installDialog" class="dialog" aria-labelledby="installTitle">
+    <div class="dialog-inner">
+      <h2 id="installTitle">Install WearCast</h2>
+      <p id="installText" class="dialog-body">—</p>
+      <ol class="dialog-steps">
+        <li>Open the browser menu / share sheet</li>
+        <li>Select <strong>Add to Home Screen</strong></li>
+        <li>Confirm</li>
+      </ol>
+      <div class="dialog-actions">
+        <form method="dialog"><button class="btn-primary">Got it</button></form>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="consentDialog" class="dialog" aria-labelledby="consentTitle">
+    <form method="dialog" class="dialog-inner">
+      <h2 id="consentTitle">Privacy</h2>
+      <p class="dialog-subtitle">Choose what you're comfortable with.</p>
+
+      <div class="option-list">
+        <label class="option-row">
+          <input type="checkbox" id="consentSelectAll" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Select all</strong>
+            <span>Enable all options below.</span>
+          </div>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="consentFunctional" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Functional storage</strong>
+            <span>Save preferences & last location.</span>
+          </div>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="consentLocation" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Device location</strong>
+            <span>Enable "Use my location" button.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="consentEssential" class="btn-ghost" value="essential">Skip</button>
+        <button id="consentAccept" class="btn-primary" value="accept">Save choices</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Add/Edit wardrobe item -->
+  <dialog id="itemDialog" class="dialog dialog-full" aria-labelledby="itemDialogTitle">
+    <form class="dialog-inner dialog-scroll" id="itemForm" method="dialog">
+      <div class="dialog-top-bar">
+        <button type="button" id="itemCancelBtn" class="btn-ghost-sm">Cancel</button>
+        <h2 id="itemDialogTitle">Add Item</h2>
+        <span class="dialog-top-spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="form-stack">
+        <section class="item-hero-card">
+          <div id="itemPhotoPreview" class="item-visual">
+            <img id="itemPhotoImg" alt="Selected clothing item" style="display:none;" />
+            <div id="itemVisualPlaceholder" class="item-visual-placeholder">
+              <div id="itemVisualEmoji" class="item-visual-emoji">👕</div>
+              <div id="itemVisualName" class="item-visual-name">Add a clothing photo</div>
+              <div id="itemVisualMeta" class="item-visual-meta">We’ll try to prefill the details for you.</div>
+            </div>
+            <button type="button" id="removePhotoBtn" class="img-remove" aria-label="Remove photo" style="display:none;">&times;</button>
+          </div>
+          <label class="file-upload file-upload-primary">
+            <input type="file" id="itemPhoto" accept="image/*" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Add clothing photo</span>
+          </label>
+          <div id="itemPhotoStatus" class="status-text item-photo-status"></div>
+        </section>
+
+        <details class="card item-manual-card" id="itemManualDetails">
+          <summary class="card-header card-header-clickable">
+            <h3>Add manually</h3>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="item-manual-body">
+            <div class="form-group">
+              <label for="itemType" class="input-label">Type *</label>
+              <select id="itemType" required class="select-input">
+                <option value="">Select type…</option>
+                <option>T-shirt</option><option>Shirt</option><option>Polo</option>
+                <option>Sweater</option><option>Hoodie</option><option>Jacket</option>
+                <option>Coat</option><option>Blazer</option><option>Vest</option>
+                <option>Tank top</option><option>Jeans</option><option>Chinos</option>
+                <option>Shorts</option><option>Sweatpants</option><option>Dress pants</option>
+                <option>Skirt</option><option>Dress</option><option>Sneakers</option>
+                <option>Boots</option><option>Sandals</option><option>Dress shoes</option>
+                <option>Scarf</option><option>Hat</option><option>Gloves</option>
+                <option>Sunglasses</option><option>Belt</option><option>Bag</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="itemName" class="input-label">Name *</label>
+              <input id="itemName" type="text" class="text-input" placeholder="e.g. Blue denim jacket" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemColor" class="input-label">Color</label>
+                <input id="itemColor" type="text" class="text-input" placeholder="e.g. Navy" />
+              </div>
+              <div class="form-group">
+                <label for="itemMaterial" class="input-label">Material</label>
+                <input id="itemMaterial" type="text" class="text-input" placeholder="e.g. Cotton" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="itemCare" class="input-label">Care Instructions</label>
+              <textarea id="itemCare" rows="2" class="text-input" placeholder="e.g. Machine wash cold, tumble dry low" style="resize:vertical;"></textarea>
+              <button type="button" id="scanTagBtn" class="btn-outline" style="margin-top:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Scan care tag
+              </button>
+            </div>
+          </div>
+        </details>
+
+        <div class="item-save-bar">
+          <button type="submit" id="itemSaveBtn" class="btn-primary item-save-btn">Save item</button>
+          <button type="button" id="itemDeleteBtn" class="btn-danger-primary item-delete-btn" style="display:none;">Delete item</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Care tag scanner -->
+  <dialog id="scanDialog" class="dialog" aria-labelledby="scanDialogTitle">
+    <div class="dialog-inner">
+      <h2 id="scanDialogTitle">Scan Care Tag</h2>
+      <p class="dialog-subtitle">Take a clear photo of the care tag.</p>
+      <label class="file-upload" style="margin-top:12px;">
+        <input type="file" id="scanPhoto" accept="image/*" capture="environment" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>Take photo or choose file</span>
+      </label>
+      <div id="scanPreview" style="margin-top:12px; display:none;">
+        <img id="scanPreviewImg" alt="Tag" style="width:100%; max-height:200px; object-fit:contain; border-radius:12px;" />
+      </div>
+      <div id="scanStatus" class="status-text" style="margin-top:8px;"></div>
+      <div class="dialog-actions">
+        <button type="button" id="scanCancelBtn" class="btn-ghost">Cancel</button>
+        <button type="button" id="scanSubmitBtn" class="btn-primary" disabled>Done</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ═══ Auth dialog ═══ -->
+  <dialog id="authDialog" class="dialog">
+    <div class="dialog-card" style="max-width:380px;">
+      <h2 id="authDialogTitle" class="dialog-title">Sign in</h2>
+      <p class="auth-subtitle">Sign in to sync your wardrobe across devices</p>
+
+      <div id="authFormWrap">
+        <!-- Email/Password form -->
+        <form id="authForm" autocomplete="on">
+          <input id="authName" type="text" class="text-input auth-input" placeholder="Name" autocomplete="name" style="display:none" />
+          <input id="authEmail" type="email" class="text-input auth-input" placeholder="Email" autocomplete="email" required inputmode="email" />
+          <input id="authPassword" type="password" class="text-input auth-input" placeholder="Password" autocomplete="current-password" required minlength="6" />
+          <div id="authError" class="auth-error" style="display:none"></div>
+          <div id="authInfo" class="auth-info" style="display:none"></div>
+          <button id="authSubmitBtn" type="submit" class="btn-primary auth-submit">Sign in</button>
+        </form>
+
+        <button id="authResendVerifyBtn" class="btn-ghost auth-submit" style="display:none; margin-top:10px;">Resend verification email</button>
+
+        <button id="authToggleMode" class="auth-toggle">Don't have an account? <strong>Sign up</strong></button>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <button id="googleSignInBtn" class="btn-google">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- Logged-in state -->
+      <div id="authLoggedIn" style="display:none">
+        <div class="auth-profile">
+          <img id="authAvatar" class="auth-profile-avatar" alt="" />
+          <div>
+            <div id="authUserName" class="auth-profile-name"></div>
+            <div id="authUserEmail" class="auth-profile-email"></div>
+            <div id="authUserBadge" class="auth-profile-badge"></div>
+          </div>
+        </div>
+        <button id="authLogoutBtn" class="btn-primary auth-submit" style="background:#e53935;">Sign out</button>
+        <button id="authDeleteBtn" class="btn-ghost auth-submit" style="margin-top:10px;">Delete account</button>
+      </div>
+
+      <button id="authCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+    </div>
+  </dialog>
+
+  <dialog id="deleteAccountDialog" class="dialog">
+    <div class="dialog-inner">
+      <h2>Delete account</h2>
+      <p class="dialog-subtitle">This will permanently remove your account and wardrobe. Take a moment to reconsider.</p>
+      <div id="deleteAccountPrompt" class="status-text" style="margin-top:12px;">If you’re sure, confirm below.</div>
+      <input id="deleteAccountPassword" type="password" class="text-input auth-input" placeholder="Current password" autocomplete="current-password" style="margin-top:12px;" />
+      <input id="deleteAccountConfirmText" type="text" class="text-input auth-input" placeholder='Type DELETE if you signed in with Google' style="margin-top:10px;" />
+      <div id="deleteAccountError" class="auth-error" style="display:none"></div>
+      <div class="dialog-actions">
+        <button type="button" id="deleteAccountCancelBtn" class="btn-ghost">Keep account</button>
+        <button type="button" id="deleteAccountConfirmBtn" class="btn-danger">Delete forever</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- GoatCounter analytics -->
+  <script data-goatcounter="https://wearcast.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script src="app.js?v=12" type="module"></script>
+</body>
+</html>

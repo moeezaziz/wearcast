@@ -1,0 +1,28 @@
+{
+  "name": "wearcast",
+  "version": "1.0.0",
+  "description": "A tiny webapp that suggests what to wear based on local weather (temperature, feels-like, wind, humidity, cloud cover, precipitation, UV).",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moeezaziz/wearcast.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moeezaziz/wearcast/issues"
+  },
+  "homepage": "https://github.com/moeezaziz/wearcast#readme",
+  "dependencies": {
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/browser": "^8.0.3",
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/geolocation": "^8.2.0",
+    "@capacitor/ios": "^8.3.0"
+  }
+}
