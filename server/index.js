@@ -750,6 +750,15 @@ app.post("/api/recommend", async (req, res) => {
     if (preferences?.streetwear) prefsDesc.push("prefers streetwear-inspired outfits");
     if (preferences?.minimalist) prefsDesc.push("prefers minimalist styling");
     if (preferences?.bike) prefsDesc.push("plans to bike or walk (active)");
+    if (preferences?.activityContext === "walking") prefsDesc.push("expects to walk more than usual today");
+    if (preferences?.activityContext === "commute") prefsDesc.push("is dressing for commuting and movement");
+    if (preferences?.locationContext === "indoors") prefsDesc.push("will spend most of the day indoors");
+    if (preferences?.locationContext === "outdoors") prefsDesc.push("will spend a lot of time outdoors");
+    if (preferences?.styleFocus === "polished") prefsDesc.push("wants the outfit to lean polished");
+    if (preferences?.styleFocus === "casual") prefsDesc.push("wants the outfit to lean casual");
+    if (preferences?.styleFocus === "sporty") prefsDesc.push("wants the outfit to lean sporty");
+    if (preferences?.styleFocus === "streetwear") prefsDesc.push("wants the outfit to lean streetwear");
+    if (preferences?.styleFocus === "minimalist") prefsDesc.push("wants the outfit to lean minimalist");
     if (preferences?.fashionNotes) prefsDesc.push(`style notes: ${preferences.fashionNotes}`);
 
     const dayFc = resolvedWeather.remainingForecast;

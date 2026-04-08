@@ -25,8 +25,8 @@
       <button id="refreshBtn" class="icon-btn" aria-label="Refresh" title="Refresh">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       </button>
-      <button id="privacyBtn" class="icon-btn" aria-label="Settings" title="Privacy settings">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <button id="privacyBtn" class="icon-btn" aria-label="Privacy" title="Privacy settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9.5 12.5 11 14l3.5-4"/></svg>
       </button>
       <button id="userBtn" class="user-btn" aria-label="Account" title="Account">
         <svg id="userBtnIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -59,7 +59,7 @@
       </div>
       <div id="placeStatus" class="status-text" role="status"></div>
 
-      <div class="card today-cta">
+      <div class="card today-cta today-cta-compact">
         <div class="today-cta-copy">
           <span id="todayCtaKicker" class="today-cta-kicker">Level up</span>
           <h3 id="todayCtaTitle">Build your closet to unlock sharper outfit picks.</h3>
@@ -72,40 +72,35 @@
         <div class="hero-main">
           <span id="temp" class="hero-temp">—</span>
           <div class="hero-meta">
-            <span id="wcode" class="hero-condition">—</span>
+            <span class="hero-condition-wrap">
+              <span id="heroConditionIcon" class="hero-condition-icon" aria-hidden="true">○</span>
+              <span id="wcode" class="hero-condition">—</span>
+            </span>
             <span class="hero-feels">Feels <span id="apparent">—</span></span>
           </div>
         </div>
         <div class="hero-stats">
           <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg><span id="wind">—</span></div>
-          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg><span id="humidity">—</span></div>
+          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="15" x2="8" y2="21"/><line x1="12" y1="17" x2="12" y2="23"/><line x1="16" y1="15" x2="16" y2="21"/></svg>Rain <span id="heroPrecipProb">—</span></div>
           <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>UV <span id="uv">—</span></div>
-          <div class="hero-stat"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="15" x2="8" y2="21"/><line x1="12" y1="17" x2="12" y2="23"/><line x1="16" y1="15" x2="16" y2="21"/></svg><span id="precip">—</span></div>
         </div>
         <div id="updatedAt" class="hero-updated">—</div>
       </div>
 
-      <!-- Severity alert -->
-      <div id="severity" class="severity-bar" role="status" style="display:none;">
-        <span id="severityIcon" class="severity-icon"></span>
-        <div class="severity-left">
-          <span id="severityTitle" class="severity-title">—</span>
-          <span id="severityDetail" class="severity-detail">—</span>
-        </div>
-        <span id="severityMeta" class="severity-meta">—</span>
-      </div>
-
       <!-- AI Outfit -->
-      <div id="aiRecSection" class="card" style="display:none;">
-        <div class="card-header">
-          <h2>Today's Outfit</h2>
-          <span class="pill pill-ai">AI</span>
+      <div id="aiRecSection" class="card today-rec-card" style="display:none;">
+        <div class="card-header today-rec-header">
+          <div>
+            <h2>Today's Recommendation</h2>
+            <p class="today-rec-subtitle">AI suggestion based on weather, wardrobe, and your preferences.</p>
+          </div>
+          <span id="aiRecBadge" class="pill pill-soft">Best match</span>
         </div>
         <div id="aiRecLoading" class="loading-state" style="display:none;">
           <div class="spinner"></div>
-          <span>Picking your outfit…</span>
+          <span>Styling your day…</span>
         </div>
-        <div id="aiRecContent"></div>
+        <div id="aiRecContent" class="today-rec-content"></div>
         <div id="aiRecWarnings"></div>
         <div id="aiRecMissing"></div>
       </div>
@@ -117,7 +112,9 @@
           <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </summary>
         <div class="detail-grid">
+          <div class="detail-item"><span class="detail-label">Humidity</span><span id="humidity">—</span></div>
           <div class="detail-item"><span class="detail-label">Cloud cover</span><span id="cloud">—</span></div>
+          <div class="detail-item"><span class="detail-label">Precipitation</span><span id="precip">—</span></div>
           <div class="detail-item"><span class="detail-label">Precip chance</span><span id="precipProb">—</span></div>
           <div class="detail-item"><span class="detail-label">Effective temp</span><span id="effTemp">—</span></div>
           <div class="detail-item"><span class="detail-label">Dew point</span><span id="dewPoint">—</span></div>
@@ -174,63 +171,73 @@
       </div>
     </section>
 
-    <!-- ── TAB: Preferences ── -->
+    <!-- ── TAB: Settings ── -->
     <section id="tabPrefs" class="tab-page">
-      <div class="tab-top-bar"><h2>Preferences</h2></div>
+      <div class="tab-top-bar"><h2>Settings</h2></div>
 
       <div class="card">
-        <div class="card-header"><h3>Comfort</h3></div>
-        <div class="pref-toggles">
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="🥶">I am usually cold</span>
-            <input type="checkbox" id="prefCold" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="🥵">I am usually hot</span>
-            <input type="checkbox" id="prefHot" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
+        <div class="card-header"><h3>Account</h3></div>
+        <div class="settings-list">
+          <div class="settings-row settings-row-static">
+            <div class="settings-copy">
+              <strong id="settingsAccountTitle">Not signed in</strong>
+              <span id="settingsAccountStatus">Sign in to sync your wardrobe and account settings.</span>
+            </div>
+          </div>
+          <button id="settingsAccountBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Manage account</strong>
+              <span>Sign in, review account details, or log out.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsDeleteAccountBtn" class="settings-row settings-row-danger" type="button" style="display:none;">
+            <div class="settings-copy">
+              <strong>Delete account</strong>
+              <span>Permanently remove your account and wardrobe.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header"><h3>Style</h3></div>
-        <div class="pref-toggles">
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="👔">Prefer polished</span>
-            <input type="checkbox" id="prefFormal" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="👟">Prefer casual</span>
-            <input type="checkbox" id="prefCasual" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="🏃">Prefer sporty</span>
-            <input type="checkbox" id="prefSporty" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="🧥">Prefer streetwear</span>
-            <input type="checkbox" id="prefStreetwear" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="✨">Prefer minimalist</span>
-            <input type="checkbox" id="prefMinimalist" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
-          <label class="toggle-row">
-            <span class="toggle-label" data-icon="🚶">I'll bike / walk</span>
-            <input type="checkbox" id="prefBike" class="toggle-input" />
-            <span class="toggle-track"></span>
-          </label>
+        <div class="card-header"><h3>Privacy & Permissions</h3></div>
+        <div class="settings-list">
+          <button id="settingsPrivacyBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Privacy choices</strong>
+              <span>Review functional storage and device location permissions.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsLocationBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Use current location</strong>
+              <span>Refresh your weather with your device location.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
         </div>
-        <div style="padding:0 16px 16px;">
-          <label for="fashionNotes" class="input-label">Style Notes</label>
-          <input id="fashionNotes" type="text" class="text-input" placeholder="e.g. minimalist streetwear, earth tones" />
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>App Data</h3></div>
+        <div class="settings-list">
+          <button id="settingsClearLocationBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Clear saved location</strong>
+              <span>Forget the last place used on this device.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsResetPrefsBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Reset outfit tuning</strong>
+              <span>Clear saved comfort, style, and recommendation preferences.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
         </div>
       </div>
 
@@ -257,7 +264,7 @@
     </button>
     <button class="nav-item" data-tab="tabPrefs">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Preferences</span>
+      <span>Settings</span>
     </button>
   </nav>
 
