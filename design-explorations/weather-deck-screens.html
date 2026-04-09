@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WearCast Weather Deck Screens</title>
+  <style>
+    :root {
+      --bg: #f4f8fd;
+      --bg-warm: #fff7ea;
+      --text: #0a1628;
+      --text-2: #435472;
+      --text-3: #7e91af;
+      --line: rgba(10, 22, 40, 0.08);
+      --blue: #2979ff;
+      --cyan: #00b0ff;
+      --mint: #00e676;
+      --glass: rgba(255, 255, 255, 0.82);
+      --glass-strong: rgba(255, 255, 255, 0.94);
+      --surface: rgba(248, 251, 255, 0.92);
+      --shadow: 0 24px 54px rgba(18, 44, 82, 0.14);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 28px 20px 56px;
+      font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 95, 0.18), transparent 22%),
+        radial-gradient(circle at top right, rgba(0, 176, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg-warm) 0%, var(--bg) 28%, #eef5ff 100%);
+    }
+
+    .board {
+      width: min(1680px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      align-items: start;
+    }
+
+    .mock {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+    }
+
+    .label {
+      width: min(390px, 100%);
+      padding: 0 6px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .device {
+      position: relative;
+      width: min(390px, 100%);
+      aspect-ratio: 390 / 844;
+      border-radius: 42px;
+      padding: 14px;
+      background: linear-gradient(180deg, #1d2939 0%, #101724 100%);
+      box-shadow: 0 36px 72px rgba(10, 22, 40, 0.18);
+    }
+
+    .device::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36%;
+      height: 28px;
+      border-radius: 0 0 18px 18px;
+      background: rgba(0, 0, 0, 0.72);
+      z-index: 5;
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 95, 0.16), transparent 24%),
+        radial-gradient(circle at top right, rgba(0, 176, 255, 0.12), transparent 30%),
+        linear-gradient(180deg, #fff7ea 0%, #f7fbff 24%, #eef5ff 100%);
+    }
+
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      position: relative;
+      z-index: 2;
+    }
+
+    .top {
+      padding: 4px 18px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.34);
+    }
+
+    .icon-set {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,.54);
+      border: 1px solid rgba(255,255,255,.62);
+      color: var(--text-2);
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(23, 54, 100, 0.08);
+    }
+
+    .search-bar {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px 12px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.74);
+      box-shadow: 0 12px 24px rgba(20, 50, 94, 0.08);
+    }
+
+    .search-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    .search-main span:last-child {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .geo-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(41,121,255,.18);
+      flex: 0 0 42px;
+    }
+
+    .scroll {
+      padding: 18px 18px 104px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .deck {
+      padding: 24px 22px 18px;
+      border-radius: 30px;
+      color: white;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.15), rgba(255,255,255,0)),
+        linear-gradient(140deg, var(--blue) 0%, var(--cyan) 58%, var(--mint) 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .deck-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .82;
+    }
+
+    .deck-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+    }
+
+    .deck-title {
+      margin-top: 16px;
+      font-size: 42px;
+      line-height: .96;
+      letter-spacing: -.06em;
+      font-weight: 800;
+    }
+
+    .deck-copy {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      opacity: .92;
+    }
+
+    .deck-main {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .temp {
+      font-size: 76px;
+      line-height: .92;
+      letter-spacing: -.075em;
+      font-weight: 800;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 14px;
+      line-height: 1.55;
+      opacity: .9;
+    }
+
+    .deck-stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 12px 10px;
+      border-radius: 18px;
+      text-align: center;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .stat span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .82;
+      font-weight: 700;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 17px;
+      line-height: 1.1;
+    }
+
+    .updated {
+      margin-top: 14px;
+      font-size: 11px;
+      opacity: .72;
+      text-align: center;
+    }
+
+    .surface {
+      border-radius: 24px;
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.68);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 28px rgba(26, 56, 101, 0.08);
+      padding: 16px;
+    }
+
+    .surface-strong {
+      background: var(--glass-strong);
+    }
+
+    .surface-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .micro {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.1);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .surface-title {
+      margin-top: 8px;
+      font-size: 28px;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+      font-weight: 800;
+    }
+
+    .surface-copy {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-2);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.08);
+      color: #18458f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tile {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(41,121,255,.08);
+      min-height: 92px;
+    }
+
+    .tile strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+    }
+
+    .tile small,
+    .muted {
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .tip {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(41,121,255,.06);
+      border: 1px solid rgba(41,121,255,.1);
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rows {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .row strong {
+      font-size: 14px;
+      line-height: 1.3;
+      text-align: right;
+    }
+
+    .cta {
+      margin-top: 12px;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      box-shadow: 0 14px 28px rgba(41,121,255,.18);
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 34px rgba(18, 43, 80, 0.12);
+      z-index: 3;
+    }
+
+    .bottom-nav span {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-3);
+    }
+
+    .bottom-nav .active {
+      color: var(--blue);
+    }
+
+    .sheet-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 26, 42, 0.18);
+    }
+
+    .sheet {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      border-radius: 30px 30px 22px 22px;
+      background: var(--surface);
+      box-shadow: 0 24px 40px rgba(8, 19, 34, 0.22);
+      padding: 12px 0 18px;
+    }
+
+    .sheet-handle {
+      width: 52px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(10,22,40,.12);
+      margin: 8px auto 18px;
+    }
+
+    .sheet-body {
+      padding: 0 18px;
+    }
+
+    .segment {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .segment span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.08);
+      color: #18458f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .segment .active {
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: white;
+    }
+
+    .wardrobe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .wardrobe-item {
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(41,121,255,.08);
+      min-height: 122px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .thumb {
+      height: 58px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at top right, rgba(0,176,255,.12), transparent 36%),
+        linear-gradient(180deg, #f8fbff, #edf5ff);
+      border: 1px solid rgba(41,121,255,.08);
+    }
+
+    .wardrobe-item strong {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .wardrobe-item span {
+      color: var(--text-3);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .topbar-modal {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 18px 10px;
+    }
+
+    .ghost-btn {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.76);
+      border: 1px solid rgba(41,121,255,.08);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-2);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .hero-upload {
+      margin: 8px 18px 0;
+      padding: 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(20, 50, 94, 0.08);
+    }
+
+    .preview-box {
+      height: 188px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(0,176,255,.12), transparent 32%),
+        linear-gradient(180deg, #f7fbff, #edf4ff);
+      border: 1px solid rgba(41,121,255,.08);
+      display: grid;
+      place-items: center;
+      color: var(--text-3);
+      text-align: center;
+      padding: 16px;
+    }
+
+    .upload-btn {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+    }
+
+    .form-card {
+      margin: 14px 18px 0;
+      padding: 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(20, 50, 94, 0.08);
+    }
+
+    .field,
+    .textarea {
+      margin-top: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(41,121,255,.08);
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .sticky-save {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .sticky-save .cta,
+      .sticky-save .ghost-btn {
+      margin-top: 0;
+      flex: 1;
+    }
+
+    .list-group {
+      border-radius: 24px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(20, 50, 94, 0.08);
+      overflow: hidden;
+    }
+
+    .list-head {
+      padding: 14px 16px 8px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .settings-row:first-of-type {
+      border-top: 0;
+    }
+
+    .settings-row strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .settings-row span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--text-3);
+      line-height: 1.45;
+    }
+
+    .chev {
+      color: var(--text-3);
+      font-size: 20px;
+      font-weight: 600;
+      flex: 0 0 auto;
+    }
+
+    .toast {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 98px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.06)),
+        linear-gradient(135deg, rgba(28,132,92,.96), rgba(42,180,124,.92), rgba(42,215,179,.88));
+      box-shadow: 0 18px 34px rgba(18, 43, 80, 0.16);
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(41,121,255,.08);
+      margin-top: 10px;
+    }
+
+    .toggle {
+      width: 48px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.18);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 22px;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: white;
+      box-shadow: 0 3px 8px rgba(0,0,0,.12);
+    }
+
+    .dimmed {
+      filter: blur(1px);
+      transform: scale(.985);
+      opacity: .82;
+    }
+  </style>
+</head>
+<body>
+  <div class="board">
+    <section class="mock">
+      <div class="label">Today / Main</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="top">
+            <div class="top-row">
+              <div class="brand"><div class="brand-mark"></div><span>WearCast</span></div>
+              <div class="icon-set">
+                <div class="icon-btn">↻</div>
+                <div class="icon-btn">☺</div>
+              </div>
+            </div>
+            <div class="search-bar">
+              <div class="search-main"><span>📍</span><span>Berlin, Germany</span></div>
+              <div class="geo-btn">◎</div>
+            </div>
+          </div>
+          <div class="scroll">
+            <div class="deck">
+              <div class="deck-kicker">Berlin right now</div>
+              <div class="deck-title">Cool now.<br />Rain later.</div>
+              <div class="deck-copy">A classic light-layer day with enough rain risk to keep one waterproof piece nearby.</div>
+              <div class="deck-main">
+                <div class="temp">17°</div>
+                <div class="meta">Partly cloudy<br />Feels like 15°<br />Wind 12 km/h</div>
+              </div>
+              <div class="deck-stats">
+                <div class="stat"><span>Rain</span><strong>40%</strong></div>
+                <div class="stat"><span>UV</span><strong>4</strong></div>
+                <div class="stat"><span>Cloud</span><strong>48%</strong></div>
+              </div>
+              <div class="updated">Updated 9:41 AM</div>
+            </div>
+
+            <div class="surface surface-strong">
+              <div class="surface-head">
+                <div>
+                  <div class="micro">Today's Recommendation</div>
+                  <div class="surface-title">Long-sleeve tee + chinos</div>
+                </div>
+                <div class="badge">Best match</div>
+              </div>
+              <div class="surface-copy">Built around light movement, cool air, and the chance of rain later.</div>
+              <div class="chip-row">
+                <div class="chip">Walking</div>
+                <div class="chip">Mixed day</div>
+                <div class="chip">Minimal</div>
+              </div>
+              <div class="tile-grid">
+                <div class="tile"><div class="micro">Top</div><strong>White long-sleeve T-shirt</strong></div>
+                <div class="tile"><div class="micro">Bottom</div><strong>Navy chinos</strong></div>
+                <div class="tile"><div class="micro">Outer</div><strong>Compact rain shell</strong></div>
+                <div class="tile"><div class="micro">Shoes</div><strong>White leather trainers</strong></div>
+              </div>
+              <div class="tip">Wardrobe tip: adding one darker overshirt would improve cooler-evening alternatives.</div>
+            </div>
+          </div>
+          <div class="bottom-nav"><span class="active">Today</span><span>Wardrobe</span><span>Settings</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock">
+      <div class="label">Today / Tune Sheet</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="top dimmed">
+            <div class="top-row">
+              <div class="brand"><div class="brand-mark"></div><span>WearCast</span></div>
+              <div class="icon-set">
+                <div class="icon-btn">↻</div>
+                <div class="icon-btn">☺</div>
+              </div>
+            </div>
+            <div class="search-bar">
+              <div class="search-main"><span>📍</span><span>Berlin, Germany</span></div>
+              <div class="geo-btn">◎</div>
+            </div>
+          </div>
+          <div class="scroll dimmed">
+            <div class="deck">
+              <div class="deck-kicker">Berlin right now</div>
+              <div class="deck-title">Cool now.<br />Rain later.</div>
+              <div class="deck-main">
+                <div class="temp">17°</div>
+                <div class="meta">Partly cloudy<br />Feels like 15°</div>
+              </div>
+            </div>
+            <div class="surface surface-strong">
+              <div class="surface-title" style="margin-top:0;">Long-sleeve tee + chinos</div>
+              <div class="tile-grid">
+                <div class="tile"><div class="micro">Top</div><strong>White long-sleeve T-shirt</strong></div>
+                <div class="tile"><div class="micro">Bottom</div><strong>Navy chinos</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="sheet-overlay"></div>
+          <div class="sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-body">
+              <div class="micro">Tune this look</div>
+              <div class="surface-title" style="margin-top:8px;">Refine the recommendation</div>
+              <div class="surface-copy">The current inline details become a true native-style sheet instead of stacked accordions.</div>
+
+              <div class="micro" style="margin-top:16px;">Activity</div>
+              <div class="segment">
+                <span>Everyday</span>
+                <span class="active">Walking</span>
+                <span>Commute</span>
+              </div>
+
+              <div class="micro" style="margin-top:16px;">Setting</div>
+              <div class="segment">
+                <span>Indoors</span>
+                <span class="active">Mixed</span>
+                <span>Outdoors</span>
+              </div>
+
+              <div class="micro" style="margin-top:16px;">Style</div>
+              <div class="segment">
+                <span>Auto</span>
+                <span>Casual</span>
+                <span>Polished</span>
+                <span class="active">Minimal</span>
+              </div>
+
+              <div class="rows">
+                <div class="row"><span>Why this works</span><strong>Light layer for a 15° feel</strong></div>
+                <div class="row"><span>Alternative option</span><strong>Swap shell for overshirt indoors</strong></div>
+              </div>
+              <div class="cta">Update recommendation</div>
+            </div>
+          </div>
+          <div class="bottom-nav"><span class="active">Today</span><span>Wardrobe</span><span>Settings</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock">
+      <div class="label">Wardrobe / Populated</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="top">
+            <div class="top-row">
+              <div class="brand"><div class="brand-mark"></div><span>WearCast</span></div>
+              <div class="icon-set">
+                <div class="icon-btn">＋</div>
+              </div>
+            </div>
+          </div>
+          <div class="scroll">
+            <div class="surface surface-strong">
+              <div class="surface-head">
+                <div>
+                  <div class="micro">My Wardrobe</div>
+                  <div class="surface-title">12 pieces ready for recommendations</div>
+                </div>
+                <div class="badge">Synced</div>
+              </div>
+              <div class="surface-copy">Your wardrobe powers the picks on Today, so the list should feel like a native collection, not a plain web grid.</div>
+              <div class="cta">Add an item</div>
+            </div>
+
+            <div class="wardrobe-grid">
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>White long-sleeve tee</strong><span>Cotton · Casual</span></div>
+              </div>
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>Navy chinos</strong><span>Structured · Everyday</span></div>
+              </div>
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>Packable shell</strong><span>Waterproof · Light layer</span></div>
+              </div>
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>Leather trainers</strong><span>Comfort · Smart casual</span></div>
+              </div>
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>Charcoal overshirt</strong><span>Layering piece</span></div>
+              </div>
+              <div class="wardrobe-item">
+                <div class="thumb"></div>
+                <div><strong>Grey hoodie</strong><span>Relaxed · Warm</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav"><span>Today</span><span class="active">Wardrobe</span><span>Settings</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock">
+      <div class="label">Add Item / Photo First</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="topbar-modal">
+            <div class="ghost-btn">Cancel</div>
+            <div class="modal-title">Add Item</div>
+            <div style="width:62px;"></div>
+          </div>
+
+          <div class="hero-upload">
+            <div class="preview-box">
+              <div>
+                <div style="font-size:30px;">👕</div>
+                <div style="margin-top:8px; font-size:16px; font-weight:700; color:var(--text);">Add a clothing photo</div>
+                <div style="margin-top:6px; font-size:13px; line-height:1.45;">We'll try to prefill the details for you.</div>
+              </div>
+            </div>
+            <div class="upload-btn">Add clothing photo</div>
+            <div style="margin-top:10px; font-size:12px; color:var(--text-3);">Photo ready for AI prefill</div>
+          </div>
+
+          <div class="form-card">
+            <div class="micro">Add manually</div>
+            <div class="field">Type: T-shirt</div>
+            <div class="field">Name: White long-sleeve T-shirt</div>
+            <div class="field-row">
+              <div class="field">Color: White</div>
+              <div class="field">Material: Cotton</div>
+            </div>
+            <div class="textarea">Care instructions: Machine wash cold, tumble dry low</div>
+            <div class="ghost-btn" style="margin-top:12px; text-align:center;">Scan care tag</div>
+          </div>
+
+          <div class="sticky-save">
+            <div class="cta">Save item</div>
+            <div class="ghost-btn" style="display:grid; place-items:center;">Delete</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock">
+      <div class="label">Settings</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="top">
+            <div class="top-row">
+              <div class="brand"><div class="brand-mark"></div><span>WearCast</span></div>
+              <div class="icon-set">
+                <div class="icon-btn">☺</div>
+              </div>
+            </div>
+          </div>
+          <div class="scroll">
+            <div class="surface surface-strong">
+              <div class="micro">Settings</div>
+              <div class="surface-title">Your app, your data</div>
+              <div class="surface-copy">This should read like a native grouped settings screen, not a collection of generic web cards.</div>
+            </div>
+
+            <div class="list-group">
+              <div class="list-head">Account</div>
+              <div class="settings-row">
+                <div>
+                  <strong>Manage account</strong>
+                  <span>Review account details, or log out.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <strong>Delete account</strong>
+                  <span>Permanently remove your account and wardrobe.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+            </div>
+
+            <div class="list-group">
+              <div class="list-head">Privacy & Permissions</div>
+              <div class="settings-row">
+                <div>
+                  <strong>Privacy choices</strong>
+                  <span>Functional storage on • device location allowed.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+            </div>
+
+            <div class="list-group">
+              <div class="list-head">App Data</div>
+              <div class="settings-row">
+                <div>
+                  <strong>Clear saved location</strong>
+                  <span>Saved on this device: Berlin, Germany.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <strong>Reset outfit tuning</strong>
+                  <span>Current tuning: Walking • Mixed day • Minimal.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+            </div>
+          </div>
+          <div class="toast">Outfit tuning reset to defaults.</div>
+          <div class="bottom-nav"><span>Today</span><span>Wardrobe</span><span class="active">Settings</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock">
+      <div class="label">Privacy Choices Sheet</div>
+      <div class="device">
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+          <div class="top dimmed">
+            <div class="top-row">
+              <div class="brand"><div class="brand-mark"></div><span>WearCast</span></div>
+              <div class="icon-set">
+                <div class="icon-btn">☺</div>
+              </div>
+            </div>
+          </div>
+          <div class="scroll dimmed">
+            <div class="surface surface-strong">
+              <div class="micro">Settings</div>
+              <div class="surface-title">Your app, your data</div>
+            </div>
+            <div class="list-group">
+              <div class="list-head">Privacy & Permissions</div>
+              <div class="settings-row">
+                <div>
+                  <strong>Privacy choices</strong>
+                  <span>Functional storage on • device location allowed.</span>
+                </div>
+                <div class="chev">›</div>
+              </div>
+            </div>
+          </div>
+          <div class="sheet-overlay"></div>
+          <div class="sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-body">
+              <div class="micro">Privacy</div>
+              <div class="surface-title" style="margin-top:8px;">Choose what WearCast can remember</div>
+              <div class="surface-copy">This keeps the current privacy flow, but in a native-feeling sheet rather than a generic dialog.</div>
+
+              <div class="toggle-row">
+                <div>
+                  <strong style="display:block; font-size:15px;">Select all</strong>
+                  <small class="muted">Enable every option below.</small>
+                </div>
+                <div class="toggle"></div>
+              </div>
+
+              <div class="toggle-row">
+                <div>
+                  <strong style="display:block; font-size:15px;">Functional storage</strong>
+                  <small class="muted">Save preferences and last location.</small>
+                </div>
+                <div class="toggle"></div>
+              </div>
+
+              <div class="toggle-row">
+                <div>
+                  <strong style="display:block; font-size:15px;">Device location</strong>
+                  <small class="muted">Enable the “Use my location” action.</small>
+                </div>
+                <div class="toggle"></div>
+              </div>
+
+              <div class="cta">Save choices</div>
+              <div class="ghost-btn" style="margin-top:10px; text-align:center;">Skip</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

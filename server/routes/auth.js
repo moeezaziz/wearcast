@@ -2,7 +2,7 @@ import { Router } from "express";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import pool from "../db.js";
-import { requireAuth, signToken } from "../auth.js";
+import { issueAuthSession, requireAuth, revokeAllRefreshTokensForUser, revokeRefreshToken, rotateRefreshToken } from "../auth.js";
 
 const router = Router();
 const APP_URL = process.env.APP_URL || "https://wearcast.fly.dev";
@@ -149,9 +149,9 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const token = signToken(user.id);
+    const session = await issueAuthSession(user.id);
     console.info("/api/auth/login: user logged in", user.id);
-    res.json({ token, user: normalizeUser(user) });
+    res.json({ token: session.accessToken, refreshToken: session.refreshToken, user: normalizeUser(user) });
   } catch (err) {
     console.error("login error:", err);
     res.status(500).json({ error: "Login failed" });
@@ -245,7 +245,7 @@ router.get("/google/callback", async (req, res) => {
       }
     }
 
-    const token = signToken(user.id);
+    const session = await issueAuthSession(user.id);
     const responseUser = {
       ...normalizeUser({
         ...user,
@@ -257,19 +257,19 @@ router.get("/google/callback", async (req, res) => {
     console.info("/api/auth/google/callback: user id", user.id);
 
     if (responseMode === "json") {
-      return res.json({ token, user: responseUser });
+      return res.json({ token: session.accessToken, refreshToken: session.refreshToken, user: responseUser });
     }
 
     // If redirect_uri is a custom scheme (iOS), redirect to it with token
     if (redirect.startsWith("com.wearcast-beta.app:")) {
-      const url = `${redirect}?token=${encodeURIComponent(token)}`;
+      const url = `${redirect}?token=${encodeURIComponent(session.accessToken)}&refresh_token=${encodeURIComponent(session.refreshToken)}`;
       console.info("/api/auth/google/callback: redirecting to", url);
       return res.redirect(url);
     }
 
     // Otherwise, return an HTML page that sends the token to the parent window (web)
     res.send(`<!DOCTYPE html><html><body><script>
-      window.opener?.postMessage({ type:"wearcast-auth", token:"${token}", user: ${JSON.stringify({
+      window.opener?.postMessage({ type:"wearcast-auth", token:"${session.accessToken}", refreshToken:"${session.refreshToken}", user: ${JSON.stringify({
         id: responseUser.id, email: responseUser.email, name: responseUser.name, avatarUrl: responseUser.avatarUrl, emailVerified: responseUser.emailVerified, authProvider: responseUser.authProvider,
       })} }, "*");
       window.close();
@@ -302,6 +302,50 @@ router.get("/me", async (req, res) => {
   } catch (err) {
     console.error("/api/auth/me: Invalid token", err);
     res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+router.post("/refresh", async (req, res) => {
+  try {
+    const refreshToken = String(req.body?.refreshToken || "");
+    if (!refreshToken) {
+      return res.status(400).json({ error: "Refresh token required" });
+    }
+
+    const rotated = await rotateRefreshToken(refreshToken);
+    const result = await pool.query(
+      "SELECT id, email, name, avatar_url, email_verified, google_id FROM users WHERE id = $1",
+      [rotated.userId]
+    );
+    const user = result.rows[0];
+    if (!user) {
+      return res.status(401).json({ error: "Session expired. Please sign in again." });
+    }
+
+    const session = await issueAuthSession(user.id);
+    res.json({
+      token: session.accessToken,
+      refreshToken: session.refreshToken,
+      user: normalizeUser(user),
+    });
+  } catch (err) {
+    console.error("refresh token error:", err);
+    res.status(401).json({ error: "Session expired. Please sign in again." });
+  }
+});
+
+router.post("/logout", requireAuth, async (req, res) => {
+  try {
+    const refreshToken = String(req.body?.refreshToken || "");
+    if (refreshToken) {
+      await revokeRefreshToken(refreshToken);
+    } else {
+      await revokeAllRefreshTokensForUser(req.userId);
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("logout error:", err);
+    res.status(500).json({ error: "Could not log out" });
   }
 });
 
@@ -380,6 +424,7 @@ router.delete("/account", requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Type DELETE to confirm account removal' });
     }
 
+    await revokeAllRefreshTokensForUser(req.userId);
     await pool.query("DELETE FROM users WHERE id = $1", [req.userId]);
     res.json({ ok: true });
   } catch (err) {

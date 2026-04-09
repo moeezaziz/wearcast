@@ -49,6 +49,7 @@ const els = {
   geoBtn: $("geoBtn"),
   searchBtn: $("searchBtn"),
   refreshBtn: $("refreshBtn"),
+  pullRefreshIndicator: $("pullRefreshIndicator"),
 
   recBadge: $("recBadge"),
   recommendation: $("recommendation"),
@@ -65,6 +66,7 @@ const els = {
   apparent: $("apparent"),
   heroConditionIcon: $("heroConditionIcon"),
   wind: $("wind"),
+  heroHumidity: $("heroHumidity"),
   humidity: $("humidity"),
   cloud: $("cloud"),
   precip: $("precip"),
@@ -142,6 +144,9 @@ const els = {
   aiRecBadge: $("aiRecBadge"),
   aiRecWarnings: $("aiRecWarnings"),
   aiRecMissing: $("aiRecMissing"),
+  whyWorksDialog: $("whyWorksDialog"),
+  whyWorksDialogBody: $("whyWorksDialogBody"),
+  whyWorksDialogCloseBtn: $("whyWorksDialogCloseBtn"),
 
   // Fashion notes
   fashionNotes: $("fashionNotes"),
@@ -150,19 +155,26 @@ const els = {
   settingsAccountBtn: $("settingsAccountBtn"),
   settingsDeleteAccountBtn: $("settingsDeleteAccountBtn"),
   settingsPrivacyBtn: $("settingsPrivacyBtn"),
-  settingsLocationBtn: $("settingsLocationBtn"),
+  settingsPrivacyStatus: $("settingsPrivacyStatus"),
   settingsClearLocationBtn: $("settingsClearLocationBtn"),
+  settingsClearLocationStatus: $("settingsClearLocationStatus"),
   settingsResetPrefsBtn: $("settingsResetPrefsBtn"),
+  settingsResetPrefsStatus: $("settingsResetPrefsStatus"),
+  settingsFeedback: $("settingsFeedback"),
 
   // New UI
   weatherHero: $("weatherHero"),
   emptyState: $("emptyState"),
+  emptyStateTitle: $("emptyStateTitle"),
+  emptyStateText: $("emptyStateText"),
   bottomNav: $("bottomNav"),
   ruleRecCard: $("ruleRecCard"),
   weatherDetailsCard: $("weatherDetailsCard"),
   reasonsCard: $("reasonsCard"),
   addItemBtnEmpty: $("addItemBtnEmpty"),
   todayWardrobeCtaBtn: $("todayWardrobeCtaBtn"),
+  todayWardrobeDialog: $("todayWardrobeDialog"),
+  todayWardrobeDialogCloseBtn: $("todayWardrobeDialogCloseBtn"),
   wardrobeExplainerBtn: $("wardrobeExplainerBtn"),
   todayCtaKicker: $("todayCtaKicker"),
   todayCtaTitle: $("todayCtaTitle"),
@@ -213,24 +225,30 @@ const STORAGE_KEY = "wearcast:v1";
 const CONSENT_KEY = "wearcast:consent:v1";
 const WARDROBE_KEY = "wearcast:wardrobe:v1";
 const AUTH_TOKEN_KEY = "wearcast:token";
+const AUTH_REFRESH_TOKEN_KEY = "wearcast:refresh-token";
 const AUTH_USER_KEY = "wearcast:user";
 const API_BASE = "https://wearcast.fly.dev";
 const GOOGLE_CALLBACK_PATH = "/oauth2redirect/google";
 
 // ─── Auth state ──────────────────────────────────────────────
 let authToken = localStorage.getItem(AUTH_TOKEN_KEY) || null;
+let authRefreshToken = localStorage.getItem(AUTH_REFRESH_TOKEN_KEY) || null;
 let authUser = (() => { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)); } catch { return null; } })();
 let googleAuthCompletionPromise = null;
 let lastVerificationEmail = "";
+let refreshSessionPromise = null;
 
-function setAuth(token, user) {
+function setAuth(token, user, refreshToken = authRefreshToken) {
   authToken = token;
+  authRefreshToken = refreshToken || null;
   authUser = user;
   if (token) {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
+    if (authRefreshToken) localStorage.setItem(AUTH_REFRESH_TOKEN_KEY, authRefreshToken);
     localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
   } else {
     localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_REFRESH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
   }
   updateAuthUI();
@@ -241,6 +259,61 @@ function authHeaders() {
 }
 
 function isLoggedIn() { return !!authToken; }
+
+function handleExpiredSession(message = "Your session expired. Please sign in again.") {
+  setAuth(null, null, null);
+  alert(message);
+}
+
+async function refreshAuthSession() {
+  if (!authRefreshToken) throw new Error("No refresh token available");
+  if (refreshSessionPromise) return refreshSessionPromise;
+
+  refreshSessionPromise = (async () => {
+    const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: authRefreshToken }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || "Session expired. Please sign in again.");
+    }
+    setAuth(data.token, data.user, data.refreshToken);
+    return data;
+  })();
+
+  try {
+    return await refreshSessionPromise;
+  } finally {
+    refreshSessionPromise = null;
+  }
+}
+
+async function authFetch(resource, options = {}, { retryOnAuth = true } = {}) {
+  const headers = {
+    ...(options.headers || {}),
+    ...authHeaders(),
+  };
+  let response = await fetch(resource, { ...options, headers });
+  if (response.status !== 401 || !retryOnAuth) return response;
+
+  try {
+    await refreshAuthSession();
+  } catch (err) {
+    handleExpiredSession(err.message || "Your session expired. Please sign in again.");
+    return response;
+  }
+
+  response = await fetch(resource, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      ...authHeaders(),
+    },
+  });
+  return response;
+}
 
 function buildGoogleOAuthUrl() {
   const clientId = getGoogleClientId();
@@ -269,8 +342,8 @@ async function getCurrentPositionNative() {
   });
 }
 
-async function finalizeAuthSuccess(token, user) {
-  setAuth(token, user);
+async function finalizeAuthSuccess(token, user, refreshToken = authRefreshToken) {
+  setAuth(token, user, refreshToken);
   await syncLocalWardrobeToServer();
   await renderWardrobe();
   if (els.authDialog?.open) els.authDialog.close();
@@ -297,7 +370,7 @@ async function completeGoogleAuth(params) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Google authentication failed");
 
-      await finalizeAuthSuccess(data.token, data.user);
+      await finalizeAuthSuccess(data.token, data.user, data.refreshToken);
       return true;
     } finally {
       googleAuthCompletionPromise = null;
@@ -407,6 +480,9 @@ const DEFAULT_CONSENT = {
 let consent = loadConsent();
 let memoryState = structuredClone(DEFAULT_STATE);
 let pendingRecommendationPrefs = null;
+let settingsFeedbackTimeoutId = null;
+let consentDialogSource = null;
+const TAB_ORDER = ["tabToday", "tabWardrobe", "tabPrefs"];
 
 function loadConsent() {
   try {
@@ -427,6 +503,11 @@ function saveConsent(patch) {
   } catch {
     // ignore
   }
+  if (!consent.functionalStorage) {
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    try { localStorage.removeItem(WARDROBE_KEY); } catch {}
+  }
+  renderSettingsDataUI();
   return consent;
 }
 
@@ -452,9 +533,16 @@ function loadState() {
 
 function saveState(partial) {
   const prev = loadState();
+  const normalizedLocation = partial.lastLocation
+    ? {
+        ...partial.lastLocation,
+        name: formatCityLevelLocation(partial.lastLocation.name),
+      }
+    : partial.lastLocation;
   const next = {
     ...prev,
     ...partial,
+    ...(partial.lastLocation !== undefined ? { lastLocation: normalizedLocation } : {}),
     prefs: { ...prev.prefs, ...(partial.prefs || {}) },
   };
 
@@ -469,6 +557,7 @@ function saveState(partial) {
     }
   }
 
+  renderSettingsDataUI();
   return next;
 }
 
@@ -483,6 +572,9 @@ function fmt1(n, unit = "") {
 }
 
 function setStatus(msg) {
+  if (/^Using:\s/i.test(String(msg || ""))) {
+    msg = "";
+  }
   els.placeStatus.classList.remove("is-busy");
   els.placeStatus.textContent = msg || "";
 }
@@ -502,7 +594,155 @@ function setLocationLoading(active, message = "") {
   }
 }
 
-function privacyPromptFallback() {
+function setSettingsFeedback(message = "", tone = "info", { persist = false } = {}) {
+  if (!els.settingsFeedback) return;
+  if (settingsFeedbackTimeoutId) {
+    window.clearTimeout(settingsFeedbackTimeoutId);
+    settingsFeedbackTimeoutId = null;
+  }
+  if (!message) {
+    els.settingsFeedback.textContent = "";
+    els.settingsFeedback.dataset.tone = "";
+    els.settingsFeedback.classList.remove("is-busy");
+    return;
+  }
+  els.settingsFeedback.textContent = message;
+  els.settingsFeedback.dataset.tone = tone;
+  els.settingsFeedback.classList.toggle("is-busy", tone === "busy");
+  if (!persist && tone !== "busy") {
+    settingsFeedbackTimeoutId = window.setTimeout(() => {
+      setSettingsFeedback("");
+    }, 3200);
+  }
+}
+
+function setSettingsActionBusy(button, busy) {
+  if (!button) return;
+  button.disabled = !!busy;
+  button.classList.toggle("is-busy", !!busy);
+  button.setAttribute("aria-busy", busy ? "true" : "false");
+}
+
+function truncateSettingsText(text, maxLength = 54) {
+  const value = String(text || "").trim();
+  if (!value) return "";
+  return value.length > maxLength ? `${value.slice(0, maxLength - 1).trimEnd()}…` : value;
+}
+
+function areRecommendationPrefsDefault(prefs = {}) {
+  const resolved = { ...DEFAULT_STATE.prefs, ...(prefs || {}) };
+  return Object.keys(DEFAULT_STATE.prefs).every((key) => resolved[key] === DEFAULT_STATE.prefs[key]);
+}
+
+function summarizeConsentSettings() {
+  const storageText = consent.functionalStorage ? "Functional storage on" : "Functional storage off";
+  const locationText = consent.deviceLocation ? "device location allowed" : "device location off";
+  return `${storageText} • ${locationText}.`;
+}
+
+function summarizeSavedLocation(state = loadState()) {
+  if (!canUseFunctionalStorage()) {
+    return state.lastLocation
+      ? `Current session only: ${truncateSettingsText(state.lastLocation.name || "Current location")}.`
+      : "Functional storage is off. No location is saved across sessions.";
+  }
+  return state.lastLocation
+    ? `Saved on this device: ${truncateSettingsText(state.lastLocation.name || "Current location")}.`
+    : "No saved location on this device.";
+}
+
+function summarizeRecommendationTuning(prefs = loadState().prefs) {
+  const resolved = { ...DEFAULT_STATE.prefs, ...(prefs || {}) };
+  if (areRecommendationPrefsDefault(resolved)) {
+    return "Using default outfit tuning.";
+  }
+
+  const chips = [];
+  const activityMap = {
+    everyday: "Everyday",
+    walking: "Walking",
+    commute: "Commute",
+  };
+  const locationMap = {
+    indoors: "Indoors",
+    mixed: "Mixed day",
+    outdoors: "Outdoors",
+  };
+  const styleMap = {
+    auto: "",
+    casual: "Casual",
+    polished: "Polished",
+    sporty: "Sporty",
+    streetwear: "Streetwear",
+    minimalist: "Minimalist",
+  };
+
+  if (resolved.activityContext && resolved.activityContext !== DEFAULT_STATE.prefs.activityContext) {
+    chips.push(activityMap[resolved.activityContext] || "Custom activity");
+  }
+  if (resolved.locationContext && resolved.locationContext !== DEFAULT_STATE.prefs.locationContext) {
+    chips.push(locationMap[resolved.locationContext] || "Custom setting");
+  }
+  if (resolved.styleFocus && resolved.styleFocus !== DEFAULT_STATE.prefs.styleFocus) {
+    chips.push(styleMap[resolved.styleFocus] || "Custom style");
+  }
+  if (resolved.cold) chips.push("Usually cold");
+  if (resolved.hot) chips.push("Usually hot");
+
+  return chips.length ? `Current tuning: ${chips.slice(0, 3).join(" • ")}.` : "Using custom outfit tuning.";
+}
+
+function renderSettingsDataUI() {
+  if (els.settingsPrivacyStatus) {
+    els.settingsPrivacyStatus.textContent = summarizeConsentSettings();
+  }
+
+  const state = loadState();
+  if (els.settingsClearLocationStatus) {
+    els.settingsClearLocationStatus.textContent = summarizeSavedLocation(state);
+  }
+  if (els.settingsResetPrefsStatus) {
+    els.settingsResetPrefsStatus.textContent = summarizeRecommendationTuning(state.prefs);
+  }
+}
+
+function resetTodayLocationState() {
+  pendingRecommendationPrefs = null;
+  lastWeatherForAI = null;
+  if (els.weatherHero) els.weatherHero.style.display = "none";
+  if (els.weatherDetailsCard) {
+    els.weatherDetailsCard.style.display = "none";
+    els.weatherDetailsCard.open = false;
+  }
+  if (els.aiRecSection) els.aiRecSection.style.display = "none";
+  if (els.aiRecLoading) els.aiRecLoading.style.display = "none";
+  if (els.aiRecContent) els.aiRecContent.innerHTML = "";
+  if (els.aiRecWarnings) els.aiRecWarnings.innerHTML = "";
+  if (els.aiRecMissing) els.aiRecMissing.innerHTML = "";
+  if (els.aiRecBadge) els.aiRecBadge.textContent = "Best match";
+  if (els.emptyState) els.emptyState.style.display = "";
+  setEmptyStateLoading(false);
+  if (els.updatedAt) els.updatedAt.textContent = "—";
+}
+
+function setEmptyStateLoading(active, message = "Fetching your local weather…") {
+  if (!els.emptyState) return;
+  els.emptyState.classList.toggle("is-loading", !!active);
+  const spinnerWrap = els.emptyState.querySelector(".empty-spinner-wrap");
+  const iconSvg = els.emptyState.querySelector("svg");
+  if (spinnerWrap) spinnerWrap.style.display = active ? "flex" : "none";
+  if (iconSvg) iconSvg.style.display = active ? "none" : "";
+  if (els.emptyStateTitle) {
+    els.emptyStateTitle.textContent = active ? "Getting your location" : "Where are you headed?";
+  }
+  if (els.emptyStateText) {
+    els.emptyStateText.textContent = active
+      ? message
+      : "Search a city or share your location to get weather-based outfit suggestions.";
+  }
+}
+
+function privacyPromptFallback({ source = null } = {}) {
   // Minimal GDPR-style consent flow for browsers without <dialog> support (notably some mobile Safari versions).
   // We ask for the same choices via confirm prompts.
   const functional = confirm(
@@ -517,11 +757,18 @@ function privacyPromptFallback() {
   if (canUseFunctionalStorage()) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryState)); } catch {}
   }
+  renderWardrobe();
+  renderSettingsDataUI();
+  if (source === "settings") {
+    setSettingsFeedback(`Privacy choices saved. ${summarizeConsentSettings()}`, "success");
+  }
+  consentDialogSource = null;
 }
 
-function showConsentDialog({ forceModal = false } = {}) {
+function showConsentDialog({ forceModal = false, source = null } = {}) {
+  consentDialogSource = source;
   if (!els.consentDialog) {
-    privacyPromptFallback();
+    privacyPromptFallback({ source });
     return;
   }
 
@@ -538,13 +785,14 @@ function showConsentDialog({ forceModal = false } = {}) {
     if (forceModal) els.consentDialog.showModal();
     else els.consentDialog.show();
   } else {
-    privacyPromptFallback();
+    privacyPromptFallback({ source });
   }
 }
 
 function closeConsentDialog() {
   if (!els.consentDialog) return;
   if (typeof els.consentDialog.close === "function") els.consentDialog.close();
+  consentDialogSource = null;
 }
 
 function clamp(n, a, b) {
@@ -644,28 +892,28 @@ function classifySeverity(current, ctx, effectiveC, hourly) {
   // Each stressor: [score, flag label, icon, priority (higher = more important)]
   const stressors = [];
 
-  if (storm) stressors.push({ s: 4, flag: "Thunderstorm", icon: "⛈️", p: 10 });
-  if (freezing) stressors.push({ s: 4, flag: "Freezing rain", icon: "🧊", p: 9 });
+  if (storm) stressors.push({ s: 4, flag: "Thunderstorm", icon: renderInlineIcon("storm"), p: 10 });
+  if (freezing) stressors.push({ s: 4, flag: "Freezing rain", icon: renderInlineIcon("umbrella"), p: 9 });
   if (snowy || daySnowMax > 0) {
-    stressors.push({ s: 3, flag: daySnowMax > 0 && !snowy ? "Snow expected later" : "Snow / ice", icon: "🌨️", p: 8 });
-    if (windy) stressors.push({ s: 1, flag: "Blowing snow", icon: "🌨️", p: 7 });
+    stressors.push({ s: 3, flag: daySnowMax > 0 && !snowy ? "Snow expected later" : "Snow / ice", icon: renderInlineIcon("snow"), p: 8 });
+    if (windy) stressors.push({ s: 1, flag: "Blowing snow", icon: renderInlineIcon("snow"), p: 7 });
   }
   if (wet || dayPrecipProbMax >= 50) {
     const heavy = (next2h ?? 0) >= 5 || dayRainMax >= 5;
     const label = heavy ? "Heavy rain" : dayPrecipProbMax >= 50 && !wet ? `Rain later (${Math.round(dayPrecipProbMax)}%)` : "Rain expected";
-    stressors.push({ s: heavy ? 3 : 2, flag: label, icon: heavy ? "🌧️" : "🌦️", p: heavy ? 6 : 5 });
+    stressors.push({ s: heavy ? 3 : 2, flag: label, icon: heavy ? renderInlineIcon("rain") : renderInlineIcon("drizzle"), p: heavy ? 6 : 5 });
   }
-  if (veryWindy || dayWindMax >= 35) stressors.push({ s: 3, flag: dayWindMax >= 35 && !veryWindy ? "Strong gusts later" : "Strong gusts", icon: "💨", p: 6 });
-  else if (windy || dayWindMax >= 25) stressors.push({ s: 2, flag: dayWindMax >= 25 && !windy ? "Windy later" : "Windy", icon: "💨", p: 4 });
+  if (veryWindy || dayWindMax >= 35) stressors.push({ s: 3, flag: dayWindMax >= 35 && !veryWindy ? "Strong gusts later" : "Strong gusts", icon: renderInlineIcon("wind"), p: 6 });
+  else if (windy || dayWindMax >= 25) stressors.push({ s: 2, flag: dayWindMax >= 25 && !windy ? "Windy later" : "Windy", icon: renderInlineIcon("wind"), p: 4 });
 
-  if (extremeCold || dayTempMin <= -15) stressors.push({ s: 3, flag: dayTempMin <= -15 && !extremeCold ? "Very cold later" : "Very cold", icon: "🥶", p: 7 });
-  else if (veryCold || dayTempMin <= 2) stressors.push({ s: 1, flag: dayTempMin <= 2 && !veryCold ? "Cold later" : "Cold", icon: "❄️", p: 3 });
+  if (extremeCold || dayTempMin <= -15) stressors.push({ s: 3, flag: dayTempMin <= -15 && !extremeCold ? "Very cold later" : "Very cold", icon: renderInlineIcon("cold"), p: 7 });
+  else if (veryCold || dayTempMin <= 2) stressors.push({ s: 1, flag: dayTempMin <= 2 && !veryCold ? "Cold later" : "Cold", icon: renderInlineIcon("cold"), p: 3 });
 
-  if (extremeHeat || dayTempMax >= 38) stressors.push({ s: 3, flag: dayTempMax >= 38 && !extremeHeat ? "Heatwave expected" : "Extreme heat", icon: "🔥", p: 7 });
-  else if (veryHot || dayTempMax >= 30) stressors.push({ s: 1, flag: dayTempMax >= 30 && !veryHot ? "Hot later" : "Hot", icon: "☀️", p: 3 });
+  if (extremeHeat || dayTempMax >= 38) stressors.push({ s: 3, flag: dayTempMax >= 38 && !extremeHeat ? "Heatwave expected" : "Extreme heat", icon: renderInlineIcon("hot"), p: 7 });
+  else if (veryHot || dayTempMax >= 30) stressors.push({ s: 1, flag: dayTempMax >= 30 && !veryHot ? "Hot later" : "Hot", icon: renderInlineIcon("hot"), p: 3 });
 
-  if (uv >= 8) stressors.push({ s: 2, flag: "Very high UV", icon: "☀️", p: 5 });
-  else if (uv >= 6) stressors.push({ s: 1, flag: "High UV", icon: "🕶️", p: 2 });
+  if (uv >= 8) stressors.push({ s: 2, flag: "Very high UV", icon: renderInlineIcon("clear"), p: 5 });
+  else if (uv >= 6) stressors.push({ s: 1, flag: "High UV", icon: renderInlineIcon("clear"), p: 2 });
 
   const score = stressors.reduce((a, x) => a + x.s, 0);
   const primary = [...stressors].sort((a, b) => b.p - a.p)[0] || null;
@@ -673,10 +921,10 @@ function classifySeverity(current, ctx, effectiveC, hourly) {
 
   let level = "good";
   let title = "All clear";
-  let icon = "✅";
+  let icon = renderInlineIcon("success");
 
-  if (score >= 6) { level = "bad"; title = primary?.flag || "Severe conditions"; icon = primary?.icon || "⚠️"; }
-  else if (stressors.length > 0) { level = "warn"; title = primary?.flag || "Be prepared"; icon = primary?.icon || "⚠️"; }
+  if (score >= 6) { level = "bad"; title = primary?.flag || "Severe conditions"; icon = primary?.icon || renderInlineIcon("warning"); }
+  else if (stressors.length > 0) { level = "warn"; title = primary?.flag || "Be prepared"; icon = primary?.icon || renderInlineIcon("warning"); }
 
   const metaParts = [];
   if (effectiveC != null) metaParts.push(`Effective ${fmt1(effectiveC, "°C")}`);
@@ -729,6 +977,7 @@ async function geocodePlace(query) {
   url.searchParams.set("format", "json");
   url.searchParams.set("q", query);
   url.searchParams.set("limit", "1");
+  url.searchParams.set("addressdetails", "1");
 
   const res = await fetch(url.toString(), {
     headers: {
@@ -742,7 +991,7 @@ async function geocodePlace(query) {
   if (!Array.isArray(data) || data.length === 0) return null;
 
   return {
-    name: data[0].display_name,
+    name: formatCityLevelLocation(data[0].display_name, data[0].address),
     lat: Number(data[0].lat),
     lon: Number(data[0].lon),
   };
@@ -1023,6 +1272,7 @@ function renderWeather(current, derived, hourly) {
   els.apparent.textContent = `${fmt1(current.apparent_temperature, "°C")}`;
   els.wind.textContent = `${fmt(current.wind_speed_10m)} km/h`;
   els.humidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
+  els.heroHumidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
   els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
   els.precip.textContent = `${fmt1(current.precipitation)} mm`;
   els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
@@ -1049,7 +1299,7 @@ function renderWeather(current, derived, hourly) {
   const conditionLabel = weatherCodeLabel(current.weather_code);
   els.wcode.textContent = conditionLabel;
   if (els.heroConditionIcon) {
-    els.heroConditionIcon.textContent = weatherConditionIcon(conditionLabel);
+    els.heroConditionIcon.innerHTML = weatherConditionIcon(conditionLabel);
   }
 }
 
@@ -1092,6 +1342,85 @@ function compactText(value, fallback = "—") {
   return text || fallback;
 }
 
+const STREAMLINE_ICON_BASE = "assets/icons/streamline";
+
+function renderAssetIcon(fileName, extraClass = "", alt = "") {
+  const classes = ["streamline-icon"];
+  if (extraClass) classes.push(extraClass);
+  return `<img class="${classes.join(" ")}" src="${STREAMLINE_ICON_BASE}/${fileName}" alt="${escapeHtml(alt)}" draggable="false" />`;
+}
+
+function renderInlineIcon(kind, extraClass = "") {
+  const assetIcons = {
+    wind: "Wind-Flow-2--Streamline-Core-Gradient.svg",
+    top: "Shirt--Streamline-Flex-Gradient.svg",
+    jacket: "Hoodie--Streamline-Phosphor.svg",
+    pants: "Pants--Streamline-Phosphor.svg",
+    shoes: "Sneakers--Streamline-Cyber.svg",
+    tune: "Sliders--Streamline-Outlined-Streamline-Material-Free.svg",
+    info: "Information-Circle--Streamline-Ultimate.svg",
+  };
+  if (assetIcons[kind]) {
+    return renderAssetIcon(assetIcons[kind], extraClass);
+  }
+
+  const classAttr = extraClass ? ` class="${extraClass}"` : "";
+  const icons = {
+    clear: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.2M12 19.3v2.2M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6"/></svg>`,
+    partly: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 6.5a3.5 3.5 0 1 0-6.8 1.2"/><path d="M7 17.5h9.5a3.5 3.5 0 0 0 .5-6.96A5.5 5.5 0 0 0 6.55 9.2 3.8 3.8 0 0 0 7 17.5Z"/></svg>`,
+    rain: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15.5h9.5a3.5 3.5 0 0 0 .5-6.96A5.5 5.5 0 0 0 6.55 7.2 3.8 3.8 0 0 0 7 15.5Z"/><path d="M9 17.5v2M13 17.5v3M17 17.5v2"/></svg>`,
+    snow: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13.5h9.5a3.5 3.5 0 0 0 .5-6.96A5.5 5.5 0 0 0 6.55 5.2 3.8 3.8 0 0 0 7 13.5Z"/><path d="m10 17 .9 1.5L12.5 20m0-3-.9 1.5L10.1 20M15 17l.9 1.5 1.6 1.5m0-3-.9 1.5L15.1 20"/></svg>`,
+    storm: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13.5h9.5a3.5 3.5 0 0 0 .5-6.96A5.5 5.5 0 0 0 6.55 5.2 3.8 3.8 0 0 0 7 13.5Z"/><path d="m12 14-1 3h2l-1 4 4-6h-2l1-3Z"/></svg>`,
+    fog: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 9.5h14"/><path d="M3 13h18"/><path d="M6 16.5h12"/></svg>`,
+    wind: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h10a2.5 2.5 0 1 0-2.5-2.5"/><path d="M2 14h14a2.5 2.5 0 1 1-2.5 2.5"/><path d="M4 19h7"/></svg>`,
+    drizzle: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13.5h9.5a3.5 3.5 0 0 0 .5-6.96A5.5 5.5 0 0 0 6.55 5.2 3.8 3.8 0 0 0 7 13.5Z"/><path d="M10 17v1.6M14 18.2v2.3"/></svg>`,
+    cold: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m8 5 4 2 4-2"/><path d="m8 19 4-2 4 2"/><path d="M4.5 8h15"/><path d="M4.5 16h15"/></svg>`,
+    hot: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 1 0-4 0v9.8a4 4 0 1 0 4 0Z"/><path d="M12 11v6"/></svg>`,
+    umbrella: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0Z"/><path d="M12 12v6a2 2 0 0 0 4 0"/></svg>`,
+    globe: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>`,
+    success: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+    warning: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+    jacket: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 3-4 4v13h5v-6h4v6h5V7l-4-4"/><path d="M9 3h6"/></svg>`,
+    top: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>`,
+    pants: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6l-2 12"/><path d="M15 3v6l2 12"/><path d="M9 3h6"/><path d="M8 21h3"/><path d="M13 21h3"/></svg>`,
+    dress: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 4 2.5 3H9.5L12 4Z"/><path d="M10 7 7 21h10L14 7"/><path d="M9.5 10h5"/></svg>`,
+    shoes: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c2 0 3-1 4-3l2 1c1.2.6 2.4 1 3.8 1H15c2 0 3 1.5 3 3v1H3z"/><path d="M18 18h3v-1c0-1.7-1.3-3-3-3h-2"/></svg>`,
+    accessory: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a3 3 0 0 1 3 3v1h-6V7a3 3 0 0 1 3-3Z"/><path d="M5 10h14l-1 8H6l-1-8Z"/><path d="M9 14h6"/></svg>`,
+    tune: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7"/><path d="M15 7h5"/><path d="M4 17h5"/><path d="M13 17h7"/><circle cx="13" cy="7" r="2.2"/><circle cx="11" cy="17" r="2.2"/></svg>`,
+  };
+  return icons[kind] || icons.globe;
+}
+
+function itemTypeIconKey(type = "") {
+  const key = String(type).toLowerCase();
+  if (/(jacket|coat|hoodie|sweater|blazer|vest)/.test(key)) return "jacket";
+  if (/(jeans|chinos|shorts|pants|sweatpants|skirt)/.test(key)) return "pants";
+  if (/(dress)/.test(key)) return "dress";
+  if (/(sneakers|boots|sandals|shoes)/.test(key)) return "shoes";
+  if (/(scarf|hat|gloves|sunglasses|belt|bag)/.test(key)) return "accessory";
+  return "top";
+}
+
+function formatCityLevelLocation(displayName, address = null) {
+  const fullText = compactText(displayName, "");
+  const parts = fullText.split(",").map((part) => part.trim()).filter(Boolean);
+  const candidates = [
+    address?.city,
+    address?.town,
+    address?.village,
+    address?.municipality,
+    address?.suburb,
+    address?.county,
+    address?.state,
+    address?.country,
+  ].map((part) => compactText(part, "")).filter(Boolean);
+
+  const primary = candidates[0] || parts[0] || fullText;
+  const secondary = candidates.find((part) => part && part !== primary) || parts.find((part) => part && part !== primary);
+  if (!primary) return "Current location";
+  return secondary ? `${primary}, ${secondary}` : primary;
+}
+
 function firstSentence(text) {
   const normalized = compactText(text, "");
   if (!normalized) return "";
@@ -1102,19 +1431,30 @@ function firstSentence(text) {
 function normalizeItemLabel(text) {
   return compactText(text, "")
     .replace(/\s*\([^)]*\)/g, "")
-    .replace(/\s*[—-]\s*.*$/, "")
+    .replace(/\s+[—-]\s+.*$/, "")
+    .trim();
+}
+
+function preserveUsefulItemLabel(text) {
+  const normalized = normalizeItemLabel(text);
+  if (!normalized) return "";
+  return normalized
+    .replace(/\s{2,}/g, " ")
+    .replace(/\btee\s*shirt\b/i, "T-shirt")
+    .replace(/\btshirt\b/i, "T-shirt")
     .trim();
 }
 
 function weatherConditionIcon(label = "") {
   const text = String(label).toLowerCase();
-  if (text.includes("clear") || text.includes("fair")) return "☼";
-  if (text.includes("partly") || text.includes("cloud")) return "◔";
-  if (text.includes("rain") || text.includes("drizzle")) return "☂";
-  if (text.includes("snow")) return "❄";
-  if (text.includes("thunder")) return "⚡";
-  if (text.includes("fog")) return "◌";
-  return "○";
+  if (text.includes("thunder")) return renderInlineIcon("storm");
+  if (text.includes("snow")) return renderInlineIcon("snow");
+  if (text.includes("rain")) return renderInlineIcon("rain");
+  if (text.includes("drizzle")) return renderInlineIcon("drizzle");
+  if (text.includes("partly") || text.includes("cloud")) return renderInlineIcon("partly");
+  if (text.includes("fog")) return renderInlineIcon("fog");
+  if (text.includes("clear") || text.includes("fair")) return renderInlineIcon("clear");
+  return renderInlineIcon("globe");
 }
 
 function extractWearableHeadlinePart(text) {
@@ -1173,11 +1513,23 @@ function getRecommendationBadge(outfit, weather) {
 
 function getRecommendationTileIcon(label) {
   const key = String(label || "").toLowerCase();
-  if (key === "top") return "👕";
-  if (key === "bottom") return "👖";
-  if (key === "outer") return "🧥";
-  if (key === "shoes") return "👟";
-  return "•";
+  if (key === "top") return renderInlineIcon("top");
+  if (key === "bottom") return renderInlineIcon("pants");
+  if (key === "outer") return renderInlineIcon("jacket");
+  if (key === "shoes") return renderInlineIcon("shoes");
+  return renderInlineIcon("accessory");
+}
+
+function renderWhyBadgeIcon() {
+  return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/></svg>`;
+}
+
+function renderInfoIcon() {
+  return renderInlineIcon("info");
+}
+
+function renderTuneIcon() {
+  return renderInlineIcon("tune");
 }
 
 function getTodayContextChips() {
@@ -1343,12 +1695,18 @@ function renderWhyItems(items) {
     <div class="today-why-list">
       ${items.map((item) => `
         <div class="today-why-item">
-          <span class="today-why-badge" aria-hidden="true">✦</span>
+          <span class="today-why-badge" aria-hidden="true">${renderWhyBadgeIcon()}</span>
           <div class="today-why-text">${escapeHtml(item)}</div>
         </div>
       `).join("")}
     </div>
   `;
+}
+
+function openWhyWorksDialog(items) {
+  if (!els.whyWorksDialogBody || !els.whyWorksDialog) return;
+  els.whyWorksDialogBody.innerHTML = renderWhyItems(items || []);
+  if (typeof els.whyWorksDialog.showModal === "function") els.whyWorksDialog.showModal();
 }
 
 async function runForLocation(loc) {
@@ -1371,6 +1729,7 @@ async function runForLocation(loc) {
     })();
 
     renderWeather(current, ctx, data.hourly);
+    setEmptyStateLoading(false);
 
     // AI recommendation (non-blocking)
     fetchAIRecommendation(data, current, ctx);
@@ -1382,6 +1741,7 @@ async function runForLocation(loc) {
     saveState({ lastLocation: loc });
   } catch (err) {
     console.error(err);
+    setEmptyStateLoading(false);
     setStatus(`Error: ${err.message}`);
   }
 }
@@ -1498,6 +1858,7 @@ async function reverseGeocode(lat, lon) {
   url.searchParams.set("format", "json");
   url.searchParams.set("lat", String(lat));
   url.searchParams.set("lon", String(lon));
+  url.searchParams.set("addressdetails", "1");
 
   const res = await fetchWithTimeout(
     url.toString(),
@@ -1506,7 +1867,9 @@ async function reverseGeocode(lat, lon) {
   );
   if (!res.ok) throw new Error(`Reverse geocoding failed (${res.status})`);
   const data = await res.json();
-  const name = data?.display_name || `Lat ${lat.toFixed(3)}, Lon ${lon.toFixed(3)}`;
+  const name = data?.display_name
+    ? formatCityLevelLocation(data.display_name, data.address)
+    : `Lat ${lat.toFixed(3)}, Lon ${lon.toFixed(3)}`;
   return { name, lat, lon };
 }
 
@@ -1684,26 +2047,65 @@ function renderSettingsUI() {
     if (els.settingsAccountBtn) els.settingsAccountBtn.querySelector("strong").textContent = "Sign in";
     if (els.settingsDeleteAccountBtn) els.settingsDeleteAccountBtn.style.display = "none";
   }
+  renderSettingsDataUI();
 }
 
 function bindSettingsUI() {
   els.settingsAccountBtn?.addEventListener("click", showAuthDialog);
   els.settingsDeleteAccountBtn?.addEventListener("click", () => els.authDeleteBtn?.click());
-  els.settingsPrivacyBtn?.addEventListener("click", () => showConsentDialog({ forceModal: true }));
-  els.settingsLocationBtn?.addEventListener("click", onUseMyLocation);
-  els.settingsClearLocationBtn?.addEventListener("click", () => {
-    const state = loadState();
-    saveState({ lastQuery: "", lastLocation: null, prefs: state.prefs });
-    els.placeInput.value = "";
-    setStatus("Saved location cleared.");
+  els.settingsPrivacyBtn?.addEventListener("click", () => {
+    setSettingsFeedback("");
+    showConsentDialog({ forceModal: true, source: "settings" });
   });
-  els.settingsResetPrefsBtn?.addEventListener("click", () => {
-    const state = loadState();
-    const nextPrefs = { ...DEFAULT_STATE.prefs };
-    saveState({ ...state, prefs: nextPrefs });
-    pendingRecommendationPrefs = null;
-    syncPreferenceInputs(nextPrefs);
-    setStatus("Recommendation preferences reset.");
+  els.settingsClearLocationBtn?.addEventListener("click", async () => {
+    setSettingsActionBusy(els.settingsClearLocationBtn, true);
+    try {
+      const state = loadState();
+      if (!state.lastLocation && !els.placeInput?.value.trim()) {
+        setSettingsFeedback("There isn’t a saved location to clear right now.", "info");
+        return;
+      }
+
+      saveState({ lastQuery: "", lastLocation: null });
+      if (els.placeInput) els.placeInput.value = "";
+      resetTodayLocationState();
+      setStatus("");
+      setSettingsFeedback(
+        canUseFunctionalStorage()
+          ? "Saved location cleared from this device."
+          : "Current location cleared for this session.",
+        "success"
+      );
+    } finally {
+      setSettingsActionBusy(els.settingsClearLocationBtn, false);
+    }
+  });
+  els.settingsResetPrefsBtn?.addEventListener("click", async () => {
+    setSettingsActionBusy(els.settingsResetPrefsBtn, true);
+    try {
+      const state = loadState();
+      const alreadyDefault = areRecommendationPrefsDefault(state.prefs) && !pendingRecommendationPrefs;
+      const nextPrefs = structuredClone(DEFAULT_STATE.prefs);
+      pendingRecommendationPrefs = null;
+      saveState({ prefs: nextPrefs });
+      syncPreferenceInputs(nextPrefs);
+
+      if (state.lastLocation) {
+        setSettingsFeedback("Resetting outfit tuning and refreshing your recommendation…", "busy", { persist: true });
+        await runForLocation(state.lastLocation);
+      }
+
+      setSettingsFeedback(
+        alreadyDefault
+          ? "Outfit tuning is already using the default settings."
+          : "Outfit tuning reset to defaults.",
+        "success"
+      );
+    } catch (err) {
+      setSettingsFeedback(`Could not reset outfit tuning: ${err.message}`, "error", { persist: true });
+    } finally {
+      setSettingsActionBusy(els.settingsResetPrefsBtn, false);
+    }
   });
 }
 
@@ -1846,7 +2248,8 @@ function bindConsentUI() {
   // Footer button
   els.privacyBtn?.addEventListener("click", () => {
     switchTab("tabPrefs");
-    showConsentDialog({ forceModal: true });
+    setSettingsFeedback("");
+    showConsentDialog({ forceModal: true, source: "settings" });
   });
 
   // Select-all logic
@@ -1871,12 +2274,18 @@ function bindConsentUI() {
   els.consentEssential?.addEventListener("click", (e) => {
     // Continue without saving (no functional storage, no device location)
     e.preventDefault();
+    const source = consentDialogSource;
     saveConsent({ seen: true, functionalStorage: false, deviceLocation: false });
     closeConsentDialog();
+    renderWardrobe();
+    if (source === "settings") {
+      setSettingsFeedback(`Privacy choices saved. ${summarizeConsentSettings()}`, "success");
+    }
   });
 
   els.consentAccept?.addEventListener("click", (e) => {
     e.preventDefault();
+    const source = consentDialogSource;
     saveConsent({
       seen: true,
       functionalStorage: !!els.consentFunctional?.checked,
@@ -1889,6 +2298,11 @@ function bindConsentUI() {
     }
 
     closeConsentDialog();
+    renderWardrobe();
+
+    if (source === "settings") {
+      setSettingsFeedback(`Privacy choices saved. ${summarizeConsentSettings()}`, "success");
+    }
 
     // Auto-trigger geolocation after consent if location was granted and no saved location
     if (!!els.consentLocation?.checked) {
@@ -1896,6 +2310,109 @@ function bindConsentUI() {
       if (!st.lastLocation) onUseMyLocation();
     }
   });
+}
+
+function bindPullToRefresh() {
+  const container = document.getElementById("tabToday");
+  if (!container) return;
+
+  const THRESHOLD = 74;
+  const AXIS_LOCK_THRESHOLD = 10;
+  let tracking = false;
+  let refreshing = false;
+  let startX = 0;
+  let startY = 0;
+  let deltaY = 0;
+  let pointerInsideInteractive = false;
+  let axisLocked = "";
+  let activeScrollParent = null;
+
+  const isInteractive = (target) => target?.closest?.(
+    "input, textarea, select, summary, details, .today-chip-toggle, .location-input-wrap, .today-cta-btn, .nav-item"
+  );
+
+  const findScrollableParent = (target) => {
+    let node = target instanceof Element ? target : null;
+    while (node && node !== container) {
+      const style = window.getComputedStyle(node);
+      const canScroll = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1;
+      if (canScroll) return node;
+      node = node.parentElement;
+    }
+    return container;
+  };
+
+  const resetPullState = () => {
+    tracking = false;
+    deltaY = 0;
+    axisLocked = "";
+    pointerInsideInteractive = false;
+    activeScrollParent = null;
+    container.classList.remove("is-pulling");
+    container.style.removeProperty("--pull-progress");
+  };
+
+  const triggerRefresh = async () => {
+    if (refreshing) return;
+    refreshing = true;
+    container.classList.remove("is-pulling");
+    container.classList.add("is-refreshing");
+    try {
+      els.refreshBtn?.click();
+    } finally {
+      window.setTimeout(() => {
+        refreshing = false;
+        container.classList.remove("is-refreshing");
+        container.style.removeProperty("--pull-progress");
+      }, 900);
+    }
+  };
+
+  container.addEventListener("touchstart", (event) => {
+    if (event.touches.length !== 1 || refreshing) return;
+    pointerInsideInteractive = !!isInteractive(event.target);
+    activeScrollParent = findScrollableParent(event.target);
+    if (pointerInsideInteractive || (activeScrollParent?.scrollTop ?? 0) > 0 || container.scrollTop > 0) return;
+    tracking = true;
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+    deltaY = 0;
+    axisLocked = "";
+  }, { passive: true });
+
+  container.addEventListener("touchmove", (event) => {
+    if (!tracking || refreshing) return;
+    const moveY = event.touches[0].clientY - startY;
+    const moveX = event.touches[0].clientX - startX;
+    if (!axisLocked) {
+      if (Math.abs(moveY) > Math.abs(moveX) + AXIS_LOCK_THRESHOLD) {
+        axisLocked = "y";
+      } else if (Math.abs(moveX) > Math.abs(moveY) + AXIS_LOCK_THRESHOLD) {
+        axisLocked = "x";
+      }
+    }
+    if (axisLocked === "x") return resetPullState();
+    deltaY = Math.max(0, moveY);
+    if (deltaY <= 0 || container.scrollTop > 0 || (activeScrollParent?.scrollTop ?? 0) > 0) return;
+    if (axisLocked !== "y") return;
+    if (deltaY > 8) {
+      const progress = Math.min(deltaY / THRESHOLD, 1);
+      container.classList.add("is-pulling");
+      container.style.setProperty("--pull-progress", `${progress}`);
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  container.addEventListener("touchend", async () => {
+    if (!tracking) return;
+    const shouldRefresh = !pointerInsideInteractive && deltaY >= THRESHOLD;
+    resetPullState();
+    if (shouldRefresh) {
+      await triggerRefresh();
+    }
+  }, { passive: true });
+
+  container.addEventListener("touchcancel", resetPullState, { passive: true });
 }
 
 // ─── Wardrobe ────────────────────────────────────────────────
@@ -1917,7 +2434,7 @@ function saveWardrobeLocal(items) {
 }
 
 async function fetchWardrobeFromServer() {
-  const res = await fetch(`${API_BASE}/api/wardrobe`, { headers: authHeaders() });
+  const res = await authFetch(`${API_BASE}/api/wardrobe`);
   if (!res.ok) throw new Error("Failed to load wardrobe");
   return res.json();
 }
@@ -1952,9 +2469,9 @@ async function syncLocalWardrobeToServer() {
   if (!local.length) return;
   for (const item of local) {
     try {
-      await fetch(`${API_BASE}/api/wardrobe`, {
+      await authFetch(`${API_BASE}/api/wardrobe`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(item),
       });
     } catch {}
@@ -1964,15 +2481,7 @@ async function syncLocalWardrobeToServer() {
 }
 
 function typeEmoji(type) {
-  const m = {
-    "T-shirt":"👕","Shirt":"👔","Polo":"👕","Sweater":"🧶","Hoodie":"🧥",
-    "Jacket":"🧥","Coat":"🧥","Blazer":"🤵","Vest":"🦺","Tank top":"👕",
-    "Jeans":"👖","Chinos":"👖","Shorts":"🩳","Sweatpants":"👖","Dress pants":"👖",
-    "Skirt":"👗","Dress":"👗","Sneakers":"👟","Boots":"🥾","Sandals":"🩴",
-    "Dress shoes":"👞","Scarf":"🧣","Hat":"🧢","Gloves":"🧤","Sunglasses":"🕶️",
-    "Belt":"⬜","Bag":"🎒",
-  };
-  return m[type] || "👚";
+  return renderInlineIcon(itemTypeIconKey(type), "wardrobe-type-icon");
 }
 
 async function renderWardrobe() {
@@ -1980,6 +2489,7 @@ async function renderWardrobe() {
   els.wardrobeList.innerHTML = "";
   els.wardrobeEmpty.style.display = items.length ? "none" : "flex";
   updateWardrobeCtas(items);
+  syncTodayWardrobeDialog(items);
 
   items.forEach((item) => {
     const div = document.createElement("div");
@@ -1988,13 +2498,26 @@ async function renderWardrobe() {
 
     const photoHtml = item.photoDataUrl
       ? `<img class="wardrobe-item-photo" src="${escapeHtml(item.photoDataUrl)}" alt="" />`
-      : `<div class="wardrobe-item-placeholder">${typeEmoji(item.type)}</div>`;
+      : `<div class="wardrobe-item-placeholder" aria-hidden="true">${typeEmoji(item.type)}</div>`;
 
     const meta = [item.type, item.color, item.material].filter(Boolean).join(" · ");
     div.innerHTML = `${photoHtml}<div class="wardrobe-item-info"><div class="wardrobe-item-name">${escapeHtml(item.name)}</div><div class="wardrobe-item-meta">${escapeHtml(meta)}</div></div>`;
     div.addEventListener("click", () => openItemDialog(item));
     els.wardrobeList.appendChild(div);
   });
+}
+
+function syncTodayWardrobeDialog(items) {
+  const emptyWardrobe = !Array.isArray(items) || items.length === 0;
+  if (!emptyWardrobe) {
+    todayWardrobeDialogDismissed = false;
+    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+    return;
+  }
+  if (todayWardrobeDialogDismissed || els.todayWardrobeDialog?.open) return;
+  if (typeof els.todayWardrobeDialog?.showModal === "function") {
+    els.todayWardrobeDialog.showModal();
+  }
 }
 
 function updateWardrobeCtas(items) {
@@ -2007,7 +2530,6 @@ function updateWardrobeCtas(items) {
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Get personalized fast";
     if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Your wardrobe powers smarter outfit picks";
     if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Add photos or care tags once, then WearCast can recommend pieces you actually own instead of generic outfits.";
-    if (els.wardrobeExplainerBtn) els.wardrobeExplainerBtn.textContent = "Add an item";
     return;
   }
 
@@ -2018,7 +2540,6 @@ function updateWardrobeCtas(items) {
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Keep going";
     if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `You’ve added ${count} item${count === 1 ? "" : "s"} so far`;
     if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Add a couple more staples and WearCast will have far more options to mix, match, and personalize.";
-    if (els.wardrobeExplainerBtn) els.wardrobeExplainerBtn.textContent = "Add another";
     return;
   }
 
@@ -2028,7 +2549,6 @@ function updateWardrobeCtas(items) {
   if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Strong foundation";
   if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `Your ${count}-item wardrobe is already helping`;
   if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "WearCast can now make more specific recommendations from what you own. Add new pieces anytime to keep the suggestions sharp.";
-  if (els.wardrobeExplainerBtn) els.wardrobeExplainerBtn.textContent = "Add one more";
 }
 
 let editingItemId = null;
@@ -2037,6 +2557,7 @@ let isSavingItem = false;
 let isReadingItemPhoto = false;
 let isReadingScanPhoto = false;
 let isAnalyzingItemPhoto = false;
+let todayWardrobeDialogDismissed = false;
 
 function normalizeItemSignature(item) {
   return [
@@ -2084,7 +2605,7 @@ function updateItemVisual() {
   if (els.removePhotoBtn) {
     els.removePhotoBtn.style.display = photo ? "flex" : "none";
   }
-  if (els.itemVisualEmoji) els.itemVisualEmoji.textContent = typeEmoji(type || "Other");
+  if (els.itemVisualEmoji) els.itemVisualEmoji.innerHTML = typeEmoji(type || "Other");
   if (els.itemVisualName) els.itemVisualName.textContent = name || (photo ? "Selected clothing item" : "Add a clothing photo");
   if (els.itemVisualMeta) {
     els.itemVisualMeta.textContent = meta || (photo ? "We’ll use the photo to help fill in the details." : "We’ll try to prefill the details for you.");
@@ -2194,19 +2715,33 @@ async function saveItem() {
 
   try {
     if (isLoggedIn()) {
+      let savedItem = null;
       if (editingItemId) {
-        await fetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
+        const res = await authFetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json", ...authHeaders() },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(itemData),
         });
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) return;
+        if (!res.ok) throw new Error(data.error || "Could not update wardrobe item");
+        savedItem = data;
       } else {
-        await fetch(`${API_BASE}/api/wardrobe`, {
+        const res = await authFetch(`${API_BASE}/api/wardrobe`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", ...authHeaders() },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(itemData),
         });
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) return;
+        if (!res.ok) throw new Error(data.error || "Could not save wardrobe item");
+        savedItem = data;
       }
+      const currentItems = Array.isArray(_wardrobeCache) ? [..._wardrobeCache] : await loadWardrobeAsync();
+      const nextItems = editingItemId
+        ? currentItems.map((item) => String(item.id) === String(editingItemId) ? savedItem : item)
+        : [savedItem, ...currentItems];
+      saveWardrobe(nextItems);
     } else {
       const items = loadWardrobeLocal();
       if (editingItemId) {
@@ -2221,6 +2756,7 @@ async function saveItem() {
     closeItemDialog();
   } catch (err) {
     console.error("save item error:", err);
+    alert(err.message || "Could not save that item.");
   } finally {
     isSavingItem = false;
     updateItemSaveState();
@@ -2232,9 +2768,9 @@ async function deleteItem() {
 
   if (isLoggedIn()) {
     try {
-      await fetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
+      await authFetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
         method: "DELETE",
-        headers: authHeaders(),
+        headers: {},
       });
     } catch (err) {
       console.error("delete item error:", err);
@@ -2257,9 +2793,32 @@ function readFileAsDataUrl(file) {
   });
 }
 
+async function optimizeImageDataUrl(file, { maxEdge = 1600, quality = 0.82 } = {}) {
+  const sourceDataUrl = await readFileAsDataUrl(file);
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Failed to process image"));
+    img.src = sourceDataUrl;
+  });
+
+  const longestEdge = Math.max(image.width, image.height) || 1;
+  const scale = Math.min(1, maxEdge / longestEdge);
+  const width = Math.max(1, Math.round(image.width * scale));
+  const height = Math.max(1, Math.round(image.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return sourceDataUrl;
+  ctx.drawImage(image, 0, 0, width, height);
+
+  return canvas.toDataURL("image/jpeg", quality);
+}
+
 function bindWardrobeUI() {
   els.addItemBtn?.addEventListener("click", () => openItemDialog());
-  els.wardrobeExplainerBtn?.addEventListener("click", () => openItemDialog());
   els.itemCancelBtn?.addEventListener("click", closeItemDialog);
   els.itemDeleteBtn?.addEventListener("click", deleteItem);
 
@@ -2275,7 +2834,7 @@ function bindWardrobeUI() {
     updateItemSaveState();
     setItemPhotoStatus("Preparing your image…", true);
     try {
-      pendingPhotoDataUrl = await readFileAsDataUrl(file);
+      pendingPhotoDataUrl = await optimizeImageDataUrl(file);
       els.itemPhotoImg.src = pendingPhotoDataUrl;
       updateItemVisual();
       isAnalyzingItemPhoto = true;
@@ -2329,7 +2888,7 @@ function bindWardrobeUI() {
     isReadingScanPhoto = true;
     els.scanSubmitBtn.disabled = true;
     try {
-      scanImageDataUrl = await readFileAsDataUrl(file);
+      scanImageDataUrl = await optimizeImageDataUrl(file, { maxEdge: 1400, quality: 0.8 });
       window.__wearcastScanImageDataUrl = scanImageDataUrl;
       els.scanPreviewImg.src = scanImageDataUrl;
       els.scanPreview.style.display = "block";
@@ -2490,16 +3049,15 @@ function renderAIRecommendation(data) {
   const subtitle = firstSentence(data.reasoning) || "Built around today’s conditions.";
   const chips = getTodayContextChips();
   const whyBullets = buildWhyBullets(data, weather);
-  const alternatives = buildAlternatives(outfit, weather);
   const accessories = Array.isArray(outfit.accessories)
-    ? outfit.accessories.map(normalizeItemLabel).filter(Boolean)
-    : [normalizeItemLabel(outfit.accessories)].filter(Boolean);
+    ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
+    : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
   const accessoryText = accessories.length ? accessories.slice(0, 2).join(" • ") : "";
   const rowEntries = [
-    ["Top", normalizeItemLabel(outfit.top)],
-    ["Bottom", normalizeItemLabel(outfit.bottom)],
-    ["Outer", normalizeItemLabel(outfit.outer)],
-    ["Shoes", normalizeItemLabel(outfit.shoes)],
+    ["Top", preserveUsefulItemLabel(outfit.top)],
+    ["Bottom", preserveUsefulItemLabel(outfit.bottom)],
+    ["Outer", preserveUsefulItemLabel(outfit.outer)],
+    ["Shoes", preserveUsefulItemLabel(outfit.shoes)],
   ].filter(([, value]) => value);
 
   if (els.aiRecBadge) {
@@ -2519,31 +3077,18 @@ function renderAIRecommendation(data) {
           </div>
         </div>
       </div>
-      ${chips.length ? `<div class="today-chip-row">${chips.map((chip) => `<span class="today-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : ""}
+      ${(chips.length || whyBullets.length) ? `<div class="today-rec-meta">${chips.length ? `<div class="today-chip-row">${chips.map((chip) => `<span class="today-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : `<div></div>`}${whyBullets.length ? `<button type="button" class="today-info-button today-info-button-compact" data-rec-action="why" aria-label="Why this works"><span class="today-info-trigger-icon" aria-hidden="true">${renderInfoIcon()}</span></button>` : ""}</div>` : ""}
       ${rowEntries.length ? `<div class="today-rec-breakdown-grid">${rowEntries.map(([label, value]) => `<div class="today-rec-tile"><span class="today-rec-tile-label"><span class="today-rec-tile-icon" aria-hidden="true">${getRecommendationTileIcon(label)}</span>${escapeHtml(label)}</span><span class="today-rec-tile-value">${escapeHtml(value)}</span></div>`).join("")}</div>` : ""}
       ${accessoryText ? `<div class="today-rec-accessories">Extras: ${escapeHtml(accessoryText)}</div>` : ""}
       <details class="today-tune-section">
-        <summary><span>Tune this look</span><svg class="today-expand-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <summary><span><span class="today-tune-icon" aria-hidden="true">${renderTuneIcon()}</span>Tune this look</span><svg class="today-expand-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
         ${renderRecommendationControls()}
       </details>
-      <details class="today-why">
-        <summary><span>Why this works</span><svg class="today-expand-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
-        ${renderWhyItems(whyBullets)}
-      </details>
-      ${alternatives.length ? `<details class="today-alt-section"><summary><span>Alternative options</span><svg class="today-expand-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="today-alt-list">${alternatives.map((alt) => `<div class="today-alt-row"><span class="today-alt-label">${escapeHtml(alt.label)}</span><span class="today-alt-value">${escapeHtml(alt.value)}</span></div>`).join("")}</div></details>` : ""}
     </div>
   `;
-
-  if (data.missingItems?.length) {
-    const item = compactText(data.missingItems[0], "");
-    els.aiRecMissing.innerHTML = item
-      ? `<div class="today-rec-note">Wardrobe tip: ${escapeHtml(item)}</div>`
-      : "";
-  } else {
-    els.aiRecMissing.innerHTML = "";
-  }
-
+  els.aiRecContent.dataset.whyItems = JSON.stringify(whyBullets);
   els.aiRecWarnings.innerHTML = "";
+  els.aiRecMissing.innerHTML = "";
 }
 
 function bindRecommendationControls() {
@@ -2558,6 +3103,16 @@ function bindRecommendationControls() {
       if (latestState.lastLocation) {
         await runForLocation(latestState.lastLocation);
       }
+      return;
+    }
+
+    const whyButton = event.target.closest("[data-rec-action='why']");
+    if (whyButton) {
+      let whyItems = [];
+      try {
+        whyItems = JSON.parse(els.aiRecContent?.dataset?.whyItems || "[]");
+      } catch {}
+      openWhyWorksDialog(whyItems);
       return;
     }
 
@@ -2582,26 +3137,287 @@ function bindRecommendationControls() {
 }
 
 // ─── Tab navigation ──────────────────────────────────────────
-function switchTab(tabId) {
-  document.querySelectorAll(".tab-page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-  const page = document.getElementById(tabId);
-  if (page) page.classList.add("active");
-  const btn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
-  if (btn) btn.classList.add("active");
+function getActiveTabId() {
+  return document.querySelector(".tab-page.active")?.id || TAB_ORDER[0];
+}
+
+let tabTransitionTimeoutId = null;
+let tabGestureStartTabId = "";
+
+function syncTabIndicators(tabId) {
+  document.querySelectorAll(".nav-item").forEach((button) => {
+    button.classList.toggle("active", button.dataset.tab === tabId);
+  });
+  document.querySelectorAll(".nav-swipe-dot").forEach((dot, index) => {
+    dot.classList.toggle("active", TAB_ORDER[index] === tabId);
+  });
+}
+
+function clearTabGestureStyles() {
+  document.querySelectorAll(".tab-page").forEach((page) => {
+    page.classList.remove("tab-enter-from-right", "tab-enter-from-left", "tab-exit-to-left", "tab-exit-to-right", "tab-swipe-active");
+    page.style.removeProperty("transform");
+    page.style.removeProperty("transition");
+  });
+}
+
+function switchTab(tabId, options = {}) {
+  const currentTabId = getActiveTabId();
+  if (tabId === currentTabId) {
+    syncTabIndicators(tabId);
+    return;
+  }
+
+  const direction = Number(options.direction || 0);
+  const currentPage = document.getElementById(currentTabId);
+  const nextPage = document.getElementById(tabId);
+  if (!nextPage) return;
+
+  if (tabTransitionTimeoutId) {
+    window.clearTimeout(tabTransitionTimeoutId);
+    tabTransitionTimeoutId = null;
+  }
+
+  clearTabGestureStyles();
+
+  syncTabIndicators(tabId);
+
+  if (!currentPage || direction === 0) {
+    document.querySelectorAll(".tab-page").forEach((page) => page.classList.remove("active"));
+    nextPage.classList.add("active");
+    return;
+  }
+
+  nextPage.classList.add("active", direction > 0 ? "tab-enter-from-right" : "tab-enter-from-left");
+  currentPage.classList.add(direction > 0 ? "tab-exit-to-left" : "tab-exit-to-right");
+
+  tabTransitionTimeoutId = window.setTimeout(() => {
+    currentPage.classList.remove("active", "tab-exit-to-left", "tab-exit-to-right");
+    nextPage.classList.remove("tab-enter-from-right", "tab-enter-from-left");
+    tabTransitionTimeoutId = null;
+  }, 250);
+}
+
+function bindIOSSwipeTabs() {
+  if (!isNative || !isIOS()) return;
+
+  const container = document.querySelector("main");
+  if (!container) return;
+
+  const SWIPE_MIN_X = 72;
+  const SWIPE_MAX_Y = 42;
+  const AXIS_LOCK_THRESHOLD = 14;
+  let tracking = false;
+  let startX = 0;
+  let startY = 0;
+  let deltaX = 0;
+  let deltaY = 0;
+  let axisLocked = "";
+  let currentPage = null;
+  let adjacentPage = null;
+  let adjacentTabId = "";
+
+  const shouldIgnoreSwipe = (target) => {
+    if (!(target instanceof Element)) return true;
+    return !!target.closest(
+      [
+        "dialog[open]",
+        "input",
+        "textarea",
+        "select",
+        "a",
+        "label",
+        "summary",
+        "[contenteditable='true']",
+        "[data-rec-pref]",
+        "[data-rec-action]",
+        ".today-chip-row-controls",
+        ".ac-dropdown",
+        ".location-input-wrap",
+        "#geoBtn",
+        "#searchBtn",
+        "#userBtn",
+        "#addItemBtn",
+        "#todayWardrobeCtaBtn",
+        ".wardrobe-item",
+        ".nav-item",
+      ].join(", ")
+    );
+  };
+
+  const prepareAdjacentPage = (direction) => {
+    const currentTabId = tabGestureStartTabId || getActiveTabId();
+    const currentIndex = TAB_ORDER.indexOf(currentTabId);
+    adjacentTabId = TAB_ORDER[currentIndex + direction] || "";
+    currentPage = document.getElementById(currentTabId);
+    adjacentPage = adjacentTabId ? document.getElementById(adjacentTabId) : null;
+    if (!currentPage || !adjacentPage) return false;
+
+    clearTabGestureStyles();
+    currentPage.classList.add("active", "tab-swipe-active");
+    adjacentPage.classList.add("active", "tab-swipe-active");
+    currentPage.style.transition = "none";
+    adjacentPage.style.transition = "none";
+    adjacentPage.style.transform = `translateX(${direction * container.clientWidth}px)`;
+    return true;
+  };
+
+  const settleSwipe = (commit, direction) => {
+    if (!currentPage) return;
+
+    const width = container.clientWidth;
+    const finalCurrent = commit ? -direction * width : 0;
+    const finalAdjacent = commit ? 0 : direction * width;
+
+    [currentPage, adjacentPage].forEach((page) => {
+      if (!page) return;
+      page.style.transition = "transform 240ms ease";
+    });
+
+    currentPage.style.transform = `translateX(${finalCurrent}px)`;
+    if (adjacentPage) {
+      adjacentPage.style.transform = `translateX(${finalAdjacent}px)`;
+    }
+
+    window.setTimeout(() => {
+      if (commit && adjacentPage && adjacentTabId) {
+        document.querySelectorAll(".tab-page").forEach((page) => page.classList.remove("active"));
+        adjacentPage.classList.add("active");
+        syncTabIndicators(adjacentTabId);
+      } else if (currentPage) {
+        document.querySelectorAll(".tab-page").forEach((page) => page.classList.remove("active"));
+        currentPage.classList.add("active");
+        syncTabIndicators(currentPage.id);
+      }
+      clearTabGestureStyles();
+      currentPage = null;
+      adjacentPage = null;
+      adjacentTabId = "";
+      tabGestureStartTabId = "";
+    }, 250);
+  };
+
+  container.addEventListener("touchstart", (event) => {
+    if (event.touches.length !== 1) {
+      tracking = false;
+      return;
+    }
+
+    if (document.querySelector("dialog[open]")) {
+      tracking = false;
+      return;
+    }
+
+    const target = event.target;
+    if (shouldIgnoreSwipe(target)) {
+      tracking = false;
+      return;
+    }
+
+    const activePage = document.querySelector(".tab-page.active");
+    if (!activePage || !activePage.contains(target)) {
+      tracking = false;
+      return;
+    }
+
+    tracking = true;
+    tabGestureStartTabId = activePage.id;
+    axisLocked = "";
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+    deltaX = 0;
+    deltaY = 0;
+    currentPage = null;
+    adjacentPage = null;
+    adjacentTabId = "";
+  }, { passive: true });
+
+  container.addEventListener("touchmove", (event) => {
+    if (!tracking || event.touches.length !== 1) return;
+
+    deltaX = event.touches[0].clientX - startX;
+    deltaY = event.touches[0].clientY - startY;
+
+    if (!axisLocked) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) + AXIS_LOCK_THRESHOLD) {
+        axisLocked = "x";
+      } else if (Math.abs(deltaY) > Math.abs(deltaX) + AXIS_LOCK_THRESHOLD) {
+        axisLocked = "y";
+      }
+    }
+
+    if (axisLocked === "x") {
+      const direction = deltaX < 0 ? 1 : -1;
+      if (!adjacentPage && !prepareAdjacentPage(direction)) {
+        return;
+      }
+      const width = container.clientWidth;
+      const clampedDeltaX = Math.max(-width, Math.min(width, deltaX));
+      currentPage.style.transform = `translateX(${clampedDeltaX}px)`;
+      if (adjacentPage) {
+        adjacentPage.style.transform = `translateX(${direction * width + clampedDeltaX}px)`;
+      }
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  container.addEventListener("touchend", () => {
+    if (!tracking) return;
+
+    const currentTabId = tabGestureStartTabId || getActiveTabId();
+    const currentIndex = TAB_ORDER.indexOf(currentTabId);
+    tracking = false;
+
+    if (axisLocked !== "x") {
+      clearTabGestureStyles();
+      tabGestureStartTabId = "";
+      return;
+    }
+    if (Math.abs(deltaY) > SWIPE_MAX_Y || !adjacentPage) {
+      settleSwipe(false, deltaX < 0 ? 1 : -1);
+      return;
+    }
+
+    const direction = deltaX < 0 ? 1 : -1;
+    const nextTabId = TAB_ORDER[currentIndex + direction];
+    settleSwipe(!!nextTabId && Math.abs(deltaX) >= SWIPE_MIN_X, direction);
+  }, { passive: true });
+
+  container.addEventListener("touchcancel", () => {
+    tracking = false;
+    axisLocked = "";
+    settleSwipe(false, deltaX < 0 ? 1 : -1);
+  }, { passive: true });
 }
 
 function bindTabNav() {
   els.bottomNav?.querySelectorAll(".nav-item").forEach(btn => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    btn.addEventListener("click", () => {
+      const currentIndex = TAB_ORDER.indexOf(getActiveTabId());
+      const nextIndex = TAB_ORDER.indexOf(btn.dataset.tab);
+      const direction = nextIndex > currentIndex ? 1 : nextIndex < currentIndex ? -1 : 0;
+      switchTab(btn.dataset.tab, { direction });
+    });
   });
-  els.todayWardrobeCtaBtn?.addEventListener("click", () => switchTab("tabWardrobe"));
+  els.todayWardrobeCtaBtn?.addEventListener("click", () => {
+    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+    switchTab("tabWardrobe", { direction: 1 });
+  });
+  els.todayWardrobeDialogCloseBtn?.addEventListener("click", () => {
+    todayWardrobeDialogDismissed = true;
+    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+  });
+
+  els.whyWorksDialogCloseBtn?.addEventListener("click", () => {
+    if (els.whyWorksDialog?.open) els.whyWorksDialog.close();
+  });
 }
 
 // ─── Auto-geolocation (silent, no prompt) ────────────────────
 async function tryAutoGeo() {
   if (!navigator.geolocation) return;
   try {
+    setEmptyStateLoading(true, "Looking up your location and loading today’s weather…");
     setStatus("Detecting location…");
     const pos = await getGeo(); // uses maximumAge:5min, won't prompt if already granted
     const loc = await resolveLocationFromCoords(pos.coords.latitude, pos.coords.longitude);
@@ -2609,6 +3425,7 @@ async function tryAutoGeo() {
     saveState({ lastQuery: "", lastLocation: loc });
     await runForLocation(loc);
   } catch {
+    setEmptyStateLoading(false);
     // Permission not granted yet or blocked — just show a nudge
     setStatus("Tap the location button or search for a city to get started.");
   }
@@ -2616,10 +3433,11 @@ async function tryAutoGeo() {
 
 // ─── Autocomplete with country flags ─────────────────────────
 function countryFlag(code) {
-  if (!code) return "\u{1F30D}"; // 🌍
-  return [...code.toUpperCase()]
-    .map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65))
-    .join("");
+  const label = String(code || "").slice(0, 2).toUpperCase();
+  return `
+    <span class="country-badge-icon" aria-hidden="true">${renderInlineIcon("globe")}</span>
+    ${label ? `<span class="country-badge-code">${escapeHtml(label)}</span>` : ""}
+  `;
 }
 
 let _acCtrl = null;
@@ -2691,16 +3509,16 @@ function renderAC(results) {
   _acList.style.display = "block";
   for (const r of results) {
     const flag = countryFlag(r.address?.country_code);
-    const short = r.display_name.split(",").slice(0, 3).map((s) => s.trim()).join(", ");
+    const short = formatCityLevelLocation(r.display_name, r.address);
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "ac-item";
     btn.innerHTML = `<span class="ac-flag">${flag}</span><span class="ac-text">${short}</span>`;
     btn.addEventListener("mousedown", (e) => {
       e.preventDefault();
-      els.placeInput.value = r.display_name;
+      els.placeInput.value = short;
       hideAC();
-      const loc = { name: r.display_name, lat: Number(r.lat), lon: Number(r.lon) };
+      const loc = { name: short, lat: Number(r.lat), lon: Number(r.lon) };
       saveState({ lastQuery: "", lastLocation: loc });
       runForLocation(loc);
     });
@@ -2796,7 +3614,7 @@ function bindAuthUI() {
         if (els.authResendVerifyBtn) els.authResendVerifyBtn.style.display = "";
         return;
       }
-      await finalizeAuthSuccess(data.token, data.user);
+      await finalizeAuthSuccess(data.token, data.user, data.refreshToken);
     } catch (err) {
       els.authError.textContent = err.message;
       els.authError.style.display = "";
@@ -2845,8 +3663,17 @@ function bindAuthUI() {
     // The redirect handler should be implemented in the app for native (see below)
   });
 
-  els.authLogoutBtn.addEventListener("click", () => {
-    setAuth(null, null);
+  els.authLogoutBtn.addEventListener("click", async () => {
+    if (authToken) {
+      try {
+        await authFetch(`${API_BASE}/api/auth/logout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken: authRefreshToken }),
+        }, { retryOnAuth: false });
+      } catch {}
+    }
+    setAuth(null, null, null);
     _wardrobeCache = null;
     renderWardrobe();
     els.authDialog.close();
@@ -2868,9 +3695,9 @@ function bindAuthUI() {
     els.deleteAccountError.style.display = "none";
     els.deleteAccountConfirmBtn.disabled = true;
     try {
-      const res = await fetch(`${API_BASE}/api/auth/account`, {
+      const res = await authFetch(`${API_BASE}/api/auth/account`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           password: els.deleteAccountPassword.value,
           confirmText: els.deleteAccountConfirmText.value,
@@ -2878,7 +3705,7 @@ function bindAuthUI() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Could not delete account");
-      setAuth(null, null);
+      setAuth(null, null, null);
       _wardrobeCache = null;
       await renderWardrobe();
       els.deleteAccountDialog.close();
@@ -2894,7 +3721,7 @@ function bindAuthUI() {
   // Listen for Google OAuth callback postMessage
   window.addEventListener("message", (e) => {
     if (e.data?.type === "wearcast-auth" && e.data.token) {
-      finalizeAuthSuccess(e.data.token, e.data.user).catch((err) => {
+      finalizeAuthSuccess(e.data.token, e.data.user, e.data.refreshToken).catch((err) => {
         alert(`Login failed: ${err.message}`);
       });
     }
@@ -2910,6 +3737,8 @@ function init() {
   configureNativeViewport();
   disableNativeDoubleTapZoom();
   bindTabNav();
+  bindIOSSwipeTabs();
+  bindPullToRefresh();
   setupInstallUI();
   bindConsentUI();
   bindPrefs();
@@ -2945,7 +3774,7 @@ function init() {
 
   const st = loadState();
   if (st.lastLocation) {
-    els.placeInput.value = st.lastLocation.name;
+    els.placeInput.value = formatCityLevelLocation(st.lastLocation.name);
     runForLocation(st.lastLocation);
   } else if (consent.seen) {
     // No saved location — silently try cached/granted geolocation (no prompt)

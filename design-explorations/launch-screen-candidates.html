@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WearCast Launch Screen Candidates</title>
+  <style>
+    :root {
+      --bg: #eef5fb;
+      --text: #10284f;
+      --muted: #617897;
+      --line: rgba(16, 40, 79, 0.08);
+      --card: rgba(255, 255, 255, 0.72);
+      --shadow: 0 24px 50px rgba(13, 39, 84, 0.12);
+      --blue: #1e67db;
+      --cyan: #17a1dd;
+      --mint: #6dd8cf;
+      --warm: #ffd9a8;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "SF Pro Display", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.9), transparent 24%),
+        linear-gradient(180deg, #f6fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      width: min(1320px, calc(100vw - 48px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: .95;
+      letter-spacing: -.05em;
+    }
+
+    .intro p {
+      margin: 0;
+      max-width: 760px;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .candidate {
+      display: grid;
+      gap: 12px;
+    }
+
+    .phone {
+      position: relative;
+      aspect-ratio: 9 / 19.5;
+      border-radius: 42px;
+      padding: 14px;
+      background: #101722;
+      box-shadow: 0 28px 50px rgba(10, 20, 38, .24);
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 108px;
+      height: 28px;
+      border-radius: 18px;
+      background: rgba(8, 14, 24, .92);
+      z-index: 3;
+    }
+
+    .time {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,.92);
+      z-index: 3;
+    }
+
+    .home {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      width: 128px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.42);
+      z-index: 3;
+    }
+
+    .candidate h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+
+    .candidate p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .candidate ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .brand-lockup {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 36px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .brand-mark {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 18px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(255,255,255,.2));
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 32px rgba(10, 32, 74, .18), inset 0 1px 0 rgba(255,255,255,.72);
+      display: grid;
+      place-items: center;
+      color: white;
+    }
+
+    .brand-mark svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -.05em;
+      color: white;
+    }
+
+    .tag {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.45;
+    }
+
+    .candidate-a {
+      background:
+        radial-gradient(circle at 22% 14%, rgba(255,255,255,.34), transparent 20%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,.12), transparent 30%),
+        linear-gradient(160deg, #1c63d5 0%, #179adb 58%, #69d8cf 100%);
+    }
+
+    .candidate-a .weather-wave,
+    .candidate-b .weather-wave,
+    .candidate-c .weather-wave,
+    .candidate-d .weather-wave {
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      bottom: -12%;
+      height: 42%;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.05));
+      filter: blur(2px);
+    }
+
+    .candidate-b {
+      background:
+        radial-gradient(circle at 24% 14%, rgba(255,255,255,.3), transparent 18%),
+        linear-gradient(180deg, #ffd8a8 0%, #d9eeff 36%, #1c6ad8 100%);
+    }
+
+    .candidate-c {
+      background:
+        radial-gradient(circle at 76% 18%, rgba(255,255,255,.26), transparent 18%),
+        linear-gradient(180deg, #f8bf8e 0%, #edf7ff 30%, #83d6d3 56%, #165fcf 100%);
+    }
+
+    .candidate-c .floating-card,
+    .candidate-d .floating-card {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 84px;
+      padding: 14px 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.2);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 32px rgba(9, 32, 70, .16), inset 0 1px 0 rgba(255,255,255,.38);
+      color: white;
+      z-index: 2;
+    }
+
+    .mini-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.76);
+    }
+
+    .mini-title {
+      margin-top: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+    }
+
+    .mini-sub {
+      margin-top: 5px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255,255,255,.78);
+    }
+
+    .candidate-d {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.36), transparent 28%),
+        linear-gradient(180deg, #16335f 0%, #1e63d4 44%, #63d3d0 100%);
+    }
+
+    .candidate-d .brand-mark {
+      background: linear-gradient(145deg, rgba(255,255,255,.95), rgba(255,255,255,.28));
+    }
+
+    .candidate-d .status-chip {
+      position: absolute;
+      top: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+    }
+
+    .pulse {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 180px;
+      height: 180px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.16);
+      z-index: 1;
+    }
+
+    .pulse::before,
+    .pulse::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .pulse::after {
+      inset: 38px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="intro">
+      <div class="eyebrow">Launch Concepts</div>
+      <h1>WearCast startup screens built around weather, wardrobe, and calm native motion.</h1>
+      <p>These candidates lean into WearCast’s core promise: outfit guidance shaped by the day ahead and your real closet. They avoid “generic weather app” branding and instead suggest atmosphere, personal styling, and a native iOS feel from the first frame.</p>
+    </section>
+
+    <section class="grid">
+      <article class="candidate">
+        <div class="phone">
+          <div class="screen candidate-a">
+            <div class="notch"></div>
+            <div class="time">9:41</div>
+            <div class="brand-lockup">
+              <div>
+                <div class="brand-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.2 3.7 16.1 2 12 5.3 7.9 2 3.8 3.7a1.9 1.9 0 0 0-1.2 2.1l.5 3.2c.1.6.6 1 1.2 1H6v10.1a1.9 1.9 0 0 0 1.9 1.9h8.2a1.9 1.9 0 0 0 1.9-1.9V10h1.7c.6 0 1.1-.4 1.2-1l.5-3.2a1.9 1.9 0 0 0-1.2-2.1Z"/>
+                  </svg>
+                </div>
+                <div class="logo">WearCast</div>
+                <div class="tag">Weather-led outfit guidance, without the guesswork.</div>
+              </div>
+            </div>
+            <div class="weather-wave"></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <h2>1. Atmosphere First</h2>
+        <p>The strongest “premium native app” option. It feels like the weather is setting the tone before the wardrobe layer fades in.</p>
+        <ul>
+          <li>Best if you want WearCast to feel calm, premium, and weather-native.</li>
+          <li>Simple enough for a real iOS launch screen asset.</li>
+          <li>Most aligned with the current blue / cyan / mint product language.</li>
+        </ul>
+      </article>
+
+      <article class="candidate">
+        <div class="phone">
+          <div class="screen candidate-b">
+            <div class="notch"></div>
+            <div class="time">9:41</div>
+            <div class="brand-lockup">
+              <div>
+                <div class="brand-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 7h7"/><path d="M15 7h5"/><path d="M4 17h5"/><path d="M13 17h7"/><circle cx="13" cy="7" r="2.2"/><circle cx="11" cy="17" r="2.2"/>
+                  </svg>
+                </div>
+                <div class="logo">WearCast</div>
+                <div class="tag">Styled for the forecast ahead.</div>
+              </div>
+            </div>
+            <div class="weather-wave"></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <h2>2. Warm-To-Cool Forecast</h2>
+        <p>This one communicates the product idea immediately: the launch gradient itself moves from warm to cool like a day’s dressing decision.</p>
+        <ul>
+          <li>Speaks directly to “what should I wear today?” without extra UI.</li>
+          <li>Feels more lifestyle-oriented than a raw weather brand.</li>
+          <li>Great if you want a slightly friendlier, less technical first impression.</li>
+        </ul>
+      </article>
+
+      <article class="candidate">
+        <div class="phone">
+          <div class="screen candidate-c">
+            <div class="notch"></div>
+            <div class="time">9:41</div>
+            <div class="brand-lockup">
+              <div>
+                <div class="brand-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 4.3a2.9 2.9 0 0 1 2.9 2.9v.8H9.1v-.8A2.9 2.9 0 0 1 12 4.3Z"/><path d="M5.4 10.2h13.2l-1 7.7H6.4l-1-7.7Z"/><path d="M9.3 14.2h5.4"/>
+                  </svg>
+                </div>
+                <div class="logo">WearCast</div>
+              </div>
+            </div>
+            <div class="floating-card">
+              <div class="mini-label">Daily Styling</div>
+              <div class="mini-title">From forecast to outfit</div>
+              <div class="mini-sub">A launch screen that hints at the card-and-deck product structure you already have.</div>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <h2>3. Product Preview</h2>
+        <p>This uses a launch-card motif to suggest the actual app experience instead of just showing the logo on a gradient.</p>
+        <ul>
+          <li>Best if you want the launch moment to feel more branded and product-specific.</li>
+          <li>Hints at “weather deck” and “recommendation card” without becoming a fake screenshot.</li>
+          <li>Useful if the app will animate from this surface into Today.</li>
+        </ul>
+      </article>
+
+      <article class="candidate">
+        <div class="phone">
+          <div class="screen candidate-d">
+            <div class="notch"></div>
+            <div class="time">9:41</div>
+            <div class="status-chip">Your wardrobe, weather-aware</div>
+            <div class="pulse"></div>
+            <div class="brand-lockup">
+              <div>
+                <div class="brand-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7.2 15.4h9.1a3.5 3.5 0 0 0 .6-6.95 5.35 5.35 0 0 0-10.32-1.1 3.6 3.6 0 0 0 .6 7.05Z"/><path d="M9.2 18.1 8.5 20M13 18.1l-.8 2.5M16.8 18.1l-.7 1.9"/>
+                  </svg>
+                </div>
+                <div class="logo">WearCast</div>
+                <div class="tag">Built for real conditions and real clothes.</div>
+              </div>
+            </div>
+            <div class="floating-card">
+              <div class="mini-label">USP-Led</div>
+              <div class="mini-title">Weather-aware. Wardrobe-smart.</div>
+              <div class="mini-sub">Most explicit about what makes WearCast different from a standard forecast app.</div>
+            </div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <h2>4. USP Lockup</h2>
+        <p>The most strategically direct option. It sells the differentiation immediately: not just weather, not just style, but both together.</p>
+        <ul>
+          <li>Best for clarity and memorability.</li>
+          <li>Feels more like a startup product with a clear proposition.</li>
+          <li>Strong candidate if App Store screenshots and branding will echo the same phrase.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

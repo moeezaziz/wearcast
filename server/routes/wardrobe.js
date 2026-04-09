@@ -27,6 +27,9 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { type, name, color, material, careInstructions, photoDataUrl } = req.body;
+    const normalizedCareInstructions = Array.isArray(careInstructions)
+      ? careInstructions.filter(Boolean)
+      : [];
     console.info(`[POST] /api/wardrobe - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn("/api/wardrobe: Type and name required");
@@ -36,13 +39,13 @@ router.post("/", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url)
        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [req.userId, type, name, color || null, material || null, JSON.stringify(careInstructions || []), photoDataUrl || null]
+      [req.userId, type, name, color || null, material || null, normalizedCareInstructions, photoDataUrl || null]
     );
     console.info("/api/wardrobe: added item", result.rows[0]?.id);
     res.json(rowToItem(result.rows[0]));
   } catch (err) {
     console.error("add wardrobe error:", err);
-    res.status(500).json({ error: "Failed to add item" });
+    res.status(500).json({ error: err.message || "Failed to add item" });
   }
 });
 
@@ -50,6 +53,9 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { type, name, color, material, careInstructions, photoDataUrl } = req.body;
+    const normalizedCareInstructions = Array.isArray(careInstructions)
+      ? careInstructions.filter(Boolean)
+      : [];
     console.info(`[PUT] /api/wardrobe/${req.params.id} - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn(`/api/wardrobe/${req.params.id}: Type and name required`);
@@ -61,7 +67,7 @@ router.put("/:id", async (req, res) => {
        SET type = $1, name = $2, color = $3, material = $4,
            care_instructions = $5, photo_data_url = $6, updated_at = NOW()
        WHERE id = $7 AND user_id = $8 RETURNING *`,
-      [type, name, color || null, material || null, JSON.stringify(careInstructions || []), photoDataUrl || null, req.params.id, req.userId]
+      [type, name, color || null, material || null, normalizedCareInstructions, photoDataUrl || null, req.params.id, req.userId]
     );
     if (!result.rows.length) {
       console.warn(`/api/wardrobe/${req.params.id}: Item not found for update`);
@@ -71,7 +77,7 @@ router.put("/:id", async (req, res) => {
     res.json(rowToItem(result.rows[0]));
   } catch (err) {
     console.error("update wardrobe error:", err);
-    res.status(500).json({ error: "Failed to update item" });
+    res.status(500).json({ error: err.message || "Failed to update item" });
   }
 });
 
@@ -102,7 +108,7 @@ function rowToItem(row) {
     name: row.name,
     color: row.color,
     material: row.material,
-    careInstructions: row.care_instructions || [],
+    careInstructions: Array.isArray(row.care_instructions) ? row.care_instructions : [],
     photoDataUrl: row.photo_data_url,
     createdAt: row.created_at,
   };

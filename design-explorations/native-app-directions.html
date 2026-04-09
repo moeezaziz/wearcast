@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WearCast Native App Directions</title>
+  <style>
+    :root {
+      --bg: #edf4fb;
+      --text: #102038;
+      --muted: #61728f;
+      --line: rgba(16, 32, 56, 0.08);
+      --card: rgba(255, 255, 255, 0.82);
+      --card-strong: rgba(255, 255, 255, 0.94);
+      --blue: #257cff;
+      --cyan: #15b8ff;
+      --mint: #5de6bf;
+      --ink: #12233b;
+      --navy: #0f1d31;
+      --sun: #ffd25f;
+      --shadow: 0 24px 50px rgba(28, 58, 105, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37,124,255,.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(93,230,191,.12), transparent 26%),
+        linear-gradient(180deg, #f7fbff 0%, var(--bg) 100%);
+    }
+
+    .page {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 40px 28px 70px;
+    }
+
+    .intro {
+      max-width: 860px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(37,124,255,.1);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: .98;
+      letter-spacing: -.05em;
+    }
+
+    .intro p {
+      margin: 0;
+      max-width: 760px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .concept {
+      display: grid;
+      gap: 16px;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      padding: 0 4px;
+    }
+
+    .meta h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.04;
+      letter-spacing: -.04em;
+    }
+
+    .meta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(16,32,56,.06);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .phone {
+      position: relative;
+      aspect-ratio: 390 / 844;
+      border-radius: 42px;
+      padding: 14px;
+      background: linear-gradient(180deg, #1f2b3f 0%, #0f1624 100%);
+      box-shadow: 0 36px 72px rgba(10, 22, 40, 0.18);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 34%;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 0 0 20px 20px;
+      background: rgba(0,0,0,.72);
+      z-index: 3;
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      background: #fff;
+    }
+
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 32px rgba(22, 45, 83, 0.12);
+    }
+
+    .nav span {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      color: #789;
+      font-weight: 700;
+    }
+
+    .nav .active {
+      color: var(--blue);
+    }
+
+    .native-one {
+      background:
+        radial-gradient(circle at top right, rgba(93,230,191,.22), transparent 32%),
+        linear-gradient(180deg, #f5fbff 0%, #eaf4ff 100%);
+    }
+
+    .native-one .hero {
+      margin: 12px 18px 0;
+      padding: 24px 22px 20px;
+      border-radius: 28px;
+      color: white;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)),
+        linear-gradient(140deg, #2478ff 0%, #0cb6ff 58%, #5de6bf 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-kicker {
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .78;
+      font-weight: 700;
+    }
+
+    .hero-temp {
+      margin-top: 18px;
+      font-size: 72px;
+      line-height: .92;
+      letter-spacing: -.06em;
+      font-weight: 800;
+    }
+
+    .hero-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 12px;
+      gap: 12px;
+    }
+
+    .hero-meta {
+      font-size: 15px;
+      line-height: 1.5;
+      opacity: .92;
+    }
+
+    .hero-stats {
+      display: grid;
+      gap: 10px;
+      margin: 18px 18px 0;
+    }
+
+    .hero-stat-card,
+    .outfit-card,
+    .mini-card,
+    .settings-card,
+    .wardrobe-card {
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 24px;
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 26px rgba(31, 70, 135, 0.08);
+    }
+
+    .hero-stat-card {
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #7687a0;
+      font-weight: 700;
+    }
+
+    .value {
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+    }
+
+    .outfit-card {
+      margin: 0 18px;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .outfit-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .outfit-head h3 {
+      margin: 6px 0 0;
+      font-size: 27px;
+      line-height: 1.02;
+      letter-spacing: -.05em;
+    }
+
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(37,124,255,.1);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini-card {
+      padding: 14px;
+      min-height: 90px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .native-two {
+      background: linear-gradient(180deg, #081322 0%, #0d1c33 44%, #eaf1f8 44%, #eef4f9 100%);
+    }
+
+    .native-two .statusbar { color: white; }
+
+    .canvas {
+      padding: 22px 20px 0;
+      color: white;
+    }
+
+    .canvas h3 {
+      margin: 14px 0 8px;
+      font-size: 42px;
+      line-height: .96;
+      letter-spacing: -.05em;
+    }
+
+    .canvas p {
+      margin: 0;
+      color: rgba(255,255,255,.72);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .chips span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sheet {
+      margin: 20px 14px 0;
+      padding: 10px 0 114px;
+      border-radius: 30px 30px 0 0;
+      background: #f8fbff;
+      box-shadow: 0 -12px 30px rgba(8,19,34,.18);
+    }
+
+    .sheet-handle {
+      width: 52px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(18,35,59,.12);
+      margin: 8px auto 16px;
+    }
+
+    .sheet-section {
+      padding: 0 18px;
+      margin-top: 14px;
+    }
+
+    .sheet-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: white;
+      border: 1px solid rgba(15,29,49,.06);
+      box-shadow: 0 12px 26px rgba(23, 48, 87, 0.06);
+    }
+
+    .sheet-card h4 {
+      margin: 8px 0 6px;
+      font-size: 23px;
+      line-height: 1.08;
+      letter-spacing: -.05em;
+    }
+
+    .rows {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(15,29,49,.06);
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .native-three {
+      background:
+        linear-gradient(180deg, #fff7e8 0%, #fffdf7 24%, #f8fbff 24%, #f2f7ff 100%);
+    }
+
+    .journal {
+      padding: 10px 18px 110px;
+    }
+
+    .journal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 10px;
+    }
+
+    .journal-top h3 {
+      margin: 10px 0 0;
+      font-size: 36px;
+      line-height: .98;
+      letter-spacing: -.05em;
+    }
+
+    .journal-top p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .day-chip {
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(255,210,95,.28);
+      color: #8c6510;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .journal-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .wardrobe-card,
+    .settings-card {
+      padding: 16px;
+      background: var(--card-strong);
+    }
+
+    .wardrobe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .wardrobe-piece {
+      padding: 14px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f7fbff, #eef5ff);
+      border: 1px solid rgba(37,124,255,.08);
+      font-size: 13px;
+    }
+
+    .settings-card .row {
+      font-size: 15px;
+    }
+
+    .divider-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .divider-title strong {
+      font-size: 16px;
+      letter-spacing: -.02em;
+    }
+
+    .micro {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    @media (max-width: 1180px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="intro">
+      <span class="eyebrow">WearCast Native Study</span>
+      <h1>Three directions to make WearCast feel like an iPhone app, not a webpage.</h1>
+      <p>Each concept keeps the current product structure of Today, Wardrobe, and Settings, but changes the interaction language. The goal is stronger hierarchy, more tactile depth, and less “stack of cards on a web page” energy.</p>
+    </div>
+
+    <div class="grid">
+      <section class="concept">
+        <div class="meta">
+          <h2>1. Weather Deck</h2>
+          <p>Lean into a native iOS weather-card feel. The app opens with a single dominant weather deck, then the outfit breakdown lives below as tactile tiles. It feels fast, punchy, and familiar.</p>
+          <div class="tags">
+            <span class="tag">Best For Today Tab</span>
+            <span class="tag">Fast Scan</span>
+            <span class="tag">Low Learning Curve</span>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="screen native-one">
+            <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+            <div class="hero">
+              <div class="hero-kicker">Berlin right now</div>
+              <div class="hero-row">
+                <div>
+                  <div class="hero-temp">17°</div>
+                  <div class="hero-meta">Partly cloudy<br />Feels like 15°</div>
+                </div>
+                <div class="pill">Good layer day</div>
+              </div>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat-card">
+                <div>
+                  <div class="label">Today’s Recommendation</div>
+                  <div class="value">Long-sleeve tee + chinos</div>
+                </div>
+                <div class="pill">Ready</div>
+              </div>
+              <div class="outfit-card">
+                <div class="outfit-head">
+                  <div>
+                    <div class="label">Built from your wardrobe</div>
+                    <h3>Layered and easy.</h3>
+                  </div>
+                  <div class="pill">Update</div>
+                </div>
+                <div class="grid-2">
+                  <div class="mini-card"><div class="label">Top</div><strong>Long-sleeve T-shirt</strong></div>
+                  <div class="mini-card"><div class="label">Bottom</div><strong>Navy chinos</strong></div>
+                  <div class="mini-card"><div class="label">Outer</div><strong>Packable shell</strong></div>
+                  <div class="mini-card"><div class="label">Shoes</div><strong>White trainers</strong></div>
+                </div>
+              </div>
+            </div>
+            <div class="nav">
+              <span class="active">Today</span>
+              <span>Wardrobe</span>
+              <span>Settings</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="concept">
+        <div class="meta">
+          <h2>2. Live Canvas</h2>
+          <p>This direction feels more premium and app-native by treating the weather as the scene and sliding content up from a bottom sheet. The top of the screen becomes atmospheric, while actions feel anchored and mobile-first.</p>
+          <div class="tags">
+            <span class="tag">Most Premium</span>
+            <span class="tag">Weather First</span>
+            <span class="tag">Bottom Sheet Feel</span>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="screen native-two">
+            <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+            <div class="canvas">
+              <div class="label" style="color: rgba(255,255,255,.65);">Today in Berlin</div>
+              <h3>Cool, bright,<br />light rain later.</h3>
+              <p>WearCast feels more like a living forecast surface here, with the outfit recommendation treated as the action layer.</p>
+              <div class="chips">
+                <span>Walking</span>
+                <span>Mixed day</span>
+                <span>Minimal</span>
+              </div>
+            </div>
+            <div class="sheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-section">
+                <div class="sheet-card">
+                  <div class="label">Outfit cue</div>
+                  <h4>Light layer, clean base, rain-safe shoes.</h4>
+                  <div class="rows">
+                    <div class="row"><span>Top</span><strong>Long-sleeve T-shirt</strong></div>
+                    <div class="row"><span>Bottom</span><strong>Relaxed black trousers</strong></div>
+                    <div class="row"><span>Outer</span><strong>Compact hooded shell</strong></div>
+                  </div>
+                </div>
+              </div>
+              <div class="sheet-section">
+                <div class="sheet-card">
+                  <div class="divider-title">
+                    <strong>Why it works</strong>
+                    <span class="micro">Rain 40%</span>
+                  </div>
+                  <p style="margin:0; color:#657592; font-size:14px; line-height:1.55;">The recommendation reads like a native bottom sheet instead of a web card. Tune controls could open as a modal half-sheet, which would feel especially iOS-native.</p>
+                </div>
+              </div>
+            </div>
+            <div class="nav" style="background: rgba(248,251,255,.82);">
+              <span class="active">Today</span>
+              <span>Wardrobe</span>
+              <span>Settings</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="concept">
+        <div class="meta">
+          <h2>3. Daily Brief</h2>
+          <p>This version makes WearCast feel like a personal daily planner. Less “weather app,” more “morning routine companion.” It gives the product a calmer, editorial app personality while still feeling native.</p>
+          <div class="tags">
+            <span class="tag">Most Distinctive</span>
+            <span class="tag">Lifestyle Feel</span>
+            <span class="tag">Best For Retention</span>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="screen native-three">
+            <div class="statusbar"><span>9:41</span><span>5G 100%</span></div>
+            <div class="journal">
+              <div class="journal-top">
+                <div>
+                  <div class="label">Good morning</div>
+                  <h3>Your daily<br />wear brief.</h3>
+                  <p>One clean brief, no clutter.</p>
+                </div>
+                <div class="day-chip">17° / Calm</div>
+              </div>
+
+              <div class="journal-stack">
+                <div class="settings-card">
+                  <div class="divider-title">
+                    <strong>Today’s look</strong>
+                    <span class="micro">Best match</span>
+                  </div>
+                  <p style="margin:0; color:#5f6f8b; font-size:14px; line-height:1.55;">Soft layering for a cool day with light movement. This direction could make the recommendation feel more personal and less mechanical.</p>
+                </div>
+
+                <div class="wardrobe-card">
+                  <div class="divider-title">
+                    <strong>Selected pieces</strong>
+                    <span class="micro">From wardrobe</span>
+                  </div>
+                  <div class="wardrobe-grid">
+                    <div class="wardrobe-piece">Long-sleeve T-shirt</div>
+                    <div class="wardrobe-piece">Charcoal overshirt</div>
+                    <div class="wardrobe-piece">Straight trousers</div>
+                    <div class="wardrobe-piece">Leather sneakers</div>
+                  </div>
+                </div>
+
+                <div class="settings-card">
+                  <div class="divider-title">
+                    <strong>Tune your day</strong>
+                    <span class="micro">Walking</span>
+                  </div>
+                  <div class="rows">
+                    <div class="row"><span>Activity</span><strong>Walking</strong></div>
+                    <div class="row"><span>Setting</span><strong>Mostly indoors</strong></div>
+                    <div class="row"><span>Style focus</span><strong>Minimal</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav">
+              <span class="active">Today</span>
+              <span>Wardrobe</span>
+              <span>Settings</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

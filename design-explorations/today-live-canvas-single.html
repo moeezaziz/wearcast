@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WearCast Today Screen Mockup</title>
+  <style>
+    :root {
+      --bg-top: #fff5e6;
+      --bg-mid: #f7fbff;
+      --bg-bottom: #eef5ff;
+      --blue: #2979ff;
+      --cyan: #00b0ff;
+      --mint: #00e676;
+      --text: #0a1628;
+      --text-2: #40516e;
+      --text-3: #7b8ca8;
+      --line: rgba(10, 22, 40, 0.08);
+      --sheet: rgba(248, 251, 255, 0.9);
+      --card: rgba(255, 255, 255, 0.78);
+      --card-strong: rgba(255, 255, 255, 0.92);
+      --shadow: 0 26px 60px rgba(19, 45, 86, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 34px 18px;
+      font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 95, 0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(0, 176, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 28%, var(--bg-bottom) 100%);
+    }
+
+    .page {
+      width: min(980px, 100%);
+      display: grid;
+      gap: 26px;
+      justify-items: center;
+    }
+
+    .intro {
+      max-width: 720px;
+      text-align: center;
+      display: grid;
+      gap: 10px;
+    }
+
+    .eyebrow {
+      justify-self: center;
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(41, 121, 255, 0.1);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .intro p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-2);
+    }
+
+    .phone {
+      width: min(390px, 100%);
+      aspect-ratio: 390 / 844;
+      position: relative;
+      border-radius: 42px;
+      padding: 14px;
+      background: linear-gradient(180deg, #1c2738 0%, #0f1624 100%);
+      box-shadow: 0 40px 80px rgba(10, 22, 40, 0.18);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36%;
+      height: 28px;
+      border-radius: 0 0 18px 18px;
+      background: rgba(0, 0, 0, 0.72);
+      z-index: 5;
+    }
+
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 210, 95, 0.18), transparent 22%),
+        radial-gradient(circle at top right, rgba(0, 176, 255, 0.12), transparent 30%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 24%, var(--bg-bottom) 100%);
+    }
+
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px 8px;
+      font-size: 13px;
+      font-weight: 800;
+      position: relative;
+      z-index: 3;
+    }
+
+    .top {
+      padding: 4px 18px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.36);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,.54);
+      border: 1px solid rgba(255,255,255,.62);
+      color: var(--text-2);
+      box-shadow: 0 10px 22px rgba(23, 54, 101, 0.08);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .search {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 12px 12px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(20, 50, 94, 0.08);
+    }
+
+    .search-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .search-main span {
+      font-size: 14px;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .geo {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      color: white;
+      box-shadow: 0 12px 22px rgba(41,121,255,.18);
+      font-weight: 800;
+    }
+
+    .scene {
+      padding: 18px 18px 0;
+    }
+
+    .weather-card {
+      padding: 24px 22px 18px;
+      border-radius: 30px;
+      color: white;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)),
+        linear-gradient(140deg, var(--blue) 0%, var(--cyan) 58%, var(--mint) 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .weather-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .82;
+    }
+
+    .weather-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+    }
+
+    .weather-card h2 {
+      margin: 16px 0 0;
+      font-size: 44px;
+      line-height: .96;
+      letter-spacing: -.06em;
+    }
+
+    .weather-copy {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      opacity: .92;
+    }
+
+    .weather-main {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .temp {
+      font-size: 76px;
+      line-height: .92;
+      font-weight: 800;
+      letter-spacing: -.075em;
+    }
+
+    .meta {
+      font-size: 14px;
+      line-height: 1.55;
+      opacity: .9;
+      text-align: right;
+    }
+
+    .scene-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 12px 10px;
+      border-radius: 18px;
+      text-align: center;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+
+    .stat span {
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .82;
+      font-weight: 700;
+    }
+
+    .updated {
+      margin-top: 14px;
+      font-size: 11px;
+      opacity: .74;
+      text-align: center;
+      letter-spacing: .02em;
+    }
+
+    .sheet {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 92px;
+      border-radius: 32px 32px 0 0;
+      background: var(--sheet);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 -10px 30px rgba(20, 43, 77, 0.16);
+      padding: 10px 0 22px;
+    }
+
+    .handle {
+      width: 52px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(10,22,40,.12);
+      margin: 8px auto 18px;
+    }
+
+    .section {
+      padding: 0 18px;
+    }
+
+    .card {
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.68);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 28px rgba(26, 56, 101, 0.08);
+      padding: 16px;
+    }
+
+    .section + .section {
+      margin-top: 14px;
+    }
+
+    .label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .recommendation-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.1);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .recommendation-head h3 {
+      margin: 8px 0 6px;
+      font-size: 28px;
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+
+    .description {
+      margin: 0;
+      color: var(--text-2);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .chips span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(41,121,255,.08);
+      color: #18458f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tile {
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--card-strong);
+      border: 1px solid rgba(41,121,255,.08);
+      min-height: 92px;
+    }
+
+    .tile strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.35;
+      letter-spacing: -.02em;
+    }
+
+    .rows {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .row strong {
+      text-align: right;
+      line-height: 1.3;
+      font-size: 14px;
+    }
+
+    .wardrobe-tip {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(41,121,255,.06);
+      border: 1px solid rgba(41,121,255,.1);
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .cta {
+      margin-top: 12px;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--mint));
+      box-shadow: 0 14px 28px rgba(41,121,255,.18);
+    }
+
+    .nav {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 34px rgba(18, 43, 80, 0.12);
+    }
+
+    .nav span {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-3);
+    }
+
+    .nav .active {
+      color: var(--blue);
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      .intro p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="intro">
+      <span class="eyebrow">Today Screen Direction</span>
+      <h1>Live canvas on top, native sheet underneath.</h1>
+      <p>This is the cleaner single-screen pitch: the weather feels like the scene, the recommendation feels like the action surface, and the rest of Today is grouped like a native app instead of stacked like a webpage.</p>
+    </div>
+
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span>5G 100%</span>
+        </div>
+
+        <div class="top">
+          <div class="top-row">
+            <div class="brand">
+              <div class="brand-mark"></div>
+              <span>WearCast</span>
+            </div>
+            <div class="actions">
+              <div class="icon">↻</div>
+              <div class="icon">☺</div>
+            </div>
+          </div>
+
+          <div class="search">
+            <div class="search-main">
+              <span>📍 Berlin, Germany</span>
+            </div>
+            <div class="geo">◎</div>
+          </div>
+        </div>
+
+        <div class="scene">
+          <div class="weather-card">
+            <div class="weather-kicker">Today’s forecast</div>
+            <h2>Cool now.<br />Rain later.</h2>
+            <div class="weather-copy">A classic light-layer day. Enough brightness for a clean base outfit, but enough rain risk that one waterproof piece still matters.</div>
+
+            <div class="weather-main">
+              <div class="temp">17°</div>
+              <div class="meta">
+                Partly cloudy<br />
+                Feels like 15°<br />
+                Wind 12 km/h
+              </div>
+            </div>
+
+            <div class="scene-stats">
+              <div class="stat"><span>Rain</span><strong>40%</strong></div>
+              <div class="stat"><span>UV</span><strong>4</strong></div>
+              <div class="stat"><span>Cloud</span><strong>48%</strong></div>
+            </div>
+
+            <div class="updated">Updated 9:41 AM</div>
+          </div>
+        </div>
+
+        <div class="sheet">
+          <div class="handle"></div>
+
+          <div class="section">
+            <div class="card">
+              <div class="recommendation-head">
+                <div>
+                  <div class="label">Today’s recommendation</div>
+                  <h3>Long-sleeve tee + chinos.</h3>
+                </div>
+                <div class="badge">Best match</div>
+              </div>
+
+              <p class="description">Built around light movement, cool air, and the chance of rain later. Smart enough to feel intentional, easy enough to wear all day.</p>
+
+              <div class="chips">
+                <span>Walking</span>
+                <span>Mixed day</span>
+                <span>Minimal</span>
+              </div>
+
+              <div class="tiles">
+                <div class="tile">
+                  <div class="label">Top</div>
+                  <strong>White long-sleeve T-shirt</strong>
+                </div>
+                <div class="tile">
+                  <div class="label">Bottom</div>
+                  <strong>Navy chinos</strong>
+                </div>
+                <div class="tile">
+                  <div class="label">Outer</div>
+                  <strong>Compact rain shell</strong>
+                </div>
+                <div class="tile">
+                  <div class="label">Shoes</div>
+                  <strong>White leather trainers</strong>
+                </div>
+              </div>
+
+              <div class="wardrobe-tip">Wardrobe tip: adding one darker overshirt or lightweight jacket would give WearCast a stronger fallback option for cooler evenings.</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="card">
+              <div class="label">Tune & explain</div>
+              <div class="rows">
+                <div class="row"><span>Tune this look</span><strong>Walking · Mixed day · Minimal</strong></div>
+                <div class="row"><span>Why this works</span><strong>Light layer for 15° feel + rain margin</strong></div>
+                <div class="row"><span>Alternative option</span><strong>Swap shell for overshirt if you stay indoors</strong></div>
+                <div class="row"><span>Weather details</span><strong>Humidity, precipitation, UV, visibility</strong></div>
+              </div>
+              <div class="cta">Add wardrobe to sharpen recommendations</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav">
+          <span class="active">Today</span>
+          <span>Wardrobe</span>
+          <span>Settings</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
