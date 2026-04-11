@@ -30,6 +30,7 @@ export async function initDB() {
       material          TEXT,
       care_instructions JSONB DEFAULT '[]',
       photo_data_url    TEXT,
+      favorite          BOOLEAN DEFAULT FALSE,
       created_at        TIMESTAMPTZ DEFAULT NOW(),
       updated_at        TIMESTAMPTZ DEFAULT NOW()
     );
@@ -52,6 +53,11 @@ export async function initDB() {
       ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT TRUE,
       ADD COLUMN IF NOT EXISTS verification_token_hash TEXT,
       ADD COLUMN IF NOT EXISTS verification_expires_at TIMESTAMPTZ;
+  `);
+
+  await pool.query(`
+    ALTER TABLE wardrobe_items
+      ADD COLUMN IF NOT EXISTS favorite BOOLEAN DEFAULT FALSE;
   `);
 
   await pool.query(`

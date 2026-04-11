@@ -110,13 +110,17 @@ const els = {
   itemForm: $("itemForm"),
   itemType: $("itemType"),
   itemName: $("itemName"),
+  itemNameError: $("itemNameError"),
   itemColor: $("itemColor"),
   itemMaterial: $("itemMaterial"),
   itemCare: $("itemCare"),
+  itemTypeError: $("itemTypeError"),
+  itemFormStatus: $("itemFormStatus"),
   itemPhoto: $("itemPhoto"),
   itemPhotoPreview: $("itemPhotoPreview"),
   itemPhotoImg: $("itemPhotoImg"),
   itemPhotoStatus: $("itemPhotoStatus"),
+  itemManualToggleBtn: $("itemManualToggleBtn"),
   itemVisualPlaceholder: $("itemVisualPlaceholder"),
   itemVisualEmoji: $("itemVisualEmoji"),
   itemVisualName: $("itemVisualName"),
@@ -147,6 +151,12 @@ const els = {
   whyWorksDialog: $("whyWorksDialog"),
   whyWorksDialogBody: $("whyWorksDialogBody"),
   whyWorksDialogCloseBtn: $("whyWorksDialogCloseBtn"),
+  todayItemDialog: $("todayItemDialog"),
+  todayItemDialogBody: $("todayItemDialogBody"),
+  todayItemDialogCloseBtn: $("todayItemDialogCloseBtn"),
+  tuneLookDialog: $("tuneLookDialog"),
+  tuneLookDialogBody: $("tuneLookDialogBody"),
+  tuneLookDialogCloseBtn: $("tuneLookDialogCloseBtn"),
 
   // Fashion notes
   fashionNotes: $("fashionNotes"),
@@ -161,6 +171,10 @@ const els = {
   settingsResetPrefsBtn: $("settingsResetPrefsBtn"),
   settingsResetPrefsStatus: $("settingsResetPrefsStatus"),
   settingsFeedback: $("settingsFeedback"),
+  userMenuDialog: $("userMenuDialog"),
+  userMenuCloseBtn: $("userMenuCloseBtn"),
+  userMenuAccountBtn: $("userMenuAccountBtn"),
+  userMenuSettingsBtn: $("userMenuSettingsBtn"),
 
   // New UI
   weatherHero: $("weatherHero"),
@@ -175,12 +189,18 @@ const els = {
   todayWardrobeCtaBtn: $("todayWardrobeCtaBtn"),
   todayWardrobeDialog: $("todayWardrobeDialog"),
   todayWardrobeDialogCloseBtn: $("todayWardrobeDialogCloseBtn"),
+  todayWardrobeInlineCta: $("todayWardrobeInlineCta"),
+  todayWardrobeInlineProgress: $("todayWardrobeInlineProgress"),
+  todayWardrobeInlineBtn: $("todayWardrobeInlineBtn"),
   wardrobeExplainerBtn: $("wardrobeExplainerBtn"),
   todayCtaKicker: $("todayCtaKicker"),
   todayCtaTitle: $("todayCtaTitle"),
   wardrobeExplainerKicker: $("wardrobeExplainerKicker"),
   wardrobeExplainerTitle: $("wardrobeExplainerTitle"),
   wardrobeExplainerText: $("wardrobeExplainerText"),
+  wardrobeExplainerProgress: $("wardrobeExplainerProgress"),
+  wardrobeExplainer: $("wardrobeExplainer"),
+  wardrobeFilters: $("wardrobeFilters"),
 
   // Wardrobe auth gate
   wardrobeAuthGate: $("wardrobeAuthGate"),
@@ -480,9 +500,13 @@ const DEFAULT_CONSENT = {
 let consent = loadConsent();
 let memoryState = structuredClone(DEFAULT_STATE);
 let pendingRecommendationPrefs = null;
+let activeRecommendationDialogIndex = -1;
+let recommendationDialogTouchStartX = 0;
+let recommendationDialogTouchDeltaX = 0;
+let recommendationDialogSwipeActive = false;
 let settingsFeedbackTimeoutId = null;
 let consentDialogSource = null;
-const TAB_ORDER = ["tabToday", "tabWardrobe", "tabPrefs"];
+const TAB_ORDER = ["tabToday", "tabWardrobe"];
 
 function loadConsent() {
   try {
@@ -662,11 +686,19 @@ function summarizeRecommendationTuning(prefs = loadState().prefs) {
     everyday: "Everyday",
     walking: "Walking",
     commute: "Commute",
+    errands: "Errands",
+    office: "Office",
+    workout: "Workout",
+    travel: "Travel",
+    evening: "Evening",
   };
   const locationMap = {
     indoors: "Indoors",
     mixed: "Mixed day",
     outdoors: "Outdoors",
+    transit: "Transit",
+    event: "Event",
+    exposed: "Exposed",
   };
   const styleMap = {
     auto: "",
@@ -1266,16 +1298,15 @@ function renderWeather(current, derived, hourly) {
   // Show hero + hide empty state
   els.weatherHero.style.display = "";
   els.emptyState.style.display = "none";
-  els.weatherDetailsCard.style.display = "";
 
   els.temp.textContent = `${fmt1(current.temperature_2m, "°")}`;
   els.apparent.textContent = `${fmt1(current.apparent_temperature, "°C")}`;
   els.wind.textContent = `${fmt(current.wind_speed_10m)} km/h`;
-  els.humidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
+  if (els.humidity) els.humidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
   els.heroHumidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
-  els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
-  els.precip.textContent = `${fmt1(current.precipitation)} mm`;
-  els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
+  if (els.cloud) els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
+  if (els.precip) els.precip.textContent = `${fmt1(current.precipitation)} mm`;
+  if (els.precipProb) els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
   if (els.heroPrecipProb) {
     els.heroPrecipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
   }
@@ -1287,20 +1318,43 @@ function renderWeather(current, derived, hourly) {
   if (wc != null) effective = wc;
   else if (hx != null && hx >= current.temperature_2m + 1.0) effective = hx;
 
-  els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
-  els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
+  if (els.dewPoint) els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
+  if (els.effTemp) els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
 
   const sev = classifySeverity(current, derived, effective, hourly);
   setSeverity(sev.level, sev.title, sev.meta, sev.detail, sev.icon);
 
   els.uv.textContent = `${fmt1(current.uv_index, "")}`;
-  els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
-  els.isDay.textContent = current.is_day === 1 ? "Yes" : current.is_day === 0 ? "No" : "—";
+  if (els.vis) els.vis.textContent = current.visibility != null ? `${fmt1(current.visibility / 1000, " km")}` : "—";
+  if (els.isDay) els.isDay.textContent = current.is_day === 1 ? "Yes" : current.is_day === 0 ? "No" : "—";
   const conditionLabel = weatherCodeLabel(current.weather_code);
   els.wcode.textContent = conditionLabel;
   if (els.heroConditionIcon) {
     els.heroConditionIcon.innerHTML = weatherConditionIcon(conditionLabel);
   }
+}
+
+function renderRecommendationWeatherStrip(weather = {}) {
+  const items = [
+    { label: "Now", value: Number.isFinite(Number(weather.temperature)) ? `${fmt1(weather.temperature, "°C")}` : "—" },
+    { label: "Feels", value: Number.isFinite(Number(weather.feelsLike)) ? `${fmt1(weather.feelsLike, "°C")}` : "—" },
+    { label: "Wind", value: Number.isFinite(Number(weather.wind)) ? `${fmt(Math.round(weather.wind), "")} km/h` : "—" },
+    { label: "Rain", value: Number.isFinite(Number(weather.precipProb)) ? `${fmt(Math.round(weather.precipProb), "")}%` : "—" },
+  ];
+  const condition = compactText(weather.weatherLabel, "");
+  return `
+    <div class="today-rec-weather-strip" aria-label="Current weather summary">
+      <span class="today-rec-weather-condition">${escapeHtml(condition)}</span>
+      <div class="today-rec-weather-metrics">
+        ${items.map((item) => `
+          <span class="today-rec-weather-metric">
+            <small>${escapeHtml(item.label)}</small>
+            ${escapeHtml(item.value)}
+          </span>
+        `).join("")}
+      </div>
+    </div>
+  `;
 }
 
 function renderRecommendation(rec) {
@@ -1342,6 +1396,15 @@ function compactText(value, fallback = "—") {
   return text || fallback;
 }
 
+function formatList(items = []) {
+  const values = items.map((item) => compactText(item, "")).filter(Boolean);
+  if (values.length <= 1) return values[0] || "";
+  if (typeof Intl !== "undefined" && Intl.ListFormat) {
+    return new Intl.ListFormat("en", { style: "long", type: "conjunction" }).format(values);
+  }
+  return `${values.slice(0, -1).join(", ")} and ${values[values.length - 1]}`;
+}
+
 const STREAMLINE_ICON_BASE = "assets/icons/streamline";
 
 function renderAssetIcon(fileName, extraClass = "", alt = "") {
@@ -1357,7 +1420,7 @@ function renderInlineIcon(kind, extraClass = "") {
     jacket: "Hoodie--Streamline-Phosphor.svg",
     pants: "Pants--Streamline-Phosphor.svg",
     shoes: "Sneakers--Streamline-Cyber.svg",
-    tune: "Sliders--Streamline-Outlined-Streamline-Material-Free.svg",
+    accessory: "Hexagram--Streamline-Core-Gradient.svg",
     info: "Information-Circle--Streamline-Ultimate.svg",
   };
   if (assetIcons[kind]) {
@@ -1385,8 +1448,8 @@ function renderInlineIcon(kind, extraClass = "") {
     pants: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6l-2 12"/><path d="M15 3v6l2 12"/><path d="M9 3h6"/><path d="M8 21h3"/><path d="M13 21h3"/></svg>`,
     dress: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 4 2.5 3H9.5L12 4Z"/><path d="M10 7 7 21h10L14 7"/><path d="M9.5 10h5"/></svg>`,
     shoes: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c2 0 3-1 4-3l2 1c1.2.6 2.4 1 3.8 1H15c2 0 3 1.5 3 3v1H3z"/><path d="M18 18h3v-1c0-1.7-1.3-3-3-3h-2"/></svg>`,
-    accessory: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a3 3 0 0 1 3 3v1h-6V7a3 3 0 0 1 3-3Z"/><path d="M5 10h14l-1 8H6l-1-8Z"/><path d="M9 14h6"/></svg>`,
-    tune: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7"/><path d="M15 7h5"/><path d="M4 17h5"/><path d="M13 17h7"/><circle cx="13" cy="7" r="2.2"/><circle cx="11" cy="17" r="2.2"/></svg>`,
+    accessory: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 10.5a4.5 4.5 0 0 1 9 0"/><path d="M9.5 10.5a2.5 2.5 0 0 1 5 0"/><path d="M7 10.5h10l-1.1 6.1A2 2 0 0 1 13.93 18H10.07a2 2 0 0 1-1.97-1.39L7 10.5Z"/><path d="M12 5.5v1"/></svg>`,
+    tune: `<svg${classAttr} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h16"/><path d="M4 12h16"/><path d="M4 17.5h16"/><circle cx="8" cy="6.5" r="2.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="12" r="2.1" fill="currentColor" stroke="none"/><circle cx="11" cy="17.5" r="2.1" fill="currentColor" stroke="none"/></svg>`,
   };
   return icons[kind] || icons.globe;
 }
@@ -1397,7 +1460,7 @@ function itemTypeIconKey(type = "") {
   if (/(jeans|chinos|shorts|pants|sweatpants|skirt)/.test(key)) return "pants";
   if (/(dress)/.test(key)) return "dress";
   if (/(sneakers|boots|sandals|shoes)/.test(key)) return "shoes";
-  if (/(scarf|hat|gloves|sunglasses|belt|bag)/.test(key)) return "accessory";
+  if (/(scarf|hat|beanie|gloves|sunglasses|belt|bag|umbrella|watch|cap|socks|accessor)/.test(key)) return "accessory";
   return "top";
 }
 
@@ -1428,6 +1491,54 @@ function firstSentence(text) {
   return (match ? match[0] : normalized).trim();
 }
 
+function shortenRecommendationSubtitle(text) {
+  return compactText(text, "");
+}
+
+function isGenericRecommendationSubtitle(text) {
+  const value = compactText(text, "").toLowerCase();
+  if (!value) return true;
+  return [
+    /chosen to match today'?s weather/,
+    /chosen to match today’s weather/,
+    /keep you comfortable through the day/,
+    /built around today'?s conditions/,
+    /built around today’s conditions/,
+    /matched to the weather/,
+    /matched to today'?s weather/,
+    /matched to today’s weather/,
+    /suited to today'?s conditions/,
+    /suited to today’s conditions/,
+  ].some((pattern) => pattern.test(value));
+}
+
+function buildLocalRecommendationSubtitle(weather = {}) {
+  const feelsLike = Number(weather.feelsLike ?? weather.temperature);
+  const wind = Number(weather.wind ?? 0);
+  const rainChance = Number(weather.precipProb ?? 0);
+  const precip = Number(weather.precip ?? 0);
+  const humidity = Number(weather.humidity ?? 0);
+  const uv = Number(weather.uv ?? 0);
+  const label = compactText(weather.weatherLabel, "today’s conditions").toLowerCase();
+  const traits = [];
+
+  if (Number.isFinite(feelsLike)) {
+    if (feelsLike <= 6) traits.push("cold");
+    else if (feelsLike <= 13) traits.push("chilly");
+    else if (feelsLike >= 29) traits.push("hot");
+    else if (feelsLike >= 24) traits.push("warm");
+    else traits.push("mild");
+  }
+  if (wind >= 25) traits.push("windy");
+  if (rainChance >= 45 || precip > 0) traits.push("rainy later today");
+  if (humidity >= 80 && feelsLike >= 18) traits.push("humid");
+  if (uv >= 7) traits.push("bright");
+  if (!traits.some((trait) => label.includes(trait.replace(/\s.*$/, "")))) traits.push(label);
+
+  const summary = formatList(Array.from(new Set(traits)).slice(0, 3));
+  return `Today looks ${summary}, so the outfit leans into comfort, coverage, and weather protection without feeling overbuilt.`;
+}
+
 function normalizeItemLabel(text) {
   return compactText(text, "")
     .replace(/\s*\([^)]*\)/g, "")
@@ -1438,11 +1549,26 @@ function normalizeItemLabel(text) {
 function preserveUsefulItemLabel(text) {
   const normalized = normalizeItemLabel(text);
   if (!normalized) return "";
-  return normalized
+  const cleaned = normalized
     .replace(/\s{2,}/g, " ")
     .replace(/\btee\s*shirt\b/i, "T-shirt")
     .replace(/\btshirt\b/i, "T-shirt")
     .trim();
+  if (!cleaned) return "";
+
+  return cleaned
+    .split(/\s+/)
+    .map((word) => word
+      .split("-")
+      .map((part) => {
+        if (!part) return part;
+        if (/^(t)$/i.test(part)) return "T";
+        if (/^[A-Z0-9]{2,}$/.test(part)) return part;
+        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      })
+      .join("-"))
+    .join(" ")
+    .replace(/\bT-Shirt\b/g, "T-shirt");
 }
 
 function weatherConditionIcon(label = "") {
@@ -1520,6 +1646,400 @@ function getRecommendationTileIcon(label) {
   return renderInlineIcon("accessory");
 }
 
+function getRecommendationCardArt(label, value, imageMatch = null) {
+  const key = itemTypeIconKey(`${label} ${value}`);
+  const toneMap = {
+    top: "top",
+    pants: "bottom",
+    jacket: "outer",
+    shoes: "shoes",
+    accessory: "accessory",
+    dress: "dress",
+  };
+  return {
+    key,
+    tone: toneMap[key] || "top",
+    icon: renderInlineIcon(key),
+    photo: imageMatch?.path || {
+      top: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
+      pants: "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
+      jacket: "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
+      shoes: "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+      accessory: "assets/recommendation-stock/accessory-black-sunglasses-studio.jpg",
+    }[key] || "",
+  };
+}
+
+function buildRecommendationItemReason(label, value, weather, aiReason = "") {
+  const preferred = compactText(aiReason, "");
+  if (preferred) return preferred;
+  const normalized = `${label} ${value}`.toLowerCase();
+  if (label === "Outer") {
+    if ((weather?.precipProb || 0) >= 40) return "Adds protection for possible rain later.";
+    if ((weather?.wind || 0) >= 22) return "Helps block the wind and hold warmth.";
+    return "Adds a useful outer layer without overdoing it.";
+  }
+  if (label === "Top") {
+    if (normalized.includes("long sleeve")) return "Keeps the base layer comfortable in cooler air.";
+    if ((weather?.temperature ?? 0) >= 22) return "Keeps the outfit light and breathable.";
+    return "Builds a comfortable base for the day.";
+  }
+  if (label === "Bottom") {
+    if (normalized.includes("short")) return "Keeps movement easy and the look light.";
+    return "Balances coverage and all-day comfort.";
+  }
+  if (label === "Shoes") {
+    if ((weather?.precipProb || 0) >= 40) return "Grounds the outfit for a wetter forecast.";
+    return "Finishes the look with easy everyday wear.";
+  }
+  if (label === "Accessory") {
+    if ((weather?.precipProb || 0) >= 40) return "Adds a practical weather-ready extra.";
+    if ((weather?.uv || 0) >= 7) return "Adds a useful finishing touch outdoors.";
+    return "Rounds out the outfit with a small extra.";
+  }
+  return "Chosen to balance the outfit for today’s conditions.";
+}
+
+function buildClientFallbackRecommendation(weather = {}, reason = "AI response timed out") {
+  const temp = Number(weather.temperature);
+  const feelsLikeRaw = Number(weather.feelsLike ?? weather.temperature);
+  const feelsLike = Number.isFinite(feelsLikeRaw) ? feelsLikeRaw : temp;
+  const precipProb = Number(weather.precipProb ?? 0);
+  const precip = Number(weather.precip ?? 0);
+  const wind = Number(weather.wind ?? 0);
+  const uv = Number(weather.uv ?? 0);
+  const label = compactText(weather.weatherLabel, "").toLowerCase();
+  const wet = precipProb >= 40 || precip > 0 || /rain|drizzle|shower|thunder|snow|sleet/.test(label);
+  const veryCold = Number.isFinite(feelsLike) && feelsLike <= 2;
+  const cold = Number.isFinite(feelsLike) && feelsLike <= 8;
+  const cool = Number.isFinite(feelsLike) && feelsLike <= 15;
+  const hot = Number.isFinite(feelsLike) && feelsLike >= 27;
+
+  const top = veryCold ? "Thermal Base Layer" : cold ? "Knit Sweater" : hot ? "Breathable T-shirt" : "Long-Sleeve Top";
+  const bottom = veryCold ? "Insulated Pants" : hot ? "Lightweight Trousers" : wet ? "Dark Jeans" : "Comfortable Trousers";
+  const outer = wet ? "Waterproof Jacket" : (cold || wind >= 22 || cool) ? "Light Jacket" : hot ? "Breathable Overshirt" : "Light Overshirt";
+  const shoes = wet ? "Waterproof Sneakers" : veryCold ? "Weatherproof Boots" : "Sneakers";
+  const accessories = [];
+  if (wet) accessories.push("Umbrella");
+  else if (uv >= 6) accessories.push("Sunglasses");
+  else if (cold) accessories.push("Warm Scarf");
+  else accessories.push("Watch");
+
+  const weatherSummary = buildLocalRecommendationSubtitle(weather);
+  return {
+    outfit: { top, bottom, outer, shoes, accessories },
+    reasoning: weatherSummary,
+    slotReasons: {
+      top: cold ? "Adds comfortable warmth without making the base bulky." : hot ? "Keeps the base breathable in warmer air." : "Creates a flexible base for changing conditions.",
+      bottom: wet ? "Darker, sturdier fabric is more forgiving if showers arrive." : "Balances coverage, comfort, and easy movement.",
+      outer: outer ? (wet ? "Keeps wind and possible rain from becoming the main issue." : "Adds light coverage that can come off if it warms up.") : "",
+      shoes: wet ? "Closed, grippier shoes are safer for damp streets." : "Keeps the outfit practical for walking through the day.",
+      accessory: accessories[0] ? "Adds a small weather-specific layer without overcomplicating the outfit." : "",
+    },
+    detailsOverview: {
+      what: [top, bottom, outer, shoes, ...accessories].filter(Boolean).join(", "),
+      why: `${weatherSummary} This fallback keeps the recommendation usable while the AI provider recovers.`,
+      note: `${reason}. You can refresh again for a fully AI-generated version.`,
+    },
+    warnings: [`Using a local weather-based fallback: ${reason}.`],
+    missingItems: [],
+  };
+}
+
+function normalizeWardrobeType(type = "") {
+  const key = String(type || "").trim().toLowerCase();
+  if (!key) return "";
+  if (["top", "shirt", "t-shirt", "tee", "sweater"].includes(key)) return "top";
+  if (["bottom", "pants", "trousers", "jeans", "shorts", "leggings"].includes(key)) return "bottom";
+  if (["outer", "outerwear", "jacket", "coat", "hoodie", "blazer"].includes(key)) return "outer";
+  if (["shoes", "shoe", "sneakers", "boots", "loafers"].includes(key)) return "shoes";
+  if (["accessory", "accessories", "scarf", "beanie", "hat", "gloves", "umbrella", "watch", "sunglasses", "cap", "baseball cap", "bag", "belt bag", "tote bag", "socks"].includes(key)) return "accessory";
+  return key;
+}
+
+function normalizeRecommendationEntry(entry, index = 0) {
+  if (Array.isArray(entry)) {
+    return {
+      label: entry[0] || "",
+      value: entry[1] || "",
+      key: entry[2] || `${String(entry[0] || "item").toLowerCase()}-${index}`,
+    };
+  }
+  return {
+    label: entry?.label || "",
+    value: entry?.value || "",
+    key: entry?.key || `${String(entry?.label || "item").toLowerCase()}-${index}`,
+  };
+}
+
+function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
+  const photoItems = Array.isArray(wardrobeItems)
+    ? wardrobeItems.filter((item) => item?.photoDataUrl && item?.name)
+    : [];
+  if (!photoItems.length) return {};
+
+  const scoredMatchFor = (slotKey, value) => {
+    const normalizedValue = normalizeItemLabel(value).toLowerCase();
+    if (!normalizedValue) return null;
+    const wantedType = normalizeWardrobeType(slotKey);
+    const wantedTokens = normalizedValue.split(/\s+/).filter((token) => token.length > 2);
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const item of photoItems) {
+      const itemType = normalizeWardrobeType(item.type);
+      if (wantedType && itemType && itemType !== wantedType) continue;
+
+      const itemName = normalizeItemLabel(item.name).toLowerCase();
+      if (!itemName) continue;
+
+      let score = 0;
+      if (itemName === normalizedValue) score += 10;
+      if (itemName.includes(normalizedValue) || normalizedValue.includes(itemName)) score += 6;
+
+      const itemTokens = itemName.split(/\s+/).filter((token) => token.length > 2);
+      const overlap = wantedTokens.filter((token) => itemTokens.includes(token)).length;
+      score += overlap * 2;
+
+      if (wantedTokens.length && overlap === wantedTokens.length) score += 2;
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    }
+
+    if (!best || bestScore < 6) return null;
+    return {
+      path: best.photoDataUrl,
+      source: "wardrobe",
+      itemId: best.id ?? null,
+      itemName: best.name || "",
+      color: best.color || "",
+      material: best.material || "",
+      careInstructions: Array.isArray(best.careInstructions) ? best.careInstructions : [],
+      type: best.type || "",
+    };
+  };
+
+  return entries.reduce((acc, entry, index) => {
+    const normalizedEntry = normalizeRecommendationEntry(entry, index);
+    const slotKey = String(normalizedEntry.label || "").toLowerCase();
+    const match = scoredMatchFor(slotKey, normalizedEntry.value);
+    if (match) acc[normalizedEntry.key] = match;
+    return acc;
+  }, {});
+}
+
+function inferRecommendedItemDetails(item = {}, weather = {}) {
+  const value = compactText(item.value, "");
+  const label = compactText(item.label, "Item");
+  const lower = value.toLowerCase();
+  const inferredColor =
+    /\bblack\b/.test(lower) ? "Black" :
+    /\bwhite\b/.test(lower) ? "White" :
+    /\bblue\b/.test(lower) ? "Blue" :
+    /\bgray|grey\b/.test(lower) ? "Grey" :
+    /\btan|beige|camel\b/.test(lower) ? "Tan" :
+    /\bbrown\b/.test(lower) ? "Brown" :
+    /\bgreen|olive\b/.test(lower) ? "Olive" :
+    /\bred|burgundy\b/.test(lower) ? "Burgundy" :
+    "Weather-ready neutral";
+
+  const inferredMaterial =
+    /\bfleece|sherpa\b/.test(lower) ? "Soft fleece" :
+    /\bhoodie|sweater|knit|jumper|beanie|scarf\b/.test(lower) ? "Knit fabric" :
+    /\bblazer|trouser|pants|chino|button-up|shirt\b/.test(lower) ? "Structured woven fabric" :
+    /\bjean|denim\b/.test(lower) ? "Denim" :
+    /\blegging\b/.test(lower) ? "Stretch performance knit" :
+    /\bwindbreaker|parka|waterproof|shell|jacket|coat\b/.test(lower) ? "Technical outerwear fabric" :
+    /\bsneaker|running\b/.test(lower) ? "Mesh and rubber" :
+    /\bloafer|boot\b/.test(lower) ? "Leather or suede" :
+    /\bumbrella\b/.test(lower) ? "Waterproof canopy fabric" :
+    /\bglove\b/.test(lower) ? "Soft insulated fabric" :
+    /\bwatch\b/.test(lower) ? "Metal and leather mix" :
+    "Versatile everyday fabric";
+
+  const care =
+    /\bwaterproof|shell|windbreaker|parka|jacket\b/.test(lower)
+      ? "Spot clean and air dry"
+      : /\bknit|sweater|beanie|scarf|glove|fleece|sherpa\b/.test(lower)
+        ? "Cool wash and lay flat to dry"
+        : /\bsneaker|boot|loafer\b/.test(lower)
+          ? "Wipe clean after wear"
+          : "Gentle wash when needed";
+
+  const note = item.reason || buildRecommendationItemReason(label, value, weather, "");
+  return {
+    sourceLabel: "AI pick",
+    color: inferredColor,
+    material: inferredMaterial,
+    care,
+    note,
+  };
+}
+
+function buildRecommendationItemDialogDetails(item = {}, weather = {}) {
+  const wardrobeDetails = item.wardrobeDetails && typeof item.wardrobeDetails === "object"
+    ? item.wardrobeDetails
+    : null;
+  const aiDetails = item.aiDetails && typeof item.aiDetails === "object"
+    ? item.aiDetails
+    : null;
+  const fallback = inferRecommendedItemDetails(item, weather);
+  const details = wardrobeDetails
+    ? {
+        sourceLabel: "From your wardrobe",
+        color: compactText(wardrobeDetails.color, ""),
+        material: compactText(wardrobeDetails.material, ""),
+        care: Array.isArray(wardrobeDetails.careInstructions) && wardrobeDetails.careInstructions.length
+          ? wardrobeDetails.careInstructions.slice(0, 2).join(" • ")
+          : "",
+        note: item.reason || "",
+      }
+    : aiDetails
+      ? {
+          sourceLabel: "AI suggestion",
+          color: compactText(aiDetails.color, ""),
+          material: compactText(aiDetails.material, ""),
+          care: Array.isArray(aiDetails.careInstructions) && aiDetails.careInstructions.length
+            ? aiDetails.careInstructions.slice(0, 2).join(" • ")
+            : "",
+          note: item.reason || "",
+        }
+      : fallback;
+
+  return [
+    { label: "Color", value: details.color || fallback.color },
+    { label: "Material", value: details.material || fallback.material },
+  ].filter((entry) => compactText(entry.value, ""));
+}
+
+function getRecommendationDialogItems() {
+  try {
+    const items = JSON.parse(els.aiRecContent?.dataset?.collageItems || "[]");
+    return Array.isArray(items) ? items : [];
+  } catch {
+    return [];
+  }
+}
+
+function stepRecommendationItemDialog(direction = 1) {
+  const items = getRecommendationDialogItems();
+  if (!items.length) return;
+  const nextIndex = Math.max(0, Math.min(items.length - 1, activeRecommendationDialogIndex + direction));
+  if (nextIndex === activeRecommendationDialogIndex) return;
+  openRecommendationItemDialog(items[nextIndex], nextIndex, direction > 0 ? "next" : "prev");
+}
+
+function getRecommendationDialogVisual() {
+  return els.todayItemDialogBody?.querySelector(".today-item-dialog-visual") || null;
+}
+
+function getRecommendationDialogStage() {
+  return els.todayItemDialogBody?.querySelector(".today-item-dialog-stage") || null;
+}
+
+function getRecommendationDialogPreview() {
+  return els.todayItemDialogBody?.querySelector(".today-item-dialog-preview") || null;
+}
+
+function renderRecommendationItemDialogMedia(item, className = "today-item-dialog-photo") {
+  if (item?.photo) {
+    return `<img class="${className}" src="${escapeHtml(item.photo)}" alt="" draggable="false" />`;
+  }
+  return `<div class="today-item-dialog-art">${item?.icon || ""}</div>`;
+}
+
+function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReasons = {}) {
+  if (!entries.length) return "";
+  let accessoryIndex = 0;
+  const accessoryCount = entries.filter((entry) => compactText(normalizeRecommendationEntry(entry).label, "").toLowerCase() === "accessory").length;
+  const collageItems = entries.map((entry, index) => {
+    const normalizedEntry = normalizeRecommendationEntry(entry, index);
+    const slotKey = String(normalizedEntry.label || "").toLowerCase();
+    const art = getRecommendationCardArt(normalizedEntry.label, normalizedEntry.value, imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null);
+    const reason = buildRecommendationItemReason(normalizedEntry.label, normalizedEntry.value, weather, slotReasons?.[normalizedEntry.key] || slotReasons?.[slotKey] || "");
+    const positionClass = slotKey === "accessory"
+      ? getRecommendationCollagePosition(normalizedEntry.label, accessoryIndex++, accessoryCount)
+      : getRecommendationCollagePosition(normalizedEntry.label, index, accessoryCount);
+    return {
+      index,
+      label: normalizedEntry.label,
+      value: normalizedEntry.value,
+      key: normalizedEntry.key,
+      tone: art.tone,
+      photo: art.photo,
+      icon: art.icon,
+      reason,
+      positionClass,
+      accessoryCount,
+    };
+  });
+  return `
+    <div class="today-rec-collage-wrap">
+      <div
+        class="today-rec-collage"
+        aria-label="Recommended outfit collage"
+        data-piece-count="${collageItems.length}"
+        data-accessory-count="${accessoryCount}"
+      >
+        <div class="today-rec-collage-silhouette" aria-hidden="true"></div>
+        ${collageItems.map((item) => `
+          <button
+            type="button"
+            class="today-rec-collage-item today-rec-collage-item-${escapeHtml(item.tone)} ${escapeHtml(item.positionClass)}"
+            data-rec-item-index="${item.index}"
+            aria-label="Open ${escapeHtml(item.value)}"
+          >
+            <span class="today-rec-collage-photo-wrap">
+              ${item.photo ? `<img class="today-rec-collage-photo" src="${item.photo}" alt="" draggable="false" />` : `<span class="today-rec-collage-art">${item.icon}</span>`}
+            </span>
+            <span class="today-rec-collage-chip">${escapeHtml(item.label)}</span>
+            <span class="today-rec-collage-name">${escapeHtml(item.value)}</span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function getRecommendationCollagePosition(label = "", index = 0, accessoryCount = 0) {
+  const key = String(label || "").toLowerCase();
+  if (key === "outer") return "is-outer";
+  if (key === "top") return "is-top";
+  if (key === "bottom") return "is-bottom";
+  if (key === "shoes") return accessoryCount > 0 ? "is-shoes" : "is-shoes-centered";
+  if (index % 3 === 0) return "is-accessory-left";
+  if (index % 3 === 1) return "is-accessory-right";
+  return "is-accessory-bottom";
+}
+
+function getRecommendationDeckTitleSizeClass(value = "") {
+  const text = compactText(value, "");
+  if (!text) return "";
+  if (text.length >= 24) return "today-rec-deck-title-sm";
+  if (text.length >= 18) return "today-rec-deck-title-md";
+  return "";
+}
+
+function initializeRecommendationDeck() {
+  return;
+}
+
+function renderRecommendationDeckHint(entries) {
+  if (!entries.length) return "";
+  return `
+    <div class="today-rec-deck-hint-wrap" aria-label="Recommendation deck hint">
+      <div class="today-rec-deck-hint">
+        <span>Tap any piece to inspect it</span>
+        <span class="today-rec-deck-hint-count">${entries.length} pieces</span>
+      </div>
+    </div>
+  `;
+}
+
 function renderWhyBadgeIcon() {
   return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/></svg>`;
 }
@@ -1539,11 +2059,19 @@ function getTodayContextChips() {
     everyday: "Everyday",
     walking: "Walking",
     commute: "Commute",
+    errands: "Errands",
+    office: "Office",
+    workout: "Workout",
+    travel: "Travel",
+    evening: "Evening",
   };
   const locationMap = {
     indoors: "Mostly indoors",
     mixed: "Mixed day",
     outdoors: "Mostly outdoors",
+    transit: "Transit-heavy",
+    event: "Event setting",
+    exposed: "Exposed outdoors",
   };
   const styleMap = {
     auto: "",
@@ -1563,28 +2091,50 @@ function getTodayContextChips() {
 
 function renderRecommendationControls() {
   const prefs = pendingRecommendationPrefs || loadState().prefs || {};
+  const comfortValue = prefs.cold ? "cold" : prefs.hot ? "hot" : "neutral";
   const groups = [
+    {
+      label: "Comfort",
+      key: "comfortBias",
+      activeValue: comfortValue,
+      options: [
+        ["neutral", "Balanced"],
+        ["cold", "I’m usually cold"],
+        ["hot", "I’m usually hot"],
+      ],
+    },
     {
       label: "Activity",
       key: "activityContext",
+      activeValue: prefs.activityContext || DEFAULT_STATE.prefs.activityContext,
       options: [
         ["everyday", "Everyday"],
         ["walking", "Walking"],
         ["commute", "Commute"],
+        ["errands", "Errands"],
+        ["office", "Office"],
+        ["workout", "Workout"],
+        ["travel", "Travel"],
+        ["evening", "Evening"],
       ],
     },
     {
       label: "Setting",
       key: "locationContext",
+      activeValue: prefs.locationContext || DEFAULT_STATE.prefs.locationContext,
       options: [
         ["indoors", "Indoors"],
         ["mixed", "Mixed"],
         ["outdoors", "Outdoors"],
+        ["transit", "Transit"],
+        ["event", "Event"],
+        ["exposed", "Exposed"],
       ],
     },
     {
       label: "Style",
       key: "styleFocus",
+      activeValue: prefs.styleFocus || DEFAULT_STATE.prefs.styleFocus,
       options: [
         ["auto", "Auto"],
         ["casual", "Casual"],
@@ -1596,16 +2146,34 @@ function renderRecommendationControls() {
     },
   ];
 
+  const descriptions = {
+    Comfort: "Bias the outfit warmer or lighter based on how you usually feel.",
+    Activity: "Adjust the look for how much movement your day actually has.",
+    Setting: "Tell WearCast whether you’ll stay inside, outside, or in transit.",
+    Style: "Shift the overall vibe without changing the weather logic.",
+  };
+
   return `
     <div class="today-control-groups">
+      <div class="today-control-intro">
+        <span class="today-control-intro-kicker">Today tune</span>
+        <strong>Shape the outfit direction before refreshing.</strong>
+        <p>These changes apply to today’s recommendation only and keep the weather logic intact.</p>
+      </div>
       ${groups.map((group) => `
         <div class="today-control-group">
-          <div class="today-control-label">${escapeHtml(group.label)}</div>
+          <div class="today-control-heading">
+            <div>
+              <div class="today-control-label">${escapeHtml(group.label)}</div>
+              <p class="today-control-help">${escapeHtml(descriptions[group.label] || "")}</p>
+            </div>
+            <span class="today-control-current">${escapeHtml(group.options.find(([value]) => value === group.activeValue)?.[1] || "")}</span>
+          </div>
           <div class="today-chip-row today-chip-row-controls">
             ${group.options.map(([value, label]) => `
               <button
                 type="button"
-                class="today-chip today-chip-toggle ${prefs[group.key] === value ? "is-active" : ""}"
+                class="today-chip today-chip-toggle ${group.activeValue === value ? "is-active" : ""}"
                 data-rec-pref="${escapeHtml(group.key)}"
                 data-rec-value="${escapeHtml(value)}"
               >${escapeHtml(label)}</button>
@@ -1613,7 +2181,7 @@ function renderRecommendationControls() {
           </div>
         </div>
       `).join("")}
-      <button type="button" class="btn-primary-sm today-update-btn" data-rec-action="apply">Update recommendation</button>
+      <button type="button" class="btn-primary-sm today-update-btn" data-rec-action="apply">Refresh today’s look</button>
     </div>
   `;
 }
@@ -1621,8 +2189,9 @@ function renderRecommendationControls() {
 function normalizeRecommendationPrefs(prefs = {}) {
   const normalized = {
     ...prefs,
-    bike: prefs.activityContext === "walking" || prefs.activityContext === "commute",
+    bike: ["walking", "commute", "errands", "travel"].includes(prefs.activityContext),
   };
+  delete normalized.comfortBias;
   const style = normalized.styleFocus;
   normalized.casual = style === "casual";
   normalized.formal = style === "polished";
@@ -1662,6 +2231,106 @@ function buildWhyBullets(data, weather) {
   return bullets.slice(0, 3);
 }
 
+function buildRecommendationDetails(data, weather, rowEntries = [], slotReasons = {}) {
+  const detailsOverview = data?.detailsOverview && typeof data.detailsOverview === "object" && !Array.isArray(data.detailsOverview)
+    ? data.detailsOverview
+    : {};
+  const what = compactText(detailsOverview.what, "");
+  const why = compactText(detailsOverview.why, "");
+  const note = compactText(detailsOverview.note, "");
+  const outfitItems = rowEntries
+    .map((entry) => ({
+      label: compactText(entry.label, "Item"),
+      value: normalizeItemLabel(entry.value),
+    }))
+    .filter((entry) => entry.value);
+  const outfitItemNames = outfitItems
+    .map((entry) => entry.value)
+    .filter(Boolean);
+  const reasoning = compactText(data.reasoning, "");
+  const weatherTags = [
+    weather?.feelsLike != null ? `Feels ${fmt1(weather.feelsLike, "°C")}` : "",
+    compactText(weather?.weatherLabel, ""),
+    weather?.wind != null ? `${fmt1(weather.wind, " km/h")} wind` : "",
+    weather?.precipProb != null ? `${Math.round(Number(weather.precipProb) || 0)}% rain` : "",
+  ].filter(Boolean).slice(0, 4);
+
+  const sections = [];
+  sections.push({
+    title: "What to wear",
+    kicker: `${outfitItems.length || 0} pieces`,
+    chips: outfitItems,
+    body: what || (
+      outfitItemNames.length
+        ? `Wear ${formatList(outfitItemNames.map((item) => item.toLowerCase()))}. The combination is meant to work as one balanced look rather than separate pieces.`
+        : "Wear a complete outfit that balances coverage, movement, and weather protection."
+    ),
+  });
+  sections.push({
+    title: "Weather logic",
+    kicker: "Why it works",
+    chips: weatherTags.map((value) => ({ label: "", value })),
+    body: why || reasoning || (
+      weather?.feelsLike != null
+        ? `Feels like ${fmt1(weather.feelsLike, "°C")}, so the recommendation balances comfort with enough coverage for the current conditions.`
+        : "The recommendation is tuned around the current temperature, sky, wind, and precipitation risk."
+    ),
+  });
+
+  const practicalNotes = [];
+  if (note) practicalNotes.push(note);
+  (data.warnings || []).forEach((warning) => {
+    const cleaned = compactText(warning, "");
+    if (cleaned) practicalNotes.push(cleaned);
+  });
+
+  (data.missingItems || []).forEach((item) => {
+    const cleaned = compactText(item, "");
+    if (cleaned) practicalNotes.push(`Worth adding: ${cleaned}`);
+  });
+
+  if (practicalNotes.length) {
+    sections.push({
+      title: "Keep in mind",
+      kicker: "Heads up",
+      body: Array.from(new Set(practicalNotes)).slice(0, 2).join(" "),
+    });
+  }
+
+  return sections.filter((section) => compactText(section.body, ""));
+}
+
+function buildRecommendationMeta(weather = {}, outfit = {}) {
+  const chips = [];
+  const feelsLike = Number(weather.feelsLike ?? weather.temperature);
+
+  const remaining = weather.remainingForecast || null;
+  if (remaining) {
+    const nextMin = Number(remaining.minApparent ?? remaining.minTemperature);
+    const rainLater = Number(remaining.maxPrecipProb ?? 0);
+    const windyLater = Number(remaining.maxWind ?? 0);
+
+    if (Number.isFinite(nextMin) && Number.isFinite(feelsLike) && nextMin <= feelsLike - 3) {
+      chips.push({ kind: "time", text: "Later gets noticeably colder" });
+    } else if (rainLater >= 45) {
+      chips.push({ kind: "time", text: "Rain risk builds later" });
+    } else if (windyLater >= 24 || normalizeItemLabel(outfit.outer)) {
+      chips.push({ kind: "time", text: "Layer-friendly through the day" });
+    }
+  }
+
+  return chips.slice(0, 2);
+}
+
+function renderRecommendationMeta(chips = []) {
+  if (!chips.length) return "";
+  return `
+    <div class="today-rec-meta-chips" aria-label="Recommendation signals">
+      ${chips.map((chip) => `<span class="today-rec-meta-chip today-rec-meta-chip-${escapeHtml(chip.kind || "default")}">${escapeHtml(chip.text || "")}</span>`).join("")}
+    </div>
+  `;
+}
+
 function buildAlternatives(outfit, weather) {
   const alternatives = [];
   const outer = normalizeItemLabel(outfit.outer);
@@ -1691,12 +2360,69 @@ function buildAlternatives(outfit, weather) {
 }
 
 function renderWhyItems(items) {
+  if (items && !Array.isArray(items) && typeof items === "object") {
+    items = Object.values(items).filter(Boolean);
+  }
+  const normalizedItems = (items || [])
+    .map((item) => {
+      if (item && typeof item === "object") {
+        const chips = Array.isArray(item.chips)
+          ? item.chips
+              .map((chip) => {
+                if (chip && typeof chip === "object") {
+                  return {
+                    label: compactText(chip.label, ""),
+                    value: compactText(chip.value, ""),
+                  };
+                }
+                return { label: "", value: compactText(chip, "") };
+              })
+              .filter((chip) => chip.value)
+          : [];
+        return {
+          title: compactText(item.title, ""),
+          kicker: compactText(item.kicker, ""),
+          body: compactText(item.body, ""),
+          chips,
+        };
+      }
+      return {
+        title: "",
+        kicker: "",
+        body: compactText(item, ""),
+        chips: [],
+      };
+    })
+    .filter((item) => item.body);
   return `
-    <div class="today-why-list">
-      ${items.map((item) => `
-        <div class="today-why-item">
+    <div class="today-details-overview">
+      <div class="today-details-overview-icon" aria-hidden="true">${renderInlineIcon("info")}</div>
+      <div>
+        <strong>Quick read</strong>
+        <span>What to wear, why it works, and what to keep in mind.</span>
+      </div>
+    </div>
+    <div class="today-why-list today-details-list">
+      ${normalizedItems.map((item) => `
+        <div class="today-why-item today-details-item">
           <span class="today-why-badge" aria-hidden="true">${renderWhyBadgeIcon()}</span>
-          <div class="today-why-text">${escapeHtml(item)}</div>
+          <div class="today-why-copy">
+            <div class="today-details-title-row">
+              ${item.title ? `<strong>${escapeHtml(item.title)}</strong>` : ""}
+              ${item.kicker ? `<span>${escapeHtml(item.kicker)}</span>` : ""}
+            </div>
+            ${item.chips?.length ? `
+              <div class="today-details-mini-chips">
+                ${item.chips.map((chip) => `
+                  <span class="today-details-mini-chip">
+                    ${chip.label ? `<small>${escapeHtml(chip.label)}</small>` : ""}
+                    ${escapeHtml(chip.value)}
+                  </span>
+                `).join("")}
+              </div>
+            ` : ""}
+            <div class="today-why-text">${escapeHtml(item.body)}</div>
+          </div>
         </div>
       `).join("")}
     </div>
@@ -1707,6 +2433,96 @@ function openWhyWorksDialog(items) {
   if (!els.whyWorksDialogBody || !els.whyWorksDialog) return;
   els.whyWorksDialogBody.innerHTML = renderWhyItems(items || []);
   if (typeof els.whyWorksDialog.showModal === "function") els.whyWorksDialog.showModal();
+}
+
+function openRecommendationItemDialog(item, index = null, transitionDirection = "") {
+  if (!els.todayItemDialog || !els.todayItemDialogBody || !item) return;
+  const weather = lastWeatherForAI || {};
+  const detailRows = buildRecommendationItemDialogDetails(item, weather);
+  const dialogItems = getRecommendationDialogItems();
+  const resolvedIndex = Number.isInteger(index)
+    ? index
+    : Math.max(0, dialogItems.findIndex((entry) => entry?.value === item?.value && entry?.label === item?.label));
+  activeRecommendationDialogIndex = resolvedIndex;
+  const hasPrev = resolvedIndex > 0;
+  const hasNext = resolvedIndex >= 0 && resolvedIndex < dialogItems.length - 1;
+  const initialPreviewIndex = hasNext ? resolvedIndex + 1 : hasPrev ? resolvedIndex - 1 : -1;
+  const initialPreviewItem = initialPreviewIndex >= 0 ? dialogItems[initialPreviewIndex] : null;
+  const visualClass = item.photo ? "today-item-dialog-visual has-photo" : "today-item-dialog-visual has-art";
+  els.todayItemDialogBody.innerHTML = `
+    <div class="${visualClass} ${transitionDirection ? `is-entering-from-${transitionDirection}` : ""}" data-dialog-index="${resolvedIndex}">
+      <div class="today-item-dialog-preview ${initialPreviewItem ? "is-visible" : ""}" data-preview-index="${initialPreviewIndex >= 0 ? initialPreviewIndex : ""}">
+        ${initialPreviewItem ? renderRecommendationItemDialogMedia(initialPreviewItem, "today-item-dialog-photo today-item-dialog-photo-preview") : ""}
+      </div>
+      <div class="today-item-dialog-stage">
+        ${renderRecommendationItemDialogMedia(item)}
+        <div class="today-item-dialog-overlay"></div>
+        ${dialogItems.length > 1 ? `
+          <button type="button" class="today-item-dialog-nav-hint today-item-dialog-nav-hint-left ${hasPrev ? "" : "is-disabled"}" data-rec-dialog-nav="prev" aria-label="Show previous item" ${hasPrev ? "" : "disabled"}><span></span></button>
+          <button type="button" class="today-item-dialog-nav-hint today-item-dialog-nav-hint-right ${hasNext ? "" : "is-disabled"}" data-rec-dialog-nav="next" aria-label="Show next item" ${hasNext ? "" : "disabled"}><span></span></button>
+          <div class="today-item-dialog-indicators" aria-hidden="true">
+            ${dialogItems.map((_, dotIndex) => `<span class="today-item-dialog-indicator ${dotIndex === resolvedIndex ? "is-active" : ""}"></span>`).join("")}
+          </div>
+        ` : ""}
+        <div class="today-item-dialog-title-block">
+          <span class="today-cta-kicker today-item-dialog-kicker">${escapeHtml(item.label || "Item")}</span>
+          <h2 id="todayItemDialogTitle" class="dialog-title">${escapeHtml(item.value || "Recommendation item")}</h2>
+        </div>
+        <div class="today-item-dialog-info-block">
+          ${item.reason ? `
+            <div class="today-item-dialog-info-section">
+              <span class="today-item-dialog-block-kicker">Why it works</span>
+              <p>${escapeHtml(item.reason || "")}</p>
+            </div>
+          ` : ""}
+          ${detailRows.length ? `
+            <div class="today-item-dialog-info-section">
+              <span class="today-item-dialog-block-kicker">Details</span>
+              <div class="today-item-dialog-detail-grid">
+                ${detailRows.map((row) => `
+                  <div class="today-item-dialog-detail-row">
+                    <small>${escapeHtml(row.label)}</small>
+                    <strong>${escapeHtml(row.value)}</strong>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          ` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+  const visual = els.todayItemDialogBody.firstElementChild;
+  if (visual && transitionDirection) {
+    window.requestAnimationFrame(() => {
+      visual.classList.add("is-animating");
+    });
+    window.setTimeout(() => {
+      visual.classList.remove("is-entering-from-next", "is-entering-from-prev", "is-animating");
+    }, 280);
+  }
+  if (typeof els.todayItemDialog.showModal === "function") els.todayItemDialog.showModal();
+}
+
+function openTuneLookDialog() {
+  if (!els.tuneLookDialog || !els.tuneLookDialogBody) return;
+  els.tuneLookDialogBody.innerHTML = renderRecommendationControls();
+  if (typeof els.tuneLookDialog.showModal === "function") els.tuneLookDialog.showModal();
+}
+
+function showAppToast(message, tone = "info") {
+  const existing = document.querySelector(".app-toast");
+  if (existing) existing.remove();
+  const toast = document.createElement("div");
+  toast.className = `app-toast app-toast-${tone}`;
+  toast.setAttribute("role", "status");
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  window.setTimeout(() => toast.classList.add("is-visible"), 20);
+  window.setTimeout(() => {
+    toast.classList.remove("is-visible");
+    window.setTimeout(() => toast.remove(), 220);
+  }, 1800);
 }
 
 async function runForLocation(loc) {
@@ -2201,6 +3017,7 @@ function setupInstallUI() {
 }
 
 function registerSW() {
+  if (isNative) return;
   if (!("serviceWorker" in navigator)) return;
 
   window.addEventListener("load", async () => {
@@ -2316,40 +3133,22 @@ function bindPullToRefresh() {
   const container = document.getElementById("tabToday");
   if (!container) return;
 
-  const THRESHOLD = 74;
-  const AXIS_LOCK_THRESHOLD = 10;
-  let tracking = false;
+  const DEAD_ZONE = 72;
+  const TRIGGER_DISTANCE = 176;
+  const MAX_VISUAL_OFFSET = 72;
+  const HORIZONTAL_CANCEL_RATIO = 1.15;
+  let gesture = null;
   let refreshing = false;
-  let startX = 0;
-  let startY = 0;
-  let deltaY = 0;
-  let pointerInsideInteractive = false;
-  let axisLocked = "";
-  let activeScrollParent = null;
 
-  const isInteractive = (target) => target?.closest?.(
-    "input, textarea, select, summary, details, .today-chip-toggle, .location-input-wrap, .today-cta-btn, .nav-item"
+  const isBlockedTarget = (target) => target?.closest?.(
+    "input, textarea, select, option, [contenteditable='true'], .location-input-wrap, .today-chip-toggle"
   );
 
-  const findScrollableParent = (target) => {
-    let node = target instanceof Element ? target : null;
-    while (node && node !== container) {
-      const style = window.getComputedStyle(node);
-      const canScroll = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 1;
-      if (canScroll) return node;
-      node = node.parentElement;
-    }
-    return container;
-  };
-
   const resetPullState = () => {
-    tracking = false;
-    deltaY = 0;
-    axisLocked = "";
-    pointerInsideInteractive = false;
-    activeScrollParent = null;
+    gesture = null;
     container.classList.remove("is-pulling");
     container.style.removeProperty("--pull-progress");
+    container.style.removeProperty("--pull-offset");
   };
 
   const triggerRefresh = async () => {
@@ -2364,48 +3163,60 @@ function bindPullToRefresh() {
         refreshing = false;
         container.classList.remove("is-refreshing");
         container.style.removeProperty("--pull-progress");
+        container.style.removeProperty("--pull-offset");
       }, 900);
     }
   };
 
   container.addEventListener("touchstart", (event) => {
     if (event.touches.length !== 1 || refreshing) return;
-    pointerInsideInteractive = !!isInteractive(event.target);
-    activeScrollParent = findScrollableParent(event.target);
-    if (pointerInsideInteractive || (activeScrollParent?.scrollTop ?? 0) > 0 || container.scrollTop > 0) return;
-    tracking = true;
-    startX = event.touches[0].clientX;
-    startY = event.touches[0].clientY;
-    deltaY = 0;
-    axisLocked = "";
+    if (!container.classList.contains("active")) return;
+    if (isBlockedTarget(event.target)) return;
+    if (container.scrollTop > 0) return;
+
+    const touch = event.touches[0];
+    gesture = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      pullDistance: 0,
+      cancelled: false,
+      visible: false,
+    };
   }, { passive: true });
 
   container.addEventListener("touchmove", (event) => {
-    if (!tracking || refreshing) return;
-    const moveY = event.touches[0].clientY - startY;
-    const moveX = event.touches[0].clientX - startX;
-    if (!axisLocked) {
-      if (Math.abs(moveY) > Math.abs(moveX) + AXIS_LOCK_THRESHOLD) {
-        axisLocked = "y";
-      } else if (Math.abs(moveX) > Math.abs(moveY) + AXIS_LOCK_THRESHOLD) {
-        axisLocked = "x";
-      }
+    if (!gesture || refreshing || event.touches.length !== 1) return;
+
+    const touch = event.touches[0];
+    const moveY = touch.clientY - gesture.startY;
+    const moveX = touch.clientX - gesture.startX;
+
+    if (gesture.cancelled || moveY <= 0 || container.scrollTop > 0) {
+      resetPullState();
+      return;
     }
-    if (axisLocked === "x") return resetPullState();
-    deltaY = Math.max(0, moveY);
-    if (deltaY <= 0 || container.scrollTop > 0 || (activeScrollParent?.scrollTop ?? 0) > 0) return;
-    if (axisLocked !== "y") return;
-    if (deltaY > 8) {
-      const progress = Math.min(deltaY / THRESHOLD, 1);
-      container.classList.add("is-pulling");
-      container.style.setProperty("--pull-progress", `${progress}`);
-      event.preventDefault();
+
+    if (Math.abs(moveX) > Math.max(18, moveY * HORIZONTAL_CANCEL_RATIO)) {
+      gesture.cancelled = true;
+      resetPullState();
+      return;
     }
-  }, { passive: false });
+
+    if (moveY < DEAD_ZONE) return;
+
+    gesture.visible = true;
+    gesture.pullDistance = moveY;
+    const effectivePull = moveY - DEAD_ZONE;
+    const progress = Math.min(effectivePull / (TRIGGER_DISTANCE - DEAD_ZONE), 1);
+    const offset = Math.min(MAX_VISUAL_OFFSET, Math.round(effectivePull * 0.42));
+    container.classList.add("is-pulling");
+    container.style.setProperty("--pull-progress", `${progress}`);
+    container.style.setProperty("--pull-offset", `${offset}px`);
+  }, { passive: true });
 
   container.addEventListener("touchend", async () => {
-    if (!tracking) return;
-    const shouldRefresh = !pointerInsideInteractive && deltaY >= THRESHOLD;
+    if (!gesture) return;
+    const shouldRefresh = gesture.visible && gesture.pullDistance >= TRIGGER_DISTANCE && container.scrollTop <= 0;
     resetPullState();
     if (shouldRefresh) {
       await triggerRefresh();
@@ -2484,14 +3295,114 @@ function typeEmoji(type) {
   return renderInlineIcon(itemTypeIconKey(type), "wardrobe-type-icon");
 }
 
+function getWardrobeCategory(item = {}) {
+  const key = `${item.type || ""} ${item.name || ""}`.toLowerCase();
+  if (/(jacket|coat|hoodie|blazer|vest|outer|parka|windbreaker)/.test(key)) return "jackets";
+  if (/(jeans|pants|trousers|chinos|shorts|leggings|skirt|bottom)/.test(key)) return "pants";
+  if (/(shirt|t-shirt|tee|polo|sweater|tank|top|blouse)/.test(key)) return "shirts";
+  if (/(shoe|sneaker|boot|sandal|loafer)/.test(key)) return "shoes";
+  if (/(scarf|hat|beanie|glove|sunglasses|belt|bag|watch|cap|sock|accessor)/.test(key)) return "accessories";
+  return "other";
+}
+
+function getWardrobeCategoryLabel(category) {
+  return {
+    all: "All",
+    shirts: "Shirts",
+    pants: "Pants",
+    jackets: "Jackets",
+    shoes: "Shoes",
+    accessories: "Accessories",
+    other: "Other",
+  }[category] || "Other";
+}
+
+function normalizeFilterValue(value = "") {
+  return String(value || "").trim().toLowerCase();
+}
+
+function getFilteredWardrobeItems(items = []) {
+  const filtered = items.filter((item) => {
+    if (wardrobeFilterState.favoritesOnly && !item.favorite) return false;
+    if (wardrobeFilterState.category !== "all" && getWardrobeCategory(item) !== wardrobeFilterState.category) return false;
+    if (wardrobeFilterState.color !== "all" && normalizeFilterValue(item.color) !== wardrobeFilterState.color) return false;
+    return true;
+  });
+
+  return filtered.sort((a, b) => {
+    const aTime = new Date(a.createdAt || 0).getTime() || 0;
+    const bTime = new Date(b.createdAt || 0).getTime() || 0;
+    return wardrobeFilterState.sort === "oldest" ? aTime - bTime : bTime - aTime;
+  });
+}
+
+function renderWardrobeFilters(items = []) {
+  if (!els.wardrobeFilters) return;
+  if (!items.length) {
+    els.wardrobeFilters.innerHTML = "";
+    return;
+  }
+
+  const categoryCounts = items.reduce((acc, item) => {
+    const category = getWardrobeCategory(item);
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  }, { all: items.length });
+  const categories = ["all", "shirts", "pants", "jackets", "shoes", "accessories", "other"]
+    .filter((category) => category === "all" || categoryCounts[category]);
+  const colors = [...new Set(items.map((item) => normalizeFilterValue(item.color)).filter(Boolean))].sort();
+
+  els.wardrobeFilters.innerHTML = `
+    <div class="wardrobe-filter-row">
+      <label class="wardrobe-filter-select">
+        <span>Category</span>
+        <select data-wardrobe-filter="category">
+          ${categories.map((category) => `<option value="${escapeHtml(category)}" ${wardrobeFilterState.category === category ? "selected" : ""}>${escapeHtml(getWardrobeCategoryLabel(category))} (${categoryCounts[category] || 0})</option>`).join("")}
+        </select>
+      </label>
+      <label class="wardrobe-filter-select">
+        <span>Color</span>
+        <select data-wardrobe-filter="color">
+          <option value="all">All colors</option>
+          ${colors.map((color) => `<option value="${escapeHtml(color)}" ${wardrobeFilterState.color === color ? "selected" : ""}>${escapeHtml(color.charAt(0).toUpperCase() + color.slice(1))}</option>`).join("")}
+        </select>
+      </label>
+      <label class="wardrobe-filter-select">
+        <span>Date</span>
+        <select data-wardrobe-filter="sort">
+          <option value="newest" ${wardrobeFilterState.sort === "newest" ? "selected" : ""}>Newest first</option>
+          <option value="oldest" ${wardrobeFilterState.sort === "oldest" ? "selected" : ""}>Oldest first</option>
+        </select>
+      </label>
+      <button type="button" class="wardrobe-filter-chip wardrobe-favorite-filter ${wardrobeFilterState.favoritesOnly ? "is-active" : ""}" data-wardrobe-favorites="toggle">
+        <span aria-hidden="true">★</span> Favorites
+      </button>
+    </div>
+  `;
+}
+
 async function renderWardrobe() {
   const items = await loadWardrobeAsync();
+  const visibleItems = getFilteredWardrobeItems(items);
   els.wardrobeList.innerHTML = "";
   els.wardrobeEmpty.style.display = items.length ? "none" : "flex";
+  if (els.addItemBtn) els.addItemBtn.style.display = items.length ? "inline-flex" : "none";
+  if (els.wardrobeExplainer) els.wardrobeExplainer.style.display = items.length ? "" : "none";
   updateWardrobeCtas(items);
   syncTodayWardrobeDialog(items);
+  renderWardrobeFilters(items);
 
-  items.forEach((item) => {
+  if (items.length && !visibleItems.length) {
+    els.wardrobeList.innerHTML = `
+      <div class="wardrobe-filter-empty">
+        <strong>No items match these filters.</strong>
+        <span>Try another category, color, or turn off Favorites.</span>
+      </div>
+    `;
+    return;
+  }
+
+  visibleItems.forEach((item) => {
     const div = document.createElement("div");
     div.className = "wardrobe-item";
     div.setAttribute("data-id", item.id);
@@ -2501,27 +3412,79 @@ async function renderWardrobe() {
       : `<div class="wardrobe-item-placeholder" aria-hidden="true">${typeEmoji(item.type)}</div>`;
 
     const meta = [item.type, item.color, item.material].filter(Boolean).join(" · ");
-    div.innerHTML = `${photoHtml}<div class="wardrobe-item-info"><div class="wardrobe-item-name">${escapeHtml(item.name)}</div><div class="wardrobe-item-meta">${escapeHtml(meta)}</div></div>`;
+    div.innerHTML = `
+      <button type="button" class="wardrobe-favorite-btn ${item.favorite ? "is-active" : ""}" data-wardrobe-favorite="${escapeHtml(String(item.id))}" aria-label="${item.favorite ? "Remove from favorites" : "Add to favorites"}">★</button>
+      ${photoHtml}
+      <div class="wardrobe-item-info">
+        <div class="wardrobe-item-name">${escapeHtml(item.name)}</div>
+        <div class="wardrobe-item-meta">${escapeHtml(meta)}</div>
+      </div>
+    `;
     div.addEventListener("click", () => openItemDialog(item));
     els.wardrobeList.appendChild(div);
   });
 }
 
+async function toggleWardrobeFavorite(itemId) {
+  const items = await loadWardrobeAsync();
+  const item = items.find((entry) => String(entry.id) === String(itemId));
+  if (!item) return;
+  const nextItem = { ...item, favorite: !item.favorite };
+
+  if (isLoggedIn()) {
+    try {
+      const res = await authFetch(`${API_BASE}/api/wardrobe/${item.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nextItem),
+      });
+      const saved = await res.json().catch(() => ({}));
+      if (res.status === 401) return;
+      if (!res.ok) throw new Error(saved.error || "Could not update favorite");
+      saveWardrobe(items.map((entry) => String(entry.id) === String(item.id) ? saved : entry));
+    } catch (err) {
+      console.error("favorite toggle error:", err);
+      alert(err.message || "Could not update favorite.");
+      return;
+    }
+  } else {
+    const nextItems = items.map((entry) => String(entry.id) === String(item.id) ? nextItem : entry);
+    saveWardrobeLocal(nextItems);
+  }
+
+  await renderWardrobe();
+}
+
 function syncTodayWardrobeDialog(items) {
   const emptyWardrobe = !Array.isArray(items) || items.length === 0;
-  if (!emptyWardrobe) {
-    todayWardrobeDialogDismissed = false;
-    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
-    return;
+  if (els.todayWardrobeInlineCta) {
+    els.todayWardrobeInlineCta.style.display = emptyWardrobe ? "grid" : "none";
   }
-  if (todayWardrobeDialogDismissed || els.todayWardrobeDialog?.open) return;
-  if (typeof els.todayWardrobeDialog?.showModal === "function") {
-    els.todayWardrobeDialog.showModal();
-  }
+  if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
 }
 
 function updateWardrobeCtas(items) {
   const count = Array.isArray(items) ? items.length : 0;
+  const categories = new Set((items || []).map((item) => getWardrobeCategory(item)).filter((category) => ["shirts", "pants", "jackets"].includes(category)));
+  const starterProgress = `${categories.size} of 3 starter groups`;
+  const starterHtml = `
+    <span class="starter-pill ${categories.has("shirts") ? "is-complete" : ""}">Shirts</span>
+    <span class="starter-pill ${categories.has("pants") ? "is-complete" : ""}">Pants</span>
+    <span class="starter-pill ${categories.has("jackets") ? "is-complete" : ""}">Jackets</span>
+  `;
+
+  if (els.todayWardrobeInlineProgress) {
+    els.todayWardrobeInlineProgress.innerHTML = `
+      <span class="starter-progress-label">${starterProgress}</span>
+      <div class="starter-pill-row">${starterHtml}</div>
+    `;
+  }
+  if (els.wardrobeExplainerProgress) {
+    els.wardrobeExplainerProgress.innerHTML = `
+      <span class="starter-progress-label">${starterProgress}</span>
+      <div class="starter-pill-row">${starterHtml}</div>
+    `;
+  }
 
   if (count === 0) {
     if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Level up";
@@ -2538,8 +3501,8 @@ function updateWardrobeCtas(items) {
     if (els.todayCtaTitle) els.todayCtaTitle.textContent = "A few more pieces will make today’s picks feel much more you.";
     if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add more";
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Keep going";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `You’ve added ${count} item${count === 1 ? "" : "s"} so far`;
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Add a couple more staples and WearCast will have far more options to mix, match, and personalize.";
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add some more items to your wardrobe to get better suggestions.";
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = `You have ${count} item${count === 1 ? "" : "s"} in your wardrobe. Build out the starter mix for stronger outfit picks.`;
     return;
   }
 
@@ -2557,7 +3520,12 @@ let isSavingItem = false;
 let isReadingItemPhoto = false;
 let isReadingScanPhoto = false;
 let isAnalyzingItemPhoto = false;
-let todayWardrobeDialogDismissed = false;
+const wardrobeFilterState = {
+  category: "all",
+  color: "all",
+  sort: "newest",
+  favoritesOnly: false,
+};
 
 function normalizeItemSignature(item) {
   return [
@@ -2584,10 +3552,72 @@ function updateItemSaveState() {
   els.itemSaveBtn.textContent = isSavingItem ? "Saving…" : isReadingItemPhoto || isAnalyzingItemPhoto ? "Preparing…" : "Save item";
 }
 
-function setItemPhotoStatus(message = "", busy = false) {
+function setItemPhotoStatus(message = "", busy = false, tone = "") {
   if (!els.itemPhotoStatus) return;
   els.itemPhotoStatus.textContent = message;
   els.itemPhotoStatus.classList.toggle("is-busy", !!busy);
+  els.itemPhotoStatus.dataset.tone = tone;
+}
+
+function setItemFormError(message = "") {
+  if (!els.itemFormStatus) return;
+  els.itemFormStatus.textContent = message;
+  els.itemFormStatus.style.display = message ? "block" : "none";
+}
+
+function setFieldError(input, errorEl, message = "") {
+  if (errorEl) errorEl.textContent = message;
+  if (input) {
+    input.classList.toggle("is-invalid", !!message);
+    input.setAttribute("aria-invalid", message ? "true" : "false");
+  }
+}
+
+function clearItemValidationErrors() {
+  setFieldError(els.itemType, els.itemTypeError, "");
+  setFieldError(els.itemName, els.itemNameError, "");
+  setItemFormError("");
+}
+
+function setItemMoreDetailsOpen(open) {
+  const moreDetails = document.querySelector(".item-more-details");
+  if (!moreDetails) return;
+  if (open) moreDetails.setAttribute("open", "open");
+  else moreDetails.removeAttribute("open");
+}
+
+function revealItemManualDetails({ focus = false } = {}) {
+  els.itemManualDetails?.setAttribute("open", "open");
+  if (!focus) return;
+  window.setTimeout(() => {
+    if (!els.itemType?.value) els.itemType?.focus?.();
+    else els.itemName?.focus?.();
+  }, 60);
+}
+
+function validateItemForm() {
+  clearItemValidationErrors();
+  const type = els.itemType.value.trim();
+  const name = els.itemName.value.trim();
+  const errors = [];
+
+  if (!type) {
+    setFieldError(els.itemType, els.itemTypeError, "Choose the item type.");
+    errors.push(els.itemType);
+  }
+  if (!name) {
+    setFieldError(els.itemName, els.itemNameError, "Enter a short item name.");
+    errors.push(els.itemName);
+  }
+
+  if (errors.length) {
+    revealItemManualDetails();
+    setItemFormError("Add the required details before saving this item.");
+    errors[0]?.focus?.();
+    return false;
+  }
+
+  return true;
 }
 
 function updateItemVisual() {
@@ -2623,18 +3653,44 @@ async function analyzeItemPhoto(imageDataUrl) {
   return data;
 }
 
+function normalizeCareInstructionsInput(value) {
+  const values = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? value.split(/[,;\n]+/)
+      : [];
+  return values.map((item) => compactText(item, "")).filter(Boolean);
+}
+
 function applyItemPhotoPrefill(data) {
-  if (!data || data.error) return;
+  if (!data || data.error) return false;
+  let applied = false;
   if (data.type && !els.itemType.value) els.itemType.value = data.type;
-  if (data.name && !els.itemName.value.trim()) els.itemName.value = data.name;
-  if (data.color && !els.itemColor.value.trim()) els.itemColor.value = data.color;
-  if (data.material && !els.itemMaterial.value.trim()) els.itemMaterial.value = data.material;
-  if (data.careInstructions?.length && !els.itemCare.value.trim()) {
-    els.itemCare.value = data.careInstructions.join(", ");
+  if (data.type) applied = true;
+  if (data.name && !els.itemName.value.trim()) {
+    els.itemName.value = data.name;
+    applied = true;
   }
-  if (data.type || data.name || data.color || data.material || data.careInstructions?.length) {
-    els.itemManualDetails?.setAttribute("open", "open");
+  if (data.color && !els.itemColor.value.trim()) {
+    els.itemColor.value = data.color;
+    applied = true;
   }
+  if (data.material && !els.itemMaterial.value.trim()) {
+    els.itemMaterial.value = data.material;
+    applied = true;
+  }
+  const careInstructions = normalizeCareInstructionsInput(data.careInstructions);
+  if (careInstructions.length && !els.itemCare.value.trim()) {
+    els.itemCare.value = careInstructions.join(", ");
+    applied = true;
+  }
+  if (data.color || data.material || careInstructions.length) {
+    setItemMoreDetailsOpen(true);
+  }
+  if (data.type || data.name || data.color || data.material || careInstructions.length) {
+    revealItemManualDetails();
+  }
+  return applied;
 }
 
 function updateScanState(scanning) {
@@ -2657,6 +3713,8 @@ function openItemDialog(item = null) {
   els.itemForm.reset();
   pendingPhotoDataUrl = null;
   setItemPhotoStatus("");
+  clearItemValidationErrors();
+  setItemMoreDetailsOpen(false);
 
   if (item) {
     els.itemDialogTitle = $("itemDialogTitle");
@@ -2666,12 +3724,13 @@ function openItemDialog(item = null) {
     els.itemColor.value = item.color || "";
     els.itemMaterial.value = item.material || "";
     els.itemCare.value = (item.careInstructions || []).join(", ");
+    setItemMoreDetailsOpen(!!(item.color || item.material || item.careInstructions?.length));
     if (item.photoDataUrl) {
       pendingPhotoDataUrl = item.photoDataUrl;
       els.itemPhotoImg.src = item.photoDataUrl;
     }
     els.itemDeleteBtn.style.display = "inline-flex";
-    els.itemManualDetails?.setAttribute("open", "open");
+    revealItemManualDetails();
   } else {
     const title = $("itemDialogTitle");
     if (title) title.textContent = "Add Clothing Item";
@@ -2690,12 +3749,16 @@ function closeItemDialog() {
 
 async function saveItem() {
   if (isSavingItem || isReadingItemPhoto) return;
+  if (!validateItemForm()) return;
   const type = els.itemType.value.trim();
   const name = els.itemName.value.trim();
-  if (!type || !name) return;
 
   const careRaw = els.itemCare.value.trim();
   const careInstructions = careRaw ? careRaw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean) : [];
+  const existingItems = editingItemId ? await loadWardrobeAsync() : [];
+  const existingItem = editingItemId
+    ? existingItems.find((item) => String(item.id) === String(editingItemId))
+    : null;
 
   const itemData = {
     type, name,
@@ -2703,10 +3766,12 @@ async function saveItem() {
     material: els.itemMaterial.value.trim() || null,
     careInstructions,
     photoDataUrl: pendingPhotoDataUrl || null,
+    favorite: !!existingItem?.favorite,
   };
 
   if (await hasDuplicateWardrobeItem(itemData, editingItemId)) {
-    alert("That wardrobe item already exists.");
+    els.itemManualDetails?.setAttribute("open", "open");
+    setItemFormError("This item already exists in your wardrobe. Edit the existing item or change the name/details.");
     return;
   }
 
@@ -2756,7 +3821,8 @@ async function saveItem() {
     closeItemDialog();
   } catch (err) {
     console.error("save item error:", err);
-    alert(err.message || "Could not save that item.");
+    els.itemManualDetails?.setAttribute("open", "open");
+    setItemFormError(err.message || "Could not save that item. Check the details and try again.");
   } finally {
     isSavingItem = false;
     updateItemSaveState();
@@ -2819,6 +3885,36 @@ async function optimizeImageDataUrl(file, { maxEdge = 1600, quality = 0.82 } = {
 
 function bindWardrobeUI() {
   els.addItemBtn?.addEventListener("click", () => openItemDialog());
+  els.itemManualToggleBtn?.addEventListener("click", () => revealItemManualDetails({ focus: true }));
+  els.wardrobeFilters?.addEventListener("click", async (event) => {
+    const favoritesButton = event.target.closest("[data-wardrobe-favorites]");
+    if (favoritesButton) {
+      wardrobeFilterState.favoritesOnly = !wardrobeFilterState.favoritesOnly;
+      await renderWardrobe();
+    }
+  });
+  els.wardrobeFilters?.addEventListener("change", async (event) => {
+    const filter = event.target?.dataset?.wardrobeFilter;
+    if (filter === "category") {
+      wardrobeFilterState.category = event.target.value || "all";
+      await renderWardrobe();
+    }
+    if (filter === "color") {
+      wardrobeFilterState.color = event.target.value || "all";
+      await renderWardrobe();
+    }
+    if (filter === "sort") {
+      wardrobeFilterState.sort = event.target.value || "newest";
+      await renderWardrobe();
+    }
+  });
+  els.wardrobeList?.addEventListener("click", async (event) => {
+    const favoriteButton = event.target.closest("[data-wardrobe-favorite]");
+    if (!favoriteButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+    await toggleWardrobeFavorite(favoriteButton.dataset.wardrobeFavorite);
+  }, true);
   els.itemCancelBtn?.addEventListener("click", closeItemDialog);
   els.itemDeleteBtn?.addEventListener("click", deleteItem);
 
@@ -2841,12 +3937,19 @@ function bindWardrobeUI() {
       updateItemSaveState();
       setItemPhotoStatus("Looking at the clothing photo…", true);
       const analysis = await analyzeItemPhoto(pendingPhotoDataUrl);
-      applyItemPhotoPrefill(analysis);
+      const appliedPrefill = applyItemPhotoPrefill(analysis);
       updateItemVisual();
-      setItemPhotoStatus("Details prefilled from your photo.", false);
+      if (appliedPrefill && els.itemType.value.trim() && els.itemName.value.trim()) {
+        setItemPhotoStatus("Details prefilled from your photo.", false, "success");
+        clearItemValidationErrors();
+      } else {
+        revealItemManualDetails();
+        setItemPhotoStatus("Photo added. Add type and name below to save it.", false, "warning");
+      }
     } catch (err) {
       console.error("item photo error:", err);
-      setItemPhotoStatus("Photo added, but we could not prefill all details.", false);
+      revealItemManualDetails();
+      setItemPhotoStatus("Photo added. Add type and name below to save it.", false, "warning");
     } finally {
       isReadingItemPhoto = false;
       isAnalyzingItemPhoto = false;
@@ -2864,6 +3967,14 @@ function bindWardrobeUI() {
   [els.itemType, els.itemName, els.itemColor, els.itemMaterial].forEach((input) => {
     input?.addEventListener("input", updateItemVisual);
     input?.addEventListener("change", updateItemVisual);
+  });
+  els.itemType?.addEventListener("change", () => {
+    if (els.itemType.value.trim()) setFieldError(els.itemType, els.itemTypeError, "");
+    if (els.itemType.value.trim() && els.itemName.value.trim()) setItemFormError("");
+  });
+  els.itemName?.addEventListener("input", () => {
+    if (els.itemName.value.trim()) setFieldError(els.itemName, els.itemNameError, "");
+    if (els.itemType.value.trim() && els.itemName.value.trim()) setItemFormError("");
   });
 
   // Scan tag button opens scan dialog
@@ -2944,6 +4055,65 @@ function bindWardrobeUI() {
 
 // ─── AI Recommendation (Gemini) ─────────────────────────────
 let lastWeatherForAI = null;
+const RECOMMENDATION_DECK_HINT_KEY = "wearcastRecommendationDeckHintSeen";
+
+function wait(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function hasRecommendationCardContent() {
+  const content = els.aiRecContent;
+  return !!(content && content.children.length && content.textContent.trim());
+}
+
+async function animateRecommendationRefreshOut() {
+  const section = els.aiRecSection;
+  const content = els.aiRecContent;
+  if (!section || !content) return;
+
+  section.classList.add("is-refreshing");
+  if (!hasRecommendationCardContent()) return;
+
+  const currentHeight = Math.max(content.offsetHeight || 0, content.scrollHeight || 0);
+  if (!currentHeight) return;
+
+  content.classList.remove("is-expanding");
+  content.style.height = `${currentHeight}px`;
+  content.style.overflow = "hidden";
+
+  requestAnimationFrame(() => {
+    content.classList.add("is-collapsing");
+    content.style.height = `${Math.max(156, Math.round(currentHeight * 0.9))}px`;
+  });
+
+  await wait(240);
+}
+
+function animateRecommendationRefreshIn() {
+  const section = els.aiRecSection;
+  const content = els.aiRecContent;
+  if (!section || !content) return;
+
+  const currentHeight = Math.max(parseFloat(content.style.height) || 0, 112);
+  const nextHeight = Math.max(content.scrollHeight || 0, 112);
+
+  content.classList.remove("is-collapsing");
+  content.classList.add("is-expanding");
+  content.style.overflow = "hidden";
+  content.style.height = `${currentHeight}px`;
+
+  requestAnimationFrame(() => {
+    content.style.height = `${nextHeight}px`;
+  });
+
+  window.setTimeout(() => {
+    content.classList.remove("is-expanding");
+    content.style.removeProperty("height");
+    content.style.removeProperty("overflow");
+    section.classList.remove("is-refreshing");
+    if (els.aiRecLoading) els.aiRecLoading.style.display = "none";
+  }, 360);
+}
 
 async function fetchAIRecommendation(weatherData, current, ctx) {
   const wardrobe = loadWardrobe().map(({ id, type, name, color, material, careInstructions }) => ({
@@ -3016,49 +4186,115 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     fashionNotes: state.prefs.fashionNotes || null,
   };
 
+  const hasExistingRecommendation = hasRecommendationCardContent();
   els.aiRecSection.style.display = "";
-  els.aiRecLoading.style.display = "flex";
-  els.aiRecContent.innerHTML = "";
   els.aiRecWarnings.innerHTML = "";
   els.aiRecMissing.innerHTML = "";
+  if (!hasExistingRecommendation) {
+    els.aiRecSection.classList.add("is-loading-first");
+    els.aiRecContent.innerHTML = `
+      <div class="recommendation-first-load">
+        <div class="rec-skeleton-hero">
+          <div class="rec-skeleton-summary">
+            <span class="rec-skeleton-icon"></span>
+            <div class="rec-skeleton-lines">
+              <span class="rec-skeleton-line rec-skeleton-line-title"></span>
+              <span class="rec-skeleton-line"></span>
+              <span class="rec-skeleton-line rec-skeleton-line-short"></span>
+            </div>
+          </div>
+          <div class="rec-skeleton-meta">
+            <span class="rec-skeleton-pill"></span>
+            <span class="rec-skeleton-pill rec-skeleton-pill-short"></span>
+          </div>
+        </div>
+        <div class="rec-skeleton-card"></div>
+        <div class="rec-skeleton-actions">
+          <span class="rec-skeleton-action"></span>
+          <span class="rec-skeleton-action"></span>
+          <span class="rec-skeleton-action rec-skeleton-action-accent"></span>
+        </div>
+        <div class="rec-skeleton-caption">Styling your day from weather and wardrobe context…</div>
+      </div>
+    `;
+  }
+  await animateRecommendationRefreshOut();
+  if (hasExistingRecommendation && els.aiRecLoading) els.aiRecLoading.style.display = "flex";
+
+  const recommendationController = new AbortController();
+  const recommendationTimeoutId = window.setTimeout(() => recommendationController.abort(), 28000);
 
   try {
     const res = await fetch(`${API_BASE}/api/recommend`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      signal: recommendationController.signal,
       body: JSON.stringify({ weather, wardrobe, preferences, location }),
     });
     const data = await res.json();
     if (data.error) {
-      els.aiRecContent.innerHTML = `<div class="ai-error">Could not generate outfit recommendation. <button onclick="document.getElementById('refreshBtn').click()" class="ai-retry-btn">Retry</button></div>`;
+      renderAIRecommendation(buildClientFallbackRecommendation(weather, data.error || "AI service returned an error"));
       return;
     }
     renderAIRecommendation(data);
   } catch (err) {
-    els.aiRecContent.innerHTML = `<div class="ai-error">Could not reach the AI service. <button onclick="document.getElementById('refreshBtn').click()" class="ai-retry-btn">Retry</button></div>`;
+    const reason = err?.name === "AbortError"
+      ? "AI took too long to respond"
+      : "AI service could not be reached";
+    renderAIRecommendation(buildClientFallbackRecommendation(weather, reason));
   } finally {
-    els.aiRecLoading.style.display = "none";
+    window.clearTimeout(recommendationTimeoutId);
+    els.aiRecSection?.classList.remove("is-loading-first");
+    if (!els.aiRecSection.classList.contains("is-refreshing") && els.aiRecLoading) {
+      els.aiRecLoading.style.display = "none";
+    }
   }
 }
 
 function renderAIRecommendation(data) {
   pendingRecommendationPrefs = null;
+  els.aiRecSection?.classList.remove("is-loading-first");
   const outfit = data.outfit || {};
   const weather = lastWeatherForAI || {};
   const headline = buildOutfitHeadline(outfit);
-  const subtitle = firstSentence(data.reasoning) || "Built around today’s conditions.";
+  const aiSubtitle = shortenRecommendationSubtitle(data.reasoning);
+  const subtitle = isGenericRecommendationSubtitle(aiSubtitle)
+    ? buildLocalRecommendationSubtitle(weather)
+    : aiSubtitle;
   const chips = getTodayContextChips();
-  const whyBullets = buildWhyBullets(data, weather);
+  const imageMatches = data.outfitImages || {};
+  const slotReasons = data.slotReasons || {};
   const accessories = Array.isArray(outfit.accessories)
     ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
     : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
-  const accessoryText = accessories.length ? accessories.slice(0, 2).join(" • ") : "";
   const rowEntries = [
-    ["Top", preserveUsefulItemLabel(outfit.top)],
-    ["Bottom", preserveUsefulItemLabel(outfit.bottom)],
-    ["Outer", preserveUsefulItemLabel(outfit.outer)],
-    ["Shoes", preserveUsefulItemLabel(outfit.shoes)],
-  ].filter(([, value]) => value);
+    { label: "Top", value: preserveUsefulItemLabel(outfit.top), key: "top" },
+    { label: "Bottom", value: preserveUsefulItemLabel(outfit.bottom), key: "bottom" },
+    { label: "Outer", value: preserveUsefulItemLabel(outfit.outer), key: "outer" },
+    { label: "Shoes", value: preserveUsefulItemLabel(outfit.shoes), key: "shoes" },
+    ...accessories.map((value, index) => ({
+      label: "Accessory",
+      value,
+      key: `accessory-${index}`,
+    })),
+  ].filter((entry) => entry.value);
+  const wardrobePhotoMatches = buildWardrobePhotoMatches(rowEntries, loadWardrobe());
+  const detailsItems = buildRecommendationDetails(data, weather, rowEntries, slotReasons);
+  const metaChips = buildRecommendationMeta(weather, outfit);
+  const collageItems = rowEntries.map((entry, index) => {
+    const slotKey = String(entry.label || "").toLowerCase();
+    const imageMatch = { ...imageMatches, ...wardrobePhotoMatches }[entry.key] || { ...imageMatches, ...wardrobePhotoMatches }[slotKey] || null;
+    const art = getRecommendationCardArt(entry.label, entry.value, imageMatch);
+    return {
+      label: entry.label,
+      value: entry.value,
+      reason: buildRecommendationItemReason(entry.label, entry.value, weather, slotReasons?.[entry.key] || slotReasons?.[slotKey] || ""),
+      photo: art.photo,
+      icon: art.icon,
+      tone: art.tone,
+      wardrobeDetails: imageMatch?.source === "wardrobe" ? imageMatch : null,
+    };
+  });
 
   if (els.aiRecBadge) {
     els.aiRecBadge.textContent = getRecommendationBadge(outfit, weather);
@@ -3074,25 +4310,77 @@ function renderAIRecommendation(data) {
           <div class="today-rec-copy">
             <h3>${escapeHtml(headline)}</h3>
             <p>${escapeHtml(subtitle)}</p>
+            ${renderRecommendationMeta(metaChips)}
           </div>
         </div>
+        ${renderRecommendationWeatherStrip(weather)}
       </div>
-      ${(chips.length || whyBullets.length) ? `<div class="today-rec-meta">${chips.length ? `<div class="today-chip-row">${chips.map((chip) => `<span class="today-chip">${escapeHtml(chip)}</span>`).join("")}</div>` : `<div></div>`}${whyBullets.length ? `<button type="button" class="today-info-button today-info-button-compact" data-rec-action="why" aria-label="Why this works"><span class="today-info-trigger-icon" aria-hidden="true">${renderInfoIcon()}</span></button>` : ""}</div>` : ""}
-      ${rowEntries.length ? `<div class="today-rec-breakdown-grid">${rowEntries.map(([label, value]) => `<div class="today-rec-tile"><span class="today-rec-tile-label"><span class="today-rec-tile-icon" aria-hidden="true">${getRecommendationTileIcon(label)}</span>${escapeHtml(label)}</span><span class="today-rec-tile-value">${escapeHtml(value)}</span></div>`).join("")}</div>` : ""}
-      ${accessoryText ? `<div class="today-rec-accessories">Extras: ${escapeHtml(accessoryText)}</div>` : ""}
-      <details class="today-tune-section">
-        <summary><span><span class="today-tune-icon" aria-hidden="true">${renderTuneIcon()}</span>Tune this look</span><svg class="today-expand-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
-        ${renderRecommendationControls()}
-      </details>
+      ${rowEntries.length ? renderRecommendationDeckHint(rowEntries) : ""}
+      ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, { ...imageMatches, ...wardrobePhotoMatches }, slotReasons) : ""}
+      <div class="today-feedback-panel" aria-label="Refine recommendation">
+        <div class="today-feedback-copy">
+          <span class="today-feedback-kicker">Make it better</span>
+          <strong>Tap items to inspect, then tune the look</strong>
+        </div>
+        <div class="today-feedback-actions">
+          <button type="button" class="today-feedback-chip" data-rec-feedback="too_cold">${renderInlineIcon("cold")} Too cold</button>
+          <button type="button" class="today-feedback-chip" data-rec-feedback="too_warm">${renderInlineIcon("hot")} Too warm</button>
+          <button type="button" class="today-feedback-chip today-feedback-chip-tune" data-rec-action="tune">${renderTuneIcon()} Tune</button>
+        </div>
+        <div class="today-secondary-actions">
+          ${detailsItems.length ? `<button type="button" class="today-details-button today-details-button-wide" data-rec-action="why">View details</button>` : ""}
+        </div>
+      </div>
     </div>
   `;
-  els.aiRecContent.dataset.whyItems = JSON.stringify(whyBullets);
+  els.aiRecContent.dataset.whyItems = JSON.stringify(detailsItems);
+  els.aiRecContent.dataset.collageItems = JSON.stringify(collageItems);
   els.aiRecWarnings.innerHTML = "";
   els.aiRecMissing.innerHTML = "";
+  initializeRecommendationDeck();
+  animateRecommendationRefreshIn();
 }
 
 function bindRecommendationControls() {
-  els.aiRecContent?.addEventListener("click", async (event) => {
+  const applyRecommendationFeedback = async (feedback, sourceButton = null) => {
+    const latestState = loadState();
+    const basePrefs = latestState.prefs || {};
+    let nextPrefs = { ...basePrefs };
+
+    if (feedback === "too_cold") {
+      nextPrefs = { ...nextPrefs, cold: true, hot: false };
+    } else if (feedback === "too_warm") {
+      nextPrefs = { ...nextPrefs, cold: false, hot: true };
+    }
+
+    saveState({ prefs: nextPrefs });
+    pendingRecommendationPrefs = null;
+    syncPreferenceInputs(nextPrefs);
+    sourceButton?.classList.add("is-active");
+    if (latestState.lastLocation) {
+      await runForLocation(latestState.lastLocation);
+    }
+  };
+  window.handleRecommendationSwipeFeedback = null;
+
+  const handleRecommendationControlInteraction = async (event) => {
+    const itemButton = event.target.closest("[data-rec-item-index]");
+    if (itemButton) {
+      try {
+        const items = JSON.parse(els.aiRecContent?.dataset?.collageItems || "[]");
+        const itemIndex = Number(itemButton.dataset.recItemIndex || -1);
+        const item = items[itemIndex];
+        if (item) openRecommendationItemDialog(item, itemIndex);
+      } catch {}
+      return;
+    }
+
+    const feedbackButton = event.target.closest("[data-rec-feedback]");
+    if (feedbackButton) {
+      await applyRecommendationFeedback(feedbackButton.dataset.recFeedback, feedbackButton);
+      return;
+    }
+
     const actionButton = event.target.closest("[data-rec-action='apply']");
     if (actionButton) {
       const latestState = loadState();
@@ -3100,6 +4388,7 @@ function bindRecommendationControls() {
       pendingRecommendationPrefs = null;
       saveState({ prefs: nextPrefs });
       syncPreferenceInputs(nextPrefs);
+      if (typeof els.tuneLookDialog?.close === "function") els.tuneLookDialog.close();
       if (latestState.lastLocation) {
         await runForLocation(latestState.lastLocation);
       }
@@ -3116,6 +4405,12 @@ function bindRecommendationControls() {
       return;
     }
 
+    const tuneButton = event.target.closest("[data-rec-action='tune']");
+    if (tuneButton) {
+      openTuneLookDialog();
+      return;
+    }
+
     const chipButton = event.target.closest("[data-rec-pref]");
     if (!chipButton) return;
 
@@ -3124,15 +4419,178 @@ function bindRecommendationControls() {
     if (!key || !value) return;
 
     const basePrefs = pendingRecommendationPrefs || loadState().prefs;
-    pendingRecommendationPrefs = {
-      ...basePrefs,
-      [key]: value,
-    };
+    if (key === "comfortBias") {
+      pendingRecommendationPrefs = {
+        ...basePrefs,
+        cold: value === "cold",
+        hot: value === "hot",
+      };
+    } else {
+      pendingRecommendationPrefs = {
+        ...basePrefs,
+        [key]: value,
+      };
+    }
 
-    const allButtons = els.aiRecContent.querySelectorAll(`[data-rec-pref="${key}"]`);
+    const allButtons = document.querySelectorAll(`#aiRecContent [data-rec-pref="${key}"], #tuneLookDialogBody [data-rec-pref="${key}"]`);
     allButtons.forEach((btn) => {
       btn.classList.toggle("is-active", btn.dataset.recValue === value);
     });
+  };
+
+  els.aiRecContent?.addEventListener("click", handleRecommendationControlInteraction);
+  els.tuneLookDialogBody?.addEventListener("click", handleRecommendationControlInteraction);
+  els.todayItemDialogCloseBtn?.addEventListener("click", () => {
+    if (els.todayItemDialog?.open) els.todayItemDialog.close();
+  });
+  els.todayItemDialog?.addEventListener("click", (event) => {
+    if (event.target === els.todayItemDialog && els.todayItemDialog.open) {
+      els.todayItemDialog.close();
+    }
+  });
+  els.todayItemDialogBody?.addEventListener("touchstart", (event) => {
+    if (!els.todayItemDialog?.open || event.touches.length !== 1) return;
+    recommendationDialogTouchStartX = event.touches[0].clientX;
+    recommendationDialogTouchDeltaX = 0;
+    recommendationDialogSwipeActive = true;
+  }, { passive: true });
+  els.todayItemDialogBody?.addEventListener("touchmove", (event) => {
+    if (!els.todayItemDialog?.open || event.touches.length !== 1) return;
+    recommendationDialogTouchDeltaX = event.touches[0].clientX - recommendationDialogTouchStartX;
+    const visual = getRecommendationDialogVisual();
+    const stage = getRecommendationDialogStage();
+    const preview = getRecommendationDialogPreview();
+    if (!visual || !stage || !preview) return;
+    const items = getRecommendationDialogItems();
+    const width = Math.max(visual.clientWidth || 1, 1);
+    const progress = Math.max(-1, Math.min(1, recommendationDialogTouchDeltaX / width));
+    const direction = recommendationDialogTouchDeltaX < 0 ? 1 : recommendationDialogTouchDeltaX > 0 ? -1 : 0;
+    const previewIndex = direction === 1
+      ? activeRecommendationDialogIndex + 1
+      : direction === -1
+        ? activeRecommendationDialogIndex - 1
+        : -1;
+    const previewItem = previewIndex >= 0 && previewIndex < items.length ? items[previewIndex] : null;
+    if (previewItem) {
+      const currentPreviewIndex = Number(preview.dataset.previewIndex || -1);
+      if (currentPreviewIndex !== previewIndex) {
+        preview.innerHTML = renderRecommendationItemDialogMedia(previewItem, "today-item-dialog-photo today-item-dialog-photo-preview");
+        preview.dataset.previewIndex = String(previewIndex);
+      }
+      preview.classList.add("is-visible");
+      preview.style.transition = "none";
+      preview.style.opacity = `${0.5 + Math.abs(progress) * 0.5}`;
+      preview.style.transform = `translateX(${direction === 1 ? width * 0.18 + recommendationDialogTouchDeltaX * 0.18 : -width * 0.18 + recommendationDialogTouchDeltaX * 0.18}px) scale(${0.98 + Math.abs(progress) * 0.02})`;
+    } else {
+      preview.classList.remove("is-visible");
+      preview.innerHTML = "";
+      preview.dataset.previewIndex = "";
+      preview.style.removeProperty("transform");
+      preview.style.removeProperty("opacity");
+    }
+    stage.style.transition = "none";
+    stage.style.transform = `translateX(${recommendationDialogTouchDeltaX}px) scale(${1 - Math.abs(progress) * 0.03})`;
+    stage.style.opacity = `${1 - Math.abs(progress) * 0.18}`;
+  }, { passive: true });
+  els.todayItemDialogBody?.addEventListener("touchend", () => {
+    if (!els.todayItemDialog?.open) return;
+    const stage = getRecommendationDialogStage();
+    const preview = getRecommendationDialogPreview();
+    const threshold = 44;
+    if (recommendationDialogTouchDeltaX <= -threshold) {
+      recommendationDialogSwipeActive = false;
+      if (stage) {
+        stage.style.removeProperty("transition");
+        stage.style.removeProperty("transform");
+        stage.style.removeProperty("opacity");
+      }
+      if (preview) {
+        preview.style.removeProperty("transition");
+        preview.style.removeProperty("transform");
+        preview.style.removeProperty("opacity");
+      }
+      stepRecommendationItemDialog(1);
+    } else if (recommendationDialogTouchDeltaX >= threshold) {
+      recommendationDialogSwipeActive = false;
+      if (stage) {
+        stage.style.removeProperty("transition");
+        stage.style.removeProperty("transform");
+        stage.style.removeProperty("opacity");
+      }
+      if (preview) {
+        preview.style.removeProperty("transition");
+        preview.style.removeProperty("transform");
+        preview.style.removeProperty("opacity");
+      }
+      stepRecommendationItemDialog(-1);
+    } else if (stage) {
+      stage.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+      stage.style.transform = "translateX(0) scale(1)";
+      stage.style.opacity = "1";
+      if (preview) {
+        preview.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+        preview.style.transform = "translateX(0) scale(.98)";
+        preview.style.opacity = "0";
+      }
+      window.setTimeout(() => {
+        stage.style.removeProperty("transition");
+        stage.style.removeProperty("transform");
+        stage.style.removeProperty("opacity");
+        if (preview) {
+          preview.classList.remove("is-visible");
+          preview.innerHTML = "";
+          preview.dataset.previewIndex = "";
+          preview.style.removeProperty("transition");
+          preview.style.removeProperty("transform");
+          preview.style.removeProperty("opacity");
+        }
+      }, 240);
+    }
+    recommendationDialogTouchStartX = 0;
+    recommendationDialogTouchDeltaX = 0;
+    recommendationDialogSwipeActive = false;
+  });
+  els.todayItemDialogBody?.addEventListener("touchcancel", () => {
+    const stage = getRecommendationDialogStage();
+    const preview = getRecommendationDialogPreview();
+    if (stage) {
+      stage.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+      stage.style.transform = "translateX(0) scale(1)";
+      stage.style.opacity = "1";
+      if (preview) {
+        preview.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+        preview.style.transform = "translateX(0) scale(.98)";
+        preview.style.opacity = "0";
+      }
+      window.setTimeout(() => {
+        stage.style.removeProperty("transition");
+        stage.style.removeProperty("transform");
+        stage.style.removeProperty("opacity");
+        if (preview) {
+          preview.classList.remove("is-visible");
+          preview.innerHTML = "";
+          preview.dataset.previewIndex = "";
+          preview.style.removeProperty("transition");
+          preview.style.removeProperty("transform");
+          preview.style.removeProperty("opacity");
+        }
+      }, 240);
+    }
+    recommendationDialogTouchStartX = 0;
+    recommendationDialogTouchDeltaX = 0;
+    recommendationDialogSwipeActive = false;
+  });
+  els.todayItemDialogBody?.addEventListener("click", (event) => {
+    const navButton = event.target.closest("[data-rec-dialog-nav]");
+    if (!navButton) return;
+    const direction = navButton.dataset.recDialogNav === "next" ? 1 : -1;
+    stepRecommendationItemDialog(direction);
+  });
+  els.todayItemDialog?.addEventListener("close", () => {
+    activeRecommendationDialogIndex = -1;
+    recommendationDialogTouchStartX = 0;
+    recommendationDialogTouchDeltaX = 0;
+    recommendationDialogSwipeActive = false;
   });
 }
 
@@ -3231,6 +4689,11 @@ function bindIOSSwipeTabs() {
         "[contenteditable='true']",
         "[data-rec-pref]",
         "[data-rec-action]",
+        ".today-rec-deck-wrap",
+        ".today-rec-deck",
+        ".today-rec-deck-card",
+        ".today-rec-deck-copy",
+        ".today-rec-deck-media",
         ".today-chip-row-controls",
         ".ac-dropdown",
         ".location-input-wrap",
@@ -3248,6 +4711,7 @@ function bindIOSSwipeTabs() {
   const prepareAdjacentPage = (direction) => {
     const currentTabId = tabGestureStartTabId || getActiveTabId();
     const currentIndex = TAB_ORDER.indexOf(currentTabId);
+    if (currentIndex === -1) return false;
     adjacentTabId = TAB_ORDER[currentIndex + direction] || "";
     currentPage = document.getElementById(currentTabId);
     adjacentPage = adjacentTabId ? document.getElementById(adjacentTabId) : null;
@@ -3393,7 +4857,7 @@ function bindIOSSwipeTabs() {
 function bindTabNav() {
   els.bottomNav?.querySelectorAll(".nav-item").forEach(btn => {
     btn.addEventListener("click", () => {
-      const currentIndex = TAB_ORDER.indexOf(getActiveTabId());
+      const currentIndex = Math.max(0, TAB_ORDER.indexOf(getActiveTabId()));
       const nextIndex = TAB_ORDER.indexOf(btn.dataset.tab);
       const direction = nextIndex > currentIndex ? 1 : nextIndex < currentIndex ? -1 : 0;
       switchTab(btn.dataset.tab, { direction });
@@ -3403,13 +4867,16 @@ function bindTabNav() {
     if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
     switchTab("tabWardrobe", { direction: 1 });
   });
-  els.todayWardrobeDialogCloseBtn?.addEventListener("click", () => {
-    todayWardrobeDialogDismissed = true;
-    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+  els.todayWardrobeInlineBtn?.addEventListener("click", () => {
+    switchTab("tabWardrobe", { direction: 1 });
+    window.setTimeout(() => openItemDialog(), 240);
   });
 
   els.whyWorksDialogCloseBtn?.addEventListener("click", () => {
     if (els.whyWorksDialog?.open) els.whyWorksDialog.close();
+  });
+  els.tuneLookDialogCloseBtn?.addEventListener("click", () => {
+    if (els.tuneLookDialog?.open) els.tuneLookDialog.close();
   });
 }
 
@@ -3573,7 +5040,16 @@ function isValidEmail(email) {
 }
 
 function bindAuthUI() {
-  els.userBtn.addEventListener("click", showAuthDialog);
+  els.userBtn.addEventListener("click", showUserMenu);
+  els.userMenuCloseBtn?.addEventListener("click", () => els.userMenuDialog?.close());
+  els.userMenuAccountBtn?.addEventListener("click", () => {
+    els.userMenuDialog?.close();
+    showAuthDialog();
+  });
+  els.userMenuSettingsBtn?.addEventListener("click", () => {
+    els.userMenuDialog?.close();
+    switchTab("tabPrefs", { direction: 0 });
+  });
   els.wardrobeSignInBtn?.addEventListener("click", showAuthDialog);
   els.authCloseBtn.addEventListener("click", () => els.authDialog.close());
   els.authToggleMode.addEventListener("click", () => setAuthMode(!authIsSignup));
@@ -3726,6 +5202,14 @@ function bindAuthUI() {
       });
     }
   });
+}
+
+function showUserMenu() {
+  if (!els.userMenuDialog) {
+    showAuthDialog();
+    return;
+  }
+  if (typeof els.userMenuDialog.showModal === "function") els.userMenuDialog.showModal();
 }
 
 // Handle Google OAuth code in URL (web flow)

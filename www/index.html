@@ -13,13 +13,16 @@
 </head>
 <body>
 
-  <button id="userBtn" class="floating-menu-btn floating-profile-btn" aria-label="Account" title="Account">
-    <svg id="userBtnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <img id="userBtnAvatar" class="user-avatar" style="display:none" alt="" />
-  </button>
+  <div class="notch-blur-overlay" aria-hidden="true"></div>
 
   <!-- ═══ Tab pages ═══ -->
   <main>
+    <div class="app-top-chrome" aria-hidden="false">
+      <button id="userBtn" class="floating-menu-btn floating-profile-btn" aria-label="Account" title="Account">
+        <svg id="userBtnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <img id="userBtnAvatar" class="user-avatar" style="display:none" alt="" />
+      </button>
+    </div>
 
     <!-- ── TAB: Today ── -->
     <section id="tabToday" class="tab-page active today-screen">
@@ -107,22 +110,15 @@
               </div>
             </div>
 
-            <details class="card card-details weather-details-inline" id="weatherDetailsCard" style="display:none;">
-              <summary class="card-header card-header-clickable">
-                <h2>Weather Details</h2>
-                <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="detail-grid">
-                <div class="detail-item"><span class="detail-label">Humidity</span><span id="humidity">—</span></div>
-                <div class="detail-item"><span class="detail-label">Cloud cover</span><span id="cloud">—</span></div>
-                <div class="detail-item"><span class="detail-label">Precipitation</span><span id="precip">—</span></div>
-                <div class="detail-item"><span class="detail-label">Precip chance</span><span id="precipProb">—</span></div>
-                <div class="detail-item"><span class="detail-label">Effective temp</span><span id="effTemp">—</span></div>
-                <div class="detail-item"><span class="detail-label">Dew point</span><span id="dewPoint">—</span></div>
-                <div class="detail-item"><span class="detail-label">Visibility</span><span id="vis">—</span></div>
-                <div class="detail-item"><span class="detail-label">Daytime</span><span id="isDay">—</span></div>
+            <div id="todayWardrobeInlineCta" class="today-inline-upgrade-card" style="display:none;">
+              <div>
+                <span class="today-inline-upgrade-kicker">Better with your closet</span>
+                <strong>Use your own clothes for sharper outfits.</strong>
+                <p>Add a few pieces so WearCast can recommend items you actually own.</p>
+                <div id="todayWardrobeInlineProgress" class="today-inline-upgrade-progress" aria-hidden="true"></div>
               </div>
-            </details>
+              <button id="todayWardrobeInlineBtn" class="btn-primary-sm" type="button">Add items</button>
+            </div>
 
             <div id="emptyState" class="empty-state">
               <div class="empty-icon">
@@ -159,15 +155,17 @@
               <span class="wardrobe-kicker">Wardrobe</span>
               <h2>My Wardrobe</h2>
             </div>
-            <button id="addItemBtn" class="btn-primary-sm">+ Add</button>
+            <button id="addItemBtn" class="btn-primary-sm wardrobe-add-fab" aria-label="Add wardrobe item">+</button>
           </div>
-          <div class="card wardrobe-explainer">
+          <div id="wardrobeExplainer" class="card wardrobe-explainer">
             <div class="wardrobe-explainer-body">
               <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Get personalized fast</span>
               <h3 id="wardrobeExplainerTitle">Your wardrobe powers smarter outfit picks</h3>
               <p id="wardrobeExplainerText">Add photos or care tags once, then WearCast can recommend pieces you actually own instead of generic outfits.</p>
+              <div id="wardrobeExplainerProgress" class="wardrobe-explainer-progress" aria-hidden="true"></div>
             </div>
           </div>
+          <div id="wardrobeFilters" class="wardrobe-filters" aria-label="Wardrobe filters"></div>
         </div>
 
         <div class="wardrobe-body">
@@ -176,7 +174,13 @@
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
             </div>
             <h3>Your closet is empty</h3>
-            <p>Add your clothing items so WearCast can pick outfits from what you own.</p>
+            <p>Add a few real pieces so WearCast can style from what you actually own.</p>
+            <div class="wardrobe-empty-guides" aria-hidden="true">
+              <span>Shirts</span>
+              <span>Pants</span>
+              <span>Jackets</span>
+            </div>
+            <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Add your first item</button>
           </div>
           <div id="wardrobeList" class="wardrobe-grid"></div>
         </div>
@@ -184,10 +188,55 @@
     </section>
 
     <!-- ── TAB: Settings ── -->
-    <section id="tabPrefs" class="tab-page">
-      <div class="tab-top-bar"><h2>Settings</h2></div>
+    <section id="tabPrefs" class="tab-page settings-screen">
+      <div class="settings-page-hero">
+        <span class="today-cta-kicker">Settings</span>
+        <h2>WearCast controls</h2>
+      </div>
 
-      <div class="card">
+      <div class="card settings-panel">
+        <div class="card-header"><h3>Privacy & Permissions</h3></div>
+        <div class="settings-list">
+          <button id="settingsPrivacyBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Privacy choices</strong>
+              <span id="settingsPrivacyStatus">Review functional storage and device location permissions.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card settings-panel">
+        <div class="card-header"><h3>App Data</h3></div>
+        <div class="settings-list">
+          <button id="settingsClearLocationBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Clear saved location</strong>
+              <span id="settingsClearLocationStatus">Forget the last place used on this device.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsResetPrefsBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Reset outfit tuning</strong>
+              <span id="settingsResetPrefsStatus">Clear saved comfort, style, and recommendation preferences.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card settings-panel">
+        <div class="card-header"><h3>About</h3></div>
+        <div class="about-content">
+          <p><strong>WearCast</strong> suggests outfits based on real-time weather.</p>
+          <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. AI by <a href="https://ai.google.dev/" target="_blank" rel="noreferrer">Gemini</a>.</p>
+          <p><a href="./privacy.html">Privacy Policy</a></p>
+        </div>
+      </div>
+
+      <div class="card settings-panel">
         <div class="card-header"><h3>Account</h3></div>
         <div class="settings-list">
           <div class="settings-row settings-row-static">
@@ -212,48 +261,6 @@
           </button>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-header"><h3>Privacy & Permissions</h3></div>
-        <div class="settings-list">
-          <button id="settingsPrivacyBtn" class="settings-row" type="button">
-            <div class="settings-copy">
-              <strong>Privacy choices</strong>
-              <span id="settingsPrivacyStatus">Review functional storage and device location permissions.</span>
-            </div>
-            <span class="settings-chevron">›</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>App Data</h3></div>
-        <div class="settings-list">
-          <button id="settingsClearLocationBtn" class="settings-row" type="button">
-            <div class="settings-copy">
-              <strong>Clear saved location</strong>
-              <span id="settingsClearLocationStatus">Forget the last place used on this device.</span>
-            </div>
-            <span class="settings-chevron">›</span>
-          </button>
-          <button id="settingsResetPrefsBtn" class="settings-row" type="button">
-            <div class="settings-copy">
-              <strong>Reset outfit tuning</strong>
-              <span id="settingsResetPrefsStatus">Clear saved comfort, style, and recommendation preferences.</span>
-            </div>
-            <span class="settings-chevron">›</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>About</h3></div>
-        <div class="about-content">
-          <p><strong>WearCast</strong> suggests outfits based on real-time weather.</p>
-          <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. AI by <a href="https://ai.google.dev/" target="_blank" rel="noreferrer">Gemini</a>.</p>
-          <p><a href="./privacy.html">Privacy Policy</a></p>
-        </div>
-      </div>
     </section>
   </main>
 
@@ -271,13 +278,8 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
       <span>Wardrobe</span>
     </button>
-    <button class="nav-item" data-tab="tabPrefs">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Settings</span>
-    </button>
     <div class="nav-swipe-hint" aria-hidden="true">
       <span class="nav-swipe-dot active"></span>
-      <span class="nav-swipe-dot"></span>
       <span class="nav-swipe-dot"></span>
     </div>
   </nav>
@@ -295,6 +297,30 @@
   <div id="installBannerSubtitle" style="display:none;"></div>
 
   <!-- ═══ Dialogs ═══ -->
+
+  <dialog id="userMenuDialog" class="dialog user-menu-dialog" aria-labelledby="userMenuTitle">
+    <div class="dialog-inner user-menu-inner">
+      <button id="userMenuCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <span class="today-cta-kicker">Profile</span>
+      <h2 id="userMenuTitle" class="dialog-title">WearCast menu</h2>
+      <div class="settings-list user-menu-list">
+        <button id="userMenuAccountBtn" class="settings-row" type="button">
+          <div class="settings-copy">
+            <strong>Account</strong>
+            <span>Sign in, review details, or log out.</span>
+          </div>
+          <span class="settings-chevron">›</span>
+        </button>
+        <button id="userMenuSettingsBtn" class="settings-row" type="button">
+          <div class="settings-copy">
+            <strong>Settings</strong>
+            <span>Privacy, saved location, and app data.</span>
+          </div>
+          <span class="settings-chevron">›</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
 
   <dialog id="installDialog" class="dialog" aria-labelledby="installTitle">
     <div class="dialog-inner">
@@ -326,9 +352,26 @@
   <dialog id="whyWorksDialog" class="dialog why-works-dialog" aria-labelledby="whyWorksDialogTitle">
     <div class="dialog-inner why-works-dialog-inner">
       <button id="whyWorksDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
-      <span class="today-cta-kicker">Recommendation notes</span>
-      <h2 id="whyWorksDialogTitle" class="dialog-title">Why this works</h2>
+      <span class="today-cta-kicker">Recommendation details</span>
+      <h2 id="whyWorksDialogTitle" class="dialog-title">Details for this look</h2>
       <div id="whyWorksDialogBody" class="why-works-dialog-body"></div>
+    </div>
+  </dialog>
+
+  <dialog id="todayItemDialog" class="dialog today-item-dialog" aria-labelledby="todayItemDialogTitle">
+    <div class="dialog-inner today-item-dialog-inner">
+      <button id="todayItemDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <div id="todayItemDialogBody"></div>
+    </div>
+  </dialog>
+
+  <dialog id="tuneLookDialog" class="dialog tune-look-dialog" aria-labelledby="tuneLookDialogTitle">
+    <div class="dialog-inner tune-look-dialog-inner">
+      <button id="tuneLookDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <span class="today-cta-kicker">Tune This Look</span>
+      <h2 id="tuneLookDialogTitle" class="dialog-title">Adjust the outfit direction</h2>
+      <p class="dialog-subtitle">Refine the recommendation in a calmer, native-feeling sheet.</p>
+      <div id="tuneLookDialogBody" class="tune-look-dialog-body"></div>
     </div>
   </dialog>
 
@@ -398,12 +441,13 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <span>Add clothing photo</span>
           </label>
+          <button type="button" id="itemManualToggleBtn" class="item-manual-toggle">Add manually instead</button>
           <div id="itemPhotoStatus" class="status-text item-photo-status"></div>
         </section>
 
         <details class="card item-manual-card" id="itemManualDetails">
           <summary class="card-header card-header-clickable">
-            <h3>Add manually</h3>
+            <h3>Item details</h3>
             <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
           <div class="item-manual-body">
@@ -422,32 +466,40 @@
                 <option>Sunglasses</option><option>Belt</option><option>Bag</option>
                 <option>Other</option>
               </select>
+              <div id="itemTypeError" class="field-error" role="alert"></div>
             </div>
 
             <div class="form-group">
               <label for="itemName" class="input-label">Name *</label>
               <input id="itemName" type="text" class="text-input" placeholder="e.g. Blue denim jacket" required />
+              <div id="itemNameError" class="field-error" role="alert"></div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="itemColor" class="input-label">Color</label>
-                <input id="itemColor" type="text" class="text-input" placeholder="e.g. Navy" />
-              </div>
-              <div class="form-group">
-                <label for="itemMaterial" class="input-label">Material</label>
-                <input id="itemMaterial" type="text" class="text-input" placeholder="e.g. Cotton" />
-              </div>
-            </div>
+            <details class="item-more-details">
+              <summary>More details</summary>
+              <div class="item-more-details-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="itemColor" class="input-label">Color</label>
+                    <input id="itemColor" type="text" class="text-input" placeholder="e.g. Navy" />
+                  </div>
+                  <div class="form-group">
+                    <label for="itemMaterial" class="input-label">Material</label>
+                    <input id="itemMaterial" type="text" class="text-input" placeholder="e.g. Cotton" />
+                  </div>
+                </div>
 
-            <div class="form-group">
-              <label for="itemCare" class="input-label">Care Instructions</label>
-              <textarea id="itemCare" rows="2" class="text-input" placeholder="e.g. Machine wash cold, tumble dry low" style="resize:vertical;"></textarea>
-              <button type="button" id="scanTagBtn" class="btn-outline" style="margin-top:8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                Scan care tag
-              </button>
-            </div>
+                <div class="form-group">
+                  <label for="itemCare" class="input-label">Care Instructions</label>
+                  <textarea id="itemCare" rows="2" class="text-input" placeholder="e.g. Machine wash cold, tumble dry low" style="resize:vertical;"></textarea>
+                  <button type="button" id="scanTagBtn" class="btn-outline" style="margin-top:8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan care tag
+                  </button>
+                </div>
+              </div>
+            </details>
+            <div id="itemFormStatus" class="form-status" role="alert"></div>
           </div>
         </details>
 
@@ -481,8 +533,9 @@
   </dialog>
 
   <!-- ═══ Auth dialog ═══ -->
-  <dialog id="authDialog" class="dialog">
-    <div class="dialog-card" style="max-width:380px;">
+  <dialog id="authDialog" class="dialog auth-dialog">
+    <div class="dialog-card auth-dialog-card">
+      <span class="today-cta-kicker">Account</span>
       <h2 id="authDialogTitle" class="dialog-title">Sign in</h2>
       <p class="auth-subtitle">Sign in to sync your wardrobe across devices</p>
 

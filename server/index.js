@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { readFileSync } from "fs";
 import https from "https";
+import { randomUUID } from "crypto";
 import express from "express";
 import cors from "cors";
 import { initDB } from "./db.js";
@@ -26,8 +27,226 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = "auto";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
+const RECOMMENDATION_COPY_VERSION = 7;
 const weatherCache = new Map();
 const recommendationCache = new Map();
+const STOCK_IMAGE_CATALOG = {
+  top_white_tshirt_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
+    description: "white crew-neck T-shirt in a clean studio flat lay",
+    keywords: ["t-shirt", "tee", "tee shirt", "tshirt", "short sleeve", "crew neck", "basic tee"],
+    fallback: true,
+  },
+  top_white_button_up_shirt: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+    description: "white button-up shirt on hangers in soft studio light",
+    keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "dress shirt", "collared shirt", "white shirt"],
+  },
+  top_knit_sweater_hanger: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-knit-sweater-hanger.jpg",
+    description: "knit sweater hanging on a wooden hanger",
+    keywords: ["sweater", "knit", "jumper", "pullover", "crewneck", "thermal", "base layer", "thermal shirt", "long-sleeve thermal shirt"],
+  },
+  bottom_blue_jeans_stack: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
+    description: "stack of blue jeans in studio light",
+    keywords: ["jeans", "denim", "pants", "trousers", "chinos", "bottoms", "leggings", "shorts"],
+    fallback: true,
+  },
+  bottom_black_trousers_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+    description: "black tailored trousers on a white studio background",
+    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants"],
+  },
+  bottom_athletic_leggings_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-athletic-leggings-studio.jpg",
+    description: "athletic leggings in a clean studio shot",
+    keywords: ["athletic leggings", "leggings", "running leggings", "fleece-lined leggings", "active leggings"],
+  },
+  bottom_magenta_leggings_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-magenta-leggings-studio.jpg",
+    description: "magenta athletic leggings in a studio shot",
+    keywords: ["magenta leggings", "pink leggings", "athletic leggings", "running leggings", "active leggings", "leggings"],
+  },
+  bottom_cargo_pants_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-cargo-pants-studio.jpg",
+    description: "cargo-style pants in a clean fashion shot",
+    keywords: ["cargo pants", "water-resistant pants", "insulated pants", "fleece-lined pants", "rain pants", "utility pants"],
+  },
+  bottom_plaid_trousers_street: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-plaid-trousers-street.jpg",
+    description: "plaid tailored trousers with a street-style look",
+    keywords: ["plaid trousers", "checked trousers", "tailored trousers", "smart trousers", "dress pants", "slacks"],
+  },
+  outer_gray_jacket_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
+    description: "gray lightweight jacket on a white studio background",
+    keywords: ["jacket", "coat", "outerwear", "outer", "blazer", "shell", "windbreaker", "parka", "cardigan", "layer"],
+    fallback: true,
+  },
+  outer_black_blazer_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-black-blazer-studio.jpg",
+    description: "tailored blazer detail in clean studio styling",
+    keywords: ["blazer", "light blazer", "tailored blazer", "smart blazer"],
+  },
+  outer_white_hoodie_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-white-hoodie-studio.jpg",
+    description: "white hoodie in a minimal studio shot",
+    keywords: ["hoodie", "zip hoodie", "hooded layer", "casual hoodie"],
+  },
+  outer_black_windbreaker_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-black-windbreaker-studio.jpg",
+    description: "black windbreaker style jacket in studio light",
+    keywords: ["windbreaker", "lightweight windbreaker", "windproof jacket", "waterproof jacket"],
+  },
+  outer_black_shell_jacket_city: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+    description: "black shell jacket worn outdoors in the city",
+    keywords: ["shell jacket", "black shell jacket", "running jacket", "light shell", "windbreaker", "technical jacket"],
+  },
+  outer_charcoal_overshirt_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+    description: "charcoal overshirt jacket over a knit top",
+    keywords: ["overshirt", "shirt jacket", "charcoal overshirt", "light jacket", "casual jacket", "overshirt jacket"],
+  },
+  outer_rust_parka_outdoors: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-rust-parka-outdoors.jpg",
+    description: "rust hooded parka worn outdoors",
+    keywords: ["rust parka", "hooded parka", "parka", "rain parka", "weatherproof parka", "hooded jacket"],
+  },
+  outer_winter_coat_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-winter-coat-studio.jpg",
+    description: "heavy winter coat detail in a cold-weather fashion shot",
+    keywords: ["waterproof parka", "parka", "winter coat", "waterproof winter coat", "insulated jacket", "insulated coat"],
+  },
+  shoes_white_sneakers_minimal: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+    description: "minimal white sneakers on a light background",
+    keywords: ["sneakers", "trainers", "tennis shoes", "casual shoes", "white sneakers"],
+    fallback: true,
+  },
+  shoes_black_white_sneakers_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-black-white-sneakers-studio.jpg",
+    description: "black and white statement sneakers in studio lighting",
+    keywords: ["streetwear sneakers", "sporty sneakers", "athletic shoes", "fashion sneakers", "black sneakers"],
+  },
+  shoes_white_running_sneakers: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-white-running-sneakers.jpg",
+    description: "white running sneakers in a clean product shot",
+    keywords: ["running sneakers", "running shoes", "athletic shoes", "water-resistant athletic shoes", "breathable sneakers", "waterproof sneakers"],
+  },
+  shoes_white_performance_runner_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-white-performance-runner-studio.jpg",
+    description: "white performance running shoe in a dramatic product shot",
+    keywords: ["performance runner", "running sneakers", "running shoes", "white running shoe", "athletic shoes", "technical sneakers"],
+  },
+  shoes_black_loafers_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+    description: "black loafers in a studio product shot",
+    keywords: ["loafers", "dress loafers", "smart loafers"],
+  },
+  shoes_tan_winter_boots: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-tan-winter-boots.jpg",
+    description: "tan winter boots on a soft white background",
+    keywords: ["boots", "ankle boots", "winter boots", "suede boots", "waterproof boots", "water-resistant boots", "insulated boots"],
+  },
+  accessory_white_umbrella_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-white-umbrella-studio.jpg",
+    description: "umbrella silhouette in a clean dramatic product-style scene",
+    keywords: ["umbrella", "compact umbrella", "rain umbrella"],
+  },
+  accessory_black_sunglasses_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-black-sunglasses-studio.jpg",
+    description: "black sunglasses on a clean white surface",
+    keywords: ["black sunglasses", "sunglasses", "dark sunglasses", "shades"],
+  },
+  accessory_pattern_scarf_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+    description: "patterned silk scarf on a white background",
+    keywords: ["scarf", "neck scarf", "silk scarf", "wrap"],
+  },
+  accessory_yellow_silk_scarf_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-yellow-silk-scarf-studio.jpg",
+    description: "yellow silk scarf styled over a white shirt",
+    keywords: ["yellow scarf", "silk scarf", "neck scarf", "pattern scarf", "scarf"],
+  },
+  accessory_white_beanie_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-white-beanie-studio.jpg",
+    description: "knit beanie in a clean product-style shot",
+    keywords: ["beanie", "warm hat", "knit hat", "winter hat"],
+  },
+  accessory_knit_beanies_outdoors: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-knit-beanies-outdoors.jpg",
+    description: "knit beanies in outdoor natural styling",
+    keywords: ["knit beanie", "beanie", "winter hat", "warm hat", "knit hat"],
+  },
+  accessory_black_baseball_cap_outdoors: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
+    description: "black baseball cap worn outdoors",
+    keywords: ["black baseball cap", "black cap", "baseball cap", "cap", "dad cap", "sport cap"],
+  },
+  accessory_watch_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-watch-studio.jpg",
+    description: "wristwatch on a white product background",
+    keywords: ["watch", "wristwatch", "classic watch"],
+  },
+  accessory_tote_bag_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-tote-bag-studio.jpg",
+    description: "leather tote bag on a clean white background",
+    keywords: ["tote bag", "tote", "carryall", "shopper bag"],
+  },
+  accessory_belt_bag_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-belt-bag-studio.jpg",
+    description: "belt bag on a white background",
+    keywords: ["belt bag", "crossbody bag", "waist bag", "bag"],
+  },
+  accessory_socks_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-socks-studio.jpg",
+    description: "rolled socks on a white surface",
+    keywords: ["socks", "crew socks", "wool socks"],
+  },
+  accessory_white_gloves_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-white-gloves-studio.jpg",
+    description: "white gloves on a white background",
+    keywords: ["gloves", "light gloves", "warm gloves"],
+    fallback: true,
+  },
+};
 
 function decodeOAuthState(state) {
   if (!state || typeof state !== "string") return {};
@@ -38,29 +257,92 @@ function decodeOAuthState(state) {
   }
 }
 
-async function chatCompletion(messages, { maxTokens = 560 } = {}) {
-  const res = await fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://wearcast.app",
-      "X-Title": "WearCast",
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages,
-      max_tokens: maxTokens,
-      temperature: 0.2,
-      reasoning: { effort: "none" },
-    }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenRouter ${res.status}: ${err}`);
+async function chatCompletion(messages, { maxTokens = 560, requestId = null, traceLabel = "chat", timeoutMs = 18000 } = {}) {
+  const startedAt = Date.now();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(new Error(`openrouter_timeout_${timeoutMs}ms`)), timeoutMs);
+  try {
+    if (!OPENROUTER_API_KEY) {
+      console.error("[openrouter] missing api key", { requestId, traceLabel });
+      throw new Error("OPENROUTER_API_KEY is not configured");
+    }
+    console.info("[openrouter] start", {
+      requestId,
+      traceLabel,
+      maxTokens,
+      messageCount: Array.isArray(messages) ? messages.length : 0,
+      promptChars: Array.isArray(messages) ? messages.reduce((sum, msg) => sum + String(msg?.content || "").length, 0) : 0,
+    });
+    const res = await fetch(OPENROUTER_URL, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://wearcast.app",
+        "X-Title": "WearCast",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages,
+        max_tokens: maxTokens,
+        temperature: 0.2,
+        reasoning: {
+          effort: "minimal",
+          exclude: true,
+        },
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      console.warn("OpenRouter error response:", {
+        status: res.status,
+        statusText: res.statusText,
+        body: err.slice(0, 3000),
+      });
+      throw new Error(`OpenRouter ${res.status}: ${err}`);
+    }
+    const data = await res.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content !== "string" || !content.trim()) {
+      console.warn("OpenRouter empty content response:", JSON.stringify({
+        id: data?.id,
+        model: data?.model,
+        created: data?.created,
+        choices: data?.choices,
+        usage: data?.usage,
+        error: data?.error,
+      }).slice(0, 3000));
+      throw new Error("OpenRouter returned empty content");
+    }
+    console.info("[openrouter] success", {
+      requestId,
+      traceLabel,
+      durationMs: Date.now() - startedAt,
+      maxTokens,
+      contentLength: content.length,
+      model: data?.model || MODEL,
+      usage: data?.usage || null,
+    });
+    return content;
+  } catch (err) {
+    const abortReason = controller.signal.aborted
+      ? controller.signal.reason?.message || String(controller.signal.reason || "aborted")
+      : null;
+    console.error("[openrouter] failed", {
+      requestId,
+      traceLabel,
+      durationMs: Date.now() - startedAt,
+      maxTokens,
+      aborted: controller.signal.aborted,
+      abortReason,
+      errorName: err?.name || "Error",
+      errorMessage: err?.message || String(err),
+    });
+    throw err;
+  } finally {
+    clearTimeout(timeout);
   }
-  const data = await res.json();
-  return data.choices[0].message.content;
 }
 
 function toNumber(value, fallback = null) {
@@ -196,6 +478,7 @@ function setCachedWeather(lat, lon, data) {
 
 function recommendationCacheKey(weather, wardrobe, preferences) {
   return JSON.stringify({
+    copyVersion: RECOMMENDATION_COPY_VERSION,
     temperature: Math.round(Number(weather?.temperature) || 0),
     feelsLike: Math.round(Number(weather?.feelsLike) || 0),
     wind: Math.round(Number(weather?.wind) || 0),
@@ -424,6 +707,7 @@ function salvageRecommendationFromText(text) {
 
   return {
     outfit,
+    slotReasons: {},
     reasoning,
     warnings,
     missingItems,
@@ -434,6 +718,10 @@ function cleanInlineText(value, fallback = "") {
   if (typeof value !== "string") return fallback;
   const cleaned = value.replace(/\s+/g, " ").trim();
   return cleaned || fallback;
+}
+
+function normalizeMatchText(value) {
+  return cleanInlineText(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 function clampSentenceCount(value, maxSentences = 2) {
@@ -451,22 +739,410 @@ function normalizeList(values, { limit = 2, fallback = [] } = {}) {
     .slice(0, limit);
 }
 
-function normalizeRecommendationResponse(parsed) {
+function normalizeDetailsOverview(value) {
+  const source = value && typeof value === "object" && !Array.isArray(value)
+    ? value
+    : { why: value };
   return {
-    outfit: {
-      top: cleanInlineText(parsed?.outfit?.top, "A comfortable top suited to the current temperature"),
-      bottom: cleanInlineText(parsed?.outfit?.bottom, "Comfortable bottoms for today's conditions"),
-      outer: cleanInlineText(parsed?.outfit?.outer) || null,
-      shoes: cleanInlineText(parsed?.outfit?.shoes, "Comfortable everyday shoes"),
-      accessories: normalizeList(parsed?.outfit?.accessories, { limit: 1 }),
-    },
-    reasoning: clampSentenceCount(
-      parsed?.reasoning,
-      1
-    ) || "Chosen to match today's weather and keep you comfortable through the day.",
+    what: clampSentenceCount(source?.what, 2),
+    why: clampSentenceCount(source?.why, 2),
+    note: clampSentenceCount(source?.note, 1),
+  };
+}
+
+function normalizeCareInstructions(value, { limit = 8 } = {}) {
+  const values = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? value.split(/[,;\n]+/)
+      : [];
+  return values
+    .map((item) => cleanInlineText(item))
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function humanizeCatalogKey(key, entry = null) {
+  const catalogEntry = entry || STOCK_IMAGE_CATALOG[key];
+  if (!catalogEntry) return "";
+  const fromKeyword = catalogEntry.keywords.find((keyword) => !/\b(basic|casual|everyday|lightweight|minimal|studio|clean)\b/i.test(keyword));
+  if (fromKeyword) {
+    return cleanInlineText(fromKeyword)
+      .split(/\s+/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(" ");
+  }
+  return key
+    .split("_")
+    .slice(1)
+    .join(" ")
+    .replace(/\b(studio|minimal|hanger|stack)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (match) => match.toUpperCase());
+}
+
+function sanitizeOutfitSlotText(value, slot, preferredKey = null) {
+  const cleaned = cleanInlineText(value);
+  if (!cleaned) return "";
+
+  const normalized = normalizeMatchText(cleaned);
+  const directCatalogEntry = STOCK_IMAGE_CATALOG[cleaned] || STOCK_IMAGE_CATALOG[preferredKey];
+  if (directCatalogEntry && directCatalogEntry.slot === slot) {
+    return humanizeCatalogKey(preferredKey && STOCK_IMAGE_CATALOG[preferredKey]?.slot === slot ? preferredKey : cleaned, directCatalogEntry);
+  }
+
+  const catalogMatch = Object.entries(STOCK_IMAGE_CATALOG).find(([key, entry]) =>
+    entry.slot === slot && (
+      normalizeMatchText(key) === normalized ||
+      normalizeMatchText(entry.path) === normalized
+    ));
+
+  if (catalogMatch) {
+    return humanizeCatalogKey(catalogMatch[0], catalogMatch[1]);
+  }
+
+  if (/\.(png|jpe?g|webp|svg)\b/i.test(cleaned) || cleaned.includes("assets/recommendation-stock/")) {
+    const fallbackEntry = preferredKey && STOCK_IMAGE_CATALOG[preferredKey]?.slot === slot
+      ? STOCK_IMAGE_CATALOG[preferredKey]
+      : null;
+    return humanizeCatalogKey(preferredKey, fallbackEntry);
+  }
+
+  return cleaned;
+}
+
+function normalizeRecommendationResponse(parsed) {
+  const preferredImageKeys = parsed?.outfitImageKeys && typeof parsed.outfitImageKeys === "object"
+    ? parsed.outfitImageKeys
+    : {};
+  const outfit = {
+    top: sanitizeOutfitSlotText(parsed?.outfit?.top, "top", cleanInlineText(preferredImageKeys?.top)) || "A comfortable top suited to the current temperature",
+    bottom: sanitizeOutfitSlotText(parsed?.outfit?.bottom, "bottom", cleanInlineText(preferredImageKeys?.bottom)) || "Comfortable bottoms for today's conditions",
+    outer: sanitizeOutfitSlotText(parsed?.outfit?.outer, "outer", cleanInlineText(preferredImageKeys?.outer)) || null,
+    shoes: sanitizeOutfitSlotText(parsed?.outfit?.shoes, "shoes", cleanInlineText(preferredImageKeys?.shoes)) || "Comfortable everyday shoes",
+    accessories: normalizeList(parsed?.outfit?.accessories, { limit: 1 })
+      .map((value) => sanitizeOutfitSlotText(value, "accessory", cleanInlineText(preferredImageKeys?.accessory)))
+      .filter(Boolean),
+  };
+  const slotReasons = {
+    top: clampSentenceCount(parsed?.slotReasons?.top, 1),
+    bottom: clampSentenceCount(parsed?.slotReasons?.bottom, 1),
+    outer: clampSentenceCount(parsed?.slotReasons?.outer, 1),
+    shoes: clampSentenceCount(parsed?.slotReasons?.shoes, 1),
+    accessory: clampSentenceCount(parsed?.slotReasons?.accessory, 1),
+  };
+  return {
+    outfit,
+    outfitImages: buildRecommendationImageMatches(outfit, preferredImageKeys),
+    slotReasons,
+    reasoning: clampSentenceCount(parsed?.reasoning, 1),
+    detailsOverview: normalizeDetailsOverview(parsed?.detailsOverview),
     warnings: normalizeList(parsed?.warnings, { limit: 1 }),
     missingItems: normalizeList(parsed?.missingItems, { limit: 1 }),
   };
+}
+
+function pickAlwaysOnOuter(weather = {}) {
+  const feelsLike = Number(weather?.feelsLike ?? weather?.temperature);
+  const wind = Number(weather?.wind ?? 0);
+  const precipProb = Number(weather?.precipProb ?? 0);
+  const label = String(weather?.weatherLabel || "").toLowerCase();
+  const wet = precipProb >= 40 || /rain|drizzle|storm|snow|freezing|sleet/.test(label);
+  if (wet && feelsLike <= 8) return "Weatherproof Parka";
+  if (wet) return "Waterproof Jacket";
+  if (feelsLike <= 5) return "Warm Coat";
+  if (feelsLike <= 12) return "Insulated Jacket";
+  if (wind >= 22) return "Windbreaker";
+  if (feelsLike <= 18) return "Light Jacket";
+  if (feelsLike >= 28) return "Breathable Overshirt";
+  return "Light Overshirt";
+}
+
+function pickAlwaysOnAccessory(weather = {}) {
+  const feelsLike = Number(weather?.feelsLike ?? weather?.temperature);
+  const precipProb = Number(weather?.precipProb ?? 0);
+  const uv = Number(weather?.uv ?? 0);
+  const label = String(weather?.weatherLabel || "").toLowerCase();
+  const wet = precipProb >= 40 || /rain|drizzle|storm|snow|freezing|sleet/.test(label);
+  if (wet) return "Umbrella";
+  if (uv >= 6) return "Sunglasses";
+  if (feelsLike <= 6) return "Beanie";
+  if (feelsLike <= 12) return "Scarf";
+  if (feelsLike >= 26) return "Cap";
+  return "Watch";
+}
+
+function ensureFiveCategoryOutfit(response, weather = {}) {
+  const outfit = response?.outfit && typeof response.outfit === "object" ? { ...response.outfit } : {};
+  outfit.top = cleanInlineText(outfit.top) || "Comfortable Top";
+  outfit.bottom = cleanInlineText(outfit.bottom) || "Everyday Trousers";
+  outfit.outer = cleanInlineText(outfit.outer) || pickAlwaysOnOuter(weather);
+  outfit.shoes = cleanInlineText(outfit.shoes) || "Sneakers";
+  const accessory = cleanInlineText(Array.isArray(outfit.accessories) ? outfit.accessories[0] : outfit.accessories) || pickAlwaysOnAccessory(weather);
+  outfit.accessories = [accessory];
+
+  const slotReasons = {
+    ...(response?.slotReasons || {}),
+    top: cleanInlineText(response?.slotReasons?.top) || "Builds the base of the outfit for today's temperature.",
+    bottom: cleanInlineText(response?.slotReasons?.bottom) || "Keeps the look practical and balanced through the day.",
+    outer: cleanInlineText(response?.slotReasons?.outer) || "Adds a weather-ready outer layer so the look stays complete.",
+    shoes: cleanInlineText(response?.slotReasons?.shoes) || "Keeps the outfit grounded for all-day wear.",
+    accessory: cleanInlineText(response?.slotReasons?.accessory) || "Finishes the outfit with a useful extra.",
+  };
+
+  return {
+    ...response,
+    outfit,
+    slotReasons,
+    outfitImages: buildRecommendationImageMatches(outfit),
+  };
+}
+
+function scoreCatalogMatch(text, entry) {
+  const normalized = normalizeMatchText(text);
+  if (!normalized) return 0;
+  let score = 0;
+  for (const keyword of entry.keywords) {
+    const normalizedKeyword = normalizeMatchText(keyword);
+    if (!normalizedKeyword) continue;
+    if (normalized === normalizedKeyword) score += 10;
+    else if (normalized.includes(normalizedKeyword)) score += 4;
+  }
+  if (entry.fallback) score += 1;
+  return score;
+}
+
+function findStockImageForSlot(slot, itemName, preferredKey = null) {
+  if (preferredKey && STOCK_IMAGE_CATALOG[preferredKey]?.slot === slot) {
+    const entry = STOCK_IMAGE_CATALOG[preferredKey];
+    return { key: preferredKey, path: entry.path, description: entry.description };
+  }
+
+  const entries = Object.entries(STOCK_IMAGE_CATALOG).filter(([, entry]) => entry.slot === slot);
+  let best = null;
+  let bestScore = -1;
+  for (const [key, entry] of entries) {
+    const score = scoreCatalogMatch(itemName, entry);
+    if (score > bestScore) {
+      best = { key, path: entry.path, description: entry.description };
+      bestScore = score;
+    }
+  }
+
+  if (best && bestScore > 0) return best;
+  const fallback = entries.find(([, entry]) => entry.fallback);
+  return fallback ? { key: fallback[0], path: fallback[1].path, description: fallback[1].description } : null;
+}
+
+function buildRecommendationImageMatches(outfit, preferredKeys = null) {
+  const output = {};
+  const preferred = preferredKeys && typeof preferredKeys === "object" ? preferredKeys : {};
+  for (const slot of ["top", "bottom", "outer", "shoes"]) {
+    const itemName = cleanInlineText(outfit?.[slot]);
+    if (!itemName) {
+      output[slot] = null;
+      continue;
+    }
+    output[slot] = findStockImageForSlot(slot, itemName, cleanInlineText(preferred?.[slot])) || null;
+  }
+  const accessories = Array.isArray(outfit?.accessories)
+    ? outfit.accessories
+    : [outfit?.accessories];
+  accessories
+    .map((value) => cleanInlineText(value))
+    .filter(Boolean)
+    .slice(0, 1)
+    .forEach((itemName, index) => {
+      output[`accessory-${index}`] = findStockImageForSlot("accessory", itemName, cleanInlineText(preferred?.accessory)) || null;
+    });
+  return output;
+}
+
+function hasCompleteSlotReasons(slotReasons, outfit) {
+  const slots = ["top", "bottom", "shoes"];
+  if (cleanInlineText(outfit?.outer)) slots.push("outer");
+  if (cleanInlineText(Array.isArray(outfit?.accessories) ? outfit.accessories[0] : outfit?.accessories)) slots.push("accessory");
+  return slots.every((slot) => cleanInlineText(slotReasons?.[slot]));
+}
+
+function isGenericRecommendationReasoning(value) {
+  const text = cleanInlineText(value).toLowerCase();
+  if (!text) return true;
+  const genericPatterns = [
+    /chosen to match today'?s weather/,
+    /chosen to match today’s weather/,
+    /keep you comfortable through the day/,
+    /built around today'?s conditions/,
+    /built around today’s conditions/,
+    /matched to the weather/,
+    /matched to today’s weather/,
+    /matched to today's weather/,
+    /suited to today'?s conditions/,
+    /suited to today’s conditions/,
+  ];
+  return genericPatterns.some((pattern) => pattern.test(text));
+}
+
+function buildContextReasoningFallback(response, weather) {
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const wind = Number(weather?.wind ?? 0);
+  const rainChance = Number(weather?.precipProb ?? 0);
+  const precip = Number(weather?.precip ?? 0);
+  const humidity = Number(weather?.humidity ?? 0);
+  const uv = Number(weather?.uv ?? 0);
+  const label = cleanInlineText(weather?.weatherLabel, "current conditions").toLowerCase();
+  const traits = [];
+
+  if (Number.isFinite(feelsLike)) {
+    if (feelsLike <= 6) traits.push("cold");
+    else if (feelsLike <= 13) traits.push("chilly");
+    else if (feelsLike >= 29) traits.push("hot");
+    else if (feelsLike >= 24) traits.push("warm");
+    else traits.push("mild");
+  }
+  if (wind >= 25) traits.push("windy");
+  if (rainChance >= 45 || precip > 0) traits.push("rainy later today");
+  if (humidity >= 80 && feelsLike >= 18) traits.push("humid");
+  if (uv >= 7) traits.push("bright");
+  traits.push(label);
+
+  const summary = Array.from(new Set(traits.filter(Boolean))).slice(0, 3);
+  const naturalSummary = summary.length > 1
+    ? `${summary.slice(0, -1).join(", ")} and ${summary[summary.length - 1]}`
+    : (summary[0] || label);
+  return `Today looks ${naturalSummary}, so the outfit leans into comfort, coverage, and weather protection without feeling overbuilt.`;
+}
+
+async function ensureAiRecommendationReasoning(response, weather, preferences, location) {
+  if (!isGenericRecommendationReasoning(response?.reasoning)) return response;
+
+  const accessories = Array.isArray(response?.outfit?.accessories)
+    ? response.outfit.accessories.filter(Boolean).join(", ")
+    : cleanInlineText(response?.outfit?.accessories);
+  const prompt = `Write the recommendation subline for WearCast.
+
+It appears under the outfit heading. It should summarize the weather story in natural language and explain the outfit direction.
+
+## Location
+${location?.name || "Unknown"}
+
+## Weather
+- Temperature: ${weather?.temperature}°C
+- Feels like: ${weather?.feelsLike}°C
+- Wind: ${weather?.wind} km/h
+- Gusts: ${weather?.gusts} km/h
+- Humidity: ${weather?.humidity}%
+- Precipitation: ${weather?.precip} mm/h
+- Precipitation probability: ${weather?.precipProb ?? "unknown"}%
+- UV: ${weather?.uv}
+- Weather: ${weather?.weatherLabel}
+
+## Outfit
+- Top: ${response?.outfit?.top || ""}
+- Bottom: ${response?.outfit?.bottom || ""}
+- Outer: ${response?.outfit?.outer || "none"}
+- Shoes: ${response?.outfit?.shoes || ""}
+- Accessory: ${accessories || "none"}
+
+## User tuning
+${Object.entries(preferences || {}).filter(([, value]) => !!value).map(([key, value]) => `- ${key}: ${value}`).join("\n") || "- none"}
+
+Rules:
+- Return JSON only.
+- Write one natural sentence.
+- Do not use raw stats, numbers, units, percentages, or symbols.
+- Mention the weather pattern in words, such as chilly, windy, humid, bright, rain later, or colder this evening.
+- Tie the weather overview to the outfit direction.
+- Do not use generic phrases like "chosen to match today's weather" or "keep you comfortable through the day".
+
+{
+  "reasoning": "one natural weather-overview subline"
+}`;
+
+  try {
+    const text = await chatCompletion([{ role: "user", content: prompt }], { maxTokens: 220 });
+    const parsed = parseModelJson(text);
+    const reasoning = clampSentenceCount(parsed?.reasoning, 1);
+    return {
+      ...response,
+      reasoning: isGenericRecommendationReasoning(reasoning)
+        ? buildContextReasoningFallback(response, weather)
+        : reasoning,
+    };
+  } catch (err) {
+    console.warn("recommendation subtitle generation fallback:", err?.message || err);
+    return {
+      ...response,
+      reasoning: buildContextReasoningFallback(response, weather),
+    };
+  }
+}
+
+async function ensureAiSlotReasons(response, weather, preferences, location) {
+  if (hasCompleteSlotReasons(response?.slotReasons, response?.outfit)) return response;
+
+  const prompt = `You are writing short outfit-card blurbs for WearCast.
+
+Write one short, natural, context-based line for each outfit item.
+
+## Location
+${location?.name || "Unknown"}
+
+## Weather
+- Temperature: ${weather?.temperature}°C
+- Feels like: ${weather?.feelsLike}°C
+- Wind: ${weather?.wind} km/h
+- Precipitation probability: ${weather?.precipProb ?? "unknown"}%
+- UV: ${weather?.uv}
+- Weather: ${weather?.weatherLabel}
+
+## Preferences
+${Object.entries(preferences || {}).filter(([, value]) => !!value).map(([key, value]) => `- ${key}: ${value}`).join("\n") || "- none"}
+
+## Outfit
+- Top: ${response?.outfit?.top || ""}
+- Bottom: ${response?.outfit?.bottom || ""}
+- Outer: ${response?.outfit?.outer || "none"}
+- Shoes: ${response?.outfit?.shoes || ""}
+- Accessory: ${Array.isArray(response?.outfit?.accessories) ? (response.outfit.accessories[0] || "none") : (response?.outfit?.accessories || "none")}
+
+Rules:
+- Each line must be 4 to 10 words.
+- Make them specific to weather or context.
+- Do not repeat the item name.
+- Do not use bullets in the values.
+- If there is no outer layer, return an empty string for outer.
+- If there is no accessory, return an empty string for accessory.
+- Return JSON only.
+
+{
+  "top": "short reason",
+  "bottom": "short reason",
+  "outer": "short reason or empty string",
+  "shoes": "short reason",
+  "accessory": "short reason or empty string"
+}`;
+
+  try {
+    const text = await chatCompletion([{ role: "user", content: prompt }], { maxTokens: 260 });
+    const parsed = parseModelJson(text);
+    return {
+      ...response,
+      slotReasons: {
+        top: clampSentenceCount(parsed?.top, 1) || response?.slotReasons?.top || "",
+        bottom: clampSentenceCount(parsed?.bottom, 1) || response?.slotReasons?.bottom || "",
+        outer: clampSentenceCount(parsed?.outer, 1) || response?.slotReasons?.outer || "",
+        shoes: clampSentenceCount(parsed?.shoes, 1) || response?.slotReasons?.shoes || "",
+        accessory: clampSentenceCount(parsed?.accessory, 1) || response?.slotReasons?.accessory || "",
+      },
+    };
+  } catch (err) {
+    console.warn("slot reason generation fallback:", err?.message || err);
+    return response;
+  }
 }
 
 function weatherCodeLabel(code) {
@@ -600,22 +1276,82 @@ async function resolveRecommendationWeather(inputWeather, location) {
 
 function buildFallbackRecommendation(weather) {
   const temp = Number(weather?.temperature);
+  const feelsLike = Number(weather?.feelsLike ?? temp);
   const precipProb = Number(weather?.precipProb ?? 0);
   const wind = Number(weather?.wind ?? 0);
+  const weatherLabel = String(weather?.weatherLabel || "").toLowerCase();
 
-  const top = temp <= 10 ? "A warm sweater or hoodie" : temp <= 20 ? "A light long-sleeve top or T-shirt" : "A breathable T-shirt or light top";
-  const bottom = temp <= 12 ? "Long pants or jeans" : temp >= 24 ? "Lightweight trousers or shorts" : "Comfortable pants or jeans";
-  const outer = temp <= 14 || precipProb >= 40 || wind >= 25 ? "A light jacket or rain layer" : null;
-  const shoes = precipProb >= 40 ? "Closed-toe shoes that can handle wet ground" : "Comfortable everyday shoes";
+  const freezing = weatherLabel.includes("snow") || weatherLabel.includes("freezing");
+  const stormy = weatherLabel.includes("thunder");
+  const coldish = feelsLike <= 8;
+  const veryCold = feelsLike <= 2;
+  const hot = feelsLike >= 28;
+  const veryHot = feelsLike >= 32;
+  const wet = precipProb >= 45 || weatherLabel.includes("rain") || weatherLabel.includes("drizzle") || stormy || freezing;
+
+  const top = veryCold
+    ? "Thermal base layer"
+    : coldish
+      ? "Long-sleeve tee"
+      : veryHot
+        ? "Lightweight T-shirt"
+        : temp <= 20
+          ? "Long-sleeve top"
+          : "Breathable T-shirt";
+  const bottom = veryCold
+    ? "Insulated pants"
+    : hot
+      ? "Linen shorts"
+      : wet && coldish
+        ? "Water-resistant pants"
+        : temp <= 12
+          ? "Jeans"
+          : "Comfortable pants";
+  const outer = veryCold
+    ? "Waterproof parka"
+    : wet
+      ? "Waterproof jacket"
+      : coldish || wind >= 25
+        ? "Light jacket"
+        : hot
+          ? "Breathable overshirt"
+          : "Light overshirt";
+  const shoes = veryCold || freezing
+    ? "Waterproof boots"
+    : wet
+      ? "Waterproof sneakers"
+      : hot
+        ? "Canvas sneakers"
+        : "Sneakers";
   const accessories = [];
 
-  if (precipProb >= 40) accessories.push("Umbrella");
-  if (wind >= 25) accessories.push("Wind-resistant layer");
-  if (Number(weather?.uv ?? 0) >= 6) accessories.push("Sunglasses");
+  if (wet && !freezing) accessories.push("Umbrella");
+  else if (Number(weather?.uv ?? 0) >= 6) accessories.push("Sunglasses");
+  else if (coldish) accessories.push("Beanie");
+  else accessories.push("Watch");
 
   return {
     outfit: { top, bottom, outer, shoes, accessories },
-    reasoning: "The AI provider returned a non-JSON response, so this fallback outfit was generated from the weather conditions instead.",
+    outfitImages: buildRecommendationImageMatches({ top, bottom, outer, shoes, accessories }),
+    slotReasons: {
+      top: veryCold ? "Builds a warmer base for the cold." : hot ? "Keeps the outfit light in the heat." : "Works as a comfortable base layer.",
+      bottom: veryCold ? "Adds needed insulation for colder air." : hot ? "Keeps airflow and movement easy." : "Balances coverage and comfort.",
+      outer: outer ? (wet ? "Adds weather protection for rain and wind." : "Adds a practical outer layer.") : "",
+      shoes: wet || veryCold ? "Better suited to wet or colder ground." : "Keeps the look easy and wearable.",
+      accessory: accessories[0]
+        ? (accessories[0] === "Umbrella"
+            ? "Helps cover you if rain hits."
+            : accessories[0] === "Sunglasses"
+              ? "Adds useful protection in brighter sun."
+              : "Rounds out the look for the conditions.")
+        : "",
+    },
+    reasoning: buildContextReasoningFallback({ outfit: { top, bottom, outer, shoes, accessories } }, weather),
+    detailsOverview: {
+      what: `${top}, ${bottom}, and ${shoes}${outer ? ` with a ${outer}` : ""} make a practical outfit for the current conditions.`,
+      why: buildContextReasoningFallback({ outfit: { top, bottom, outer, shoes, accessories } }, weather),
+      note: accessories[0] ? `${accessories[0]} adds a useful final layer of weather protection.` : "This was generated from weather rules while AI styling is unavailable.",
+    },
     warnings: precipProb >= 40 ? ["Rain may be likely later, so bring a waterproof layer."] : [],
     missingItems: [],
   };
@@ -642,12 +1378,13 @@ Return ONLY valid JSON with this shape:
   "name": "short natural item name",
   "color": "main visible color or null",
   "material": "likely material if reasonably inferable, otherwise null",
-  "careInstructions": []
+  "careInstructions": ["machine wash cold"]
 }
 
 Rules:
 - Keep values short.
 - Use null when unsure.
+- Return careInstructions as an array of plain strings. Use [] if there is no readable care label.
 - Do not include markdown fences or extra text.`,
           },
         ],
@@ -660,7 +1397,7 @@ Rules:
       name: typeof parsed?.name === "string" ? parsed.name : null,
       color: typeof parsed?.color === "string" ? parsed.color : null,
       material: typeof parsed?.material === "string" ? parsed.material : null,
-      careInstructions: Array.isArray(parsed?.careInstructions) ? parsed.careInstructions.filter((value) => typeof value === "string") : [],
+      careInstructions: normalizeCareInstructions(parsed?.careInstructions),
     });
   } catch (err) {
     console.error("analyze-item-photo error:", err);
@@ -692,7 +1429,7 @@ Extract ALL information you can see and return **only** valid JSON (no markdown 
 
 {
   "material": "fabric composition, e.g. 80% cotton, 20% polyester",
-  "careInstructions": ["machine wash cold", "tumble dry low", ...],
+  "careInstructions": ["machine wash cold", "tumble dry low"],
   "brand": "brand name if visible, else null",
   "madeIn": "country if visible, else null",
   "size": "size if visible, else null",
@@ -707,7 +1444,10 @@ If the image is not a care tag or is unreadable, return:
     ]);
 
     const parsed = parseModelJson(text);
-    res.json(parsed);
+    res.json({
+      ...parsed,
+      careInstructions: normalizeCareInstructions(parsed?.careInstructions),
+    });
   } catch (err) {
     console.error("scan-tag error:", err);
     res.status(500).json({ error: "Failed to analyse care tag" });
@@ -719,16 +1459,42 @@ If the image is not a care tag or is unreadable, return:
 // Returns AI outfit recommendation based on wardrobe + conditions.
 app.post("/api/recommend", async (req, res) => {
   try {
+    const requestId = `rec_${randomUUID().slice(0, 8)}`;
+    const startedAt = Date.now();
     const { weather, wardrobe, preferences, location } = req.body;
     const resolvedWeather = await resolveRecommendationWeather(weather, location);
     if (!resolvedWeather) return res.status(400).json({ error: "No weather data or location provided" });
     const wardrobeItems = Array.isArray(wardrobe) ? wardrobe : [];
     const hasWardrobe = wardrobeItems.length > 0;
+    console.info("[recommend] start", {
+      requestId,
+      location: location?.name || "Unknown",
+      hasInlineWeather: !!weather,
+      wardrobeCount: wardrobeItems.length,
+      tempC: resolvedWeather.temperature,
+      feelsLikeC: resolvedWeather.feelsLike,
+      windKmh: resolvedWeather.wind,
+      precipProb: resolvedWeather.precipProb ?? null,
+      weatherLabel: resolvedWeather.weatherLabel,
+    });
 
     const cacheKey = recommendationCacheKey(resolvedWeather, wardrobeItems, preferences);
     const cachedRecommendation = getCachedRecommendation(cacheKey);
     if (cachedRecommendation) {
-      return res.json(cachedRecommendation);
+      console.info("[recommend] cache-hit", {
+        requestId,
+        durationMs: Date.now() - startedAt,
+        genericReasoning: isGenericRecommendationReasoning(cachedRecommendation.reasoning),
+      });
+      if (!isGenericRecommendationReasoning(cachedRecommendation.reasoning)) {
+        return res.json(cachedRecommendation);
+      }
+      const withReasoning = {
+        ...cachedRecommendation,
+        reasoning: buildContextReasoningFallback(cachedRecommendation, resolvedWeather),
+      };
+      setCachedRecommendation(cacheKey, withReasoning);
+      return res.json(withReasoning);
     }
 
     const wardrobeDesc =
@@ -752,8 +1518,16 @@ app.post("/api/recommend", async (req, res) => {
     if (preferences?.bike) prefsDesc.push("plans to bike or walk (active)");
     if (preferences?.activityContext === "walking") prefsDesc.push("expects to walk more than usual today");
     if (preferences?.activityContext === "commute") prefsDesc.push("is dressing for commuting and movement");
+    if (preferences?.activityContext === "errands") prefsDesc.push("is dressing for errands with frequent short stops");
+    if (preferences?.activityContext === "office") prefsDesc.push("is dressing for an office or work setting");
+    if (preferences?.activityContext === "workout") prefsDesc.push("is dressing around light workout or athleisure needs");
+    if (preferences?.activityContext === "travel") prefsDesc.push("is dressing for travel and comfort through transitions");
+    if (preferences?.activityContext === "evening") prefsDesc.push("is dressing for an evening plan");
     if (preferences?.locationContext === "indoors") prefsDesc.push("will spend most of the day indoors");
     if (preferences?.locationContext === "outdoors") prefsDesc.push("will spend a lot of time outdoors");
+    if (preferences?.locationContext === "transit") prefsDesc.push("will move between transit, streets, and indoor spaces");
+    if (preferences?.locationContext === "event") prefsDesc.push("will be in a more intentional event setting");
+    if (preferences?.locationContext === "exposed") prefsDesc.push("will be exposed to the weather for longer stretches");
     if (preferences?.styleFocus === "polished") prefsDesc.push("wants the outfit to lean polished");
     if (preferences?.styleFocus === "casual") prefsDesc.push("wants the outfit to lean casual");
     if (preferences?.styleFocus === "sporty") prefsDesc.push("wants the outfit to lean sporty");
@@ -773,20 +1547,48 @@ app.post("/api/recommend", async (req, res) => {
 - Average humidity: ${dayFc.avgHumidity}`
       : "## Forecast For The Rest Of Today\n- No later-hour forecast summary available.";
 
+    const effectiveTemp = Number.isFinite(Number(resolvedWeather.feelsLike))
+      ? Number(resolvedWeather.feelsLike)
+      : Number(resolvedWeather.temperature);
+    const wetRisk = Number(resolvedWeather.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(resolvedWeather.weatherLabel || ""));
+    const weatherRules = [
+      effectiveTemp <= 2
+        ? "- It is very cold. Use a thermal or insulated top, insulated bottoms, a substantial winter outer layer, and boots. Avoid light sneakers."
+        : effectiveTemp <= 8
+          ? "- It is cold. Prefer long sleeves and a real outer layer. Do not suggest shorts."
+          : effectiveTemp >= 32
+            ? "- It is very hot. Keep the outfit very light. No outer layer unless absolutely necessary."
+            : effectiveTemp >= 28
+              ? "- It is hot. Prefer breathable, lightweight pieces and avoid heavy layers."
+              : "- Temperature is moderate. A light layer may be appropriate depending on wind and rain.",
+      wetRisk
+        ? "- Wet conditions are likely. Use a waterproof or water-resistant outer layer and avoid delicate open footwear."
+        : "- Dry conditions are likely. Waterproof gear is optional unless wind or cold makes it useful.",
+      Number(resolvedWeather.wind ?? 0) >= 25
+        ? "- It is windy. Add a protective layer and avoid outfits that feel too exposed."
+        : "- Wind is not a dominant factor right now.",
+      Number(resolvedWeather.uv ?? 0) >= 7
+        ? "- UV is high. Favor sun-protective accessories when sensible."
+        : "- UV is not a major driver.",
+    ].join("\n");
+
+    const imageCatalogDesc = Object.entries(STOCK_IMAGE_CATALOG)
+      .map(([key, entry]) => `- ${key} (${entry.slot})`)
+      .join("\n");
+
     const prompt = `You are WearCast, a smart clothing recommendation assistant.
 
-Given the current weather and the forecast from NOW through the rest of today, suggest a specific outfit they should wear for the rest of today.${hasWardrobe ? " Pick actual items from their wardrobe when possible." : " The user has no wardrobe saved, so suggest a generic outfit."}
+Suggest a specific outfit for the rest of today.${hasWardrobe ? " Use wardrobe items only when they are genuinely suitable for the weather and forecast. If the saved wardrobe does not contain weather-appropriate pieces for a slot, give a general recommendation instead of forcing a wardrobe match." : " The user has no wardrobe saved, so suggest a generic outfit."}
 
 ## Current Weather
-- Temperature: ${resolvedWeather.temperature}°C (feels like ${resolvedWeather.feelsLike}°C)
-- Wind: ${resolvedWeather.wind} km/h (gusts ${resolvedWeather.gusts} km/h)
+- Location: ${location?.name || "Unknown"}
+- Temp: ${resolvedWeather.temperature}°C, feels like ${resolvedWeather.feelsLike}°C
+- Wind: ${resolvedWeather.wind} km/h, gusts ${resolvedWeather.gusts} km/h
 - Humidity: ${resolvedWeather.humidity}%
-- Cloud cover: ${resolvedWeather.cloud}%
-- Precipitation: ${resolvedWeather.precip} mm/h
-- Precipitation probability: ${resolvedWeather.precipProb ?? "unknown"}%
-- UV index: ${resolvedWeather.uv}
-- Weather: ${resolvedWeather.weatherLabel}
-- Is daytime: ${resolvedWeather.isDay ? "yes" : "no"}
+- Precip probability: ${resolvedWeather.precipProb ?? "unknown"}%
+- UV: ${resolvedWeather.uv}
+- Condition: ${resolvedWeather.weatherLabel}
+- Daytime: ${resolvedWeather.isDay ? "yes" : "no"}
 
 ${dayForecastDesc}
 
@@ -796,45 +1598,131 @@ ${prefsDesc.length ? prefsDesc.join("\n") : "No special preferences set."}
 ## User's Wardrobe
 ${wardrobeDesc}
 
+## Weather Forcing Rules
+${weatherRules}
+
+## Available Stock Image Keys
+Choose the best matching local stock image key for each outfit slot from this list:
+${imageCatalogDesc}
+
 ## Instructions
 1. Recommend a COMPLETE outfit using short item names only.
 2. Consider ONLY the forecast from now onward today.
-3. ${hasWardrobe ? "Reference SPECIFIC wardrobe items by name." : "Do not mention missing wardrobe pieces beyond one short missing-item suggestion."}
-4. Keep reasoning to ONE short sentence.
-5. Return at most ONE accessory, ONE warning, and ONE missing item.
-6. Do not explain each clothing piece separately.
-7. Return JSON only.
+3. ${hasWardrobe ? "Reference SPECIFIC wardrobe items by name only when they clearly fit the weather. Do not force wardrobe usage just because an item exists." : "Do not mention missing wardrobe pieces beyond one short missing-item suggestion."}
+4. Make reasoning ONE natural recommendation subline that summarizes the weather story in words and explains the outfit direction. Do not use raw stats, numbers, units, percentages, or symbols.
+5. Return detailsOverview as a richer modal explanation: what the outfit is doing overall, why it fits the weather, and one optional practical note.
+6. Return at most ONE accessory, ONE warning, and ONE missing item.
+7. Do not explain each clothing piece separately in detailsOverview.
+8. For each clothing slot, choose the most appropriate stock image key from the provided list.
+9. Also return one short slot-specific reason for top, bottom, outer, shoes, and accessory when present.
+10. Always return all five categories: top, bottom, outer, shoes, and exactly one accessory.
+11. Make the outfit meaningfully reflect the actual weather severity and not just a generic everyday look.
+12. If a wardrobe item is unsuitable for the weather, prefer a generic weather-appropriate recommendation.
+13. Do not use generic phrases like "chosen to match today's weather", "keep you comfortable through the day", or "built around today's conditions".
+14. Return JSON only.
 
 Return ONLY valid JSON (no markdown fences):
 {
   "outfit": {
     "top": "short item name",
     "bottom": "short item name",
-    "outer": "short item name, or null if not needed",
+    "outer": "short item name",
     "shoes": "short item name",
-    "accessories": ["one optional item"]
+    "accessories": ["one item"]
   },
-  "reasoning": "One short sentence",
+  "outfitImageKeys": {
+    "top": "matching stock image key",
+    "bottom": "matching stock image key",
+    "outer": "matching stock image key",
+    "shoes": "matching stock image key",
+    "accessory": "matching stock image key"
+  },
+  "slotReasons": {
+    "top": "one short reason",
+    "bottom": "one short reason",
+    "outer": "one short reason",
+    "shoes": "one short reason",
+    "accessory": "one short reason"
+  },
+  "reasoning": "One natural weather-overview subline shown under the recommendation heading",
+  "detailsOverview": {
+    "what": "One or two sentences describing the full outfit strategy without repeating each card blurb",
+    "why": "One or two sentences explaining the weather logic and comfort tradeoff",
+    "note": "One optional practical note about timing, layering, rain, UV, wind, or missing coverage"
+  },
   "warnings": ["one short warning if needed"],
   "missingItems": ["one short missing item if needed"]
 }`;
 
-    const text = await chatCompletion(
-      [{ role: "user", content: prompt }],
-      { maxTokens: hasWardrobe ? 280 : 180 }
-    );
-    console.info("AI recommendation response:", text);
+    let text = "";
+    try {
+      const recommendationMaxTokens = hasWardrobe ? 680 : 560;
+      const recommendationTimeoutMs = 30000;
+      console.info("[recommend] ai-request", {
+        requestId,
+        durationMs: Date.now() - startedAt,
+        promptChars: prompt.length,
+        maxTokens: recommendationMaxTokens,
+        timeoutMs: recommendationTimeoutMs,
+      });
+      text = await chatCompletion(
+        [{ role: "user", content: prompt }],
+        {
+          maxTokens: recommendationMaxTokens,
+          requestId,
+          traceLabel: "recommendation",
+          timeoutMs: recommendationTimeoutMs,
+        }
+      );
+    } catch (aiErr) {
+      console.warn("[recommend] ai-fallback", {
+        requestId,
+        durationMs: Date.now() - startedAt,
+        errorName: aiErr?.name || "Error",
+        errorMessage: aiErr?.message || String(aiErr),
+      });
+      const response = buildFallbackRecommendation(resolvedWeather);
+      setCachedRecommendation(cacheKey, response);
+      return res.json(response);
+    }
+    console.info("[recommend] ai-response", {
+      requestId,
+      durationMs: Date.now() - startedAt,
+      responseChars: text.length,
+      preview: text.slice(0, 500),
+    });
 
     try {
       const parsed = parseModelJson(text);
-      const response = normalizeRecommendationResponse(parsed);
+      const normalized = ensureFiveCategoryOutfit(normalizeRecommendationResponse(parsed), resolvedWeather);
+      const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
+      const response = ensureFiveCategoryOutfit(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+      console.info("[recommend] success", {
+        requestId,
+        durationMs: Date.now() - startedAt,
+        outfit: response?.outfit || null,
+        warnings: response?.warnings?.length || 0,
+        missingItems: response?.missingItems?.length || 0,
+      });
       setCachedRecommendation(cacheKey, response);
       res.json(response);
     } catch (parseErr) {
-      console.warn("recommend parse fallback:", parseErr);
+      console.warn("[recommend] parse-fallback", {
+        requestId,
+        durationMs: Date.now() - startedAt,
+        errorName: parseErr?.name || "Error",
+        errorMessage: parseErr?.message || String(parseErr),
+      });
       const salvaged = salvageRecommendationFromText(text);
       if (salvaged) {
-        const response = normalizeRecommendationResponse(salvaged);
+        const normalized = ensureFiveCategoryOutfit(normalizeRecommendationResponse(salvaged), resolvedWeather);
+        const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
+        const response = ensureFiveCategoryOutfit(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+        console.info("[recommend] salvaged-success", {
+          requestId,
+          durationMs: Date.now() - startedAt,
+          outfit: response?.outfit || null,
+        });
         setCachedRecommendation(cacheKey, response);
         return res.json(response);
       }
@@ -843,7 +1731,11 @@ Return ONLY valid JSON (no markdown fences):
       res.json(response);
     }
   } catch (err) {
-    console.error("recommend error:", err);
+    console.error("[recommend] fatal", {
+      errorName: err?.name || "Error",
+      errorMessage: err?.message || String(err),
+      stack: err?.stack || null,
+    });
     res.status(500).json({ error: "Failed to generate recommendation" });
   }
 });

@@ -4,7 +4,11 @@
   "description": "A tiny webapp that suggests what to wear based on local weather (temperature, feels-like, wind, humidity, cloud cover, precipitation, UV).",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "phone:codex": "hey codex",
+    "phone:codex:new": "hey codex --new",
+    "phone:status": "hey status",
+    "phone:reset": "hey reset"
   },
   "repository": {
     "type": "git",

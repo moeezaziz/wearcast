@@ -7,6 +7,16 @@ const router = Router();
 // All wardrobe routes require authentication
 router.use(requireAuth);
 
+function normalizeCareInstructions(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item || "").trim()).filter(Boolean);
+  }
+  if (typeof value === "string") {
+    return value.split(/[,;\n]+/).map((item) => item.trim()).filter(Boolean);
+  }
+  return [];
+}
+
 // ─── List wardrobe items ─────────────────────────────────────
 router.get("/", async (req, res) => {
   try {
@@ -26,10 +36,8 @@ router.get("/", async (req, res) => {
 // ─── Add item ────────────────────────────────────────────────
 router.post("/", async (req, res) => {
   try {
-    const { type, name, color, material, careInstructions, photoDataUrl } = req.body;
-    const normalizedCareInstructions = Array.isArray(careInstructions)
-      ? careInstructions.filter(Boolean)
-      : [];
+    const { type, name, color, material, careInstructions, photoDataUrl, favorite } = req.body;
+    const normalizedCareInstructions = normalizeCareInstructions(careInstructions);
     console.info(`[POST] /api/wardrobe - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn("/api/wardrobe: Type and name required");
@@ -37,9 +45,9 @@ router.post("/", async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [req.userId, type, name, color || null, material || null, normalizedCareInstructions, photoDataUrl || null]
+      `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url, favorite)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [req.userId, type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), photoDataUrl || null, !!favorite]
     );
     console.info("/api/wardrobe: added item", result.rows[0]?.id);
     res.json(rowToItem(result.rows[0]));
@@ -52,10 +60,8 @@ router.post("/", async (req, res) => {
 // ─── Update item ─────────────────────────────────────────────
 router.put("/:id", async (req, res) => {
   try {
-    const { type, name, color, material, careInstructions, photoDataUrl } = req.body;
-    const normalizedCareInstructions = Array.isArray(careInstructions)
-      ? careInstructions.filter(Boolean)
-      : [];
+    const { type, name, color, material, careInstructions, photoDataUrl, favorite } = req.body;
+    const normalizedCareInstructions = normalizeCareInstructions(careInstructions);
     console.info(`[PUT] /api/wardrobe/${req.params.id} - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn(`/api/wardrobe/${req.params.id}: Type and name required`);
@@ -65,9 +71,9 @@ router.put("/:id", async (req, res) => {
     const result = await pool.query(
       `UPDATE wardrobe_items
        SET type = $1, name = $2, color = $3, material = $4,
-           care_instructions = $5, photo_data_url = $6, updated_at = NOW()
-       WHERE id = $7 AND user_id = $8 RETURNING *`,
-      [type, name, color || null, material || null, normalizedCareInstructions, photoDataUrl || null, req.params.id, req.userId]
+           care_instructions = $5, photo_data_url = $6, favorite = $7, updated_at = NOW()
+       WHERE id = $8 AND user_id = $9 RETURNING *`,
+      [type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), photoDataUrl || null, !!favorite, req.params.id, req.userId]
     );
     if (!result.rows.length) {
       console.warn(`/api/wardrobe/${req.params.id}: Item not found for update`);
@@ -110,6 +116,7 @@ function rowToItem(row) {
     material: row.material,
     careInstructions: Array.isArray(row.care_instructions) ? row.care_instructions : [],
     photoDataUrl: row.photo_data_url,
+    favorite: !!row.favorite,
     createdAt: row.created_at,
   };
 }
