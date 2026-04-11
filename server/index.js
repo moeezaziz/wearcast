@@ -35,14 +35,32 @@ const STOCK_IMAGE_CATALOG = {
     slot: "top",
     path: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
     description: "white crew-neck T-shirt in a clean studio flat lay",
-    keywords: ["t-shirt", "tee", "tee shirt", "tshirt", "short sleeve", "crew neck", "basic tee"],
+    keywords: ["t-shirt", "tee", "tee shirt", "tshirt", "short sleeve", "crew neck", "basic tee", "cotton t-shirt", "lightweight t-shirt", "long-sleeve t-shirt", "long sleeve t-shirt", "oversized tee"],
     fallback: true,
+  },
+  top_white_hoodie_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/outer-white-hoodie-studio.jpg",
+    description: "white hoodie in a minimal studio shot",
+    keywords: ["hoodie", "casual hoodie", "pullover hoodie", "light hoodie"],
   },
   top_white_button_up_shirt: {
     slot: "top",
     path: "assets/recommendation-stock/top-white-button-up-shirt.jpg",
     description: "white button-up shirt on hangers in soft studio light",
-    keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "dress shirt", "collared shirt", "white shirt"],
+    keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "oxford shirt", "dress shirt", "collared shirt", "white shirt", "long-sleeve shirt", "polo shirt"],
+  },
+  top_white_polo_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-white-polo-studio.jpg",
+    description: "white polo shirt against a clean white background",
+    keywords: ["polo", "polo shirt", "white polo", "collared polo", "smart polo"],
+  },
+  top_black_graphic_tee_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-black-graphic-tee-studio.jpg",
+    description: "black graphic t-shirt in a clean studio shot",
+    keywords: ["graphic tee", "graphic t-shirt", "graphic tee shirt", "printed tee", "streetwear tee", "oversized graphic tee", "graphic shirt"],
   },
   top_knit_sweater_hanger: {
     slot: "top",
@@ -50,18 +68,30 @@ const STOCK_IMAGE_CATALOG = {
     description: "knit sweater hanging on a wooden hanger",
     keywords: ["sweater", "knit", "jumper", "pullover", "crewneck", "thermal", "base layer", "thermal shirt", "long-sleeve thermal shirt"],
   },
+  top_white_tank_top_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-white-tank-top-studio.jpg",
+    description: "white tank top on a bright studio background",
+    keywords: ["tank top", "white tank top", "linen tank top", "lightweight tank top", "sleeveless top", "summer tank"],
+  },
   bottom_blue_jeans_stack: {
     slot: "bottom",
     path: "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
     description: "stack of blue jeans in studio light",
-    keywords: ["jeans", "denim", "pants", "trousers", "chinos", "bottoms", "leggings", "shorts"],
+    keywords: ["jeans", "denim", "pants", "trousers", "bottoms", "warm jeans"],
     fallback: true,
+  },
+  bottom_blue_denim_shorts_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-blue-denim-shorts-studio.jpg",
+    description: "blue denim shorts on a clean white background",
+    keywords: ["shorts", "denim shorts", "loose shorts", "chino shorts", "cotton shorts", "summer shorts"],
   },
   bottom_black_trousers_studio: {
     slot: "bottom",
     path: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
     description: "black tailored trousers on a white studio background",
-    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants"],
+    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants", "charcoal chinos", "warm trousers", "wool trousers", "tailored wool trousers"],
   },
   bottom_athletic_leggings_studio: {
     slot: "bottom",
@@ -98,7 +128,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "outer",
     path: "assets/recommendation-stock/outer-black-blazer-studio.jpg",
     description: "tailored blazer detail in clean studio styling",
-    keywords: ["blazer", "light blazer", "tailored blazer", "smart blazer"],
+    keywords: ["blazer", "light blazer", "tailored blazer", "smart blazer", "lightweight blazer"],
   },
   outer_white_hoodie_studio: {
     slot: "outer",
@@ -110,13 +140,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "outer",
     path: "assets/recommendation-stock/outer-black-windbreaker-studio.jpg",
     description: "black windbreaker style jacket in studio light",
-    keywords: ["windbreaker", "lightweight windbreaker", "windproof jacket", "waterproof jacket"],
+    keywords: ["windbreaker", "lightweight windbreaker", "windproof jacket", "waterproof jacket", "windbreaker jacket"],
   },
   outer_black_shell_jacket_city: {
     slot: "outer",
     path: "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
     description: "black shell jacket worn outdoors in the city",
-    keywords: ["shell jacket", "black shell jacket", "running jacket", "light shell", "windbreaker", "technical jacket"],
+    keywords: ["shell jacket", "black shell jacket", "running jacket", "light shell", "windbreaker", "technical jacket", "rain jacket", "waterproof jacket", "weatherproof jacket"],
   },
   outer_charcoal_overshirt_studio: {
     slot: "outer",
@@ -134,26 +164,32 @@ const STOCK_IMAGE_CATALOG = {
     slot: "outer",
     path: "assets/recommendation-stock/outer-winter-coat-studio.jpg",
     description: "heavy winter coat detail in a cold-weather fashion shot",
-    keywords: ["waterproof parka", "parka", "winter coat", "waterproof winter coat", "insulated jacket", "insulated coat"],
+    keywords: ["waterproof parka", "parka", "winter coat", "waterproof winter coat", "insulated jacket", "insulated coat", "wool overcoat", "overcoat", "long coat"],
+  },
+  outer_white_overcoat_studio: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-white-overcoat-studio.jpg",
+    description: "white overcoat in a minimal fashion studio portrait",
+    keywords: ["overcoat", "wool overcoat", "long overcoat", "smart overcoat", "tailored coat"],
   },
   shoes_white_sneakers_minimal: {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
     description: "minimal white sneakers on a light background",
-    keywords: ["sneakers", "trainers", "tennis shoes", "casual shoes", "white sneakers"],
+    keywords: ["sneakers", "trainers", "tennis shoes", "casual shoes", "white sneakers", "casual sneakers", "low-top sneakers", "white leather sneakers", "supportive sneakers", "canvas sneakers"],
     fallback: true,
   },
   shoes_black_white_sneakers_studio: {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-black-white-sneakers-studio.jpg",
     description: "black and white statement sneakers in studio lighting",
-    keywords: ["streetwear sneakers", "sporty sneakers", "athletic shoes", "fashion sneakers", "black sneakers"],
+    keywords: ["streetwear sneakers", "sporty sneakers", "fashion sneakers", "black sneakers", "retro sneakers"],
   },
   shoes_white_running_sneakers: {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-white-running-sneakers.jpg",
     description: "white running sneakers in a clean product shot",
-    keywords: ["running sneakers", "running shoes", "athletic shoes", "water-resistant athletic shoes", "breathable sneakers", "waterproof sneakers"],
+    keywords: ["running sneakers", "running shoes", "athletic shoes", "water-resistant athletic shoes", "breathable sneakers", "waterproof sneakers", "breathable running sneakers", "athleisure sneakers"],
   },
   shoes_white_performance_runner_studio: {
     slot: "shoes",
@@ -165,13 +201,25 @@ const STOCK_IMAGE_CATALOG = {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
     description: "black loafers in a studio product shot",
-    keywords: ["loafers", "dress loafers", "smart loafers"],
+    keywords: ["loafers", "dress loafers", "smart loafers", "leather loafers"],
+  },
+  shoes_black_dress_loafers_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-black-dress-loafers-studio.jpg",
+    description: "black leather dress loafers on a white background",
+    keywords: ["dress shoes", "dress loafers", "formal shoes", "smart shoes", "office shoes"],
   },
   shoes_tan_winter_boots: {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-tan-winter-boots.jpg",
     description: "tan winter boots on a soft white background",
     keywords: ["boots", "ankle boots", "winter boots", "suede boots", "waterproof boots", "water-resistant boots", "insulated boots"],
+  },
+  shoes_brown_ankle_boots_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-brown-ankle-boots-studio.jpg",
+    description: "brown ankle boots on a clean studio backdrop",
+    keywords: ["ankle boots", "leather ankle boots", "brown ankle boots", "smart ankle boots", "heeled ankle boots"],
   },
   accessory_white_umbrella_studio: {
     slot: "accessory",
@@ -189,7 +237,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
     description: "patterned silk scarf on a white background",
-    keywords: ["scarf", "neck scarf", "silk scarf", "wrap"],
+    keywords: ["scarf", "neck scarf", "silk scarf", "wrap", "light scarf", "lightweight scarf"],
   },
   accessory_yellow_silk_scarf_studio: {
     slot: "accessory",
@@ -201,7 +249,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-white-beanie-studio.jpg",
     description: "knit beanie in a clean product-style shot",
-    keywords: ["beanie", "warm hat", "knit hat", "winter hat"],
+    keywords: ["beanie", "warm hat", "knit hat", "winter hat", "winter beanie", "wool beanie"],
   },
   accessory_knit_beanies_outdoors: {
     slot: "accessory",
@@ -213,7 +261,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
     description: "black baseball cap worn outdoors",
-    keywords: ["black baseball cap", "black cap", "baseball cap", "cap", "dad cap", "sport cap"],
+    keywords: ["black baseball cap", "black cap", "baseball cap", "cap", "dad cap", "sport cap", "snapback cap"],
+  },
+  accessory_white_sun_hat_studio: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-white-sun-hat-studio.jpg",
+    description: "white wide-brim sun hat on a clean background",
+    keywords: ["sun hat", "wide-brim sun hat", "wide brim hat", "beach hat", "sun hat with brim"],
   },
   accessory_watch_studio: {
     slot: "accessory",
@@ -225,13 +279,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-tote-bag-studio.jpg",
     description: "leather tote bag on a clean white background",
-    keywords: ["tote bag", "tote", "carryall", "shopper bag"],
+    keywords: ["tote bag", "tote", "carryall", "shopper bag", "bag", "waterproof bag", "bag for essentials", "everyday bag"],
   },
   accessory_belt_bag_studio: {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-belt-bag-studio.jpg",
     description: "belt bag on a white background",
-    keywords: ["belt bag", "crossbody bag", "waist bag", "bag"],
+    keywords: ["belt bag", "crossbody bag", "waist bag", "bag", "small waterproof bag", "compact essentials bag"],
   },
   accessory_socks_studio: {
     slot: "accessory",
@@ -243,7 +297,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-white-gloves-studio.jpg",
     description: "white gloves on a white background",
-    keywords: ["gloves", "light gloves", "warm gloves"],
+    keywords: ["gloves", "light gloves", "warm gloves", "lightweight gloves", "waterproof insulated gloves"],
     fallback: true,
   },
 };
@@ -813,16 +867,13 @@ function sanitizeOutfitSlotText(value, slot, preferredKey = null) {
 }
 
 function normalizeRecommendationResponse(parsed) {
-  const preferredImageKeys = parsed?.outfitImageKeys && typeof parsed.outfitImageKeys === "object"
-    ? parsed.outfitImageKeys
-    : {};
   const outfit = {
-    top: sanitizeOutfitSlotText(parsed?.outfit?.top, "top", cleanInlineText(preferredImageKeys?.top)) || "A comfortable top suited to the current temperature",
-    bottom: sanitizeOutfitSlotText(parsed?.outfit?.bottom, "bottom", cleanInlineText(preferredImageKeys?.bottom)) || "Comfortable bottoms for today's conditions",
-    outer: sanitizeOutfitSlotText(parsed?.outfit?.outer, "outer", cleanInlineText(preferredImageKeys?.outer)) || null,
-    shoes: sanitizeOutfitSlotText(parsed?.outfit?.shoes, "shoes", cleanInlineText(preferredImageKeys?.shoes)) || "Comfortable everyday shoes",
+    top: sanitizeOutfitSlotText(parsed?.outfit?.top, "top") || "A comfortable top suited to the current temperature",
+    bottom: sanitizeOutfitSlotText(parsed?.outfit?.bottom, "bottom") || "Comfortable bottoms for today's conditions",
+    outer: sanitizeOutfitSlotText(parsed?.outfit?.outer, "outer") || null,
+    shoes: sanitizeOutfitSlotText(parsed?.outfit?.shoes, "shoes") || "Comfortable everyday shoes",
     accessories: normalizeList(parsed?.outfit?.accessories, { limit: 1 })
-      .map((value) => sanitizeOutfitSlotText(value, "accessory", cleanInlineText(preferredImageKeys?.accessory)))
+      .map((value) => sanitizeOutfitSlotText(value, "accessory"))
       .filter(Boolean),
   };
   const slotReasons = {
@@ -834,29 +885,13 @@ function normalizeRecommendationResponse(parsed) {
   };
   return {
     outfit,
-    outfitImages: buildRecommendationImageMatches(outfit, preferredImageKeys),
+    outfitImages: buildRecommendationImageMatches(outfit),
     slotReasons,
     reasoning: clampSentenceCount(parsed?.reasoning, 1),
     detailsOverview: normalizeDetailsOverview(parsed?.detailsOverview),
     warnings: normalizeList(parsed?.warnings, { limit: 1 }),
     missingItems: normalizeList(parsed?.missingItems, { limit: 1 }),
   };
-}
-
-function pickAlwaysOnOuter(weather = {}) {
-  const feelsLike = Number(weather?.feelsLike ?? weather?.temperature);
-  const wind = Number(weather?.wind ?? 0);
-  const precipProb = Number(weather?.precipProb ?? 0);
-  const label = String(weather?.weatherLabel || "").toLowerCase();
-  const wet = precipProb >= 40 || /rain|drizzle|storm|snow|freezing|sleet/.test(label);
-  if (wet && feelsLike <= 8) return "Weatherproof Parka";
-  if (wet) return "Waterproof Jacket";
-  if (feelsLike <= 5) return "Warm Coat";
-  if (feelsLike <= 12) return "Insulated Jacket";
-  if (wind >= 22) return "Windbreaker";
-  if (feelsLike <= 18) return "Light Jacket";
-  if (feelsLike >= 28) return "Breathable Overshirt";
-  return "Light Overshirt";
 }
 
 function pickAlwaysOnAccessory(weather = {}) {
@@ -873,11 +908,11 @@ function pickAlwaysOnAccessory(weather = {}) {
   return "Watch";
 }
 
-function ensureFiveCategoryOutfit(response, weather = {}) {
+function ensureRecommendationShape(response, weather = {}) {
   const outfit = response?.outfit && typeof response.outfit === "object" ? { ...response.outfit } : {};
   outfit.top = cleanInlineText(outfit.top) || "Comfortable Top";
   outfit.bottom = cleanInlineText(outfit.bottom) || "Everyday Trousers";
-  outfit.outer = cleanInlineText(outfit.outer) || pickAlwaysOnOuter(weather);
+  outfit.outer = cleanInlineText(outfit.outer) || "";
   outfit.shoes = cleanInlineText(outfit.shoes) || "Sneakers";
   const accessory = cleanInlineText(Array.isArray(outfit.accessories) ? outfit.accessories[0] : outfit.accessories) || pickAlwaysOnAccessory(weather);
   outfit.accessories = [accessory];
@@ -886,7 +921,7 @@ function ensureFiveCategoryOutfit(response, weather = {}) {
     ...(response?.slotReasons || {}),
     top: cleanInlineText(response?.slotReasons?.top) || "Builds the base of the outfit for today's temperature.",
     bottom: cleanInlineText(response?.slotReasons?.bottom) || "Keeps the look practical and balanced through the day.",
-    outer: cleanInlineText(response?.slotReasons?.outer) || "Adds a weather-ready outer layer so the look stays complete.",
+    outer: cleanInlineText(response?.slotReasons?.outer) || "",
     shoes: cleanInlineText(response?.slotReasons?.shoes) || "Keeps the outfit grounded for all-day wear.",
     accessory: cleanInlineText(response?.slotReasons?.accessory) || "Finishes the outfit with a useful extra.",
   };
@@ -902,14 +937,36 @@ function ensureFiveCategoryOutfit(response, weather = {}) {
 function scoreCatalogMatch(text, entry) {
   const normalized = normalizeMatchText(text);
   if (!normalized) return 0;
+  const textTokens = normalized.split(" ").filter((token) => token.length > 2);
   let score = 0;
   for (const keyword of entry.keywords) {
     const normalizedKeyword = normalizeMatchText(keyword);
     if (!normalizedKeyword) continue;
-    if (normalized === normalizedKeyword) score += 10;
-    else if (normalized.includes(normalizedKeyword)) score += 4;
+    const keywordTokens = normalizedKeyword.split(" ").filter((token) => token.length > 2);
+    if (normalized === normalizedKeyword) {
+      score += 18;
+      continue;
+    }
+    if (normalized.includes(normalizedKeyword)) {
+      score += 8;
+    }
+    if (normalizedKeyword.includes(normalized)) {
+      score += 6;
+    }
+    if (keywordTokens.length) {
+      const matchedTokens = keywordTokens.filter((token) => textTokens.includes(token)).length;
+      if (matchedTokens === keywordTokens.length) score += 6;
+      else if (matchedTokens > 0) score += matchedTokens * 2;
+    }
   }
-  if (entry.fallback) score += 1;
+  const description = normalizeMatchText(entry.description);
+  if (description) {
+    if (description.includes(normalized)) score += 4;
+    const descriptionTokens = description.split(" ").filter((token) => token.length > 2);
+    const descriptionOverlap = textTokens.filter((token) => descriptionTokens.includes(token)).length;
+    if (descriptionOverlap > 0) score += Math.min(descriptionOverlap, 3);
+  }
+  if (entry.fallback) score -= 1;
   return score;
 }
 
@@ -1572,10 +1629,6 @@ app.post("/api/recommend", async (req, res) => {
         : "- UV is not a major driver.",
     ].join("\n");
 
-    const imageCatalogDesc = Object.entries(STOCK_IMAGE_CATALOG)
-      .map(([key, entry]) => `- ${key} (${entry.slot})`)
-      .join("\n");
-
     const prompt = `You are WearCast, a smart clothing recommendation assistant.
 
 Suggest a specific outfit for the rest of today.${hasWardrobe ? " Use wardrobe items only when they are genuinely suitable for the weather and forecast. If the saved wardrobe does not contain weather-appropriate pieces for a slot, give a general recommendation instead of forcing a wardrobe match." : " The user has no wardrobe saved, so suggest a generic outfit."}
@@ -1601,10 +1654,6 @@ ${wardrobeDesc}
 ## Weather Forcing Rules
 ${weatherRules}
 
-## Available Stock Image Keys
-Choose the best matching local stock image key for each outfit slot from this list:
-${imageCatalogDesc}
-
 ## Instructions
 1. Recommend a COMPLETE outfit using short item names only.
 2. Consider ONLY the forecast from now onward today.
@@ -1613,9 +1662,9 @@ ${imageCatalogDesc}
 5. Return detailsOverview as a richer modal explanation: what the outfit is doing overall, why it fits the weather, and one optional practical note.
 6. Return at most ONE accessory, ONE warning, and ONE missing item.
 7. Do not explain each clothing piece separately in detailsOverview.
-8. For each clothing slot, choose the most appropriate stock image key from the provided list.
-9. Also return one short slot-specific reason for top, bottom, outer, shoes, and accessory when present.
-10. Always return all five categories: top, bottom, outer, shoes, and exactly one accessory.
+8. Also return one short slot-specific reason for top, bottom, outer, shoes, and accessory.
+9. Outer is OPTIONAL. Only include an outer layer when the weather truly justifies one. If no outer layer is needed, return an empty string for outer and an empty string for its slot reason.
+10. Return exactly one accessory.
 11. Make the outfit meaningfully reflect the actual weather severity and not just a generic everyday look.
 12. If a wardrobe item is unsuitable for the weather, prefer a generic weather-appropriate recommendation.
 13. Do not use generic phrases like "chosen to match today's weather", "keep you comfortable through the day", or "built around today's conditions".
@@ -1629,13 +1678,6 @@ Return ONLY valid JSON (no markdown fences):
     "outer": "short item name",
     "shoes": "short item name",
     "accessories": ["one item"]
-  },
-  "outfitImageKeys": {
-    "top": "matching stock image key",
-    "bottom": "matching stock image key",
-    "outer": "matching stock image key",
-    "shoes": "matching stock image key",
-    "accessory": "matching stock image key"
   },
   "slotReasons": {
     "top": "one short reason",
@@ -1694,9 +1736,9 @@ Return ONLY valid JSON (no markdown fences):
 
     try {
       const parsed = parseModelJson(text);
-      const normalized = ensureFiveCategoryOutfit(normalizeRecommendationResponse(parsed), resolvedWeather);
+      const normalized = ensureRecommendationShape(normalizeRecommendationResponse(parsed), resolvedWeather);
       const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-      const response = ensureFiveCategoryOutfit(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+      const response = ensureRecommendationShape(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
       console.info("[recommend] success", {
         requestId,
         durationMs: Date.now() - startedAt,
@@ -1715,9 +1757,9 @@ Return ONLY valid JSON (no markdown fences):
       });
       const salvaged = salvageRecommendationFromText(text);
       if (salvaged) {
-        const normalized = ensureFiveCategoryOutfit(normalizeRecommendationResponse(salvaged), resolvedWeather);
+        const normalized = ensureRecommendationShape(normalizeRecommendationResponse(salvaged), resolvedWeather);
         const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-        const response = ensureFiveCategoryOutfit(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+        const response = ensureRecommendationShape(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
         console.info("[recommend] salvaged-success", {
           requestId,
           durationMs: Date.now() - startedAt,

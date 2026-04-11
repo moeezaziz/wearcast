@@ -160,8 +160,8 @@
           <div id="wardrobeExplainer" class="card wardrobe-explainer">
             <div class="wardrobe-explainer-body">
               <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Get personalized fast</span>
-              <h3 id="wardrobeExplainerTitle">Your wardrobe powers smarter outfit picks</h3>
-              <p id="wardrobeExplainerText">Add photos or care tags once, then WearCast can recommend pieces you actually own instead of generic outfits.</p>
+              <h3 id="wardrobeExplainerTitle">Add a few pieces for sharper outfit picks</h3>
+              <p id="wardrobeExplainerText">Start with the staples you wear most so WearCast can style from your closet, not generic stock looks.</p>
               <div id="wardrobeExplainerProgress" class="wardrobe-explainer-progress" aria-hidden="true"></div>
             </div>
           </div>
@@ -175,10 +175,10 @@
             </div>
             <h3>Your closet is empty</h3>
             <p>Add a few real pieces so WearCast can style from what you actually own.</p>
-            <div class="wardrobe-empty-guides" aria-hidden="true">
-              <span>Shirts</span>
-              <span>Pants</span>
-              <span>Jackets</span>
+            <div class="wardrobe-empty-guides" aria-label="Starter categories">
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Shirt">Shirts</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jeans">Pants</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Jackets</button>
             </div>
             <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Add your first item</button>
           </div>
@@ -368,9 +368,9 @@
   <dialog id="tuneLookDialog" class="dialog tune-look-dialog" aria-labelledby="tuneLookDialogTitle">
     <div class="dialog-inner tune-look-dialog-inner">
       <button id="tuneLookDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
-      <span class="today-cta-kicker">Tune This Look</span>
+      <span class="today-cta-kicker">Change style</span>
       <h2 id="tuneLookDialogTitle" class="dialog-title">Adjust the outfit direction</h2>
-      <p class="dialog-subtitle">Refine the recommendation in a calmer, native-feeling sheet.</p>
+      <p class="dialog-subtitle">Refine the recommendation with a clearer style direction.</p>
       <div id="tuneLookDialogBody" class="tune-look-dialog-body"></div>
     </div>
   </dialog>
@@ -441,13 +441,13 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <span>Add clothing photo</span>
           </label>
-          <button type="button" id="itemManualToggleBtn" class="item-manual-toggle">Add manually instead</button>
+          <button type="button" id="itemManualToggleBtn" class="item-manual-toggle">Add details manually</button>
           <div id="itemPhotoStatus" class="status-text item-photo-status"></div>
         </section>
 
         <details class="card item-manual-card" id="itemManualDetails">
           <summary class="card-header card-header-clickable">
-            <h3>Item details</h3>
+            <h3>Add details manually</h3>
             <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
           <div class="item-manual-body">

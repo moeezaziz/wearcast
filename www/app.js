@@ -1344,7 +1344,10 @@ function renderRecommendationWeatherStrip(weather = {}) {
   const condition = compactText(weather.weatherLabel, "");
   return `
     <div class="today-rec-weather-strip" aria-label="Current weather summary">
-      <span class="today-rec-weather-condition">${escapeHtml(condition)}</span>
+      <span class="today-rec-weather-condition">
+        <span class="today-rec-weather-condition-icon" aria-hidden="true">${weatherConditionIcon(condition || "Clear")}</span>
+        <span>${escapeHtml(condition)}</span>
+      </span>
       <div class="today-rec-weather-metrics">
         ${items.map((item) => `
           <span class="today-rec-weather-metric">
@@ -1954,16 +1957,13 @@ function renderRecommendationItemDialogMedia(item, className = "today-item-dialo
 
 function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReasons = {}) {
   if (!entries.length) return "";
-  let accessoryIndex = 0;
-  const accessoryCount = entries.filter((entry) => compactText(normalizeRecommendationEntry(entry).label, "").toLowerCase() === "accessory").length;
-  const collageItems = entries.map((entry, index) => {
-    const normalizedEntry = normalizeRecommendationEntry(entry, index);
+  const normalizedEntries = entries.map((entry, index) => normalizeRecommendationEntry(entry, index));
+  const accessoryCount = normalizedEntries.filter((entry) => compactText(entry.label, "").toLowerCase() === "accessory").length;
+  const positionClasses = buildRecommendationCollageLayout(normalizedEntries);
+  const collageItems = normalizedEntries.map((normalizedEntry, index) => {
     const slotKey = String(normalizedEntry.label || "").toLowerCase();
     const art = getRecommendationCardArt(normalizedEntry.label, normalizedEntry.value, imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null);
     const reason = buildRecommendationItemReason(normalizedEntry.label, normalizedEntry.value, weather, slotReasons?.[normalizedEntry.key] || slotReasons?.[slotKey] || "");
-    const positionClass = slotKey === "accessory"
-      ? getRecommendationCollagePosition(normalizedEntry.label, accessoryIndex++, accessoryCount)
-      : getRecommendationCollagePosition(normalizedEntry.label, index, accessoryCount);
     return {
       index,
       label: normalizedEntry.label,
@@ -1973,7 +1973,7 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
       photo: art.photo,
       icon: art.icon,
       reason,
-      positionClass,
+      positionClass: positionClasses[index] || "is-grid-center",
       accessoryCount,
     };
   });
@@ -2005,15 +2005,14 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
   `;
 }
 
-function getRecommendationCollagePosition(label = "", index = 0, accessoryCount = 0) {
-  const key = String(label || "").toLowerCase();
-  if (key === "outer") return "is-outer";
-  if (key === "top") return "is-top";
-  if (key === "bottom") return "is-bottom";
-  if (key === "shoes") return accessoryCount > 0 ? "is-shoes" : "is-shoes-centered";
-  if (index % 3 === 0) return "is-accessory-left";
-  if (index % 3 === 1) return "is-accessory-right";
-  return "is-accessory-bottom";
+function buildRecommendationCollageLayout(entries = []) {
+  const count = entries.length;
+  if (count <= 1) return ["is-grid-center"];
+  if (count === 2) return ["is-grid-middle-left", "is-grid-middle-right"];
+  if (count === 3) return ["is-grid-top-left", "is-grid-top-right", "is-grid-bottom-center"];
+  if (count === 4) return ["is-grid-top-left", "is-grid-top-right", "is-grid-bottom-left", "is-grid-bottom-right"];
+  if (count === 5) return ["is-grid-top-left", "is-grid-top-center", "is-grid-top-right", "is-grid-bottom-left-wide", "is-grid-bottom-right-wide"];
+  return ["is-grid-top-left", "is-grid-top-center", "is-grid-top-right", "is-grid-bottom-left", "is-grid-bottom-center", "is-grid-bottom-right"];
 }
 
 function getRecommendationDeckTitleSizeClass(value = "") {
@@ -2156,7 +2155,7 @@ function renderRecommendationControls() {
   return `
     <div class="today-control-groups">
       <div class="today-control-intro">
-        <span class="today-control-intro-kicker">Today tune</span>
+        <span class="today-control-intro-kicker">Change style</span>
         <strong>Shape the outfit direction before refreshing.</strong>
         <p>These changes apply to today’s recommendation only and keep the weather logic intact.</p>
       </div>
@@ -2278,7 +2277,9 @@ function buildRecommendationDetails(data, weather, rowEntries = [], slotReasons 
   });
 
   const practicalNotes = [];
-  if (note) practicalNotes.push(note);
+  if (note) {
+    practicalNotes.push(/unavailable/i.test(note) ? "AI stylist temporarily unavailable." : note);
+  }
   (data.warnings || []).forEach((warning) => {
     const cleaned = compactText(warning, "");
     if (cleaned) practicalNotes.push(cleaned);
@@ -2398,8 +2399,8 @@ function renderWhyItems(items) {
     <div class="today-details-overview">
       <div class="today-details-overview-icon" aria-hidden="true">${renderInlineIcon("info")}</div>
       <div>
-        <strong>Quick read</strong>
-        <span>What to wear, why it works, and what to keep in mind.</span>
+        <strong>Using weather-based styling today</strong>
+        <span>A quick read on the look, the weather fit, and anything practical to keep in mind.</span>
       </div>
     </div>
     <div class="today-why-list today-details-list">
@@ -2469,12 +2470,7 @@ function openRecommendationItemDialog(item, index = null, transitionDirection = 
           <h2 id="todayItemDialogTitle" class="dialog-title">${escapeHtml(item.value || "Recommendation item")}</h2>
         </div>
         <div class="today-item-dialog-info-block">
-          ${item.reason ? `
-            <div class="today-item-dialog-info-section">
-              <span class="today-item-dialog-block-kicker">Why it works</span>
-              <p>${escapeHtml(item.reason || "")}</p>
-            </div>
-          ` : ""}
+          ${item.reason ? `<p class="today-item-dialog-info-copy">${escapeHtml(item.reason || "")}</p>` : ""}
           ${detailRows.length ? `
             <div class="today-item-dialog-info-section">
               <span class="today-item-dialog-block-kicker">Details</span>
@@ -2508,6 +2504,22 @@ function openTuneLookDialog() {
   if (!els.tuneLookDialog || !els.tuneLookDialogBody) return;
   els.tuneLookDialogBody.innerHTML = renderRecommendationControls();
   if (typeof els.tuneLookDialog.showModal === "function") els.tuneLookDialog.showModal();
+}
+
+function getStarterTypePreset(type = "") {
+  const normalized = compactText(type, "").toLowerCase();
+  if (!normalized) return {};
+  const nameMap = {
+    shirt: "Everyday shirt",
+    "t-shirt": "Everyday tee",
+    jacket: "Light jacket",
+    jeans: "Everyday jeans",
+    chinos: "Everyday trousers",
+  };
+  return {
+    type,
+    name: nameMap[normalized] || "",
+  };
 }
 
 function showAppToast(message, tone = "info") {
@@ -3491,8 +3503,8 @@ function updateWardrobeCtas(items) {
     if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Build your closet to unlock sharper outfit picks.";
     if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add wardrobe";
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Get personalized fast";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Your wardrobe powers smarter outfit picks";
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Add photos or care tags once, then WearCast can recommend pieces you actually own instead of generic outfits.";
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add a few pieces for sharper outfit picks";
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Start with the staples you wear most so WearCast can style from your closet, not generic stock looks.";
     return;
   }
 
@@ -3548,7 +3560,8 @@ async function hasDuplicateWardrobeItem(itemData, excludeId = null) {
 function updateItemSaveState() {
   if (!els.itemSaveBtn) return;
   const busy = isSavingItem || isReadingItemPhoto || isAnalyzingItemPhoto;
-  els.itemSaveBtn.disabled = busy;
+  const hasRequiredFields = !!(els.itemType?.value?.trim() && els.itemName?.value?.trim());
+  els.itemSaveBtn.disabled = busy || !hasRequiredFields;
   els.itemSaveBtn.textContent = isSavingItem ? "Saving…" : isReadingItemPhoto || isAnalyzingItemPhoto ? "Preparing…" : "Save item";
 }
 
@@ -3704,7 +3717,7 @@ function pendingScanImageReady() {
   return !!window.__wearcastScanImageDataUrl;
 }
 
-function openItemDialog(item = null) {
+function openItemDialog(item = null, preset = null) {
   editingItemId = item?.id || null;
   isSavingItem = false;
   isReadingItemPhoto = false;
@@ -3736,9 +3749,13 @@ function openItemDialog(item = null) {
     if (title) title.textContent = "Add Clothing Item";
     els.itemDeleteBtn.style.display = "none";
     els.itemManualDetails?.removeAttribute("open");
+    if (preset?.type) els.itemType.value = preset.type;
+    if (preset?.name) els.itemName.value = preset.name;
+    if (preset?.type || preset?.name) revealItemManualDetails();
   }
 
   updateItemVisual();
+  updateItemSaveState();
 
   if (typeof els.itemDialog.showModal === "function") els.itemDialog.showModal();
 }
@@ -3962,11 +3979,18 @@ function bindWardrobeUI() {
     els.itemPhoto.value = "";
     setItemPhotoStatus("");
     updateItemVisual();
+    updateItemSaveState();
   });
 
   [els.itemType, els.itemName, els.itemColor, els.itemMaterial].forEach((input) => {
-    input?.addEventListener("input", updateItemVisual);
-    input?.addEventListener("change", updateItemVisual);
+    input?.addEventListener("input", () => {
+      updateItemVisual();
+      updateItemSaveState();
+    });
+    input?.addEventListener("change", () => {
+      updateItemVisual();
+      updateItemSaveState();
+    });
   });
   els.itemType?.addEventListener("change", () => {
     if (els.itemType.value.trim()) setFieldError(els.itemType, els.itemTypeError, "");
@@ -3975,6 +3999,14 @@ function bindWardrobeUI() {
   els.itemName?.addEventListener("input", () => {
     if (els.itemName.value.trim()) setFieldError(els.itemName, els.itemNameError, "");
     if (els.itemType.value.trim() && els.itemName.value.trim()) setItemFormError("");
+  });
+  els.wardrobeEmpty?.addEventListener("click", (event) => {
+    const starterButton = event.target.closest("[data-starter-type]");
+    if (!starterButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const starterType = starterButton.getAttribute("data-starter-type") || "";
+    openItemDialog(null, getStarterTypePreset(starterType));
   });
 
   // Scan tag button opens scan dialog
@@ -4040,6 +4072,8 @@ function bindWardrobeUI() {
       if (data.brand && !els.itemName.value.trim()) {
         els.itemName.value = data.brand;
       }
+      updateItemVisual();
+      updateItemSaveState();
       els.scanStatus.textContent = "Done! Tag info added to the form.";
       setTimeout(() => {
         if (typeof els.scanDialog.close === "function") els.scanDialog.close();
@@ -4325,7 +4359,7 @@ function renderAIRecommendation(data) {
         <div class="today-feedback-actions">
           <button type="button" class="today-feedback-chip" data-rec-feedback="too_cold">${renderInlineIcon("cold")} Too cold</button>
           <button type="button" class="today-feedback-chip" data-rec-feedback="too_warm">${renderInlineIcon("hot")} Too warm</button>
-          <button type="button" class="today-feedback-chip today-feedback-chip-tune" data-rec-action="tune">${renderTuneIcon()} Tune</button>
+          <button type="button" class="today-feedback-chip today-feedback-chip-tune" data-rec-action="tune">${renderTuneIcon()} Change style</button>
         </div>
         <div class="today-secondary-actions">
           ${detailsItems.length ? `<button type="button" class="today-details-button today-details-button-wide" data-rec-action="why">View details</button>` : ""}
