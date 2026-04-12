@@ -1,272 +1,415 @@
-import { readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, appendFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
-const envText = readFileSync(new URL("../server/.env", import.meta.url), "utf8");
-const key = envText
-  .split("\n")
-  .map((line) => line.trim())
-  .find((line) => line.startsWith("OPENROUTER_API_KEY="))
-  ?.split("=")
-  .slice(1)
-  .join("=")
-  .trim();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = join(__dirname, "..");
+const outDir = join(rootDir, "tmp");
+mkdirSync(outDir, { recursive: true });
 
-function scenario(
-  name,
-  {
-    temperature,
-    feelsLike,
-    wind,
-    gusts,
-    humidity,
-    cloud,
-    precip,
-    precipProb,
-    uv,
-    weatherLabel,
-    prefs = [],
-    tempRange,
-    feelsLikeRange,
-    maxWind,
-    maxPrecipProb,
-    totalPrecip,
-    peakUV,
-    avgHumidity,
-  }
-) {
-  return {
-    name,
-    weather: {
-      temperature,
-      feelsLike,
-      wind,
-      gusts,
-      humidity,
-      cloud,
-      precip,
-      precipProb,
-      uv,
-      weatherLabel,
-      isDay: true,
-      remainingForecast: {
-        tempRange,
-        feelsLikeRange,
-        maxWind,
-        maxPrecipProb,
-        totalPrecip,
-        peakUV,
-        avgHumidity,
-      },
-    },
-    prefs,
-  };
-}
+const baseUrl = process.env.WEARCAST_RECOMMEND_URL || "http://127.0.0.1:3001";
+const endpoint = `${baseUrl.replace(/\/$/, "")}/api/recommend`;
+const runId = new Date().toISOString().replace(/[:.]/g, "-");
+const outputPath = join(outDir, `recommendation-matrix-${runId}.jsonl`);
+const summaryPath = join(outDir, `recommendation-matrix-${runId}.summary.json`);
+const concurrency = Math.max(1, Number(process.env.WEARCAST_MATRIX_CONCURRENCY || 6));
 
-const scenarios = [
-  scenario("cool_clear_city", {
-    temperature: 16, feelsLike: 14, wind: 18, gusts: 28, humidity: 61, cloud: 12, precip: 0, precipProb: 8, uv: 3, weatherLabel: "Clear",
-    prefs: ["prefers casual everyday outfits"],
-    tempRange: "14°C – 18°C", feelsLikeRange: "12°C – 17°C", maxWind: "28 km/h", maxPrecipProb: "10%", totalPrecip: "0 mm", peakUV: 4, avgHumidity: "60%",
-  }),
-  scenario("warm_rain_commute", {
-    temperature: 22, feelsLike: 23, wind: 16, gusts: 24, humidity: 78, cloud: 84, precip: 1.2, precipProb: 72, uv: 4, weatherLabel: "Rain",
-    prefs: ["is dressing for commuting and movement"],
-    tempRange: "20°C – 24°C", feelsLikeRange: "21°C – 25°C", maxWind: "24 km/h", maxPrecipProb: "78%", totalPrecip: "6.4 mm", peakUV: 4, avgHumidity: "79%",
-  }),
-  scenario("cold_windy_layered", {
-    temperature: 7, feelsLike: 3, wind: 31, gusts: 43, humidity: 67, cloud: 55, precip: 0.1, precipProb: 26, uv: 2, weatherLabel: "Partly cloudy",
-    prefs: ["runs cold (feels colder than average)", "will spend a lot of time outdoors"],
-    tempRange: "5°C – 8°C", feelsLikeRange: "1°C – 5°C", maxWind: "43 km/h", maxPrecipProb: "30%", totalPrecip: "0.6 mm", peakUV: 2, avgHumidity: "69%",
-  }),
-  scenario("hot_sunny_minimal", {
-    temperature: 29, feelsLike: 31, wind: 10, gusts: 15, humidity: 49, cloud: 5, precip: 0, precipProb: 2, uv: 8, weatherLabel: "Clear",
-    prefs: ["wants the outfit to lean minimalist"],
-    tempRange: "28°C – 32°C", feelsLikeRange: "30°C – 34°C", maxWind: "15 km/h", maxPrecipProb: "4%", totalPrecip: "0 mm", peakUV: 8, avgHumidity: "47%",
-  }),
-  scenario("snowy_weekend", {
-    temperature: -1, feelsLike: -5, wind: 20, gusts: 30, humidity: 83, cloud: 92, precip: 0.8, precipProb: 68, uv: 1, weatherLabel: "Snow",
-    prefs: ["prefers casual everyday outfits"],
-    tempRange: "-2°C – 1°C", feelsLikeRange: "-7°C – -1°C", maxWind: "30 km/h", maxPrecipProb: "74%", totalPrecip: "3.5 mm", peakUV: 1, avgHumidity: "84%",
-  }),
-  scenario("smart_casual_office", {
-    temperature: 18, feelsLike: 18, wind: 11, gusts: 16, humidity: 58, cloud: 40, precip: 0, precipProb: 12, uv: 5, weatherLabel: "Mainly clear",
-    prefs: ["prefers polished or smart-casual style", "wants the outfit to lean polished"],
-    tempRange: "17°C – 20°C", feelsLikeRange: "17°C – 20°C", maxWind: "16 km/h", maxPrecipProb: "14%", totalPrecip: "0 mm", peakUV: 5, avgHumidity: "58%",
-  }),
-  scenario("humid_heat_streetwear", {
-    temperature: 31, feelsLike: 35, wind: 9, gusts: 14, humidity: 74, cloud: 28, precip: 0.2, precipProb: 18, uv: 7, weatherLabel: "Partly cloudy",
-    prefs: ["prefers streetwear-inspired outfits", "wants the outfit to lean streetwear", "runs hot (feels warmer than average)"],
-    tempRange: "30°C – 34°C", feelsLikeRange: "34°C – 38°C", maxWind: "14 km/h", maxPrecipProb: "22%", totalPrecip: "0.2 mm", peakUV: 8, avgHumidity: "76%",
-  }),
-  scenario("brisk_polished_evening", {
-    temperature: 11, feelsLike: 8, wind: 19, gusts: 27, humidity: 63, cloud: 36, precip: 0, precipProb: 12, uv: 2, weatherLabel: "Mainly clear",
-    prefs: ["prefers polished or smart-casual style", "runs cold (feels colder than average)"],
-    tempRange: "9°C – 12°C", feelsLikeRange: "6°C – 10°C", maxWind: "27 km/h", maxPrecipProb: "14%", totalPrecip: "0 mm", peakUV: 2, avgHumidity: "64%",
-  }),
-  scenario("drizzly_mild_indoors", {
-    temperature: 19, feelsLike: 19, wind: 13, gusts: 19, humidity: 81, cloud: 90, precip: 0.5, precipProb: 58, uv: 2, weatherLabel: "Drizzle",
-    prefs: ["will spend most of the day indoors"],
-    tempRange: "18°C – 20°C", feelsLikeRange: "18°C – 20°C", maxWind: "19 km/h", maxPrecipProb: "60%", totalPrecip: "2.3 mm", peakUV: 2, avgHumidity: "82%",
-  }),
-  scenario("bike_commute_breezy", {
-    temperature: 13, feelsLike: 10, wind: 24, gusts: 34, humidity: 59, cloud: 30, precip: 0, precipProb: 10, uv: 4, weatherLabel: "Partly cloudy",
-    prefs: ["plans to bike or walk (active)", "expects to walk more than usual today"],
-    tempRange: "11°C – 15°C", feelsLikeRange: "8°C – 13°C", maxWind: "34 km/h", maxPrecipProb: "14%", totalPrecip: "0 mm", peakUV: 4, avgHumidity: "60%",
-  }),
-  scenario("freezing_rain_alert", {
-    temperature: 1, feelsLike: -3, wind: 22, gusts: 31, humidity: 88, cloud: 96, precip: 1.1, precipProb: 81, uv: 1, weatherLabel: "Freezing rain",
-    prefs: ["runs cold (feels colder than average)"],
-    tempRange: "-1°C – 2°C", feelsLikeRange: "-5°C – 0°C", maxWind: "31 km/h", maxPrecipProb: "86%", totalPrecip: "5.1 mm", peakUV: 1, avgHumidity: "90%",
-  }),
-  scenario("overcast_spring_formal", {
-    temperature: 15, feelsLike: 15, wind: 12, gusts: 18, humidity: 66, cloud: 88, precip: 0, precipProb: 16, uv: 3, weatherLabel: "Overcast",
-    prefs: ["prefers polished or smart-casual style", "wants the outfit to lean polished", "will spend most of the day indoors"],
-    tempRange: "14°C – 17°C", feelsLikeRange: "14°C – 17°C", maxWind: "18 km/h", maxPrecipProb: "18%", totalPrecip: "0 mm", peakUV: 3, avgHumidity: "67%",
-  }),
-  scenario("athleisure_cool_morning", {
-    temperature: 9, feelsLike: 7, wind: 15, gusts: 21, humidity: 57, cloud: 22, precip: 0, precipProb: 6, uv: 3, weatherLabel: "Clear",
-    prefs: ["prefers sporty or athleisure looks", "plans to bike or walk (active)"],
-    tempRange: "8°C – 13°C", feelsLikeRange: "6°C – 11°C", maxWind: "21 km/h", maxPrecipProb: "8%", totalPrecip: "0 mm", peakUV: 4, avgHumidity: "58%",
-  }),
-  scenario("beach_heatwave", {
-    temperature: 34, feelsLike: 37, wind: 12, gusts: 18, humidity: 56, cloud: 3, precip: 0, precipProb: 1, uv: 9, weatherLabel: "Clear",
-    prefs: ["runs hot (feels warmer than average)", "will spend a lot of time outdoors", "prefers casual everyday outfits"],
-    tempRange: "33°C – 36°C", feelsLikeRange: "36°C – 40°C", maxWind: "18 km/h", maxPrecipProb: "2%", totalPrecip: "0 mm", peakUV: 10, avgHumidity: "55%",
-  }),
-  scenario("mountain_chill_hike", {
-    temperature: 5, feelsLike: 1, wind: 28, gusts: 39, humidity: 71, cloud: 48, precip: 0.2, precipProb: 24, uv: 5, weatherLabel: "Partly cloudy",
-    prefs: ["will spend a lot of time outdoors", "plans to bike or walk (active)", "runs cold (feels colder than average)"],
-    tempRange: "3°C – 7°C", feelsLikeRange: "-1°C – 4°C", maxWind: "39 km/h", maxPrecipProb: "28%", totalPrecip: "0.4 mm", peakUV: 6, avgHumidity: "72%",
-  }),
-  scenario("autumn_streetwear_layering", {
-    temperature: 12, feelsLike: 10, wind: 14, gusts: 20, humidity: 64, cloud: 52, precip: 0, precipProb: 10, uv: 2, weatherLabel: "Partly cloudy",
-    prefs: ["prefers streetwear-inspired outfits", "wants the outfit to lean streetwear"],
-    tempRange: "10°C – 14°C", feelsLikeRange: "8°C – 12°C", maxWind: "20 km/h", maxPrecipProb: "12%", totalPrecip: "0 mm", peakUV: 3, avgHumidity: "65%",
-  }),
-  scenario("summer_evening_smart", {
-    temperature: 24, feelsLike: 24, wind: 8, gusts: 12, humidity: 52, cloud: 18, precip: 0, precipProb: 4, uv: 3, weatherLabel: "Clear",
-    prefs: ["prefers polished or smart-casual style", "wants the outfit to lean polished"],
-    tempRange: "22°C – 25°C", feelsLikeRange: "22°C – 26°C", maxWind: "12 km/h", maxPrecipProb: "6%", totalPrecip: "0 mm", peakUV: 3, avgHumidity: "53%",
-  }),
-  scenario("transitional_office_casual", {
-    temperature: 20, feelsLike: 20, wind: 9, gusts: 14, humidity: 54, cloud: 33, precip: 0, precipProb: 8, uv: 4, weatherLabel: "Partly cloudy",
-    prefs: ["prefers casual everyday outfits", "will spend most of the day indoors"],
-    tempRange: "19°C – 22°C", feelsLikeRange: "19°C – 22°C", maxWind: "14 km/h", maxPrecipProb: "10%", totalPrecip: "0 mm", peakUV: 4, avgHumidity: "55%",
-  }),
-  scenario("stormy_evening", {
-    temperature: 17, feelsLike: 16, wind: 26, gusts: 38, humidity: 82, cloud: 98, precip: 2.2, precipProb: 88, uv: 1, weatherLabel: "Thunderstorm",
-    prefs: ["prefers casual everyday outfits"],
-    tempRange: "16°C – 18°C", feelsLikeRange: "15°C – 17°C", maxWind: "38 km/h", maxPrecipProb: "92%", totalPrecip: "9.1 mm", peakUV: 1, avgHumidity: "84%",
-  }),
+const cities = [
+  { country: "Germany", name: "Berlin", lat: 52.52, lon: 13.405 },
+  { country: "Germany", name: "Munich", lat: 48.1374, lon: 11.5755 },
+  { country: "Germany", name: "Hamburg", lat: 53.5511, lon: 9.9937 },
+  { country: "Germany", name: "Frankfurt", lat: 50.1109, lon: 8.6821 },
+  { country: "Germany", name: "Cologne", lat: 50.9375, lon: 6.9603 },
+  { country: "United States", name: "New York", lat: 40.7128, lon: -74.006 },
+  { country: "United States", name: "San Francisco", lat: 37.7749, lon: -122.4194 },
+  { country: "United States", name: "Chicago", lat: 41.8781, lon: -87.6298 },
+  { country: "United States", name: "Seattle", lat: 47.6062, lon: -122.3321 },
+  { country: "United States", name: "Boston", lat: 42.3601, lon: -71.0589 },
+  { country: "Pakistan", name: "Islamabad", lat: 33.6844, lon: 73.0479 },
+  { country: "Pakistan", name: "Karachi", lat: 24.8607, lon: 67.0011 },
+  { country: "Pakistan", name: "Lahore", lat: 31.5204, lon: 74.3587 },
+  { country: "Pakistan", name: "Rawalpindi", lat: 33.5651, lon: 73.0169 },
+  { country: "Pakistan", name: "Faisalabad", lat: 31.4504, lon: 73.135 },
+  { country: "Ireland", name: "Dublin", lat: 53.3498, lon: -6.2603 },
+  { country: "Ireland", name: "Cork", lat: 51.8985, lon: -8.4756 },
+  { country: "Ireland", name: "Galway", lat: 53.2707, lon: -9.0568 },
+  { country: "Ireland", name: "Limerick", lat: 52.6638, lon: -8.6267 },
+  { country: "Ireland", name: "Waterford", lat: 52.2593, lon: -7.1101 },
+  { country: "Italy", name: "Milan", lat: 45.4642, lon: 9.19 },
+  { country: "Italy", name: "Rome", lat: 41.9028, lon: 12.4964 },
+  { country: "Italy", name: "Turin", lat: 45.0703, lon: 7.6869 },
+  { country: "Italy", name: "Bologna", lat: 44.4949, lon: 11.3426 },
+  { country: "Italy", name: "Florence", lat: 43.7696, lon: 11.2558 },
+  { country: "Switzerland", name: "Zurich", lat: 47.3769, lon: 8.5417 },
+  { country: "Switzerland", name: "Geneva", lat: 46.2044, lon: 6.1432 },
+  { country: "Switzerland", name: "Basel", lat: 47.5596, lon: 7.5886 },
+  { country: "Switzerland", name: "Lausanne", lat: 46.5197, lon: 6.6323 },
+  { country: "Switzerland", name: "Bern", lat: 46.948, lon: 7.4474 },
 ];
 
-function promptFor(scenario) {
-  const { weather } = scenario;
-  const dayFc = weather.remainingForecast;
-  return `You are WearCast, a smart clothing recommendation assistant.
-
-Given the current weather and the forecast from NOW through the rest of today, suggest a specific outfit they should wear for the rest of today. The user has no wardrobe saved, so suggest a generic outfit only.
-
-## Current Weather
-- Temperature: ${weather.temperature}°C (feels like ${weather.feelsLike}°C)
-- Wind: ${weather.wind} km/h (gusts ${weather.gusts} km/h)
-- Humidity: ${weather.humidity}%
-- Cloud cover: ${weather.cloud}%
-- Precipitation: ${weather.precip} mm/h
-- Precipitation probability: ${weather.precipProb}%
-- UV index: ${weather.uv}
-- Weather: ${weather.weatherLabel}
-- Is daytime: yes
-
-## Forecast For The Rest Of Today
-- Temperature range: ${dayFc.tempRange}
-- Feels-like range: ${dayFc.feelsLikeRange}
-- Max wind: ${dayFc.maxWind}
-- Max precipitation probability: ${dayFc.maxPrecipProb}
-- Total precipitation: ${dayFc.totalPrecip}
-- Peak UV index: ${dayFc.peakUV}
-- Average humidity: ${dayFc.avgHumidity}
-
-## User Preferences
-${scenario.prefs.join("\n")}
-
-## User's Wardrobe
-User has no saved wardrobe items. Suggest a generic outfit only.
-
-## Instructions
-1. Recommend a COMPLETE outfit using short item names only.
-2. Consider ONLY the forecast from now onward today.
-3. Do not mention missing wardrobe pieces beyond one short missing-item suggestion.
-4. Keep reasoning to ONE short sentence.
-5. Return at most ONE accessory, ONE warning, and ONE missing item.
-6. Do not explain each clothing piece separately.
-7. Vary item names naturally when appropriate instead of always using the same generic pieces.
-8. Return JSON only.
-
-Return ONLY valid JSON (no markdown fences):
-{
-  "outfit": {
-    "top": "short item name",
-    "bottom": "short item name",
-    "outer": "short item name, or null if not needed",
-    "shoes": "short item name",
-    "accessories": ["one optional item"]
-  },
-  "reasoning": "One short sentence",
-  "warnings": ["one short warning if needed"],
-  "missingItems": ["one short missing item if needed"]
-}`;
-}
-
-function parseMaybeJson(content, fallback) {
-  try {
-    return JSON.parse(String(content).replace(/^```json\s*/i, "").replace(/```$/i, "").trim());
-  } catch {
-    return { raw: content || fallback };
-  }
-}
-
-const results = [];
-
-for (const [index, scenarioDef] of scenarios.entries()) {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://wearcast.app",
-      "X-Title": "WearCast",
+const profiles = [
+  {
+    id: "office_mild_clear",
+    weather: {
+      temperature: 18,
+      feelsLike: 17,
+      wind: 12,
+      gusts: 18,
+      humidity: 56,
+      cloud: 18,
+      precip: 0,
+      precipProb: 8,
+      uv: 4,
+      weatherLabel: "Mainly clear",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "16°C – 20°C",
+        feelsLikeRange: "15°C – 19°C",
+        maxWind: "18 km/h",
+        maxPrecipProb: "10%",
+        totalPrecip: "0 mm",
+        peakUV: 4,
+        avgHumidity: "57%",
+      },
     },
-    body: JSON.stringify({
-      model: "auto",
-      messages: [{ role: "user", content: promptFor(scenarioDef) }],
-      max_tokens: 200,
-      temperature: 0.35,
-      reasoning: { effort: "none" },
-    }),
-  });
+    preferences: {
+      cold: false,
+      hot: false,
+      formal: true,
+      casual: false,
+      sporty: false,
+      streetwear: false,
+      minimalist: false,
+      bike: false,
+      activityContext: "office",
+      locationContext: "mixed",
+      styleFocus: "polished",
+      fashionNotes: null,
+    },
+  },
+  {
+    id: "commute_rain",
+    weather: {
+      temperature: 14,
+      feelsLike: 11,
+      wind: 23,
+      gusts: 31,
+      humidity: 82,
+      cloud: 92,
+      precip: 1.4,
+      precipProb: 78,
+      uv: 2,
+      weatherLabel: "Rain",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "11°C – 15°C",
+        feelsLikeRange: "8°C – 13°C",
+        maxWind: "32 km/h",
+        maxPrecipProb: "82%",
+        totalPrecip: "7.3 mm",
+        peakUV: 2,
+        avgHumidity: "83%",
+      },
+    },
+    preferences: {
+      cold: false,
+      hot: false,
+      formal: false,
+      casual: true,
+      sporty: false,
+      streetwear: false,
+      minimalist: false,
+      bike: true,
+      activityContext: "commute",
+      locationContext: "transit",
+      styleFocus: "casual",
+      fashionNotes: null,
+    },
+  },
+  {
+    id: "sporty_exposed_breezy",
+    weather: {
+      temperature: 18.5,
+      feelsLike: 14.2,
+      wind: 24.6,
+      gusts: 33,
+      humidity: 61,
+      cloud: 24,
+      precip: 0,
+      precipProb: 10,
+      uv: 4,
+      weatherLabel: "Mainly clear",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "14°C – 19°C",
+        feelsLikeRange: "11°C – 17°C",
+        maxWind: "33 km/h",
+        maxPrecipProb: "12%",
+        totalPrecip: "0 mm",
+        peakUV: 4,
+        avgHumidity: "62%",
+      },
+    },
+    preferences: {
+      cold: false,
+      hot: true,
+      formal: false,
+      casual: false,
+      sporty: true,
+      streetwear: false,
+      minimalist: false,
+      bike: false,
+      activityContext: "workout",
+      locationContext: "exposed",
+      styleFocus: "sporty",
+      fashionNotes: null,
+    },
+  },
+  {
+    id: "cold_outdoors",
+    weather: {
+      temperature: 6,
+      feelsLike: 2,
+      wind: 29,
+      gusts: 39,
+      humidity: 74,
+      cloud: 68,
+      precip: 0.2,
+      precipProb: 32,
+      uv: 2,
+      weatherLabel: "Partly cloudy",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "3°C – 7°C",
+        feelsLikeRange: "-1°C – 4°C",
+        maxWind: "39 km/h",
+        maxPrecipProb: "35%",
+        totalPrecip: "0.4 mm",
+        peakUV: 2,
+        avgHumidity: "75%",
+      },
+    },
+    preferences: {
+      cold: true,
+      hot: false,
+      formal: false,
+      casual: false,
+      sporty: false,
+      streetwear: false,
+      minimalist: false,
+      bike: false,
+      activityContext: "walking",
+      locationContext: "outdoors",
+      styleFocus: "auto",
+      fashionNotes: null,
+    },
+  },
+  {
+    id: "hot_urban_evening",
+    weather: {
+      temperature: 31,
+      feelsLike: 35,
+      wind: 10,
+      gusts: 16,
+      humidity: 71,
+      cloud: 20,
+      precip: 0,
+      precipProb: 6,
+      uv: 7,
+      weatherLabel: "Partly cloudy",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "29°C – 33°C",
+        feelsLikeRange: "33°C – 37°C",
+        maxWind: "16 km/h",
+        maxPrecipProb: "8%",
+        totalPrecip: "0 mm",
+        peakUV: 7,
+        avgHumidity: "72%",
+      },
+    },
+    preferences: {
+      cold: false,
+      hot: true,
+      formal: false,
+      casual: false,
+      sporty: false,
+      streetwear: true,
+      minimalist: false,
+      bike: false,
+      activityContext: "evening",
+      locationContext: "event",
+      styleFocus: "streetwear",
+      fashionNotes: null,
+    },
+  },
+  {
+    id: "minimal_indoor_transition",
+    weather: {
+      temperature: 21,
+      feelsLike: 21,
+      wind: 9,
+      gusts: 13,
+      humidity: 49,
+      cloud: 30,
+      precip: 0,
+      precipProb: 5,
+      uv: 5,
+      weatherLabel: "Clear",
+      isDay: true,
+      remainingForecast: {
+        tempRange: "19°C – 23°C",
+        feelsLikeRange: "19°C – 23°C",
+        maxWind: "13 km/h",
+        maxPrecipProb: "7%",
+        totalPrecip: "0 mm",
+        peakUV: 5,
+        avgHumidity: "50%",
+      },
+    },
+    preferences: {
+      cold: false,
+      hot: false,
+      formal: false,
+      casual: false,
+      sporty: false,
+      streetwear: false,
+      minimalist: true,
+      bike: false,
+      activityContext: "everyday",
+      locationContext: "indoors",
+      styleFocus: "minimalist",
+      fashionNotes: "clean and understated",
+    },
+  },
+];
 
-  const data = await res.json();
-  const content = data?.choices?.[0]?.message?.content || "";
-  const parsed = parseMaybeJson(content, data);
-  results.push({ scenario: scenarioDef.name, status: res.status, parsed });
-  console.error(`sampled ${index + 1}/${scenarios.length}: ${scenarioDef.name}`);
-}
+const wardrobeVariants = [
+  {
+    id: "empty",
+    wardrobe: [],
+  },
+  {
+    id: "starter_capsule",
+    wardrobe: [
+      { id: 1, type: "top", name: "White T-shirt", color: "White", material: "Cotton", careInstructions: [] },
+      { id: 2, type: "bottom", name: "Black Trousers", color: "Black", material: "Wool blend", careInstructions: [] },
+      { id: 3, type: "outer", name: "Black Shell Jacket", color: "Black", material: "Technical shell", careInstructions: [] },
+      { id: 4, type: "shoes", name: "White Sneakers", color: "White", material: "Leather", careInstructions: [] },
+      { id: 5, type: "accessory", name: "Black Cap", color: "Black", material: "Cotton twill", careInstructions: [] },
+    ],
+  },
+];
 
-const uniqueBySlot = { top: new Set(), bottom: new Set(), outer: new Set(), shoes: new Set(), accessories: new Set() };
-for (const entry of results) {
-  const outfit = entry.parsed?.outfit || {};
-  for (const slot of ["top", "bottom", "outer", "shoes"]) {
-    if (typeof outfit[slot] === "string" && outfit[slot].trim()) uniqueBySlot[slot].add(outfit[slot].trim());
-  }
-  if (Array.isArray(outfit.accessories)) {
-    for (const accessory of outfit.accessories) {
-      if (typeof accessory === "string" && accessory.trim()) uniqueBySlot.accessories.add(accessory.trim());
+const cases = [];
+for (const city of cities) {
+  for (const profile of profiles) {
+    for (const wardrobeVariant of wardrobeVariants) {
+      cases.push({
+        city,
+        profile,
+        wardrobeVariant,
+      });
     }
   }
 }
 
-const summary = Object.fromEntries(
-  Object.entries(uniqueBySlot).map(([slot, values]) => [slot, Array.from(values).sort((a, b) => a.localeCompare(b))])
-);
+async function runCase(entry, index, total) {
+  const location = {
+    lat: entry.city.lat,
+    lon: entry.city.lon,
+    name: `${entry.city.name}, ${entry.city.country}`,
+  };
+  const payload = {
+    weather: entry.profile.weather,
+    wardrobe: entry.wardrobeVariant.wardrobe,
+    preferences: entry.profile.preferences,
+    location,
+  };
 
-console.log(JSON.stringify({ results, summary }, null, 2));
+  const startedAt = Date.now();
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const text = await res.text();
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = { raw: text };
+    }
+
+    const result = {
+      index: index + 1,
+      total,
+      ok: res.ok,
+      status: res.status,
+      durationMs: Date.now() - startedAt,
+      city: location.name,
+      profile: entry.profile.id,
+      wardrobeVariant: entry.wardrobeVariant.id,
+      request: payload,
+      response: parsed,
+    };
+    appendFileSync(outputPath, `${JSON.stringify(result)}\n`);
+    console.error(`[${index + 1}/${total}] ${location.name} | ${entry.profile.id} | ${entry.wardrobeVariant.id} -> ${res.status}`);
+    return result;
+  } catch (error) {
+    const result = {
+      index: index + 1,
+      total,
+      ok: false,
+      status: "FETCH_ERROR",
+      durationMs: Date.now() - startedAt,
+      city: location.name,
+      profile: entry.profile.id,
+      wardrobeVariant: entry.wardrobeVariant.id,
+      request: payload,
+      error: error?.message || String(error),
+    };
+    appendFileSync(outputPath, `${JSON.stringify(result)}\n`);
+    console.error(`[${index + 1}/${total}] ${location.name} | ${entry.profile.id} | ${entry.wardrobeVariant.id} -> ERROR ${result.error}`);
+    return result;
+  }
+}
+
+const summary = {
+  endpoint,
+  totalCases: cases.length,
+  concurrency,
+  countries: [...new Set(cities.map((city) => city.country))],
+  profiles: profiles.map((profile) => profile.id),
+  wardrobeVariants: wardrobeVariants.map((variant) => variant.id),
+  outputPath,
+  successes: 0,
+  failures: 0,
+  startedAt: new Date().toISOString(),
+  finishedAt: null,
+  byStatus: {},
+};
+
+let nextIndex = 0;
+const workers = Array.from({ length: concurrency }, async () => {
+  while (nextIndex < cases.length) {
+    const currentIndex = nextIndex;
+    nextIndex += 1;
+    const result = await runCase(cases[currentIndex], currentIndex, cases.length);
+    if (result.ok) summary.successes += 1;
+    else summary.failures += 1;
+    const statusKey = String(result.status);
+    summary.byStatus[statusKey] = (summary.byStatus[statusKey] || 0) + 1;
+  }
+});
+
+await Promise.all(workers);
+
+summary.finishedAt = new Date().toISOString();
+writeFileSync(summaryPath, `${JSON.stringify(summary, null, 2)}\n`);
+
+console.log(JSON.stringify({
+  ...summary,
+  summaryPath,
+}, null, 2));

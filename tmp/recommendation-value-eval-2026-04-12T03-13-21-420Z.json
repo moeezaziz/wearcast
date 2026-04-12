@@ -1,0 +1,213 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T03-13-18-623Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 77.5,
+    "avgProfileFit": 55.8,
+    "avgDecisionFatigue": 15,
+    "completeOutfitRate": 0
+  },
+  "verdict": {
+    "providesDailyValue": false,
+    "reducesDecisionFatigue": false,
+    "hasHealthyVariability": false
+  },
+  "profileSummary": {
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 75,
+      "avgDecisionFatigue": 15
+    },
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 65,
+      "avgProfileFit": 30,
+      "avgDecisionFatigue": 15
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 80,
+      "avgProfileFit": 35,
+      "avgDecisionFatigue": 15
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 35,
+      "avgProfileFit": 30,
+      "avgDecisionFatigue": 15
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 85,
+      "avgProfileFit": 85,
+      "avgDecisionFatigue": 15
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 1,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 80,
+      "avgDecisionFatigue": 15
+    }
+  },
+  "diversityFailures": [
+    {
+      "profile": "office_mild_clear",
+      "uniqueOutfits": 1,
+      "cases": 60
+    },
+    {
+      "profile": "commute_rain",
+      "uniqueOutfits": 1,
+      "cases": 60
+    },
+    {
+      "profile": "sporty_exposed_breezy",
+      "uniqueOutfits": 1,
+      "cases": 60
+    },
+    {
+      "profile": "cold_outdoors",
+      "uniqueOutfits": 1,
+      "cases": 60
+    },
+    {
+      "profile": "hot_urban_evening",
+      "uniqueOutfits": 1,
+      "cases": 60
+    },
+    {
+      "profile": "minimal_indoor_transition",
+      "uniqueOutfits": 1,
+      "cases": 60
+    }
+  ],
+  "weakestExamples": [
+    {
+      "city": "Berlin, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Frankfurt, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Frankfurt, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Cologne, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Cologne, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "New York, United States",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "New York, United States",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    }
+  ]
+}

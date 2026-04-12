@@ -1,0 +1,32 @@
+{
+  "endpoint": "http://127.0.0.1:3001/api/recommend",
+  "totalCases": 360,
+  "countries": [
+    "Germany",
+    "United States",
+    "Pakistan",
+    "Ireland",
+    "Italy",
+    "Switzerland"
+  ],
+  "profiles": [
+    "office_mild_clear",
+    "commute_rain",
+    "sporty_exposed_breezy",
+    "cold_outdoors",
+    "hot_urban_evening",
+    "minimal_indoor_transition"
+  ],
+  "wardrobeVariants": [
+    "empty",
+    "starter_capsule"
+  ],
+  "outputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T02-44-53-815Z.jsonl",
+  "successes": 0,
+  "failures": 360,
+  "startedAt": "2026-04-12T02:44:53.820Z",
+  "finishedAt": "2026-04-12T02:44:54.153Z",
+  "byStatus": {
+    "FETCH_ERROR": 360
+  }
+}

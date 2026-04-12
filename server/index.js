@@ -27,7 +27,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = "auto";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
-const RECOMMENDATION_COPY_VERSION = 7;
+const RECOMMENDATION_COPY_VERSION = 14;
 const weatherCache = new Map();
 const recommendationCache = new Map();
 const STOCK_IMAGE_CATALOG = {
@@ -35,8 +35,14 @@ const STOCK_IMAGE_CATALOG = {
     slot: "top",
     path: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
     description: "white crew-neck T-shirt in a clean studio flat lay",
-    keywords: ["t-shirt", "tee", "tee shirt", "tshirt", "short sleeve", "crew neck", "basic tee", "cotton t-shirt", "lightweight t-shirt", "long-sleeve t-shirt", "long sleeve t-shirt", "oversized tee"],
+    keywords: ["t-shirt", "tee", "tee shirt", "tshirt", "short sleeve", "crew neck", "basic tee", "cotton t-shirt", "lightweight t-shirt", "oversized tee", "white performance tee"],
     fallback: true,
+  },
+  top_white_long_sleeve_tshirt_studio: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-white-long-sleeve-tshirt-studio.jpg",
+    description: "white long sleeve T-shirt on a clean studio background",
+    keywords: ["long-sleeve t-shirt", "long sleeve t-shirt", "long-sleeve tshirt", "long sleeve tshirt", "long sleeve tee", "long-sleeve tee", "long sleeve top", "long-sleeve top"],
   },
   top_white_hoodie_studio: {
     slot: "top",
@@ -48,7 +54,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "top",
     path: "assets/recommendation-stock/top-white-button-up-shirt.jpg",
     description: "white button-up shirt on hangers in soft studio light",
-    keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "oxford shirt", "dress shirt", "collared shirt", "white shirt", "long-sleeve shirt", "polo shirt"],
+    keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "oxford shirt", "dress shirt", "collared shirt", "white shirt", "long-sleeve shirt", "polo shirt", "linen shirt"],
   },
   top_white_polo_studio: {
     slot: "top",
@@ -87,11 +93,23 @@ const STOCK_IMAGE_CATALOG = {
     description: "blue denim shorts on a clean white background",
     keywords: ["shorts", "denim shorts", "loose shorts", "chino shorts", "cotton shorts", "summer shorts"],
   },
+  bottom_athletic_running_shorts_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-athletic-running-shorts-studio.jpg",
+    description: "athletic running shorts styled in a studio fashion shot",
+    keywords: ["running shorts", "athletic shorts", "sport shorts", "training shorts", "performance shorts"],
+  },
   bottom_black_trousers_studio: {
     slot: "bottom",
     path: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
     description: "black tailored trousers on a white studio background",
-    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants", "charcoal chinos", "warm trousers", "wool trousers", "tailored wool trousers"],
+    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants", "charcoal chinos", "warm trousers", "wool trousers", "tailored wool trousers", "lightweight chinos"],
+  },
+  bottom_black_tech_joggers_studio: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+    description: "black technical jogger-style trousers in a clean product shot",
+    keywords: ["black tech joggers", "tech joggers", "performance joggers", "joggers", "fleece-lined trousers"],
   },
   bottom_athletic_leggings_studio: {
     slot: "bottom",
@@ -154,6 +172,12 @@ const STOCK_IMAGE_CATALOG = {
     description: "charcoal overshirt jacket over a knit top",
     keywords: ["overshirt", "shirt jacket", "charcoal overshirt", "light jacket", "casual jacket", "overshirt jacket"],
   },
+  outer_black_light_overshirt_street: {
+    slot: "outer",
+    path: "assets/recommendation-stock/outer-black-light-overshirt-street.jpg",
+    description: "black lightweight overshirt styled in a streetwear shot",
+    keywords: ["light overshirt", "breathable overshirt", "lightweight overshirt", "black overshirt", "shacket", "light shacket"],
+  },
   outer_rust_parka_outdoors: {
     slot: "outer",
     path: "assets/recommendation-stock/outer-rust-parka-outdoors.jpg",
@@ -195,7 +219,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-white-performance-runner-studio.jpg",
     description: "white performance running shoe in a dramatic product shot",
-    keywords: ["performance runner", "running sneakers", "running shoes", "white running shoe", "athletic shoes", "technical sneakers"],
+    keywords: ["performance runner", "running sneakers", "running shoes", "white running shoe", "athletic shoes", "technical sneakers", "white running shoes"],
+  },
+  shoes_gray_trail_runners_studio: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-gray-trail-runners-studio.jpg",
+    description: "gray trail running shoes in a product-style shot",
+    keywords: ["trail runners", "trail running shoes", "trail shoes", "grip runners"],
   },
   shoes_black_loafers_studio: {
     slot: "shoes",
@@ -213,7 +243,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "shoes",
     path: "assets/recommendation-stock/shoes-tan-winter-boots.jpg",
     description: "tan winter boots on a soft white background",
-    keywords: ["boots", "ankle boots", "winter boots", "suede boots", "waterproof boots", "water-resistant boots", "insulated boots"],
+    keywords: ["boots", "ankle boots", "winter boots", "suede boots", "waterproof boots", "water-resistant boots", "insulated boots", "waterproof hiking boots", "insulated walking boots"],
   },
   shoes_brown_ankle_boots_studio: {
     slot: "shoes",
@@ -237,7 +267,7 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
     description: "patterned silk scarf on a white background",
-    keywords: ["scarf", "neck scarf", "silk scarf", "wrap", "light scarf", "lightweight scarf"],
+    keywords: ["scarf", "neck scarf", "silk scarf", "wrap", "light scarf", "lightweight scarf", "wool scarf"],
   },
   accessory_yellow_silk_scarf_studio: {
     slot: "accessory",
@@ -261,7 +291,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "accessory",
     path: "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
     description: "black baseball cap worn outdoors",
-    keywords: ["black baseball cap", "black cap", "baseball cap", "cap", "dad cap", "sport cap", "snapback cap"],
+    keywords: ["black baseball cap", "black cap", "baseball cap", "cap", "dad cap", "sport cap", "snapback cap", "compact cap"],
+  },
+  accessory_black_sports_cap_outdoors: {
+    slot: "accessory",
+    path: "assets/recommendation-stock/accessory-black-sports-cap-outdoors.jpg",
+    description: "black sports cap in an outdoor product-style shot",
+    keywords: ["sports cap", "black sport cap", "sport cap", "running cap", "athletic cap"],
   },
   accessory_white_sun_hat_studio: {
     slot: "accessory",
@@ -311,7 +347,14 @@ function decodeOAuthState(state) {
   }
 }
 
-async function chatCompletion(messages, { maxTokens = 560, requestId = null, traceLabel = "chat", timeoutMs = 18000 } = {}) {
+async function chatCompletion(messages, {
+  maxTokens = 560,
+  requestId = null,
+  traceLabel = "chat",
+  timeoutMs = 18000,
+  allowEmptyRetry = true,
+  compactJsonRetry = false,
+} = {}) {
   const startedAt = Date.now();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(new Error(`openrouter_timeout_${timeoutMs}ms`)), timeoutMs);
@@ -327,6 +370,15 @@ async function chatCompletion(messages, { maxTokens = 560, requestId = null, tra
       messageCount: Array.isArray(messages) ? messages.length : 0,
       promptChars: Array.isArray(messages) ? messages.reduce((sum, msg) => sum + String(msg?.content || "").length, 0) : 0,
     });
+    const requestMessages = compactJsonRetry
+      ? [
+          ...(Array.isArray(messages) ? messages : []),
+          {
+            role: "user",
+            content: "Return compact valid JSON only. Keep every value short and finish the answer quickly.",
+          },
+        ]
+      : messages;
     const res = await fetch(OPENROUTER_URL, {
       method: "POST",
       signal: controller.signal,
@@ -338,13 +390,17 @@ async function chatCompletion(messages, { maxTokens = 560, requestId = null, tra
       },
       body: JSON.stringify({
         model: MODEL,
-        messages,
+        messages: requestMessages,
         max_tokens: maxTokens,
-        temperature: 0.2,
-        reasoning: {
-          effort: "minimal",
-          exclude: true,
-        },
+        temperature: compactJsonRetry ? 0 : 0.2,
+        ...(compactJsonRetry
+          ? {}
+          : {
+              reasoning: {
+                effort: "minimal",
+                exclude: true,
+              },
+            }),
       }),
     });
     if (!res.ok) {
@@ -359,6 +415,7 @@ async function chatCompletion(messages, { maxTokens = 560, requestId = null, tra
     const data = await res.json();
     const content = data?.choices?.[0]?.message?.content;
     if (typeof content !== "string" || !content.trim()) {
+      const finishReason = data?.choices?.[0]?.finish_reason || data?.choices?.[0]?.native_finish_reason || null;
       console.warn("OpenRouter empty content response:", JSON.stringify({
         id: data?.id,
         model: data?.model,
@@ -367,7 +424,25 @@ async function chatCompletion(messages, { maxTokens = 560, requestId = null, tra
         usage: data?.usage,
         error: data?.error,
       }).slice(0, 3000));
-      throw new Error("OpenRouter returned empty content");
+      if (allowEmptyRetry) {
+        const retryMaxTokens = Math.max(220, Math.min(360, Math.round(maxTokens * 0.55)));
+        console.warn("[openrouter] retrying after empty content", {
+          requestId,
+          traceLabel,
+          finishReason,
+          previousMaxTokens: maxTokens,
+          retryMaxTokens,
+        });
+        return chatCompletion(messages, {
+          maxTokens: retryMaxTokens,
+          requestId,
+          traceLabel: `${traceLabel}-retry`,
+          timeoutMs: Math.min(timeoutMs, 16000),
+          allowEmptyRetry: false,
+          compactJsonRetry: true,
+        });
+      }
+      throw new Error(`OpenRouter returned empty content${finishReason ? ` (${finishReason})` : ""}`);
     }
     console.info("[openrouter] success", {
       requestId,
@@ -530,9 +605,14 @@ function setCachedWeather(lat, lon, data) {
   });
 }
 
-function recommendationCacheKey(weather, wardrobe, preferences) {
+function recommendationCacheKey(weather, wardrobe, preferences, location = {}) {
   return JSON.stringify({
     copyVersion: RECOMMENDATION_COPY_VERSION,
+    location: {
+      name: cleanInlineText(location?.name || ""),
+      lat: Number.isFinite(Number(location?.lat)) ? Math.round(Number(location.lat) * 100) / 100 : null,
+      lon: Number.isFinite(Number(location?.lon)) ? Math.round(Number(location.lon) * 100) / 100 : null,
+    },
     temperature: Math.round(Number(weather?.temperature) || 0),
     feelsLike: Math.round(Number(weather?.feelsLike) || 0),
     wind: Math.round(Number(weather?.wind) || 0),
@@ -804,6 +884,29 @@ function normalizeDetailsOverview(value) {
   };
 }
 
+function normalizeRecommendationItemDetail(value) {
+  const source = value && typeof value === "object" && !Array.isArray(value)
+    ? value
+    : {};
+  return {
+    color: cleanInlineText(source?.color),
+    material: cleanInlineText(source?.material),
+  };
+}
+
+function normalizeRecommendationItemDetails(value) {
+  const source = value && typeof value === "object" && !Array.isArray(value)
+    ? value
+    : {};
+  return {
+    top: normalizeRecommendationItemDetail(source?.top),
+    bottom: normalizeRecommendationItemDetail(source?.bottom),
+    outer: normalizeRecommendationItemDetail(source?.outer),
+    shoes: normalizeRecommendationItemDetail(source?.shoes),
+    accessory: normalizeRecommendationItemDetail(source?.accessory),
+  };
+}
+
 function normalizeCareInstructions(value, { limit = 8 } = {}) {
   const values = Array.isArray(value)
     ? value
@@ -887,6 +990,7 @@ function normalizeRecommendationResponse(parsed) {
     outfit,
     outfitImages: buildRecommendationImageMatches(outfit),
     slotReasons,
+    itemDetails: normalizeRecommendationItemDetails(parsed?.itemDetails),
     reasoning: clampSentenceCount(parsed?.reasoning, 1),
     detailsOverview: normalizeDetailsOverview(parsed?.detailsOverview),
     warnings: normalizeList(parsed?.warnings, { limit: 1 }),
@@ -926,12 +1030,969 @@ function ensureRecommendationShape(response, weather = {}) {
     accessory: cleanInlineText(response?.slotReasons?.accessory) || "Finishes the outfit with a useful extra.",
   };
 
+  const itemDetails = normalizeRecommendationItemDetails(response?.itemDetails);
+
   return {
     ...response,
     outfit,
     slotReasons,
+    itemDetails,
     outfitImages: buildRecommendationImageMatches(outfit),
   };
+}
+
+function hasCompleteItemDetails(itemDetails, outfit) {
+  const slots = ["top", "bottom", "shoes"];
+  if (cleanInlineText(outfit?.outer)) slots.push("outer");
+  if (cleanInlineText(Array.isArray(outfit?.accessories) ? outfit.accessories[0] : outfit?.accessories)) slots.push("accessory");
+  return slots.every((slot) => {
+    const details = itemDetails?.[slot];
+    return cleanInlineText(details?.color) && cleanInlineText(details?.material);
+  });
+}
+
+function buildFallbackItemDetails(outfit = {}) {
+  const inferDetails = (text, slot) => {
+    const lower = cleanInlineText(text).toLowerCase();
+    const color =
+      /\bblack\b/.test(lower) ? "Black" :
+      /\bwhite\b/.test(lower) ? "White" :
+      /\bblue\b/.test(lower) ? "Blue" :
+      /\bgray|grey|charcoal\b/.test(lower) ? "Grey" :
+      /\bbrown\b/.test(lower) ? "Brown" :
+      /\bgreen|olive\b/.test(lower) ? "Olive" :
+      /\bred|burgundy|rust\b/.test(lower) ? "Rust red" :
+      /\bbeige|tan|camel\b/.test(lower) ? "Tan" :
+      slot === "accessory" ? "Weather-ready neutral" : "Easy neutral";
+    const material =
+      /\bfleece|sherpa\b/.test(lower) ? "Soft fleece" :
+      /\bhoodie|sweater|knit|jumper|beanie|scarf\b/.test(lower) ? "Knit fabric" :
+      /\bblazer|trouser|pants|chino|button-up|shirt|polo\b/.test(lower) ? "Structured woven fabric" :
+      /\bjean|denim|shorts\b/.test(lower) ? "Denim or cotton twill" :
+      /\blegging|running\b/.test(lower) ? "Stretch performance knit" :
+      /\bwindbreaker|parka|waterproof|shell|jacket|coat|overshirt\b/.test(lower) ? "Technical outerwear fabric" :
+      /\bsneaker\b/.test(lower) ? "Mesh and rubber" :
+      /\bloafer|boot\b/.test(lower) ? "Leather or suede" :
+      /\bumbrella\b/.test(lower) ? "Waterproof canopy fabric" :
+      /\bglove\b/.test(lower) ? "Soft insulated fabric" :
+      /\bwatch\b/.test(lower) ? "Metal and leather mix" :
+      /\bsunglasses\b/.test(lower) ? "Tinted acetate and metal" :
+      /\bcap|hat\b/.test(lower) ? "Cotton twill" :
+      "Versatile everyday fabric";
+    return { color, material };
+  };
+
+  const accessory = cleanInlineText(Array.isArray(outfit.accessories) ? outfit.accessories[0] : outfit.accessories);
+  return {
+    top: inferDetails(outfit.top, "top"),
+    bottom: inferDetails(outfit.bottom, "bottom"),
+    outer: outfit.outer ? inferDetails(outfit.outer, "outer") : { color: "", material: "" },
+    shoes: inferDetails(outfit.shoes, "shoes"),
+    accessory: accessory ? inferDetails(accessory, "accessory") : { color: "", material: "" },
+  };
+}
+
+function normalizeWardrobeSlot(type = "") {
+  const key = cleanInlineText(type).toLowerCase();
+  if (!key) return "";
+  if (["top", "shirt", "t-shirt", "tee", "sweater", "polo"].includes(key)) return "top";
+  if (["bottom", "pants", "trousers", "jeans", "shorts", "leggings", "joggers"].includes(key)) return "bottom";
+  if (["outer", "outerwear", "jacket", "coat", "hoodie", "blazer", "overshirt", "parka"].includes(key)) return "outer";
+  if (["shoes", "shoe", "sneakers", "boots", "loafers", "runners"].includes(key)) return "shoes";
+  if (["accessory", "accessories", "scarf", "beanie", "hat", "gloves", "umbrella", "watch", "sunglasses", "cap", "baseball cap", "bag"].includes(key)) return "accessory";
+  return key;
+}
+
+function normalizePreferenceProfile(preferences = {}) {
+  const style = preferences?.styleFocus && preferences.styleFocus !== "auto"
+    ? preferences.styleFocus
+    : preferences?.formal
+      ? "polished"
+      : preferences?.sporty
+        ? "sporty"
+        : preferences?.streetwear
+          ? "streetwear"
+          : preferences?.minimalist
+            ? "minimalist"
+            : preferences?.casual
+              ? "casual"
+              : "casual";
+  const activity = preferences?.activityContext || "everyday";
+  const setting = preferences?.locationContext || "mixed";
+  return { style, activity, setting };
+}
+
+function deriveRecommendationProfileBand(preferences = {}, weather = {}) {
+  const { style, activity, setting } = normalizePreferenceProfile(preferences);
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const hot = preferences?.hot || feelsLike >= 26;
+  const cold = preferences?.cold || feelsLike <= 10;
+  const wet = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  if (activity === "office" || setting === "event" || style === "polished") return "office";
+  if (activity === "workout" || style === "sporty") return "sporty";
+  if (hot && (activity === "evening" || setting === "event")) return "hot-evening";
+  if (cold || wet) return "weather-led";
+  if (style === "minimalist") return "minimal";
+  if (style === "streetwear") return "streetwear";
+  return "casual";
+}
+
+function hashString(value = "") {
+  let hash = 0;
+  const text = String(value);
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function buildArchetypeOptions(profileBand, preferences = {}, weather = {}) {
+  const hot = preferences?.hot || Number(weather?.feelsLike ?? weather?.temperature) >= 26;
+  const cold = preferences?.cold || Number(weather?.feelsLike ?? weather?.temperature) <= 10;
+  const wet = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const windy = Number(weather?.wind ?? 0) >= 24;
+  const options = {
+    office: [
+      {
+        name: "smart tailoring",
+        top: "oxford shirt or crisp collared shirt",
+        bottom: "tailored trousers",
+        outer: wet ? "weather-smart shell with clean lines" : "lightweight blazer",
+        shoes: "leather loafers or polished smart shoes",
+        accessory: "watch or refined scarf",
+        avoid: "t-shirt, cap, sporty runners",
+        keywords: {
+          top: ["oxford", "collared", "button-up", "button up", "shirt"],
+          bottom: ["tailored", "trouser", "pleated"],
+          outer: wet ? ["shell", "rain", "mac", "coat"] : ["blazer", "tailored jacket"],
+          shoes: ["loafer", "derby", "dress", "leather"],
+          accessory: ["watch", "scarf", "umbrella"],
+        },
+      },
+      {
+        name: "knit polo office casual",
+        top: "refined knit polo or fine-gauge knit",
+        bottom: "clean chinos",
+        outer: "minimal overshirt or none",
+        shoes: "minimal leather sneakers or loafers",
+        accessory: "understated watch",
+        avoid: "graphic tee, baseball cap, cargo bottoms",
+        keywords: {
+          top: ["knit polo", "polo", "fine-gauge", "merino", "knit"],
+          bottom: ["chino", "clean trouser"],
+          outer: ["overshirt", "none"],
+          shoes: ["minimal sneaker", "leather sneaker", "loafer"],
+          accessory: ["watch"],
+        },
+      },
+      {
+        name: "commuter polish",
+        top: "fine merino crewneck or polished knit",
+        bottom: "structured wool trousers",
+        outer: wet || cold ? "refined shell or tailored coat" : "tailored overshirt",
+        shoes: "derby shoes or leather sneakers",
+        accessory: "compact umbrella or subtle scarf",
+        avoid: "athletic tank, obvious gym pieces",
+        keywords: {
+          top: ["merino", "crewneck", "polished knit", "fine knit"],
+          bottom: ["wool trouser", "structured trouser", "trouser"],
+          outer: wet || cold ? ["tailored coat", "refined shell", "mac", "coat"] : ["tailored overshirt", "overshirt"],
+          shoes: ["derby", "leather sneaker", "leather shoe"],
+          accessory: ["umbrella", "scarf"],
+        },
+      },
+      {
+        name: "soft tailoring",
+        top: "open-collar woven shirt",
+        bottom: "pleated tapered trousers",
+        outer: "clean bomber or overshirt",
+        shoes: "loafers",
+        accessory: "watch",
+        avoid: "hoodie, sport cap, trail shoes",
+        keywords: {
+          top: ["open-collar", "woven shirt", "camp collar", "shirt"],
+          bottom: ["pleated", "tapered trouser", "trouser"],
+          outer: ["bomber", "overshirt"],
+          shoes: ["loafer"],
+          accessory: ["watch"],
+        },
+      },
+    ],
+    sporty: [
+      {
+        name: "run-ready",
+        top: "performance tee or athletic tank",
+        bottom: hot ? "running shorts" : "light tech shorts",
+        outer: windy || wet ? "lightweight windbreaker" : "no outer",
+        shoes: "runners or trail runners",
+        accessory: "sports cap",
+        avoid: "loafers, blazer, tailored trousers",
+        keywords: {
+          top: ["performance tee", "athletic tank", "running tee", "training tee"],
+          bottom: ["running short", "tech short"],
+          outer: windy || wet ? ["windbreaker", "shell"] : ["none"],
+          shoes: ["runner", "trail runner", "trainer"],
+          accessory: ["sports cap", "cap"],
+        },
+      },
+      {
+        name: "athleisure commuter",
+        top: "performance quarter-zip or fitted training tee",
+        bottom: "tech joggers",
+        outer: "track jacket",
+        shoes: "running shoes",
+        accessory: "sports watch",
+        avoid: "office shirt, leather shoes",
+        keywords: {
+          top: ["quarter-zip", "quarter zip", "training tee", "performance tee"],
+          bottom: ["tech jogger", "jogger"],
+          outer: ["track jacket"],
+          shoes: ["running shoe", "trainer", "runner"],
+          accessory: ["watch"],
+        },
+      },
+      {
+        name: "cool-weather training",
+        top: "long-sleeve performance top",
+        bottom: "running leggings or warm training pants",
+        outer: "light technical jacket or shell",
+        shoes: "grip runners",
+        accessory: "beanie or sports cap",
+        avoid: "cotton chinos, dressy pieces",
+        keywords: {
+          top: ["long-sleeve performance", "thermal performance", "compression", "performance top"],
+          bottom: ["legging", "training pant", "warm jogger"],
+          outer: ["technical jacket", "shell"],
+          shoes: ["grip runner", "runner", "trail runner"],
+          accessory: ["beanie", "sports cap", "cap"],
+        },
+      },
+      {
+        name: "court-sport casual",
+        top: "performance polo or clean training tee",
+        bottom: "sport shorts",
+        outer: "packable shell or no outer",
+        shoes: "court-style trainers",
+        accessory: "light cap",
+        avoid: "formal blazer, office loafers",
+        keywords: {
+          top: ["performance polo", "training tee", "court tee"],
+          bottom: ["sport short", "training short"],
+          outer: ["packable shell", "none"],
+          shoes: ["court trainer", "trainer"],
+          accessory: ["cap"],
+        },
+      },
+    ],
+    "hot-evening": [
+      {
+        name: "elevated warm-evening",
+        top: "airy shirt or linen shirt",
+        bottom: "lightweight chinos or tailored shorts",
+        outer: "no outer",
+        shoes: "clean sneakers or loafers",
+        accessory: "watch or refined small accessory",
+        avoid: "basic white tee with cap if a dressier option works",
+      },
+      {
+        name: "relaxed city evening",
+        top: "breathable open-collar top",
+        bottom: "soft lightweight trousers",
+        outer: "no outer",
+        shoes: "minimal sneakers",
+        accessory: "subtle watch",
+        avoid: "winter layers, sporty cap-heavy look",
+      },
+      {
+        name: "dressy summer night",
+        top: "lightweight woven shirt",
+        bottom: "tapered light trousers",
+        outer: "no outer unless breeze truly requires it",
+        shoes: "sharp loafers or refined sneakers",
+        accessory: "evening-friendly accessory",
+        avoid: "plain daytime casual formula",
+      },
+      {
+        name: "summer social minimal",
+        top: "refined knit tee or knit polo",
+        bottom: "easy tapered chinos",
+        outer: "none",
+        shoes: "sleek low-profile sneakers",
+        accessory: "watch",
+        avoid: "baseball cap, technical runners",
+      },
+    ],
+    "weather-led": [
+      {
+        name: "weather shield",
+        top: wet ? "long-sleeve base" : "warmer knit or long-sleeve top",
+        bottom: wet ? "water-resistant tapered trousers" : "practical trousers",
+        outer: wet ? "waterproof shell" : "protective outer if needed",
+        shoes: wet ? "waterproof sneakers" : "grippy shoes",
+        accessory: wet ? "umbrella" : "weather-aware accessory",
+        avoid: "delicate or overly airy pieces",
+        keywords: {
+          top: ["long-sleeve", "base", "knit"],
+          bottom: wet ? ["water-resistant trouser", "tapered trouser", "technical trouser"] : ["practical trouser", "trouser"],
+          outer: wet ? ["waterproof shell", "rain jacket", "shell"] : ["jacket", "shell", "coat"],
+          shoes: wet ? ["waterproof sneaker", "weatherproof sneaker"] : ["grippy shoe", "boot", "sneaker"],
+          accessory: wet ? ["umbrella"] : ["watch", "scarf", "cap"],
+        },
+      },
+      {
+        name: "cold-city protection",
+        top: cold ? "thermal or knit base" : "light knit",
+        bottom: cold ? "insulating bottoms" : "durable bottoms",
+        outer: cold ? "protective outer or winter coat" : "wind layer",
+        shoes: cold ? "boots" : "grounded sneakers",
+        accessory: cold ? "warm accessory" : "practical accessory",
+        avoid: "shorts, tanks",
+        keywords: {
+          top: cold ? ["thermal", "knit", "fleece", "long-sleeve"] : ["light knit", "long-sleeve"],
+          bottom: cold ? ["insulating pant", "wool trouser", "jean"] : ["durable trouser", "jean"],
+          outer: cold ? ["winter coat", "coat", "parka", "jacket"] : ["wind layer", "shell", "jacket"],
+          shoes: cold ? ["boot"] : ["grounded sneaker", "sneaker"],
+          accessory: cold ? ["scarf", "beanie", "gloves"] : ["umbrella", "watch", "cap"],
+        },
+      },
+      {
+        name: "transit utility",
+        top: "overshirt base or textured long-sleeve",
+        bottom: "dark jeans or utility trousers",
+        outer: "hooded shell or overshirt",
+        shoes: "rubber-soled boots or grounded sneakers",
+        accessory: "compact umbrella or cap",
+        avoid: "flimsy layers",
+        keywords: {
+          top: ["overshirt base", "textured long-sleeve", "long-sleeve", "overshirt"],
+          bottom: ["dark jean", "utility trouser", "jean"],
+          outer: ["hooded shell", "overshirt", "shell"],
+          shoes: ["boot", "grounded sneaker", "rubber-soled"],
+          accessory: ["umbrella", "cap"],
+        },
+      },
+    ],
+    minimal: [
+      {
+        name: "monochrome gallery",
+        top: "clean knit tee",
+        bottom: "cropped streamlined trousers",
+        outer: "none",
+        shoes: "minimal leather sneakers",
+        accessory: "slim watch",
+        avoid: "busy graphics, statement layers",
+        keywords: {
+          top: ["knit tee", "clean tee", "fine-gauge tee"],
+          bottom: ["cropped trouser", "streamlined trouser", "cropped"],
+          outer: ["none"],
+          shoes: ["minimal leather sneaker", "minimal sneaker", "low-profile sneaker"],
+          accessory: ["watch"],
+        },
+      },
+      {
+        name: "quiet luxury light",
+        top: "refined poplin shirt",
+        bottom: "clean chinos",
+        outer: "none",
+        shoes: "soft loafers",
+        accessory: "pared-back watch",
+        avoid: "sport cap, loud sneakers",
+        keywords: {
+          top: ["poplin", "crisp shirt", "shirt"],
+          bottom: ["chino"],
+          outer: ["none"],
+          shoes: ["loafer"],
+          accessory: ["watch"],
+        },
+      },
+      {
+        name: "tonal overshirt set",
+        top: "fine-gauge knit polo",
+        bottom: "sleek tonal trousers",
+        outer: "ultra-clean overshirt",
+        shoes: "quiet low-profile sneakers",
+        accessory: "slim sunglasses",
+        avoid: "extra layers with no purpose",
+        keywords: {
+          top: ["knit polo", "fine-gauge knit", "polo"],
+          bottom: ["sleek trouser", "tonal trouser"],
+          outer: ["overshirt"],
+          shoes: ["low-profile sneaker", "minimal sneaker"],
+          accessory: ["sunglasses"],
+        },
+      },
+      {
+        name: "soft studio minimal",
+        top: "light merino crewneck",
+        bottom: "drawstring tailored trousers",
+        outer: "none",
+        shoes: "slip-on loafers",
+        accessory: "structured tote",
+        avoid: "heavy layers, bright logos",
+        keywords: {
+          top: ["merino", "crewneck"],
+          bottom: ["drawstring trouser", "tailored trouser"],
+          outer: ["none"],
+          shoes: ["slip-on loafer", "loafer", "slip on"],
+          accessory: ["tote", "bag"],
+        },
+      },
+    ],
+    streetwear: [
+      {
+        name: "streetwear layered",
+        top: "graphic or styled top",
+        bottom: "relaxed trousers",
+        outer: "statement light outer",
+        shoes: "standout sneakers",
+        accessory: "cap or bag",
+        avoid: "overly formal office styling",
+      },
+      {
+        name: "clean streetwear",
+        top: "oversized top",
+        bottom: "technical pants",
+        outer: "sleek shell or overshirt",
+        shoes: "retro sneakers",
+        accessory: "urban accessory",
+        avoid: "plain business casual formula",
+      },
+      {
+        name: "city utility",
+        top: "boxy tee or textured long-sleeve",
+        bottom: "utility trousers",
+        outer: "light shell",
+        shoes: "chunky or retro runners",
+        accessory: "crossbody or cap",
+        avoid: "loafers, tailored blazer",
+      },
+    ],
+    casual: [
+      {
+        name: "everyday casual",
+        top: "easy tee or shirt",
+        bottom: "comfortable trousers or jeans",
+        outer: "light layer only if justified",
+        shoes: "versatile sneakers",
+        accessory: "simple accessory",
+        avoid: "overbuilt layering",
+      },
+      {
+        name: "smart relaxed",
+        top: "long-sleeve top or woven shirt",
+        bottom: "chinos",
+        outer: "minimal layer",
+        shoes: "clean shoes",
+        accessory: "practical accessory",
+        avoid: "overly sporty details",
+      },
+      {
+        name: "weekend utility",
+        top: "soft knit or easy overshirt base",
+        bottom: "durable jeans or casual trousers",
+        outer: "overshirt or shell if needed",
+        shoes: "easy everyday sneakers",
+        accessory: "watch or cap",
+        avoid: "formal office cues",
+      },
+    ],
+  }[profileBand] || [];
+  return options.slice(0, 4);
+}
+
+function keywordsMatchText(text = "", keywords = []) {
+  const normalized = cleanInlineText(text).toLowerCase();
+  return keywords.some((keyword) => normalized.includes(String(keyword).toLowerCase()));
+}
+
+function buildArchetypeDirective(profileBand, location, preferences = {}, weather = {}) {
+  const options = buildArchetypeOptions(profileBand, preferences, weather);
+  if (!options.length) return { text: "- No archetype guidance.", profileBand, variantIndex: 0 };
+  const seed = [
+    location?.name || "",
+    Math.round(Number(weather?.temperature) || 0),
+    Math.round(Number(weather?.feelsLike) || 0),
+    weather?.weatherLabel || "",
+    preferences?.activityContext || "",
+    preferences?.locationContext || "",
+    preferences?.styleFocus || "",
+    preferences?.cold ? "cold" : "",
+    preferences?.hot ? "hot" : "",
+  ].join("|");
+  const variantIndex = hashString(seed) % options.length;
+  const preferred = options[variantIndex];
+  const lines = options.map((option, index) => `${index + 1}. ${option.name}: top ${option.top}; bottom ${option.bottom}; outer ${option.outer}; shoes ${option.shoes}; accessory ${option.accessory}; avoid ${option.avoid}`);
+  return {
+    profileBand,
+    variantIndex,
+    preferred,
+    options,
+    text: `- Profile band: ${profileBand}
+- Use one of these valid archetypes and avoid collapsing to the same default every time:
+${lines.join("\n")}
+- Preferred archetype for this request: ${variantIndex + 1} (${preferred.name}).
+- Strong slot steer for this request:
+  top: ${preferred.top}
+  bottom: ${preferred.bottom}
+  outer: ${preferred.outer}
+  shoes: ${preferred.shoes}
+  accessory: ${preferred.accessory}
+  avoid: ${preferred.avoid}
+- Follow the preferred archetype unless weather or truly suitable wardrobe pieces make another listed archetype clearly better.`,
+  };
+}
+
+function recommendationMissesArchetype(response, archetypeDirective, weather = {}) {
+  const preferred = archetypeDirective?.preferred;
+  if (!preferred?.keywords) return false;
+  const top = cleanInlineText(response?.outfit?.top).toLowerCase();
+  const bottom = cleanInlineText(response?.outfit?.bottom).toLowerCase();
+  const outer = cleanInlineText(response?.outfit?.outer).toLowerCase();
+  const shoes = cleanInlineText(response?.outfit?.shoes).toLowerCase();
+  const accessory = cleanInlineText(Array.isArray(response?.outfit?.accessories) ? response.outfit.accessories[0] : response?.outfit?.accessories).toLowerCase();
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const wetRisk = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+
+  const slots = [
+    ["top", top],
+    ["bottom", bottom],
+    ["outer", outer],
+    ["shoes", shoes],
+    ["accessory", accessory],
+  ];
+
+  let matches = 0;
+  let relevantSlots = 0;
+  for (const [slot, text] of slots) {
+    const keywords = preferred.keywords?.[slot] || [];
+    if (!keywords.length) continue;
+    if (slot === "outer" && preferred.outer.includes("none") && !text) {
+      matches += 1;
+      relevantSlots += 1;
+      continue;
+    }
+    if (slot === "outer" && !text && preferred.outer.includes("none")) continue;
+    if (!text) {
+      relevantSlots += 1;
+      continue;
+    }
+    relevantSlots += 1;
+    if (keywordsMatchText(text, keywords)) matches += 1;
+  }
+
+  const avoidMiss = preferred.avoid
+    ? preferred.avoid.split(",").map((item) => item.trim()).filter(Boolean).some((token) => keywordsMatchText(`${top} ${bottom} ${outer} ${shoes} ${accessory}`, [token]))
+    : false;
+
+  if (avoidMiss) return true;
+  if (preferred.outer.includes("none") && outer && !wetRisk && feelsLike >= 18) return true;
+  return relevantSlots >= 4 ? matches < 3 : matches < 2;
+}
+
+function buildMinimalArchetypeOutfit(archetypeName = "") {
+  switch (archetypeName) {
+    case "monochrome gallery":
+      return {
+        top: "Knit tee",
+        bottom: "Cropped trousers",
+        outer: "",
+        shoes: "Minimal leather sneakers",
+        accessories: ["Slim watch"],
+      };
+    case "quiet luxury light":
+      return {
+        top: "Poplin shirt",
+        bottom: "Clean chinos",
+        outer: "",
+        shoes: "Soft loafers",
+        accessories: ["Pared-back watch"],
+      };
+    case "tonal overshirt set":
+      return {
+        top: "Knit polo",
+        bottom: "Tonal trousers",
+        outer: "Clean overshirt",
+        shoes: "Low-profile sneakers",
+        accessories: ["Slim sunglasses"],
+      };
+    case "soft studio minimal":
+      return {
+        top: "Merino crewneck",
+        bottom: "Drawstring trousers",
+        outer: "",
+        shoes: "Slip-on loafers",
+        accessories: ["Structured tote"],
+      };
+    default:
+      return null;
+  }
+}
+
+function enforceArchetypeShape(response, archetypeDirective, weather = {}) {
+  if (!response || typeof response !== "object") return response;
+  const profileBand = archetypeDirective?.profileBand || "";
+  const preferredName = archetypeDirective?.preferred?.name || "";
+  if (profileBand !== "minimal") return response;
+  const enforcedOutfit = buildMinimalArchetypeOutfit(preferredName);
+  if (!enforcedOutfit) return response;
+  if (!recommendationMissesArchetype(response, archetypeDirective, weather)) return response;
+  return {
+    ...response,
+    outfit: enforcedOutfit,
+  };
+}
+
+function buildStyleGuardrails(preferences = {}, weather = {}) {
+  const { style, activity, setting } = normalizePreferenceProfile(preferences);
+  const feelsLike = Number(weather?.feelsLike ?? weather?.temperature);
+  const lines = [];
+  if (activity === "office" || setting === "event" || style === "polished") {
+    lines.push("- Office / polished looks must resist falling back to T-shirt + sneakers + cap unless every sharper alternative is clearly unsuitable for the weather.");
+    lines.push("- Office / polished looks should favor collared shirts, refined knits, tailored trousers, loafers, and cleaner accessories.");
+  }
+  if (activity === "evening" || (style === "streetwear" && (preferences?.hot || feelsLike >= 24))) {
+    lines.push("- Hot evening looks must not default to the same plain daytime casual outfit. Make them feel more intentional, social, or styled for later in the day.");
+  }
+  if (activity === "workout" || style === "sporty") {
+    lines.push("- Sporty looks must use more than one performance template over time. Vary between run-ready, athleisure commuter, and cool-weather training archetypes when appropriate.");
+  }
+  if (style === "minimalist" || activity === "indoor" || setting === "indoors") {
+    lines.push("- Minimal indoor looks must vary across clearly different minimalist silhouettes such as knit-tee with cropped trousers, poplin shirt with loafers, overshirt set, or merino with tote. Do not collapse them into the same tee-trousers-sneakers formula.");
+  }
+  return lines;
+}
+
+function wardrobeItemFitScore(item, preferences = {}, weather = {}) {
+  const slot = normalizeWardrobeSlot(item?.type);
+  const name = cleanInlineText(item?.name).toLowerCase();
+  const color = cleanInlineText(item?.color).toLowerCase();
+  const material = cleanInlineText(item?.material).toLowerCase();
+  const text = `${name} ${color} ${material}`.trim();
+  const profileBand = deriveRecommendationProfileBand(preferences, weather);
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const wet = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const windy = Number(weather?.wind ?? 0) >= 24;
+  let score = 0;
+
+  if (!slot || !name) return -50;
+
+  if (slot === "top") {
+    if (feelsLike <= 10) score += /\b(thermal|long sleeve|long-sleeve|sweater|knit|hoodie)\b/.test(text) ? 4 : -3;
+    if (feelsLike >= 25) score += /\b(tank|tee|t-shirt|t shirt|linen)\b/.test(text) ? 4 : -2;
+  }
+  if (slot === "bottom") {
+    if (feelsLike <= 10) score += /\b(fleece|wool|trouser|pants|jeans)\b/.test(text) ? 3 : -2;
+    if (feelsLike >= 26) score += /\b(shorts|lightweight|linen)\b/.test(text) ? 4 : 0;
+  }
+  if (slot === "outer") {
+    if (wet || windy || feelsLike <= 14) score += /\b(shell|jacket|coat|parka|blazer|overshirt|hoodie)\b/.test(text) ? 4 : -4;
+    if (!wet && !windy && feelsLike >= 24) score += /\b(shell|jacket|coat|parka)\b/.test(text) ? -4 : 1;
+  }
+  if (slot === "shoes") {
+    if (wet) score += /\b(boot|waterproof|water-resistant|runner|sneaker)\b/.test(text) ? 3 : -2;
+    if (profileBand === "sporty") score += /\b(runner|running|sneaker|trainer)\b/.test(text) ? 4 : -3;
+    if (profileBand === "office") score += /\b(loafer|leather|dress)\b/.test(text) ? 4 : /\b(sneaker)\b/.test(text) ? -3 : 0;
+  }
+  if (slot === "accessory") {
+    if (wet) score += /\b(umbrella)\b/.test(text) ? 4 : 0;
+    if (Number(weather?.uv ?? 0) >= 7) score += /\b(sunglass|cap|hat)\b/.test(text) ? 3 : 0;
+    if (feelsLike <= 8) score += /\b(scarf|beanie|gloves)\b/.test(text) ? 3 : 0;
+  }
+
+  if (profileBand === "office") {
+    if (slot === "top") score += /\b(oxford|button|collar|shirt|knit)\b/.test(text) ? 5 : /\b(t-shirt|tee|tank|graphic)\b/.test(text) ? -6 : 0;
+    if (slot === "bottom") score += /\b(trouser|chino|slack)\b/.test(text) ? 4 : /\b(cargo|legging|jogger|shorts)\b/.test(text) ? -6 : 0;
+    if (slot === "accessory") score += /\b(cap|beanie)\b/.test(text) ? -6 : /\b(watch|scarf|umbrella)\b/.test(text) ? 2 : 0;
+  }
+  if (profileBand === "sporty") {
+    if (slot === "top") score += /\b(performance|athletic|tank|tee)\b/.test(text) ? 5 : /\b(oxford|button|blouse)\b/.test(text) ? -5 : 0;
+    if (slot === "bottom") score += /\b(jogger|shorts|legging)\b/.test(text) ? 5 : /\b(trouser|chino)\b/.test(text) ? -3 : 0;
+    if (slot === "accessory") score += /\b(cap)\b/.test(text) ? 2 : /\b(scarf|watch)\b/.test(text) ? -1 : 0;
+  }
+  if (profileBand === "hot-evening") {
+    if (slot === "top") score += /\b(linen|shirt|open|light)\b/.test(text) ? 4 : /\b(thermal|hoodie|sweater)\b/.test(text) ? -6 : 0;
+    if (slot === "bottom") score += /\b(lightweight|chino|tailored|shorts)\b/.test(text) ? 3 : 0;
+    if (slot === "outer") score += text ? -4 : 0;
+    if (slot === "accessory") score += /\b(cap)\b/.test(text) ? -2 : /\b(watch)\b/.test(text) ? 2 : 0;
+  }
+
+  return score;
+}
+
+function filterWardrobeItemsForRecommendation(wardrobeItems = [], preferences = {}, weather = {}) {
+  const scored = (Array.isArray(wardrobeItems) ? wardrobeItems : [])
+    .map((item) => ({
+      ...item,
+      _slot: normalizeWardrobeSlot(item?.type),
+      _fitScore: wardrobeItemFitScore(item, preferences, weather),
+    }))
+    .filter((item) => item._slot && item._fitScore >= 3)
+    .sort((a, b) => b._fitScore - a._fitScore);
+
+  const kept = [];
+  const slotCounts = new Map();
+  for (const item of scored) {
+    const slot = item._slot;
+    const count = slotCounts.get(slot) || 0;
+    const limit = slot === "accessory" ? 2 : 3;
+    if (count >= limit) continue;
+    kept.push(item);
+    slotCounts.set(slot, count + 1);
+  }
+  return kept;
+}
+
+function buildWardrobePenaltyRules(filteredWardrobe, originalWardrobe, preferences = {}, weather = {}) {
+  const eligibleCount = Array.isArray(filteredWardrobe) ? filteredWardrobe.length : 0;
+  const totalCount = Array.isArray(originalWardrobe) ? originalWardrobe.length : 0;
+  const profileBand = deriveRecommendationProfileBand(preferences, weather);
+  const lines = [];
+  lines.push(`- Only ${eligibleCount} of ${totalCount} wardrobe items are a good fit for this weather and vibe. Do not force the rest.`);
+  if (profileBand === "office") {
+    lines.push("- If wardrobe pieces make the look less polished or too casual, prefer generic office-appropriate suggestions.");
+  }
+  if (profileBand === "sporty") {
+    lines.push("- If wardrobe pieces weaken the athletic/performance feel, prefer generic sporty pieces instead.");
+  }
+  if (profileBand === "hot-evening") {
+    lines.push("- If wardrobe pieces make the outfit feel like generic daytime casual, prefer a more intentional warm-evening suggestion.");
+  }
+  return lines;
+}
+
+function buildPreferenceTuningRules(preferences = {}, weather = {}) {
+  const rules = [];
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const wetRisk = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const windy = Number(weather?.wind ?? 0) >= 24;
+
+  if (preferences?.cold) {
+    rules.push("- The user usually feels cold. Treat the day as roughly 5°C colder and make the outfit visibly warmer with more coverage, warmer fabrics, or an extra layer when sensible.");
+  }
+  if (preferences?.hot) {
+    rules.push("- The user usually feels hot. Treat the day as roughly 5°C warmer and make the outfit visibly lighter by removing unnecessary layers and favoring breathable pieces.");
+  }
+  if (preferences?.activityContext === "walking") {
+    rules.push("- Activity is walking. Favor easy movement, supportive shoes, and layers that work while moving.");
+  } else if (preferences?.activityContext === "commute") {
+    rules.push("- Activity is commuting. Make the look practical across streets, transit, and indoor stops.");
+  } else if (preferences?.activityContext === "errands") {
+    rules.push("- Activity is errands. Keep the outfit casual, durable, and easy for repeated on-off movement.");
+  } else if (preferences?.activityContext === "office") {
+    rules.push("- Activity is office. Make the outfit noticeably smarter than a generic casual look.");
+  } else if (preferences?.activityContext === "workout") {
+    rules.push("- Activity is workout or athleisure. Make the outfit clearly more active and performance-friendly.");
+  } else if (preferences?.activityContext === "travel") {
+    rules.push("- Activity is travel. Prioritize comfort through temperature changes and long wear.");
+  } else if (preferences?.activityContext === "evening") {
+    rules.push("- Activity is evening. Make the look feel slightly more intentional and nighttime-ready.");
+  }
+
+  if (preferences?.locationContext === "indoors") {
+    rules.push("- Setting is mostly indoors. Avoid over-layering unless cold or wet conditions strongly require it.");
+  } else if (preferences?.locationContext === "outdoors") {
+    rules.push("- Setting is mostly outdoors. Give weather protection more weight than a standard mixed day.");
+  } else if (preferences?.locationContext === "transit") {
+    rules.push("- Setting is transit-heavy. Use easy layers and shoes that work for walking and waiting outside.");
+  } else if (preferences?.locationContext === "event") {
+    rules.push("- Setting is an event. Keep the outfit polished and intentional, not purely utilitarian.");
+  } else if (preferences?.locationContext === "exposed") {
+    rules.push("- Setting is exposed outdoors. Build in stronger protection for wind, rain, or temperature swings.");
+  }
+
+  if (preferences?.styleFocus === "polished" || preferences?.formal) {
+    rules.push("- Style focus is polished. Make the outfit visibly cleaner and sharper than a basic casual outfit.");
+  } else if (preferences?.styleFocus === "sporty" || preferences?.sporty) {
+    rules.push("- Style focus is sporty. Lean into athletic pieces or streamlined performance-inspired styling.");
+  } else if (preferences?.styleFocus === "streetwear" || preferences?.streetwear) {
+    rules.push("- Style focus is streetwear. Make the silhouette feel more styled and fashion-forward.");
+  } else if (preferences?.styleFocus === "minimalist" || preferences?.minimalist) {
+    rules.push("- Style focus is minimalist. Keep the look clean, pared back, and tonal.");
+  } else if (preferences?.styleFocus === "casual" || preferences?.casual) {
+    rules.push("- Style focus is casual. Keep the outfit easy, relaxed, and everyday.");
+  }
+
+  if ((preferences?.cold || preferences?.locationContext === "exposed" || preferences?.locationContext === "outdoors") && Number.isFinite(feelsLike) && feelsLike <= 18 && !wetRisk && !windy) {
+    rules.push("- Even if the weather is technically moderate, do not underdress this user. A visible layer is acceptable.");
+  }
+  if ((preferences?.hot || preferences?.locationContext === "indoors") && Number.isFinite(feelsLike) && feelsLike >= 20 && !wetRisk) {
+    rules.push("- Avoid adding an outer layer just for styling. Only keep one if weather exposure clearly justifies it.");
+  }
+
+  return rules;
+}
+
+function recommendationNeedsPreferenceRevision(response, weather = {}, preferences = {}) {
+  const profileBand = deriveRecommendationProfileBand(preferences, weather);
+  const top = cleanInlineText(response?.outfit?.top).toLowerCase();
+  const bottom = cleanInlineText(response?.outfit?.bottom).toLowerCase();
+  const outer = cleanInlineText(response?.outfit?.outer).toLowerCase();
+  const shoes = cleanInlineText(response?.outfit?.shoes).toLowerCase();
+  const accessory = cleanInlineText(Array.isArray(response?.outfit?.accessories) ? response.outfit.accessories[0] : response?.outfit?.accessories).toLowerCase();
+  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
+    ? Number(weather.feelsLike)
+    : Number(weather?.temperature);
+  const wetRisk = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const windy = Number(weather?.wind ?? 0) >= 24;
+
+  if (preferences?.cold) {
+    if (feelsLike < 22 && !outer && !/\b(hoodie|sweater|knit|fleece|jacket|coat|parka|overshirt)\b/.test(top)) return true;
+    if (feelsLike < 20 && /\b(tank|tee|t-shirt|t shirt|polo)\b/.test(top)) return true;
+    if (feelsLike < 24 && /\bshorts\b/.test(bottom)) return true;
+  }
+
+  if (preferences?.hot) {
+    if (feelsLike >= 20 && outer && !wetRisk && !windy) return true;
+    if (feelsLike >= 24 && /\b(thermal|sweater|knit|hoodie|fleece|sherpa|long-sleeve|long sleeve)\b/.test(`${top} ${outer}`)) return true;
+    if (feelsLike >= 28 && /\b(boots|loafers|insulated)\b/.test(shoes)) return true;
+  }
+
+  if ((preferences?.activityContext === "office" || preferences?.locationContext === "event" || preferences?.styleFocus === "polished" || preferences?.formal) && /\b(hoodie|graphic|tank|athletic)\b/.test(`${top} ${outer}`)) {
+    return true;
+  }
+  if ((preferences?.activityContext === "office" || preferences?.locationContext === "event" || preferences?.styleFocus === "polished" || preferences?.formal) && /\b(leggings|cargo)\b/.test(bottom)) {
+    return true;
+  }
+  if (profileBand === "office" && /\b(t-shirt|t shirt|tee)\b/.test(top) && /\b(sneaker|runner)\b/.test(shoes) && /\b(cap|beanie)\b/.test(accessory)) {
+    return true;
+  }
+  if ((preferences?.activityContext === "workout" || preferences?.styleFocus === "sporty" || preferences?.sporty) && !/\b(running|trainer|sneaker|leggings|athletic|performance|hoodie|shorts)\b/.test(`${top} ${bottom} ${shoes}`)) {
+    return true;
+  }
+  if (profileBand === "sporty" && /\b(t-shirt|t shirt|tee)\b/.test(top) && /\b(trouser|chino|jean)\b/.test(bottom) && !/\b(jogger|short|legging)\b/.test(bottom)) {
+    return true;
+  }
+  if (profileBand === "hot-evening" && /\b(t-shirt|t shirt|tee)\b/.test(top) && /\b(black trousers|trousers|jeans)\b/.test(bottom) && /\b(cap)\b/.test(accessory)) {
+    return true;
+  }
+  if (profileBand === "minimal" && /\b(t-shirt|t shirt|tee|knit tee)\b/.test(top) && /\b(trouser|chino)\b/.test(bottom) && /\b(sneaker|slip-on sneaker|low-profile sneaker)\b/.test(shoes) && /\b(watch|understated)\b/.test(accessory)) {
+    return true;
+  }
+  if (profileBand === "minimal" && !outer && /\b(sneaker)\b/.test(shoes) && !/\b(poplin|polo|merino|overshirt)\b/.test(`${top} ${outer}`)) {
+    return true;
+  }
+  if ((preferences?.locationContext === "outdoors" || preferences?.locationContext === "exposed" || preferences?.locationContext === "transit") && (wetRisk || windy || feelsLike <= 14) && !outer) {
+    return true;
+  }
+  if ((preferences?.locationContext === "outdoors" || preferences?.locationContext === "exposed") && Number(weather?.uv ?? 0) >= 7 && !/\b(sunglasses|cap|hat)\b/.test(accessory)) {
+    return true;
+  }
+
+  return false;
+}
+
+async function rewriteRecommendationForPreferences(response, weather, preferences, location, wardrobeItems = []) {
+  const revisionNotes = buildPreferenceTuningRules(preferences, weather);
+  const profileBand = deriveRecommendationProfileBand(preferences, weather);
+  const archetypeDirective = buildArchetypeDirective(profileBand, location, preferences, weather);
+  const styleGuardrails = buildStyleGuardrails(preferences, weather);
+  const wardrobePenaltyRules = buildWardrobePenaltyRules(wardrobeItems, wardrobeItems, preferences, weather);
+
+  const wardrobeDesc = Array.isArray(wardrobeItems) && wardrobeItems.length
+    ? wardrobeItems
+      .map((item) => `- ${item.type}: ${item.name}${item.color ? ` (${item.color})` : ""}${item.material ? ` [${item.material}]` : ""}`)
+      .join("\n")
+    : "- No saved wardrobe items";
+
+  const accessory = cleanInlineText(Array.isArray(response?.outfit?.accessories) ? response.outfit.accessories[0] : response?.outfit?.accessories) || "none";
+  const prompt = `Revise this WearCast outfit so the user's tuning has a noticeable effect while staying weather-appropriate.
+
+## Weather
+- Location: ${location?.name || "Unknown"}
+- Temperature: ${weather?.temperature}°C
+- Feels like: ${weather?.feelsLike}°C
+- Wind: ${weather?.wind} km/h
+- Precipitation probability: ${weather?.precipProb ?? "unknown"}%
+- UV: ${weather?.uv}
+- Weather: ${weather?.weatherLabel}
+
+## User tuning that must be visible
+${revisionNotes.length ? revisionNotes.join("\n") : "- No extra user tuning beyond the selected profile band. Focus on making the chosen archetype clearer and more distinctive."}
+
+## Archetype guidance
+${archetypeDirective.text}
+
+## Style guardrails
+${styleGuardrails.length ? styleGuardrails.join("\n") : "- none"}
+
+## Wardrobe
+${wardrobeDesc}
+
+## Wardrobe penalty rules
+${wardrobePenaltyRules.join("\n")}
+
+## Current outfit to improve
+- Top: ${response?.outfit?.top || ""}
+- Bottom: ${response?.outfit?.bottom || ""}
+- Outer: ${response?.outfit?.outer || "none"}
+- Shoes: ${response?.outfit?.shoes || ""}
+- Accessory: ${accessory}
+
+## Rules
+- Make the tuning effect noticeable, not subtle.
+- Keep the weather logic believable.
+- Keep the intended profile band clear: ${profileBand}.
+- Make the selected archetype visually obvious in the slot choices instead of blending multiple archetypes together.
+- Preserve the same JSON schema.
+- Return fresh slotReasons and itemDetails for every present slot.
+- Color and material must be plausible for the exact item you recommend.
+- Outer is optional.
+- Exactly one accessory.
+- Avoid collapsing back to the same generic outfit formula if a better-fitting archetype is available.
+- Return JSON only.
+
+{
+  "outfit": {
+    "top": "short item name",
+    "bottom": "short item name",
+    "outer": "short item name or empty string",
+    "shoes": "short item name",
+    "accessories": ["one item"]
+  },
+  "slotReasons": {
+    "top": "one short reason",
+    "bottom": "one short reason",
+    "outer": "one short reason or empty string",
+    "shoes": "one short reason",
+    "accessory": "one short reason"
+  },
+  "itemDetails": {
+    "top": { "color": "short color", "material": "short material" },
+    "bottom": { "color": "short color", "material": "short material" },
+    "outer": { "color": "short color", "material": "short material" },
+    "shoes": { "color": "short color", "material": "short material" },
+    "accessory": { "color": "short color", "material": "short material" }
+  },
+  "reasoning": "One natural weather-overview subline",
+  "detailsOverview": {
+    "what": "One or two sentences",
+    "why": "One or two sentences",
+    "note": "One optional practical note"
+  },
+  "warnings": ["one short warning if needed"],
+  "missingItems": ["one short missing item if needed"]
+}`;
+
+  try {
+    const text = await chatCompletion([{ role: "user", content: prompt }], {
+      maxTokens: 560,
+      traceLabel: "recommendation-revision",
+      timeoutMs: 18000,
+    });
+    return normalizeRecommendationResponse(parseModelJson(text));
+  } catch (err) {
+    console.warn("recommendation revision fallback:", err?.message || err);
+    return response;
+  }
 }
 
 function scoreCatalogMatch(text, entry) {
@@ -1138,12 +2199,14 @@ Rules:
   }
 }
 
-async function ensureAiSlotReasons(response, weather, preferences, location) {
-  if (hasCompleteSlotReasons(response?.slotReasons, response?.outfit)) return response;
+async function ensureAiSlotContent(response, weather, preferences, location) {
+  if (hasCompleteSlotReasons(response?.slotReasons, response?.outfit) && hasCompleteItemDetails(response?.itemDetails, response?.outfit)) {
+    return response;
+  }
 
-  const prompt = `You are writing short outfit-card blurbs for WearCast.
+  const prompt = `You are writing WearCast outfit-card content.
 
-Write one short, natural, context-based line for each outfit item.
+Write one short, natural, context-based line for each outfit item, plus concise plausible color and material details for each item.
 
 ## Location
 ${location?.name || "Unknown"}
@@ -1170,34 +2233,55 @@ Rules:
 - Each line must be 4 to 10 words.
 - Make them specific to weather or context.
 - Do not repeat the item name.
-- Do not use bullets in the values.
+- Color should be 1 to 3 words.
+- Material should be 1 to 4 words.
+- Infer plausible item details from the exact item name and style direction.
+- Accessories need details too.
 - If there is no outer layer, return an empty string for outer.
 - If there is no accessory, return an empty string for accessory.
 - Return JSON only.
 
 {
-  "top": "short reason",
-  "bottom": "short reason",
-  "outer": "short reason or empty string",
-  "shoes": "short reason",
-  "accessory": "short reason or empty string"
+  "slotReasons": {
+    "top": "short reason",
+    "bottom": "short reason",
+    "outer": "short reason or empty string",
+    "shoes": "short reason",
+    "accessory": "short reason or empty string"
+  },
+  "itemDetails": {
+    "top": { "color": "short color", "material": "short material" },
+    "bottom": { "color": "short color", "material": "short material" },
+    "outer": { "color": "short color", "material": "short material" },
+    "shoes": { "color": "short color", "material": "short material" },
+    "accessory": { "color": "short color", "material": "short material" }
+  }
 }`;
 
   try {
     const text = await chatCompletion([{ role: "user", content: prompt }], { maxTokens: 260 });
     const parsed = parseModelJson(text);
+    const itemDetails = normalizeRecommendationItemDetails(parsed?.itemDetails);
     return {
       ...response,
       slotReasons: {
-        top: clampSentenceCount(parsed?.top, 1) || response?.slotReasons?.top || "",
-        bottom: clampSentenceCount(parsed?.bottom, 1) || response?.slotReasons?.bottom || "",
-        outer: clampSentenceCount(parsed?.outer, 1) || response?.slotReasons?.outer || "",
-        shoes: clampSentenceCount(parsed?.shoes, 1) || response?.slotReasons?.shoes || "",
-        accessory: clampSentenceCount(parsed?.accessory, 1) || response?.slotReasons?.accessory || "",
+        top: clampSentenceCount(parsed?.slotReasons?.top, 1) || response?.slotReasons?.top || "",
+        bottom: clampSentenceCount(parsed?.slotReasons?.bottom, 1) || response?.slotReasons?.bottom || "",
+        outer: clampSentenceCount(parsed?.slotReasons?.outer, 1) || response?.slotReasons?.outer || "",
+        shoes: clampSentenceCount(parsed?.slotReasons?.shoes, 1) || response?.slotReasons?.shoes || "",
+        accessory: clampSentenceCount(parsed?.slotReasons?.accessory, 1) || response?.slotReasons?.accessory || "",
+      },
+      itemDetails: {
+        ...normalizeRecommendationItemDetails(response?.itemDetails),
+        top: itemDetails.top.color || itemDetails.top.material ? itemDetails.top : normalizeRecommendationItemDetail(response?.itemDetails?.top),
+        bottom: itemDetails.bottom.color || itemDetails.bottom.material ? itemDetails.bottom : normalizeRecommendationItemDetail(response?.itemDetails?.bottom),
+        outer: itemDetails.outer.color || itemDetails.outer.material ? itemDetails.outer : normalizeRecommendationItemDetail(response?.itemDetails?.outer),
+        shoes: itemDetails.shoes.color || itemDetails.shoes.material ? itemDetails.shoes : normalizeRecommendationItemDetail(response?.itemDetails?.shoes),
+        accessory: itemDetails.accessory.color || itemDetails.accessory.material ? itemDetails.accessory : normalizeRecommendationItemDetail(response?.itemDetails?.accessory),
       },
     };
   } catch (err) {
-    console.warn("slot reason generation fallback:", err?.message || err);
+    console.warn("slot content generation fallback:", err?.message || err);
     return response;
   }
 }
@@ -1403,6 +2487,7 @@ function buildFallbackRecommendation(weather) {
               : "Rounds out the look for the conditions.")
         : "",
     },
+    itemDetails: buildFallbackItemDetails({ top, bottom, outer, shoes, accessories }),
     reasoning: buildContextReasoningFallback({ outfit: { top, bottom, outer, shoes, accessories } }, weather),
     detailsOverview: {
       what: `${top}, ${bottom}, and ${shoes}${outer ? ` with a ${outer}` : ""} make a practical outfit for the current conditions.`,
@@ -1522,12 +2607,20 @@ app.post("/api/recommend", async (req, res) => {
     const resolvedWeather = await resolveRecommendationWeather(weather, location);
     if (!resolvedWeather) return res.status(400).json({ error: "No weather data or location provided" });
     const wardrobeItems = Array.isArray(wardrobe) ? wardrobe : [];
-    const hasWardrobe = wardrobeItems.length > 0;
+    const eligibleWardrobeItems = filterWardrobeItemsForRecommendation(wardrobeItems, preferences, resolvedWeather);
+    const hasWardrobe = eligibleWardrobeItems.length > 0;
+    const profileBand = deriveRecommendationProfileBand(preferences, resolvedWeather);
+    const archetypeDirective = buildArchetypeDirective(profileBand, location, preferences, resolvedWeather);
+    const styleGuardrails = buildStyleGuardrails(preferences, resolvedWeather);
+    const wardrobePenaltyRules = buildWardrobePenaltyRules(eligibleWardrobeItems, wardrobeItems, preferences, resolvedWeather);
     console.info("[recommend] start", {
       requestId,
       location: location?.name || "Unknown",
       hasInlineWeather: !!weather,
       wardrobeCount: wardrobeItems.length,
+      eligibleWardrobeCount: eligibleWardrobeItems.length,
+      profileBand,
+      preferences: preferences || {},
       tempC: resolvedWeather.temperature,
       feelsLikeC: resolvedWeather.feelsLike,
       windKmh: resolvedWeather.wind,
@@ -1535,12 +2628,13 @@ app.post("/api/recommend", async (req, res) => {
       weatherLabel: resolvedWeather.weatherLabel,
     });
 
-    const cacheKey = recommendationCacheKey(resolvedWeather, wardrobeItems, preferences);
+    const cacheKey = recommendationCacheKey(resolvedWeather, eligibleWardrobeItems, preferences, location);
     const cachedRecommendation = getCachedRecommendation(cacheKey);
     if (cachedRecommendation) {
       console.info("[recommend] cache-hit", {
         requestId,
         durationMs: Date.now() - startedAt,
+        preferences: preferences || {},
         genericReasoning: isGenericRecommendationReasoning(cachedRecommendation.reasoning),
       });
       if (!isGenericRecommendationReasoning(cachedRecommendation.reasoning)) {
@@ -1556,53 +2650,33 @@ app.post("/api/recommend", async (req, res) => {
 
     const wardrobeDesc =
       hasWardrobe
-        ? wardrobeItems
-            .map(
-              (item) =>
-                `- ${item.type}: ${item.name}${item.color ? ` (${item.color})` : ""}${item.material ? ` [${item.material}]` : ""}${item.careInstructions?.length ? ` care: ${item.careInstructions.join(", ")}` : ""}`
-            )
+        ? eligibleWardrobeItems
+            .slice(0, 12)
+            .map((item) => {
+              const parts = [
+                cleanInlineText(item.type),
+                cleanInlineText(item.name),
+                cleanInlineText(item.color),
+                cleanInlineText(item.material),
+              ].filter(Boolean);
+              return `- ${parts.join(" | ")}`;
+            })
             .join("\n")
-        : "User has no saved wardrobe items. Suggest a generic outfit only.";
+        : "- none";
 
     const prefsDesc = [];
-    if (preferences?.cold) prefsDesc.push("runs cold (feels colder than average)");
-    if (preferences?.hot) prefsDesc.push("runs hot (feels warmer than average)");
-    if (preferences?.formal) prefsDesc.push("prefers polished or smart-casual style");
-    if (preferences?.casual) prefsDesc.push("prefers casual everyday outfits");
-    if (preferences?.sporty) prefsDesc.push("prefers sporty or athleisure looks");
-    if (preferences?.streetwear) prefsDesc.push("prefers streetwear-inspired outfits");
-    if (preferences?.minimalist) prefsDesc.push("prefers minimalist styling");
-    if (preferences?.bike) prefsDesc.push("plans to bike or walk (active)");
-    if (preferences?.activityContext === "walking") prefsDesc.push("expects to walk more than usual today");
-    if (preferences?.activityContext === "commute") prefsDesc.push("is dressing for commuting and movement");
-    if (preferences?.activityContext === "errands") prefsDesc.push("is dressing for errands with frequent short stops");
-    if (preferences?.activityContext === "office") prefsDesc.push("is dressing for an office or work setting");
-    if (preferences?.activityContext === "workout") prefsDesc.push("is dressing around light workout or athleisure needs");
-    if (preferences?.activityContext === "travel") prefsDesc.push("is dressing for travel and comfort through transitions");
-    if (preferences?.activityContext === "evening") prefsDesc.push("is dressing for an evening plan");
-    if (preferences?.locationContext === "indoors") prefsDesc.push("will spend most of the day indoors");
-    if (preferences?.locationContext === "outdoors") prefsDesc.push("will spend a lot of time outdoors");
-    if (preferences?.locationContext === "transit") prefsDesc.push("will move between transit, streets, and indoor spaces");
-    if (preferences?.locationContext === "event") prefsDesc.push("will be in a more intentional event setting");
-    if (preferences?.locationContext === "exposed") prefsDesc.push("will be exposed to the weather for longer stretches");
-    if (preferences?.styleFocus === "polished") prefsDesc.push("wants the outfit to lean polished");
-    if (preferences?.styleFocus === "casual") prefsDesc.push("wants the outfit to lean casual");
-    if (preferences?.styleFocus === "sporty") prefsDesc.push("wants the outfit to lean sporty");
-    if (preferences?.styleFocus === "streetwear") prefsDesc.push("wants the outfit to lean streetwear");
-    if (preferences?.styleFocus === "minimalist") prefsDesc.push("wants the outfit to lean minimalist");
-    if (preferences?.fashionNotes) prefsDesc.push(`style notes: ${preferences.fashionNotes}`);
+    if (preferences?.cold) prefsDesc.push("runs cold");
+    if (preferences?.hot) prefsDesc.push("runs hot");
+    if (preferences?.activityContext && preferences.activityContext !== "everyday") prefsDesc.push(`activity: ${preferences.activityContext}`);
+    if (preferences?.locationContext && preferences.locationContext !== "mixed") prefsDesc.push(`setting: ${preferences.locationContext}`);
+    if (preferences?.styleFocus && preferences.styleFocus !== "auto") prefsDesc.push(`style: ${preferences.styleFocus}`);
+    if (preferences?.fashionNotes) prefsDesc.push(`notes: ${cleanInlineText(preferences.fashionNotes).slice(0, 120)}`);
+    const tuningRules = buildPreferenceTuningRules(preferences, resolvedWeather);
 
     const dayFc = resolvedWeather.remainingForecast;
     const dayForecastDesc = dayFc
-      ? `## Forecast For The Rest Of Today
-- Temperature range: ${dayFc.tempRange}
-- Feels-like range: ${dayFc.feelsLikeRange}
-- Max wind: ${dayFc.maxWind}
-- Max precipitation probability: ${dayFc.maxPrecipProb}
-- Total precipitation: ${dayFc.totalPrecip}
-- Peak UV index: ${dayFc.peakUV}
-- Average humidity: ${dayFc.avgHumidity}`
-      : "## Forecast For The Rest Of Today\n- No later-hour forecast summary available.";
+      ? `later: temp ${dayFc.tempRange}; feels ${dayFc.feelsLikeRange}; wind ${dayFc.maxWind}; rain ${dayFc.maxPrecipProb}; uv ${dayFc.peakUV}`
+      : "later: unavailable";
 
     const effectiveTemp = Number.isFinite(Number(resolvedWeather.feelsLike))
       ? Number(resolvedWeather.feelsLike)
@@ -1629,46 +2703,50 @@ app.post("/api/recommend", async (req, res) => {
         : "- UV is not a major driver.",
     ].join("\n");
 
-    const prompt = `You are WearCast, a smart clothing recommendation assistant.
+    const prompt = `You are WearCast. Return one weather-aware outfit for the rest of today.
 
-Suggest a specific outfit for the rest of today.${hasWardrobe ? " Use wardrobe items only when they are genuinely suitable for the weather and forecast. If the saved wardrobe does not contain weather-appropriate pieces for a slot, give a general recommendation instead of forcing a wardrobe match." : " The user has no wardrobe saved, so suggest a generic outfit."}
+Use wardrobe items only if they fit both the weather and the requested vibe. Otherwise use general recommendations. Make tuning visibly affect the result.
 
-## Current Weather
-- Location: ${location?.name || "Unknown"}
-- Temp: ${resolvedWeather.temperature}°C, feels like ${resolvedWeather.feelsLike}°C
-- Wind: ${resolvedWeather.wind} km/h, gusts ${resolvedWeather.gusts} km/h
-- Humidity: ${resolvedWeather.humidity}%
-- Precip probability: ${resolvedWeather.precipProb ?? "unknown"}%
-- UV: ${resolvedWeather.uv}
-- Condition: ${resolvedWeather.weatherLabel}
-- Daytime: ${resolvedWeather.isDay ? "yes" : "no"}
-
+WEATHER
+location: ${location?.name || "Unknown"}
+now: ${resolvedWeather.temperature}C feels ${resolvedWeather.feelsLike}C, ${resolvedWeather.weatherLabel}, wind ${resolvedWeather.wind} km/h, rain ${resolvedWeather.precipProb ?? "unknown"}%, uv ${resolvedWeather.uv}, ${resolvedWeather.isDay ? "day" : "night"}
 ${dayForecastDesc}
 
-## User Preferences
-${prefsDesc.length ? prefsDesc.join("\n") : "No special preferences set."}
+PREFERENCES
+${prefsDesc.length ? prefsDesc.join("; ") : "none"}
 
-## User's Wardrobe
+TUNING RULES
+${tuningRules.length ? tuningRules.join("\n") : "- none"}
+
+ARCHETYPE GUIDANCE
+${archetypeDirective.text}
+
+STYLE GUARDRAILS
+${styleGuardrails.length ? styleGuardrails.join("\n") : "- none"}
+
+WARDROBE
 ${wardrobeDesc}
 
-## Weather Forcing Rules
+WARDROBE PENALTY RULES
+${wardrobePenaltyRules.join("\n")}
+
+WEATHER RULES
 ${weatherRules}
 
-## Instructions
-1. Recommend a COMPLETE outfit using short item names only.
-2. Consider ONLY the forecast from now onward today.
-3. ${hasWardrobe ? "Reference SPECIFIC wardrobe items by name only when they clearly fit the weather. Do not force wardrobe usage just because an item exists." : "Do not mention missing wardrobe pieces beyond one short missing-item suggestion."}
-4. Make reasoning ONE natural recommendation subline that summarizes the weather story in words and explains the outfit direction. Do not use raw stats, numbers, units, percentages, or symbols.
-5. Return detailsOverview as a richer modal explanation: what the outfit is doing overall, why it fits the weather, and one optional practical note.
-6. Return at most ONE accessory, ONE warning, and ONE missing item.
-7. Do not explain each clothing piece separately in detailsOverview.
-8. Also return one short slot-specific reason for top, bottom, outer, shoes, and accessory.
-9. Outer is OPTIONAL. Only include an outer layer when the weather truly justifies one. If no outer layer is needed, return an empty string for outer and an empty string for its slot reason.
-10. Return exactly one accessory.
-11. Make the outfit meaningfully reflect the actual weather severity and not just a generic everyday look.
-12. If a wardrobe item is unsuitable for the weather, prefer a generic weather-appropriate recommendation.
-13. Do not use generic phrases like "chosen to match today's weather", "keep you comfortable through the day", or "built around today's conditions".
-14. Return JSON only.
+RULES
+- Use short item names.
+- Consider only the rest of today.
+- ${hasWardrobe ? "Use specific wardrobe item names only when they truly fit. Ignore the rest of the wardrobe completely." : "Generic outfit is fine."}
+- Make the subline natural and weather-specific. No raw numbers or generic filler.
+- Return 0 or 1 outer layer only when justified.
+- Return exactly 1 accessory.
+- Return at most 1 warning and 1 missing item.
+- Return short slotReasons for every present slot.
+- Return itemDetails with plausible color and material for every present slot.
+- Keep detailsOverview high-level, not per-card repetition.
+- Wardrobe fit is secondary to vibe fit. If wardrobe pieces degrade the intended profile, prefer generic recommendations.
+- Avoid repeating the same outfit archetype for every similar request; follow the selected archetype direction unless the weather makes it unreasonable.
+- JSON only.
 
 Return ONLY valid JSON (no markdown fences):
 {
@@ -1686,6 +2764,13 @@ Return ONLY valid JSON (no markdown fences):
     "shoes": "one short reason",
     "accessory": "one short reason"
   },
+  "itemDetails": {
+    "top": { "color": "short color", "material": "short material" },
+    "bottom": { "color": "short color", "material": "short material" },
+    "outer": { "color": "short color", "material": "short material" },
+    "shoes": { "color": "short color", "material": "short material" },
+    "accessory": { "color": "short color", "material": "short material" }
+  },
   "reasoning": "One natural weather-overview subline shown under the recommendation heading",
   "detailsOverview": {
     "what": "One or two sentences describing the full outfit strategy without repeating each card blurb",
@@ -1698,7 +2783,7 @@ Return ONLY valid JSON (no markdown fences):
 
     let text = "";
     try {
-      const recommendationMaxTokens = hasWardrobe ? 680 : 560;
+      const recommendationMaxTokens = hasWardrobe ? 820 : 700;
       const recommendationTimeoutMs = 30000;
       console.info("[recommend] ai-request", {
         requestId,
@@ -1736,9 +2821,22 @@ Return ONLY valid JSON (no markdown fences):
 
     try {
       const parsed = parseModelJson(text);
-      const normalized = ensureRecommendationShape(normalizeRecommendationResponse(parsed), resolvedWeather);
+      let normalized = ensureRecommendationShape(normalizeRecommendationResponse(parsed), resolvedWeather);
+      const needsPreferenceRevision = recommendationNeedsPreferenceRevision(normalized, resolvedWeather, preferences);
+      const missesArchetype = recommendationMissesArchetype(normalized, archetypeDirective, resolvedWeather);
+      if (needsPreferenceRevision || missesArchetype) {
+        console.info("[recommend] preference-revision", {
+          requestId,
+          durationMs: Date.now() - startedAt,
+          preferences: preferences || {},
+          missesArchetype,
+          outfit: normalized?.outfit || null,
+        });
+        normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather);
+      }
+      normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather);
       const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-      const response = ensureRecommendationShape(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+      const response = ensureRecommendationShape(await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
       console.info("[recommend] success", {
         requestId,
         durationMs: Date.now() - startedAt,
@@ -1757,9 +2855,22 @@ Return ONLY valid JSON (no markdown fences):
       });
       const salvaged = salvageRecommendationFromText(text);
       if (salvaged) {
-        const normalized = ensureRecommendationShape(normalizeRecommendationResponse(salvaged), resolvedWeather);
+        let normalized = ensureRecommendationShape(normalizeRecommendationResponse(salvaged), resolvedWeather);
+        const needsPreferenceRevision = recommendationNeedsPreferenceRevision(normalized, resolvedWeather, preferences);
+        const missesArchetype = recommendationMissesArchetype(normalized, archetypeDirective, resolvedWeather);
+        if (needsPreferenceRevision || missesArchetype) {
+          console.info("[recommend] preference-revision-salvaged", {
+            requestId,
+            durationMs: Date.now() - startedAt,
+            preferences: preferences || {},
+            missesArchetype,
+            outfit: normalized?.outfit || null,
+          });
+          normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather);
+        }
+        normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather);
         const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-        const response = ensureRecommendationShape(await ensureAiSlotReasons(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+        const response = ensureRecommendationShape(await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
         console.info("[recommend] salvaged-success", {
           requestId,
           durationMs: Date.now() - startedAt,

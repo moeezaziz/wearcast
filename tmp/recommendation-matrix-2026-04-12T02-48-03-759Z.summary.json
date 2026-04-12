@@ -1,0 +1,33 @@
+{
+  "endpoint": "https://wearcast.fly.dev/api/recommend",
+  "totalCases": 360,
+  "concurrency": 6,
+  "countries": [
+    "Germany",
+    "United States",
+    "Pakistan",
+    "Ireland",
+    "Italy",
+    "Switzerland"
+  ],
+  "profiles": [
+    "office_mild_clear",
+    "commute_rain",
+    "sporty_exposed_breezy",
+    "cold_outdoors",
+    "hot_urban_evening",
+    "minimal_indoor_transition"
+  ],
+  "wardrobeVariants": [
+    "empty",
+    "starter_capsule"
+  ],
+  "outputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T02-48-03-759Z.jsonl",
+  "successes": 360,
+  "failures": 0,
+  "startedAt": "2026-04-12T02:48:03.767Z",
+  "finishedAt": "2026-04-12T02:49:15.496Z",
+  "byStatus": {
+    "200": 360
+  }
+}

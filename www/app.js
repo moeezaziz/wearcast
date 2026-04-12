@@ -1739,6 +1739,19 @@ function buildClientFallbackRecommendation(weather = {}, reason = "AI response t
       shoes: wet ? "Closed, grippier shoes are safer for damp streets." : "Keeps the outfit practical for walking through the day.",
       accessory: accessories[0] ? "Adds a small weather-specific layer without overcomplicating the outfit." : "",
     },
+    itemDetails: {
+      top: { color: "Easy neutral", material: cold ? "Soft knit jersey" : hot ? "Breathable cotton" : "Versatile jersey" },
+      bottom: { color: wet ? "Dark neutral" : "Easy neutral", material: hot ? "Light cotton weave" : "Structured woven fabric" },
+      outer: outer ? { color: "Weather-ready neutral", material: wet ? "Water-resistant shell" : "Light outerwear fabric" } : { color: "", material: "" },
+      shoes: { color: "Neutral", material: wet ? "Water-resistant textile" : "Mesh and rubber" },
+      accessory: accessories[0] === "Umbrella"
+        ? { color: "Neutral", material: "Waterproof canopy fabric" }
+        : accessories[0] === "Sunglasses"
+          ? { color: "Dark neutral", material: "Tinted acetate and metal" }
+          : accessories[0] === "Warm Scarf"
+            ? { color: "Soft neutral", material: "Cozy knit" }
+            : { color: "Classic neutral", material: "Polished mixed materials" },
+    },
     detailsOverview: {
       what: [top, bottom, outer, shoes, ...accessories].filter(Boolean).join(", "),
       why: `${weatherSummary} This fallback keeps the recommendation usable while the AI provider recovers.`,
@@ -1893,22 +1906,14 @@ function buildRecommendationItemDialogDetails(item = {}, weather = {}) {
   const fallback = inferRecommendedItemDetails(item, weather);
   const details = wardrobeDetails
     ? {
-        sourceLabel: "From your wardrobe",
         color: compactText(wardrobeDetails.color, ""),
         material: compactText(wardrobeDetails.material, ""),
-        care: Array.isArray(wardrobeDetails.careInstructions) && wardrobeDetails.careInstructions.length
-          ? wardrobeDetails.careInstructions.slice(0, 2).join(" • ")
-          : "",
         note: item.reason || "",
       }
     : aiDetails
       ? {
-          sourceLabel: "AI suggestion",
           color: compactText(aiDetails.color, ""),
           material: compactText(aiDetails.material, ""),
-          care: Array.isArray(aiDetails.careInstructions) && aiDetails.careInstructions.length
-            ? aiDetails.careInstructions.slice(0, 2).join(" • ")
-            : "",
           note: item.reason || "",
         }
       : fallback;
@@ -4090,6 +4095,8 @@ function bindWardrobeUI() {
 // ─── AI Recommendation (Gemini) ─────────────────────────────
 let lastWeatherForAI = null;
 const RECOMMENDATION_DECK_HINT_KEY = "wearcastRecommendationDeckHintSeen";
+let activeRecommendationRequestId = 0;
+let activeRecommendationController = null;
 
 function wait(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -4255,8 +4262,20 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
   await animateRecommendationRefreshOut();
   if (hasExistingRecommendation && els.aiRecLoading) els.aiRecLoading.style.display = "flex";
 
+  const requestId = ++activeRecommendationRequestId;
+  if (activeRecommendationController) {
+    try {
+      activeRecommendationController.abort("superseded");
+    } catch {}
+  }
   const recommendationController = new AbortController();
-  const recommendationTimeoutId = window.setTimeout(() => recommendationController.abort(), 28000);
+  activeRecommendationController = recommendationController;
+  console.info("[recommend-ui] request-start", {
+    requestId,
+    location: location?.name || null,
+    prefs: preferences,
+  });
+  const recommendationTimeoutId = window.setTimeout(() => recommendationController.abort("timeout"), 28000);
 
   try {
     const res = await fetch(`${API_BASE}/api/recommend`, {
@@ -4266,18 +4285,42 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
       body: JSON.stringify({ weather, wardrobe, preferences, location }),
     });
     const data = await res.json();
+    if (requestId !== activeRecommendationRequestId) {
+      console.info("[recommend-ui] request-stale-response", { requestId, activeRecommendationRequestId });
+      return;
+    }
     if (data.error) {
       renderAIRecommendation(buildClientFallbackRecommendation(weather, data.error || "AI service returned an error"));
       return;
     }
+    console.info("[recommend-ui] request-success", {
+      requestId,
+      outfit: data?.outfit || null,
+      prefs: preferences,
+    });
     renderAIRecommendation(data);
   } catch (err) {
+    if (requestId !== activeRecommendationRequestId) {
+      console.info("[recommend-ui] request-stale-error", {
+        requestId,
+        activeRecommendationRequestId,
+        error: err?.message || String(err),
+      });
+      return;
+    }
+    if (err?.name === "AbortError" || err?.message === "superseded" || err === "superseded") {
+      console.info("[recommend-ui] request-aborted", { requestId, reason: err?.message || String(err) });
+      return;
+    }
     const reason = err?.name === "AbortError"
       ? "AI took too long to respond"
       : "AI service could not be reached";
     renderAIRecommendation(buildClientFallbackRecommendation(weather, reason));
   } finally {
     window.clearTimeout(recommendationTimeoutId);
+    if (requestId === activeRecommendationRequestId) {
+      activeRecommendationController = null;
+    }
     els.aiRecSection?.classList.remove("is-loading-first");
     if (!els.aiRecSection.classList.contains("is-refreshing") && els.aiRecLoading) {
       els.aiRecLoading.style.display = "none";
@@ -4298,6 +4341,7 @@ function renderAIRecommendation(data) {
   const chips = getTodayContextChips();
   const imageMatches = data.outfitImages || {};
   const slotReasons = data.slotReasons || {};
+  const itemDetails = data.itemDetails || {};
   const accessories = Array.isArray(outfit.accessories)
     ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
     : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
@@ -4327,6 +4371,7 @@ function renderAIRecommendation(data) {
       icon: art.icon,
       tone: art.tone,
       wardrobeDetails: imageMatch?.source === "wardrobe" ? imageMatch : null,
+      aiDetails: itemDetails?.[entry.key] || itemDetails?.[slotKey] || (slotKey.startsWith("accessory") ? itemDetails?.accessory : null),
     };
   });
 

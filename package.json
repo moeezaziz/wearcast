@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "eval:recommendations": "WEARCAST_RECOMMEND_URL=https://wearcast.fly.dev WEARCAST_MATRIX_CONCURRENCY=6 node scripts/sample_recommendations.mjs && node scripts/evaluate_recommendation_value.mjs",
     "phone:codex": "hey codex",
     "phone:codex:new": "hey codex --new",
     "phone:status": "hey status",

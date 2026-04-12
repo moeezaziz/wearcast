@@ -1,0 +1,299 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T03-14-58-041Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 100,
+    "avgProfileFit": 98,
+    "avgDecisionFatigue": 96.9,
+    "completeOutfitRate": 100
+  },
+  "verdict": {
+    "providesDailyValue": true,
+    "reducesDecisionFatigue": true,
+    "hasHealthyVariability": false
+  },
+  "profileSummary": {
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 90,
+      "avgDecisionFatigue": 100
+    },
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 100
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 85
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 3,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 96.3
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 98.3,
+      "avgDecisionFatigue": 100
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 6,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 100
+    }
+  },
+  "diversityFailures": [
+    {
+      "profile": "commute_rain",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "office_mild_clear",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "sporty_exposed_breezy",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "minimal_indoor_transition",
+      "uniqueOutfits": 2,
+      "cases": 60
+    }
+  ],
+  "weakestExamples": [
+    {
+      "city": "Berlin, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 65,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit tee",
+        "bottom": "sleek trousers",
+        "outer": "none",
+        "shoes": "low-profile sneakers",
+        "accessories": [
+          "watch"
+        ]
+      },
+      "reasoning": "Clear, mild evening in Berlin; indoors keeps layers unnecessary."
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 65,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit tee",
+        "bottom": "sleek trousers",
+        "outer": "none",
+        "shoes": "low-profile sneakers",
+        "accessories": [
+          "watch"
+        ]
+      },
+      "reasoning": "Clear, mild evening in Berlin; indoors keeps layers unnecessary."
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 65,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit tee",
+        "bottom": "sleek trousers",
+        "outer": "none",
+        "shoes": "low-profile sneakers",
+        "accessories": [
+          "watch"
+        ]
+      },
+      "reasoning": "Clear, mild evening in Berlin; indoors keeps layers unnecessary."
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "athletic tank",
+        "bottom": "running shorts",
+        "outer": "lightweight windbreaker",
+        "shoes": "trail runners",
+        "accessories": [
+          "sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate temps favor a stripped-down run-ready setup; wind picks up later, so a packable shell adds security without overheating."
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Athletic tank",
+        "bottom": "Running shorts",
+        "outer": "Black Shell Jacket",
+        "shoes": "Trail runners",
+        "accessories": [
+          "Sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate wind call for a run-ready setup with wind protection; your heat preference keeps layers minimal despite the chill."
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "athletic tank",
+        "bottom": "running shorts",
+        "outer": "lightweight windbreaker",
+        "shoes": "trail runners",
+        "accessories": [
+          "sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate temps favor a stripped-down run-ready setup; wind picks up later, so a packable shell adds security without overheating."
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Athletic tank",
+        "bottom": "Running shorts",
+        "outer": "Black Shell Jacket",
+        "shoes": "Trail runners",
+        "accessories": [
+          "Sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate wind call for a run-ready setup with wind protection; your heat preference keeps layers minimal despite the chill."
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Thermal long-sleeve base",
+        "bottom": "Black Trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof walking boots",
+        "accessories": [
+          "Wool neck gaiter"
+        ]
+      },
+      "reasoning": "Bundle up for a chilly, windy Berlin day with a thermal base and shell jacket to cut through the gusts while staying dry."
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "athletic tank",
+        "bottom": "running shorts",
+        "outer": "lightweight windbreaker",
+        "shoes": "trail runners",
+        "accessories": [
+          "sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate temps favor a stripped-down run-ready setup; wind picks up later, so a packable shell adds security without overheating."
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Athletic tank",
+        "bottom": "Running shorts",
+        "outer": "Black Shell Jacket",
+        "shoes": "Trail runners",
+        "accessories": [
+          "Sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate wind call for a run-ready setup with wind protection; your heat preference keeps layers minimal despite the chill."
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Thermal long-sleeve base",
+        "bottom": "Black Trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof walking boots",
+        "accessories": [
+          "Wool neck gaiter"
+        ]
+      },
+      "reasoning": "Bundle up for a chilly, windy Berlin day with a thermal base and shell jacket to cut through the gusts while staying dry."
+    },
+    {
+      "city": "Frankfurt, Germany",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 100,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "athletic tank",
+        "bottom": "running shorts",
+        "outer": "lightweight windbreaker",
+        "shoes": "trail runners",
+        "accessories": [
+          "sports cap"
+        ]
+      },
+      "reasoning": "Clear skies and moderate temps favor a stripped-down run-ready setup; wind picks up later, so a packable shell adds security without overheating."
+    }
+  ]
+}

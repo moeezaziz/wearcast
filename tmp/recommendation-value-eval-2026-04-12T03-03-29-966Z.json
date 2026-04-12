@@ -1,0 +1,182 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T02-45-37-772Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 87.1,
+    "avgProfileFit": 72.3,
+    "avgDecisionFatigue": 50,
+    "completeOutfitRate": 42.2
+  },
+  "verdict": {
+    "providesDailyValue": false,
+    "reducesDecisionFatigue": false,
+    "hasHealthyVariability": true
+  },
+  "profileSummary": {
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 5,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 85.8,
+      "avgDecisionFatigue": 51.8
+    },
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 5,
+      "avgWeatherFit": 80.2,
+      "avgProfileFit": 56,
+      "avgDecisionFatigue": 51.6
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 8,
+      "avgWeatherFit": 88.3,
+      "avgProfileFit": 63.2,
+      "avgDecisionFatigue": 49.3
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 12,
+      "avgWeatherFit": 62.8,
+      "avgProfileFit": 60.3,
+      "avgDecisionFatigue": 49.6
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 3,
+      "avgWeatherFit": 91,
+      "avgProfileFit": 85,
+      "avgDecisionFatigue": 49
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 6,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 83.3,
+      "avgDecisionFatigue": 49
+    }
+  },
+  "diversityFailures": [],
+  "weakestExamples": [
+    {
+      "city": "Rawalpindi, Pakistan",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Rawalpindi, Pakistan",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Faisalabad, Pakistan",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Faisalabad, Pakistan",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Dublin, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Dublin, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Cork, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Cork, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Galway, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Galway, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Limerick, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Limerick, Ireland",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    }
+  ]
+}

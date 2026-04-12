@@ -1,0 +1,236 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T03-25-23-627Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 99.6,
+    "avgProfileFit": 97.8,
+    "avgDecisionFatigue": 96.2,
+    "completeOutfitRate": 98.3
+  },
+  "verdict": {
+    "providesDailyValue": true,
+    "reducesDecisionFatigue": true,
+    "hasHealthyVariability": false
+  },
+  "profileSummary": {
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 4,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 90,
+      "avgDecisionFatigue": 92.8
+    },
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 3,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 100
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 4,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 99.8
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 99.3,
+      "avgDecisionFatigue": 97.2
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 4,
+      "avgWeatherFit": 97.8,
+      "avgProfileFit": 97.7,
+      "avgDecisionFatigue": 97.2
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 7,
+      "avgWeatherFit": 99.5,
+      "avgProfileFit": 99.5,
+      "avgDecisionFatigue": 90.2
+    }
+  },
+  "diversityFailures": [
+    {
+      "profile": "minimal_indoor_transition",
+      "uniqueOutfits": 2,
+      "cases": 60
+    }
+  ],
+  "weakestExamples": [
+    {
+      "city": "Berlin, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "empty",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "cold_outdoors",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 35,
+      "profileFit": 30,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 85,
+      "profileFit": 85,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "empty",
+      "weatherFit": 85,
+      "profileFit": 85,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 80,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 80,
+      "decisionFatigue": 15,
+      "outfit": {},
+      "reasoning": ""
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    },
+    {
+      "city": "Frankfurt, Germany",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    },
+    {
+      "city": "Cologne, Germany",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    },
+    {
+      "city": "New York, United States",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    },
+    {
+      "city": "San Francisco, United States",
+      "profile": "commute_rain",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 90,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "Long-sleeve base layer",
+        "bottom": "Water-resistant tapered trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Waterproof sneakers",
+        "accessories": [
+          "Compact umbrella"
+        ]
+      },
+      "reasoning": "Rainy and windy conditions call for a waterproof shell jacket and water-resistant layers to stay dry during your commute, while keeping the look casual and practical."
+    }
+  ]
+}

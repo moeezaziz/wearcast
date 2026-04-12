@@ -1,0 +1,304 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T02-48-03-759Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 100,
+    "avgProfileFit": 94.2,
+    "avgDecisionFatigue": 96.3,
+    "completeOutfitRate": 100
+  },
+  "verdict": {
+    "providesDailyValue": true,
+    "reducesDecisionFatigue": true,
+    "hasHealthyVariability": false
+  },
+  "profileSummary": {
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 100
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 86.3
+    },
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 5,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 90,
+      "avgDecisionFatigue": 99.3
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 92.5
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 85,
+      "avgDecisionFatigue": 100
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 2,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 90,
+      "avgDecisionFatigue": 100
+    }
+  },
+  "diversityFailures": [
+    {
+      "profile": "office_mild_clear",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "sporty_exposed_breezy",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "cold_outdoors",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "hot_urban_evening",
+      "uniqueOutfits": 2,
+      "cases": 60
+    },
+    {
+      "profile": "minimal_indoor_transition",
+      "uniqueOutfits": 2,
+      "cases": 60
+    }
+  ],
+  "weakestExamples": [
+    {
+      "city": "Berlin, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Munich, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Hamburg, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Frankfurt, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Cologne, Germany",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "New York, United States",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "San Francisco, United States",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Chicago, United States",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Seattle, United States",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Boston, United States",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Islamabad, Pakistan",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    },
+    {
+      "city": "Karachi, Pakistan",
+      "profile": "hot_urban_evening",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 70,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "White T-shirt",
+        "bottom": "Black Trousers",
+        "outer": "",
+        "shoes": "White Sneakers",
+        "accessories": [
+          "Black Cap"
+        ]
+      },
+      "reasoning": "Hot and dry with intense UV—strip back to essentials and let breathable fabrics do the work."
+    }
+  ]
+}
