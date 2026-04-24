@@ -64,6 +64,7 @@ const els = {
   updatedAt: $("updatedAt"),
   temp: $("temp"),
   apparent: $("apparent"),
+  weatherHeroHeadline: $("weatherHeroHeadline"),
   heroConditionIcon: $("heroConditionIcon"),
   wind: $("wind"),
   heroHumidity: $("heroHumidity"),
@@ -106,6 +107,9 @@ const els = {
   addItemBtn: $("addItemBtn"),
   wardrobeList: $("wardrobeList"),
   wardrobeEmpty: $("wardrobeEmpty"),
+  wardrobeSubtitle: $("wardrobeSubtitle"),
+  wardrobeSearchWrap: $("wardrobeSearchWrap"),
+  wardrobeSearchInput: $("wardrobeSearchInput"),
   itemDialog: $("itemDialog"),
   itemForm: $("itemForm"),
   itemType: $("itemType"),
@@ -114,12 +118,71 @@ const els = {
   itemColor: $("itemColor"),
   itemMaterial: $("itemMaterial"),
   itemCare: $("itemCare"),
+  itemEditColor: $("itemEditColor"),
+  itemEditMaterial: $("itemEditMaterial"),
+  itemEditCare: $("itemEditCare"),
   itemTypeError: $("itemTypeError"),
   itemFormStatus: $("itemFormStatus"),
   itemPhoto: $("itemPhoto"),
+  itemGalleryPhotos: $("itemGalleryPhotos"),
   itemPhotoPreview: $("itemPhotoPreview"),
   itemPhotoImg: $("itemPhotoImg"),
   itemPhotoStatus: $("itemPhotoStatus"),
+  itemPhotoLabel: $("itemPhotoLabel"),
+  itemQueueSummary: $("itemQueueSummary"),
+  itemBatchReview: $("itemBatchReview"),
+  itemBatchTitle: $("itemBatchTitle"),
+  itemBatchSummary: $("itemBatchSummary"),
+  itemBatchStats: $("itemBatchStats"),
+  itemBatchList: $("itemBatchList"),
+  itemBatchListDots: $("itemBatchListDots"),
+  itemBatchKeepToggleBtn: $("itemBatchKeepToggleBtn"),
+  itemRejectedResults: $("itemRejectedResults"),
+  itemRejectedTitle: $("itemRejectedTitle"),
+  itemRejectedList: $("itemRejectedList"),
+  itemRejectedListDots: $("itemRejectedListDots"),
+  itemScanningSubtitle: $("itemScanningSubtitle"),
+  itemScanningStatusPrimary: $("itemScanningStatusPrimary"),
+  itemScanningStatusSecondary: $("itemScanningStatusSecondary"),
+  itemScanningThumbs: $("itemScanningThumbs"),
+  itemBatchEditDialog: $("itemBatchEditDialog"),
+  itemBatchEditPhoto: $("itemBatchEditPhoto"),
+  itemBatchEditPhotoPlaceholder: $("itemBatchEditPhotoPlaceholder"),
+  itemBatchEditTitle: $("itemBatchEditTitle"),
+  itemBatchEditMeta: $("itemBatchEditMeta"),
+  itemBatchEditType: $("itemBatchEditType"),
+  itemBatchEditName: $("itemBatchEditName"),
+  itemBatchEditColor: $("itemBatchEditColor"),
+  itemBatchEditMaterial: $("itemBatchEditMaterial"),
+  itemBatchEditCare: $("itemBatchEditCare"),
+  itemBatchEditFavorite: $("itemBatchEditFavorite"),
+  itemBatchEditStatus: $("itemBatchEditStatus"),
+  itemBatchEditRemoveBtn: $("itemBatchEditRemoveBtn"),
+  itemBatchEditSaveBtn: $("itemBatchEditSaveBtn"),
+  itemBatchEditCloseBtn: $("itemBatchEditCloseBtn"),
+  itemBatchEditWrongCategoryBtn: $("itemBatchEditWrongCategoryBtn"),
+  itemBatchEditNotItemBtn: $("itemBatchEditNotItemBtn"),
+  itemBatchEditCropBtn: $("itemBatchEditCropBtn"),
+  itemBatchEditUseAnywayBtn: $("itemBatchEditUseAnywayBtn"),
+  itemRejectedDialog: $("itemRejectedDialog"),
+  itemRejectedDialogPhoto: $("itemRejectedDialogPhoto"),
+  itemRejectedDialogTitle: $("itemRejectedDialogTitle"),
+  itemRejectedDialogMessage: $("itemRejectedDialogMessage"),
+  itemRejectedDialogFullBtn: $("itemRejectedDialogFullBtn"),
+  itemRejectedDialogCropBtn: $("itemRejectedDialogCropBtn"),
+  itemRejectedDialogSkipBtn: $("itemRejectedDialogSkipBtn"),
+  itemRejectedDialogCloseBtn: $("itemRejectedDialogCloseBtn"),
+  itemCropDialog: $("itemCropDialog"),
+  itemCropCloseBtn: $("itemCropCloseBtn"),
+  itemCropDialogTitle: $("itemCropDialogTitle"),
+  itemCropDialogSubtitle: $("itemCropDialogSubtitle"),
+  itemCropStage: $("itemCropStage"),
+  itemCropImage: $("itemCropImage"),
+  itemCropSelection: $("itemCropSelection"),
+  itemCropHandle: $("itemCropHandle"),
+  itemCropStatus: $("itemCropStatus"),
+  itemCropResetBtn: $("itemCropResetBtn"),
+  itemCropApplyBtn: $("itemCropApplyBtn"),
   itemManualToggleBtn: $("itemManualToggleBtn"),
   itemVisualPlaceholder: $("itemVisualPlaceholder"),
   itemVisualEmoji: $("itemVisualEmoji"),
@@ -127,10 +190,23 @@ const els = {
   itemVisualMeta: $("itemVisualMeta"),
   itemManualDetails: $("itemManualDetails"),
   removePhotoBtn: $("removePhotoBtn"),
+  recropPhotoBtn: $("recropPhotoBtn"),
+  itemBackBtn: $("itemBackBtn"),
+  itemFlowKicker: $("itemFlowKicker"),
+  itemFlowAssist: $("itemFlowAssist"),
   itemSaveBtn: $("itemSaveBtn"),
+  itemNextPhotoBtn: $("itemNextPhotoBtn"),
+  itemEditDetailsBtn: $("itemEditDetailsBtn"),
   itemCancelBtn: $("itemCancelBtn"),
   itemDeleteBtn: $("itemDeleteBtn"),
+  deleteItemConfirmDialog: $("deleteItemConfirmDialog"),
+  deleteItemConfirmBtn: $("deleteItemConfirmBtn"),
+  deleteItemCancelBtn: $("deleteItemCancelBtn"),
   scanTagBtn: $("scanTagBtn"),
+  itemEditScanTagBtn: $("itemEditScanTagBtn"),
+  itemFavorite: $("itemFavorite"),
+  itemEditFavorite: $("itemEditFavorite"),
+  itemConfirmDetailsPanel: $("itemConfirmDetailsPanel"),
 
   // Scan dialog
   scanDialog: $("scanDialog"),
@@ -170,6 +246,8 @@ const els = {
   settingsClearLocationStatus: $("settingsClearLocationStatus"),
   settingsResetPrefsBtn: $("settingsResetPrefsBtn"),
   settingsResetPrefsStatus: $("settingsResetPrefsStatus"),
+  settingsSavedLooksStatus: $("settingsSavedLooksStatus"),
+  settingsProfileValidationStatus: $("settingsProfileValidationStatus"),
   settingsFeedback: $("settingsFeedback"),
   userMenuDialog: $("userMenuDialog"),
   userMenuCloseBtn: $("userMenuCloseBtn"),
@@ -199,18 +277,45 @@ const els = {
   wardrobeExplainerTitle: $("wardrobeExplainerTitle"),
   wardrobeExplainerText: $("wardrobeExplainerText"),
   wardrobeExplainerProgress: $("wardrobeExplainerProgress"),
-  wardrobeExplainer: $("wardrobeExplainer"),
+  wardrobeExplainer: $("wardrobeDashboard"),
+  wardrobeDashboard: $("wardrobeDashboard"),
+  wardrobeCoverageCircle: $("wardrobeCoverageCircle"),
+  wardrobeCoverageValue: $("wardrobeCoverageValue"),
+  wardrobeCoverageLabel: $("wardrobeCoverageLabel"),
+  wardrobeMissingChips: $("wardrobeMissingChips"),
+  wardrobeSyncPrompt: $("wardrobeSyncPrompt"),
   wardrobeFilters: $("wardrobeFilters"),
+  wardrobeFilterDialog: $("wardrobeFilterDialog"),
+  wardrobeFilterDialogCloseBtn: $("wardrobeFilterDialogCloseBtn"),
+  wardrobeColorFilter: $("wardrobeColorFilter"),
+  wardrobeMaterialFilter: $("wardrobeMaterialFilter"),
+  wardrobeSeasonFilter: $("wardrobeSeasonFilter"),
+  wardrobeSortFilter: $("wardrobeSortFilter"),
+  wardrobeRecentOnlyFilter: $("wardrobeRecentOnlyFilter"),
+  wardrobeMissingMetadataFilter: $("wardrobeMissingMetadataFilter"),
+  wardrobeMatchedFilter: $("wardrobeMatchedFilter"),
+  wardrobeFilterResetBtn: $("wardrobeFilterResetBtn"),
+  wardrobeFilterApplyBtn: $("wardrobeFilterApplyBtn"),
 
   // Wardrobe auth gate
   wardrobeAuthGate: $("wardrobeAuthGate"),
+  wardrobeAuthGateBtn: $("wardrobeAuthGateBtn"),
   wardrobeContent: $("wardrobeContent"),
   wardrobeSignInBtn: $("wardrobeSignInBtn"),
+  itemDetailDialog: $("itemDetailDialog"),
+  wardrobeItemActionsDialog: $("wardrobeItemActionsDialog"),
+  wardrobeItemActionsCloseBtn: $("wardrobeItemActionsCloseBtn"),
+  wardrobeItemActionsBody: $("wardrobeItemActionsBody"),
+  itemDetailBody: $("itemDetailBody"),
+  itemDetailCloseBtn: $("itemDetailCloseBtn"),
 
   // Auth
   userBtn: $("userBtn"),
   userBtnIcon: $("userBtnIcon"),
   userBtnAvatar: $("userBtnAvatar"),
+  todayUserBtn: $("todayUserBtn"),
+  todayUserBtnIcon: $("todayUserBtnIcon"),
+  todayUserBtnAvatar: $("todayUserBtnAvatar"),
   authDialog: $("authDialog"),
   authDialogTitle: $("authDialogTitle"),
   authFormWrap: $("authFormWrap"),
@@ -363,10 +468,14 @@ async function getCurrentPositionNative() {
 }
 
 async function finalizeAuthSuccess(token, user, refreshToken = authRefreshToken) {
+  const wasLoggedIn = !!authToken;
   setAuth(token, user, refreshToken);
   await syncLocalWardrobeToServer();
   await renderWardrobe();
   if (els.authDialog?.open) els.authDialog.close();
+  if (!wasLoggedIn && typeof showAppToast === "function") {
+    showAppToast(`Signed in${user?.name ? ` as ${user.name}` : ""}`, "success");
+  }
 }
 
 async function completeGoogleAuth(params) {
@@ -430,7 +539,7 @@ async function handleGoogleAuthRedirect(urlString, { clearBrowserUrl = false, cl
     }
     return true;
   } catch (err) {
-    alert(`Login failed: ${err.message}`);
+    showAppToast(`Login failed: ${err.message}`, "error");
     return false;
   } finally {
     if (closeBrowser) await closeNativeBrowser();
@@ -451,29 +560,47 @@ function bindNativeGoogleAuth() {
 }
 
 function updateAuthUI() {
-  if (authUser) {
-    if (authUser.avatarUrl) {
-      els.userBtnAvatar.src = authUser.avatarUrl;
-      els.userBtnAvatar.style.display = "";
-      els.userBtnIcon.style.display = "none";
+  const syncAccountButton = (avatarEl, iconEl) => {
+    if (!avatarEl || !iconEl) return;
+    if (authUser?.avatarUrl) {
+      avatarEl.src = authUser.avatarUrl;
+      avatarEl.style.display = "";
+      iconEl.style.display = "none";
     } else {
-      els.userBtnAvatar.style.display = "none";
-      els.userBtnIcon.style.display = "";
+      avatarEl.style.display = "none";
+      iconEl.style.display = "";
     }
-  } else {
-    els.userBtnAvatar.style.display = "none";
-    els.userBtnIcon.style.display = "";
-  }
+  };
+
+  syncAccountButton(els.userBtnAvatar, els.userBtnIcon);
+  syncAccountButton(els.todayUserBtnAvatar, els.todayUserBtnIcon);
+
   // Toggle wardrobe auth gate
   const loggedIn = isLoggedIn();
-  els.wardrobeAuthGate.style.display = loggedIn ? "none" : "flex";
-  els.wardrobeContent.style.display = loggedIn ? "" : "none";
+  if (els.wardrobeAuthGate) els.wardrobeAuthGate.style.display = loggedIn ? "none" : "flex";
+  if (els.wardrobeContent) els.wardrobeContent.style.display = loggedIn ? "" : "none";
+  if (els.addItemBtn && !loggedIn) els.addItemBtn.style.display = "none";
+  if (els.wardrobeSyncPrompt) els.wardrobeSyncPrompt.style.display = loggedIn ? "none" : "none";
   renderSettingsUI();
 }
 
 const DEFAULT_STATE = {
   lastQuery: "",
   lastLocation: null, // { name, lat, lon }
+  savedLooks: [],
+  latestRecommendation: {
+    matchedItemIds: [],
+    outfit: null,
+    signature: "",
+    updatedAt: null,
+  },
+  productValidation: {
+    tabs: {
+      tabToday: { opens: 0, dwellMs: 0 },
+      tabWardrobe: { opens: 0, dwellMs: 0 },
+      tabPrefs: { opens: 0, dwellMs: 0 },
+    },
+  },
   prefs: {
     cold: false,
     hot: false,
@@ -501,11 +628,31 @@ let consent = loadConsent();
 let memoryState = structuredClone(DEFAULT_STATE);
 let pendingRecommendationPrefs = null;
 let activeRecommendationDialogIndex = -1;
+let savedLooksExpanded = false;
+let wardrobeLongPressTimerId = null;
+let wardrobeLongPressHandled = false;
+let wardrobeLongPressItemId = null;
+let highlightedWardrobeItemIds = [];
+let activeItemCropSession = null;
+let activeItemCropPointerState = null;
+let wardrobeVisibleItemIds = [];
+let wardrobeItemViewerState = {
+  isOpen: false,
+  source: "all",
+  visibleItemIds: [],
+  currentIndex: 0,
+  pagerFromIndex: null,
+  isEditOpen: false,
+};
+let wardrobeViewerPointerState = null;
+const WARDROBE_VIEWER_SWIPE_THRESHOLD = 54;
+const WARDROBE_VIEWER_DRAG_INTENT_THRESHOLD = 12;
 let recommendationDialogTouchStartX = 0;
 let recommendationDialogTouchDeltaX = 0;
 let recommendationDialogSwipeActive = false;
 let settingsFeedbackTimeoutId = null;
 let consentDialogSource = null;
+let activeTabTrackedAt = Date.now();
 const TAB_ORDER = ["tabToday", "tabWardrobe"];
 
 function loadConsent() {
@@ -548,6 +695,14 @@ function loadState() {
     return {
       ...structuredClone(DEFAULT_STATE),
       ...parsed,
+      productValidation: {
+        ...structuredClone(DEFAULT_STATE).productValidation,
+        ...(parsed.productValidation || {}),
+        tabs: {
+          ...structuredClone(DEFAULT_STATE).productValidation.tabs,
+          ...((parsed.productValidation && parsed.productValidation.tabs) || {}),
+        },
+      },
       prefs: { ...DEFAULT_STATE.prefs, ...(parsed.prefs || {}) },
     };
   } catch {
@@ -724,6 +879,23 @@ function summarizeRecommendationTuning(prefs = loadState().prefs) {
   return chips.length ? `Current tuning: ${chips.slice(0, 3).join(" • ")}.` : "Using custom outfit tuning.";
 }
 
+function summarizeSavedLooksStatus(state = loadState()) {
+  const count = Array.isArray(state.savedLooks) ? state.savedLooks.length : 0;
+  if (!count) return "Saved looks stay on this device for now. You haven’t saved any yet.";
+  return `${count} saved look${count === 1 ? "" : "s"} stored on this device. Find them from Today > From your wardrobe.`;
+}
+
+function summarizeProfileValidationStatus(state = loadState()) {
+  const metrics = state.productValidation?.tabs?.tabPrefs || {};
+  const opens = Number(metrics.opens || 0);
+  const dwellMs = Number(metrics.dwellMs || 0);
+  if (!opens) {
+    return "Tracking how often Profile is opened and how long people stay there.";
+  }
+  const avgSeconds = Math.max(1, Math.round(dwellMs / Math.max(1, opens) / 1000));
+  return `Opened ${opens} time${opens === 1 ? "" : "s"} on this device • average dwell ${avgSeconds}s. Compare later against saved looks and wardrobe usage.`;
+}
+
 function renderSettingsDataUI() {
   if (els.settingsPrivacyStatus) {
     els.settingsPrivacyStatus.textContent = summarizeConsentSettings();
@@ -735,6 +907,64 @@ function renderSettingsDataUI() {
   }
   if (els.settingsResetPrefsStatus) {
     els.settingsResetPrefsStatus.textContent = summarizeRecommendationTuning(state.prefs);
+  }
+  if (els.settingsSavedLooksStatus) {
+    els.settingsSavedLooksStatus.textContent = summarizeSavedLooksStatus(state);
+  }
+  if (els.settingsProfileValidationStatus) {
+    els.settingsProfileValidationStatus.textContent = summarizeProfileValidationStatus(state);
+  }
+}
+
+function trackAnalyticsEvent(name, metadata = {}) {
+  try {
+    window.goatcounter?.count?.({
+      path: `${window.location.pathname}#${name}`,
+      title: metadata.title || name,
+      event: true,
+    });
+  } catch {}
+}
+
+function flushTabDwellMetrics(tabId = getActiveTabId(), { now = Date.now() } = {}) {
+  if (!tabId || !activeTabTrackedAt) return;
+  const elapsed = Math.max(0, now - activeTabTrackedAt);
+  if (!elapsed) return;
+  const state = loadState();
+  const current = state.productValidation?.tabs?.[tabId] || { opens: 0, dwellMs: 0 };
+  saveState({
+    productValidation: {
+      ...state.productValidation,
+      tabs: {
+        ...state.productValidation?.tabs,
+        [tabId]: {
+          ...current,
+          dwellMs: Number(current.dwellMs || 0) + elapsed,
+        },
+      },
+    },
+  });
+  activeTabTrackedAt = now;
+}
+
+function trackTabOpen(tabId, { now = Date.now() } = {}) {
+  const state = loadState();
+  const current = state.productValidation?.tabs?.[tabId] || { opens: 0, dwellMs: 0 };
+  saveState({
+    productValidation: {
+      ...state.productValidation,
+      tabs: {
+        ...state.productValidation?.tabs,
+        [tabId]: {
+          ...current,
+          opens: Number(current.opens || 0) + 1,
+        },
+      },
+    },
+  });
+  activeTabTrackedAt = now;
+  if (tabId === "tabPrefs") {
+    trackAnalyticsEvent("profile-tab-open", { title: "Profile tab open" });
   }
 }
 
@@ -755,6 +985,7 @@ function resetTodayLocationState() {
   if (els.emptyState) els.emptyState.style.display = "";
   setEmptyStateLoading(false);
   if (els.updatedAt) els.updatedAt.textContent = "—";
+  if (els.weatherHeroHeadline) els.weatherHeroHeadline.textContent = "—";
 }
 
 function setEmptyStateLoading(active, message = "Fetching your local weather…") {
@@ -1318,6 +1549,10 @@ function renderWeather(current, derived, hourly) {
   if (wc != null) effective = wc;
   else if (hx != null && hx >= current.temperature_2m + 1.0) effective = hx;
 
+  if (els.weatherHeroHeadline) {
+    els.weatherHeroHeadline.textContent = buildWeatherHeroHeadline(current, derived, effective);
+  }
+
   if (els.dewPoint) els.dewPoint.textContent = dew != null ? `${fmt1(dew, "°C")}` : "—";
   if (els.effTemp) els.effTemp.textContent = effective != null ? `${fmt1(effective, "°C")}` : "—";
 
@@ -1332,6 +1567,33 @@ function renderWeather(current, derived, hourly) {
   if (els.heroConditionIcon) {
     els.heroConditionIcon.innerHTML = weatherConditionIcon(conditionLabel);
   }
+}
+
+function buildWeatherHeroHeadline(current, derived, effectiveTemp) {
+  const effective = Number.isFinite(Number(effectiveTemp)) ? Number(effectiveTemp) : Number(current?.apparent_temperature);
+  const wind = Number(current?.wind_speed_10m);
+  const precipProb = Number(derived?.precipProb);
+  const precip = Number(current?.precipitation);
+
+  if ((Number.isFinite(precipProb) && precipProb >= 50) || (Number.isFinite(precip) && precip >= 0.5)) {
+    return "Keep a rain layer close today.";
+  }
+  if (Number.isFinite(wind) && wind >= 28 && Number.isFinite(effective) && effective <= 15) {
+    return "Light layers plus wind protection.";
+  }
+  if (Number.isFinite(effective) && effective <= 5) {
+    return "Cold enough for full layers.";
+  }
+  if (Number.isFinite(effective) && effective <= 12) {
+    return "A light jacket will carry the day.";
+  }
+  if (Number.isFinite(effective) && effective <= 20) {
+    return "Light layers should feel just right.";
+  }
+  if (Number.isFinite(effective) && effective <= 27) {
+    return "Keep it airy and breathable.";
+  }
+  return "Stay cool with the lightest pieces.";
 }
 
 function renderRecommendationWeatherStrip(weather = {}) {
@@ -1574,6 +1836,53 @@ function preserveUsefulItemLabel(text) {
     .replace(/\bT-Shirt\b/g, "T-shirt");
 }
 
+function toWardrobeTitleCase(text = "") {
+  const value = compactText(text, "");
+  if (!value) return "";
+  const smallWords = new Set(["and", "or", "of", "in", "with", "to"]);
+  return value
+    .split(/\s+/)
+    .map((word, index) => word
+      .split(/([/-])/)
+      .map((part) => {
+        if (part === "/" || part === "-") return part;
+        const lower = part.toLowerCase();
+        if (!part) return part;
+        if (/^[A-Z0-9]{2,}$/.test(part)) return part;
+        if (smallWords.has(lower) && index > 0) return lower;
+        if (lower === "t") return "T";
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join(""))
+    .join(" ")
+    .replace(/\bT Shirt\b/g, "T-shirt");
+}
+
+function normalizeWardrobeColorValue(value = "") {
+  const text = compactText(value, "");
+  if (!text) return "";
+  const aliases = {
+    grey: "Gray",
+    offwhite: "Off-white",
+    "off-white": "Off-white",
+    creme: "Cream",
+  };
+  const normalizedKey = text.toLowerCase().replace(/\s+/g, "");
+  if (aliases[normalizedKey]) return aliases[normalizedKey];
+  return toWardrobeTitleCase(text).replace(/\bGrey\b/g, "Gray");
+}
+
+function normalizeWardrobeMaterialValue(value = "") {
+  return toWardrobeTitleCase(value)
+    .replace(/\bDenim Cotton\b/g, "Cotton Denim")
+    .replace(/\bPu\b/g, "PU");
+}
+
+function normalizeWardrobeNameValue(value = "", fallbackType = "") {
+  const normalized = preserveUsefulItemLabel(value || fallbackType);
+  return normalized || preserveUsefulItemLabel(fallbackType);
+}
+
 function weatherConditionIcon(label = "") {
   const text = String(label).toLowerCase();
   if (text.includes("thunder")) return renderInlineIcon("storm");
@@ -1773,6 +2082,57 @@ function normalizeWardrobeType(type = "") {
   return key;
 }
 
+function canonicalizeDetectedItemType(type = "") {
+  const value = compactText(type, "");
+  const key = value.toLowerCase();
+  if (!key) return "";
+
+  if (/^polo(\s+shirt)?$/.test(key)) return "Polo";
+  if (/^(t[\s-]?shirt|tee|tee shirt)$/.test(key)) return "T-shirt";
+  if (/^(shirt|button[\s-]?up|button[\s-]?down|dress shirt|oxford)$/.test(key)) return "Shirt";
+  if (/^(tank|tank top)$/.test(key)) return "Tank top";
+  if (/^(jacket|coat|hoodie|blazer|vest|sweater|jeans|shorts|skirt|dress|sneakers|boots|sandals|dress shoes|hat|gloves|sunglasses|belt|bag|other)$/.test(key)) {
+    return value
+      .split(/\s+/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(" ");
+  }
+  if (/^(pants|trousers|slacks)$/.test(key)) return "Dress pants";
+  if (/^(chino|chinos)$/.test(key)) return "Chinos";
+  if (/^(sweatpant|sweatpants|joggers)$/.test(key)) return "Sweatpants";
+  if (/^(shoe|loafer|loafers)$/.test(key)) return "Dress shoes";
+  if (/^(cap|baseball cap|beanie|sun hat)$/.test(key)) return "Hat";
+  if (/^(scarf)$/.test(key)) return "Scarf";
+  if (/^(belt bag|tote bag|backpack|handbag)$/.test(key)) return "Bag";
+  if (/^(watch|bracelet|socks|umbrella)$/.test(key)) return "Other";
+
+  return value;
+}
+
+function inferDetectedItemType(type = "", name = "") {
+  const rawType = compactText(type, "");
+  const rawName = compactText(name, "");
+  const combined = `${rawType} ${rawName}`.toLowerCase();
+  if (!combined) return canonicalizeDetectedItemType(rawType);
+
+  if (/\bpolo\b/.test(combined)) return "Polo";
+  if (/\b(t[\s-]?shirt|tee)\b/.test(combined)) return "T-shirt";
+  if (/\b(button[\s-]?up|button[\s-]?down|oxford|dress shirt)\b/.test(combined)) return "Shirt";
+  if (/\b(tank(\s+top)?)\b/.test(combined)) return "Tank top";
+  if (/\b(loafer|oxford shoe|derby|dress shoe)\b/.test(combined)) return "Dress shoes";
+  if (/\b(sneaker|trainer|runner)\b/.test(combined)) return "Sneakers";
+  if (/\b(boot|chelsea|combat boot)\b/.test(combined)) return "Boots";
+  if (/\b(sandal|slide)\b/.test(combined)) return "Sandals";
+  if (/\b(baseball cap|cap|beanie|sun hat|bucket hat)\b/.test(combined)) return "Hat";
+  if (/\b(sunglass|shades|eyewear)\b/.test(combined)) return "Sunglasses";
+  if (/\b(glove|mittens?)\b/.test(combined)) return "Gloves";
+  if (/\b(scarf)\b/.test(combined)) return "Scarf";
+  if (/\b(belt)\b/.test(combined)) return "Belt";
+  if (/\b(tote|bag|backpack|purse|handbag)\b/.test(combined)) return "Bag";
+
+  return canonicalizeDetectedItemType(rawType);
+}
+
 function normalizeRecommendationEntry(entry, index = 0) {
   if (Array.isArray(entry)) {
     return {
@@ -1790,7 +2150,7 @@ function normalizeRecommendationEntry(entry, index = 0) {
 
 function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
   const photoItems = Array.isArray(wardrobeItems)
-    ? wardrobeItems.filter((item) => item?.photoDataUrl && item?.name)
+    ? wardrobeItems.filter((item) => getItemDisplayPhoto(item) && item?.name)
     : [];
   if (!photoItems.length) return {};
 
@@ -1828,7 +2188,7 @@ function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
 
     if (!best || bestScore < 6) return null;
     return {
-      path: best.photoDataUrl,
+      path: getItemDisplayPhoto(best),
       source: "wardrobe",
       itemId: best.id ?? null,
       itemName: best.name || "",
@@ -1846,6 +2206,196 @@ function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
     if (match) acc[normalizedEntry.key] = match;
     return acc;
   }, {});
+}
+
+function buildWardrobeItemMatches(entries, wardrobeItems = []) {
+  const items = Array.isArray(wardrobeItems)
+    ? wardrobeItems.filter((item) => item?.name)
+    : [];
+  if (!items.length) return {};
+
+  const scoredMatchFor = (slotKey, value) => {
+    const normalizedValue = normalizeItemLabel(value).toLowerCase();
+    if (!normalizedValue) return null;
+    const wantedType = normalizeWardrobeType(slotKey);
+    const wantedTokens = normalizedValue.split(/\s+/).filter((token) => token.length > 2);
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const item of items) {
+      const itemType = normalizeWardrobeType(item.type);
+      if (wantedType && itemType && itemType !== wantedType) continue;
+
+      const itemName = normalizeItemLabel(`${item.name || ""} ${item.type || ""}`).toLowerCase();
+      if (!itemName) continue;
+
+      let score = 0;
+      if (itemName === normalizedValue) score += 10;
+      if (itemName.includes(normalizedValue) || normalizedValue.includes(itemName)) score += 6;
+
+      const itemTokens = itemName.split(/\s+/).filter((token) => token.length > 2);
+      const overlap = wantedTokens.filter((token) => itemTokens.includes(token)).length;
+      score += overlap * 2;
+      if (wantedTokens.length && overlap === wantedTokens.length) score += 2;
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    }
+
+    if (!best || bestScore < 4) return null;
+    return best;
+  };
+
+  return entries.reduce((acc, entry, index) => {
+    const normalizedEntry = normalizeRecommendationEntry(entry, index);
+    const slotKey = String(normalizedEntry.label || "").toLowerCase();
+    const match = scoredMatchFor(slotKey, normalizedEntry.value);
+    if (match) acc[normalizedEntry.key] = match;
+    return acc;
+  }, {});
+}
+
+function getRecommendationCategoryPreset(label = "") {
+  const normalized = normalizeWardrobeType(label);
+  if (normalized === "top") return "T-shirt";
+  if (normalized === "bottom") return "Jeans";
+  if (normalized === "outer") return "Jacket";
+  if (normalized === "shoes") return "Sneakers";
+  if (normalized === "accessory") return "Bag";
+  return "Other";
+}
+
+function getRecommendationWardrobeSummary(rowEntries = [], wardrobeItems = []) {
+  const directMatches = buildWardrobeItemMatches(rowEntries, wardrobeItems);
+  const matchedCount = rowEntries.filter((entry) => directMatches[entry.key]).length;
+  const totalCount = rowEntries.length;
+  const missingCount = Math.max(0, totalCount - matchedCount);
+  const coverage = totalCount ? Math.round((matchedCount / totalCount) * 100) : 0;
+  const confidence = coverage >= 75 ? "High" : coverage >= 40 ? "Medium" : "Low";
+  return { matchedCount, totalCount, missingCount, coverage, confidence, directMatches };
+}
+
+function describeRecommendationCoverage(summary = {}) {
+  const coverage = Number(summary.coverage || 0);
+  if (coverage >= 80) return `${coverage}% closet match`;
+  if (coverage >= 50) return `${coverage}% of this look already lives in your wardrobe`;
+  return `${coverage}% matched so far`;
+}
+
+function describeRecommendationConfidence(summary = {}) {
+  const confidence = String(summary.confidence || "").toLowerCase();
+  if (confidence === "high") return "Strong match confidence";
+  if (confidence === "medium") return "Solid match confidence";
+  return "Early match confidence";
+}
+
+function buildLookSignature(outfit = {}) {
+  return [
+    outfit.top || "",
+    outfit.bottom || "",
+    outfit.outer || "",
+    outfit.shoes || "",
+    ...(Array.isArray(outfit.accessories) ? outfit.accessories : [outfit.accessories || ""]),
+  ].map((value) => normalizeItemLabel(value).toLowerCase()).filter(Boolean).join("|");
+}
+
+function saveRecommendationLook(payload) {
+  if (!payload) return false;
+  const state = loadState();
+  const existing = Array.isArray(state.savedLooks) ? state.savedLooks : [];
+  const signature = payload.signature || buildLookSignature(payload.outfit);
+  const nextEntry = {
+    id: payload.id || `look-${Date.now()}`,
+    createdAt: payload.createdAt || new Date().toISOString(),
+    headline: payload.headline || "Saved look",
+    subtitle: payload.subtitle || "",
+    locationName: payload.locationName || "",
+    coverage: payload.coverage || 0,
+    missingItems: Array.isArray(payload.missingItems) ? payload.missingItems : [],
+    signature,
+    outfit: payload.outfit || {},
+  };
+  const nextLooks = [nextEntry, ...existing.filter((entry) => entry.signature !== signature)].slice(0, 12);
+  saveState({ savedLooks: nextLooks });
+  return true;
+}
+
+function renderSavedLookHistory(savedLooks = []) {
+  if (!savedLooks.length) return "";
+  const visibleLooks = savedLooksExpanded ? savedLooks : savedLooks.slice(0, 2);
+  const toggleLabel = savedLooksExpanded ? "Show fewer" : `View all ${savedLooks.length}`;
+  return `
+    <section class="today-wardrobe-history">
+      <div class="today-wardrobe-history-head">
+        <span class="today-cta-kicker">Saved looks</span>
+        <strong>Recent outfit references</strong>
+        <span>Saved to this device for now so you can find them again from Today.</span>
+      </div>
+      <div class="today-wardrobe-history-list">
+        ${visibleLooks.map((look) => `
+          <div class="today-wardrobe-history-item">
+            <strong>${escapeHtml(look.headline || "Saved look")}</strong>
+            <span>${escapeHtml(look.locationName || "Saved on this device")}</span>
+          </div>
+        `).join("")}
+      </div>
+      ${savedLooks.length > 2 ? `
+        <div class="today-wardrobe-history-actions">
+          <button type="button" class="today-details-button" data-rec-action="toggle-saved-looks">${toggleLabel}</button>
+        </div>
+      ` : ""}
+    </section>
+  `;
+}
+
+function renderRecommendationWardrobeLoop(summary, data) {
+  const savedLooks = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+  const missingItems = Array.isArray(data?.missingItems) ? data.missingItems.filter(Boolean) : [];
+  const currentSignature = buildLookSignature(data?.outfit || {});
+  const isAlreadySaved = savedLooks.some((entry) => entry.signature === currentSignature);
+
+  return `
+    <section class="today-wardrobe-loop">
+      <div class="today-wardrobe-loop-summary">
+        <div>
+          <span class="today-cta-kicker">From your wardrobe</span>
+          <strong>${summary.matchedCount} of ${summary.totalCount || 0} pieces already match what you own</strong>
+          <p>${summary.missingCount ? `${summary.missingCount} piece${summary.missingCount === 1 ? "" : "s"} still need a match, so this look is partly grounded in your closet already.` : "This look is fully grounded in your real wardrobe, so it should be easy to wear today."}</p>
+        </div>
+        <div class="today-wardrobe-loop-metrics">
+          <span class="today-rec-meta-chip">${escapeHtml(describeRecommendationCoverage(summary))}</span>
+          <span class="today-rec-meta-chip">${escapeHtml(describeRecommendationConfidence(summary))}</span>
+        </div>
+      </div>
+      <div class="today-wardrobe-loop-actions">
+        <button type="button" class="btn-primary today-wardrobe-loop-primary" data-rec-action="open-wardrobe">Open wardrobe</button>
+        <button type="button" class="today-details-button" data-rec-action="save-look">${isAlreadySaved ? "Saved to looks" : "Save this look"}</button>
+      </div>
+      ${missingItems.length ? `
+        <div class="today-wardrobe-gap-list">
+          <div class="today-wardrobe-gap-section-head">
+            <span class="today-cta-kicker">Recommendation gap</span>
+            <strong>Add or swap one of these pieces to close the look</strong>
+          </div>
+          ${missingItems.map((item) => `
+            <div class="today-wardrobe-gap-card">
+              <div>
+                <strong>${escapeHtml(item)}</strong>
+                <p>Add a similar piece or swap to something you already own.</p>
+              </div>
+              <div class="today-wardrobe-gap-actions">
+                <button type="button" class="today-feedback-chip" data-rec-action="use-owned" data-rec-missing-item="${escapeHtml(item)}">Use one I own instead</button>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      ` : ""}
+      ${renderSavedLookHistory(savedLooks)}
+    </section>
+  `;
 }
 
 function inferRecommendedItemDetails(item = {}, weather = {}) {
@@ -1960,6 +2510,17 @@ function renderRecommendationItemDialogMedia(item, className = "today-item-dialo
   return `<div class="today-item-dialog-art">${item?.icon || ""}</div>`;
 }
 
+function getRecommendationCollageTextPlacement(positionClass = "") {
+  const position = String(positionClass || "");
+  if (/top-right|middle-right/.test(position)) return "has-text-top-right";
+  if (/top-center/.test(position)) return "has-text-top-center";
+  if (/top-left|middle-left/.test(position)) return "has-text-top-left";
+  if (/bottom-right/.test(position)) return "has-text-bottom-right";
+  if (/bottom-center/.test(position)) return "has-text-bottom-center";
+  if (/bottom-left/.test(position)) return "has-text-bottom-left";
+  return "has-text-bottom-left";
+}
+
 function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReasons = {}) {
   if (!entries.length) return "";
   const normalizedEntries = entries.map((entry, index) => normalizeRecommendationEntry(entry, index));
@@ -1967,7 +2528,8 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
   const positionClasses = buildRecommendationCollageLayout(normalizedEntries);
   const collageItems = normalizedEntries.map((normalizedEntry, index) => {
     const slotKey = String(normalizedEntry.label || "").toLowerCase();
-    const art = getRecommendationCardArt(normalizedEntry.label, normalizedEntry.value, imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null);
+    const imageMatch = imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null;
+    const art = getRecommendationCardArt(normalizedEntry.label, normalizedEntry.value, imageMatch);
     const reason = buildRecommendationItemReason(normalizedEntry.label, normalizedEntry.value, weather, slotReasons?.[normalizedEntry.key] || slotReasons?.[slotKey] || "");
     return {
       index,
@@ -1977,8 +2539,10 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
       tone: art.tone,
       photo: art.photo,
       icon: art.icon,
+      fromWardrobe: imageMatch?.source === "wardrobe",
       reason,
       positionClass: positionClasses[index] || "is-grid-center",
+      textPlacementClass: getRecommendationCollageTextPlacement(positionClasses[index] || "is-grid-center"),
       accessoryCount,
     };
   });
@@ -1994,13 +2558,14 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
         ${collageItems.map((item) => `
           <button
             type="button"
-            class="today-rec-collage-item today-rec-collage-item-${escapeHtml(item.tone)} ${escapeHtml(item.positionClass)}"
+            class="today-rec-collage-item today-rec-collage-item-${escapeHtml(item.tone)} ${escapeHtml(item.positionClass)} ${escapeHtml(item.textPlacementClass)}"
             data-rec-item-index="${item.index}"
             aria-label="Open ${escapeHtml(item.value)}"
           >
             <span class="today-rec-collage-photo-wrap">
               ${item.photo ? `<img class="today-rec-collage-photo" src="${item.photo}" alt="" draggable="false" />` : `<span class="today-rec-collage-art">${item.icon}</span>`}
             </span>
+            ${item.fromWardrobe ? `<span class="today-rec-collage-wardrobe-mark">W A R D R O B E</span>` : ""}
             <span class="today-rec-collage-chip">${escapeHtml(item.label)}</span>
             <span class="today-rec-collage-name">${escapeHtml(item.value)}</span>
           </button>
@@ -2527,14 +3092,44 @@ function getStarterTypePreset(type = "") {
   };
 }
 
-function showAppToast(message, tone = "info") {
+function showAppToast(message, tone = "info", options = {}) {
   const existing = document.querySelector(".app-toast");
   if (existing) existing.remove();
   const toast = document.createElement("div");
   toast.className = `app-toast app-toast-${tone}`;
   toast.setAttribute("role", "status");
   toast.textContent = message;
-  document.body.appendChild(toast);
+  if (options?.clickable) {
+    toast.setAttribute("role", "button");
+    toast.tabIndex = 0;
+    toast.style.cursor = "pointer";
+    toast.title = options.clickLabel || "Open";
+    const activate = () => {
+      try { options.onClick?.(); } finally {
+        toast.classList.remove("is-visible");
+        window.setTimeout(() => toast.remove(), 120);
+      }
+    };
+    toast.addEventListener("click", activate);
+    toast.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activate();
+      }
+    });
+  }
+  // A <dialog> opened via showModal() enters the top layer, which covers any
+  // element in document.body regardless of z-index. If a modal is open, append
+  // the toast inside it so it shares the same top-layer stack.
+  let openModal = null;
+  try {
+    openModal = Array.from(document.querySelectorAll("dialog[open]"))
+      .reverse()
+      .find((d) => {
+        try { return d.matches(":modal"); } catch { return false; }
+      }) || null;
+  } catch {}
+  (openModal || document.body).appendChild(toast);
   window.setTimeout(() => toast.classList.add("is-visible"), 20);
   window.setTimeout(() => {
     toast.classList.remove("is-visible");
@@ -3035,6 +3630,7 @@ function setupInstallUI() {
 
 function registerSW() {
   if (isNative) return;
+  if (window.__WEARCAST_DEV_LIVE__) return;
   if (!("serviceWorker" in navigator)) return;
 
   window.addEventListener("load", async () => {
@@ -3247,24 +3843,67 @@ function bindPullToRefresh() {
 // ─── Wardrobe: API (logged in) or localStorage (guest) ───────
 let _wardrobeCache = null;
 
+function getItemSourcePhoto(item = {}) {
+  return item.sourcePhotoDataUrl || item.photoDataUrl || null;
+}
+
+function hasTrustedCrop(item = {}) {
+  return item.cropConfidence === "trusted" && !!item.cropPhotoDataUrl;
+}
+
+function getItemDisplayPhoto(item = {}) {
+  return hasTrustedCrop(item) ? item.cropPhotoDataUrl : getItemSourcePhoto(item);
+}
+
+function normalizeWardrobeItemMedia(item = {}) {
+  const subtype = inferDetectedItemType(item.type || "", item.name || "")
+    || canonicalizeDetectedItemType(item.type || "")
+    || compactText(item.type, "");
+  const normalizedName = normalizeWardrobeNameValue(item.name, subtype);
+  const normalizedColor = normalizeWardrobeColorValue(item.color);
+  const normalizedMaterial = normalizeWardrobeMaterialValue(item.material);
+  const sourcePhotoDataUrl = item.sourcePhotoDataUrl || item.photoDataUrl || null;
+  const cropPhotoDataUrl = item.cropPhotoDataUrl || null;
+  const cropConfidence = item.cropConfidence || (cropPhotoDataUrl ? "trusted" : "none");
+  return {
+    ...item,
+    type: subtype,
+    name: normalizedName,
+    color: normalizedColor,
+    material: normalizedMaterial,
+    sourcePhotoDataUrl,
+    cropPhotoDataUrl,
+    cropConfidence,
+    photoDataUrl: cropConfidence === "trusted" && cropPhotoDataUrl ? cropPhotoDataUrl : sourcePhotoDataUrl,
+  };
+}
+
+function serializeWardrobeItemMedia(item = {}) {
+  const normalized = normalizeWardrobeItemMedia(item);
+  return {
+    ...normalized,
+    photoDataUrl: null,
+  };
+}
+
 function loadWardrobeLocal() {
   if (!canUseFunctionalStorage()) return [];
   try {
     const raw = localStorage.getItem(WARDROBE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    return raw ? JSON.parse(raw).map(normalizeWardrobeItemMedia) : [];
   } catch { return []; }
 }
 
 function saveWardrobeLocal(items) {
   if (canUseFunctionalStorage()) {
-    try { localStorage.setItem(WARDROBE_KEY, JSON.stringify(items)); } catch {}
+    try { localStorage.setItem(WARDROBE_KEY, JSON.stringify((Array.isArray(items) ? items : []).map(serializeWardrobeItemMedia))); } catch {}
   }
 }
 
 async function fetchWardrobeFromServer() {
   const res = await authFetch(`${API_BASE}/api/wardrobe`);
   if (!res.ok) throw new Error("Failed to load wardrobe");
-  return res.json();
+  return (await res.json()).map(normalizeWardrobeItemMedia);
 }
 
 function loadWardrobe() {
@@ -3287,8 +3926,9 @@ async function loadWardrobeAsync() {
 
 function saveWardrobe(items) {
   // always keep local copy in sync
-  saveWardrobeLocal(items);
-  if (isLoggedIn()) _wardrobeCache = items;
+  const normalized = (Array.isArray(items) ? items : []).map(normalizeWardrobeItemMedia);
+  saveWardrobeLocal(normalized);
+  if (isLoggedIn()) _wardrobeCache = normalized;
 }
 
 async function syncLocalWardrobeToServer() {
@@ -3312,19 +3952,28 @@ function typeEmoji(type) {
   return renderInlineIcon(itemTypeIconKey(type), "wardrobe-type-icon");
 }
 
+function getWardrobeSubtype(item = {}) {
+  return inferDetectedItemType(item.type || "", item.name || "")
+    || canonicalizeDetectedItemType(item.type || "")
+    || preserveUsefulItemLabel(item.type || "")
+    || "Other";
+}
+
 function getWardrobeCategory(item = {}) {
-  const key = `${item.type || ""} ${item.name || ""}`.toLowerCase();
-  if (/(jacket|coat|hoodie|blazer|vest|outer|parka|windbreaker)/.test(key)) return "jackets";
-  if (/(jeans|pants|trousers|chinos|shorts|leggings|skirt|bottom)/.test(key)) return "pants";
-  if (/(shirt|t-shirt|tee|polo|sweater|tank|top|blouse)/.test(key)) return "shirts";
+  const key = `${getWardrobeSubtype(item)} ${item.name || ""}`.toLowerCase();
+  if (/(jacket|coat|hoodie|blazer|vest|outer|parka|windbreaker|sweater)/.test(key)) return "jackets";
+  if (/(jeans|dress pants|chinos|shorts|sweatpants|leggings|skirt|pants|trousers|bottom)/.test(key)) return "pants";
+  if (/(shirt|t-shirt|polo|tank top|top|blouse)/.test(key)) return "shirts";
   if (/(shoe|sneaker|boot|sandal|loafer)/.test(key)) return "shoes";
-  if (/(scarf|hat|beanie|glove|sunglasses|belt|bag|watch|cap|sock|accessor)/.test(key)) return "accessories";
+  if (/(scarf|hat|beanie|glove|sunglasses|belt|bag|watch|sock|umbrella|accessor)/.test(key)) return "accessories";
   return "other";
 }
 
 function getWardrobeCategoryLabel(category) {
   return {
     all: "All",
+    overview: "Overview",
+    favorites: "Favorites",
     shirts: "Shirts",
     pants: "Pants",
     jackets: "Jackets",
@@ -3338,19 +3987,529 @@ function normalizeFilterValue(value = "") {
   return String(value || "").trim().toLowerCase();
 }
 
+function getWardrobeCollectionStage(items = []) {
+  const count = Array.isArray(items) ? items.length : 0;
+  if (!count) return "empty";
+  if (count <= 8) return "starter";
+  if (count <= 30) return "active";
+  return "rich";
+}
+
+function itemNeedsMetadataReview(item = {}) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  return !normalizedItem.color || !normalizedItem.material;
+}
+
+function getWardrobeSeasonBucket(item = {}) {
+  const text = `${item.type || ""} ${item.name || ""} ${item.material || ""}`.toLowerCase();
+  if (/\brain|waterproof|shell|trench|parka|boot\b/.test(text)) return "rain";
+  if (/\bcoat|jacket|hoodie|sweater|fleece|wool|boot|scarf|glove\b/.test(text)) return "cold";
+  if (/\bshort|tank|sandal|linen|tee|t-shirt|polo|dress\b/.test(text)) return "warm";
+  return "all";
+}
+
+function buildWardrobeSearchIndex(item = {}) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  return [
+    normalizedItem.name,
+    normalizedItem.type,
+    normalizedItem.color,
+    normalizedItem.material,
+    getWardrobeCategoryLabel(getWardrobeCategory(normalizedItem)),
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function countItemUsageInSavedLooks(item = {}, savedLooks = []) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  const candidates = [normalizedItem.name, normalizedItem.type]
+    .map((value) => normalizeItemLabel(value).toLowerCase())
+    .filter((value) => value.length >= 3);
+  if (!candidates.length) return 0;
+  return savedLooks.reduce((count, look) => {
+    const text = buildLookSignature(look?.outfit || {});
+    if (!text) return count;
+    return candidates.some((candidate) => text.includes(candidate)) ? count + 1 : count;
+  }, 0);
+}
+
+function isItemMatchedToRecommendations(item = {}, state = loadState()) {
+  const itemId = String(item?.id || "");
+  const matchedIds = Array.isArray(state.latestRecommendation?.matchedItemIds) ? state.latestRecommendation.matchedItemIds.map(String) : [];
+  if (itemId && matchedIds.includes(itemId)) return true;
+  return countItemUsageInSavedLooks(item, Array.isArray(state.savedLooks) ? state.savedLooks : []) > 0;
+}
+
+function getItemRecommendationUsage(item = {}, state = loadState()) {
+  const savedLooks = Array.isArray(state.savedLooks) ? state.savedLooks : [];
+  const usageCount = countItemUsageInSavedLooks(item, savedLooks);
+  const itemId = String(item?.id || "");
+  const matchedIds = Array.isArray(state.latestRecommendation?.matchedItemIds) ? state.latestRecommendation.matchedItemIds.map(String) : [];
+  const latestMatched = itemId && matchedIds.includes(itemId);
+  return {
+    usageCount,
+    latestMatched,
+  };
+}
+
+function markWardrobeItemsHighlighted(itemIds = []) {
+  highlightedWardrobeItemIds = itemIds.map((id) => String(id)).filter(Boolean);
+}
+
 function getFilteredWardrobeItems(items = []) {
   const filtered = items.filter((item) => {
-    if (wardrobeFilterState.favoritesOnly && !item.favorite) return false;
+    if (wardrobeFilterState.view === "favorites" && !item.favorite) return false;
     if (wardrobeFilterState.category !== "all" && getWardrobeCategory(item) !== wardrobeFilterState.category) return false;
     if (wardrobeFilterState.color !== "all" && normalizeFilterValue(item.color) !== wardrobeFilterState.color) return false;
+    if (wardrobeFilterState.material !== "all" && normalizeFilterValue(item.material) !== wardrobeFilterState.material) return false;
+    if (wardrobeFilterState.season !== "all" && getWardrobeSeasonBucket(item) !== wardrobeFilterState.season) return false;
+    if (wardrobeFilterState.recentOnly) {
+      const createdAt = new Date(item.createdAt || 0).getTime() || 0;
+      if (createdAt < Date.now() - (30 * 24 * 60 * 60 * 1000)) return false;
+    }
+    if (wardrobeFilterState.missingMetadataOnly && !itemNeedsMetadataReview(item)) return false;
+    if (wardrobeFilterState.search) {
+      const query = wardrobeFilterState.search.toLowerCase();
+      if (!buildWardrobeSearchIndex(item).includes(query)) return false;
+    }
+    if (wardrobeFilterState.matchedOnly && !isItemMatchedToRecommendations(item)) return false;
     return true;
   });
 
   return filtered.sort((a, b) => {
+    if (wardrobeFilterState.sort === "name") {
+      return normalizeWardrobeNameValue(a.name, a.type).localeCompare(normalizeWardrobeNameValue(b.name, b.type));
+    }
+    if (wardrobeFilterState.sort === "type") {
+      return getWardrobeSubtype(a).localeCompare(getWardrobeSubtype(b));
+    }
     const aTime = new Date(a.createdAt || 0).getTime() || 0;
     const bTime = new Date(b.createdAt || 0).getTime() || 0;
     return wardrobeFilterState.sort === "oldest" ? aTime - bTime : bTime - aTime;
   });
+}
+
+function getWardrobeMissingCategories(items = []) {
+  const present = new Set(items.map((item) => getWardrobeCategory(item)));
+  const missing = [];
+  if (!present.has("jackets")) missing.push("Outerwear");
+  if (!present.has("shoes")) missing.push("Shoes");
+  if (!present.has("shirts")) missing.push("Staple tops");
+  if (!present.has("pants")) missing.push("Bottoms");
+  if (!items.some((item) => /\b(rain|shell|waterproof|trench|parka|coat|boot)\b/i.test(`${item.type || ""} ${item.name || ""}`))) {
+    missing.push("Rain layer");
+  }
+  return missing.slice(0, 4);
+}
+
+function getWardrobeCoverage(items = []) {
+  return Math.max(0, Math.min(100, Math.round((Math.min(items.length, 5) / 5) * 100)));
+}
+
+function renderWardrobeDashboard(items = []) {
+  const stage = getWardrobeCollectionStage(items);
+  const coverage = getWardrobeCoverage(items);
+  const circumference = 2 * Math.PI * 48;
+  const filledLength = circumference * (coverage / 100);
+  const missing = getWardrobeMissingCategories(items);
+  const shouldShowDashboard = stage === "starter";
+
+  if (els.wardrobeDashboard) {
+    els.wardrobeDashboard.style.display = shouldShowDashboard ? "" : "none";
+    els.wardrobeDashboard.classList.toggle("is-compact", shouldShowDashboard);
+  }
+  if (els.wardrobeCoverageCircle) {
+    els.wardrobeCoverageCircle.style.strokeDasharray = `${filledLength} ${circumference}`;
+  }
+  if (els.wardrobeCoverageValue) els.wardrobeCoverageValue.textContent = `${coverage}%`;
+  if (els.wardrobeCoverageLabel) {
+    els.wardrobeCoverageLabel.textContent = items.length >= 5 ? "Ready to style" : `${Math.max(0, 5 - items.length)} left`;
+  }
+  if (els.wardrobeMissingChips) {
+    els.wardrobeMissingChips.innerHTML = missing.length
+      ? missing.map((label) => `<button type="button" class="wardrobe-missing-chip" data-starter-label="${escapeHtml(label)}">${escapeHtml(label)}</button>`).join("")
+      : `<span class="wardrobe-missing-chip is-complete">Starter set covered</span>`;
+  }
+  if (els.wardrobeSyncPrompt) {
+    els.wardrobeSyncPrompt.style.display = !isLoggedIn() && items.length ? "grid" : "none";
+  }
+}
+
+function buildWardrobeItemCard(item = {}) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  const displayPhoto = getItemDisplayPhoto(normalizedItem);
+  const recommendationUsage = getItemRecommendationUsage(normalizedItem);
+  const isHighlighted = highlightedWardrobeItemIds.includes(String(normalizedItem.id));
+  const photoHtml = displayPhoto
+    ? `<img class="wardrobe-item-photo" src="${escapeHtml(displayPhoto)}" alt="" />`
+    : `<div class="wardrobe-item-placeholder" aria-hidden="true">${typeEmoji(normalizedItem.type)}</div>`;
+  const meta = [
+    getWardrobeSubtype(normalizedItem) || getWardrobeCategoryLabel(getWardrobeCategory(normalizedItem)),
+    normalizeWardrobeColorValue(normalizedItem.color) || normalizeWardrobeMaterialValue(normalizedItem.material),
+  ].filter(Boolean).join(" · ");
+  const createdAt = new Date(normalizedItem.createdAt || 0).getTime() || 0;
+  const isNew = createdAt >= Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const badges = [];
+  if (normalizedItem.favorite) badges.push(`<span class="wardrobe-item-badge is-favorite">Favorite</span>`);
+  if (itemNeedsMetadataReview(normalizedItem)) badges.push(`<span class="wardrobe-item-badge is-review">Needs review</span>`);
+  else if (isNew) badges.push(`<span class="wardrobe-item-badge">New</span>`);
+  if (recommendationUsage.latestMatched) badges.push(`<span class="wardrobe-item-badge is-match">In today’s look</span>`);
+  const visibleBadges = badges.slice(0, 2);
+  if (badges.length > visibleBadges.length) {
+    visibleBadges.push(`<span class="wardrobe-item-badge is-more">+${badges.length - visibleBadges.length}</span>`);
+  }
+
+  return `
+    <article class="wardrobe-item ${isHighlighted ? "is-highlighted" : ""}" data-id="${escapeHtml(String(normalizedItem.id))}">
+      <div class="wardrobe-item-visual">
+        <button type="button" class="wardrobe-favorite-btn ${normalizedItem.favorite ? "is-active" : ""}" data-wardrobe-favorite="${escapeHtml(String(normalizedItem.id))}" aria-label="${normalizedItem.favorite ? "Remove from favorites" : "Add to favorites"}">★</button>
+        ${visibleBadges.length ? `<div class="wardrobe-item-badges">${visibleBadges.join("")}</div>` : ""}
+        ${photoHtml}
+      </div>
+      <div class="wardrobe-item-info">
+        <div class="wardrobe-item-caption">
+          <div class="wardrobe-item-name">${escapeHtml(normalizedItem.name)}</div>
+          <div class="wardrobe-item-meta">${escapeHtml(meta || "Ready for outfit recommendations")}</div>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function getWardrobeViewerSource() {
+  if (wardrobeFilterState.search) return "search";
+  if (wardrobeFilterState.view === "favorites") return "favorites";
+  if (wardrobeFilterState.category !== "all") return "category";
+  return "all";
+}
+
+function getWardrobeViewerMetaLine(item = {}) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  return [
+    getWardrobeSubtype(normalizedItem) || getWardrobeCategoryLabel(getWardrobeCategory(normalizedItem)),
+    normalizeWardrobeColorValue(normalizedItem.color) || normalizeWardrobeMaterialValue(normalizedItem.material),
+  ].filter(Boolean).join(" · ");
+}
+
+function getWardrobeViewerPagerOffset(total = 0, currentIndex = 0, visibleCount = Math.min(5, total || 0)) {
+  if (total <= 1) return 0;
+  return Math.max(0, Math.min(currentIndex - Math.floor(visibleCount / 2), total - visibleCount));
+}
+
+function buildWardrobeViewerPager(total = 0, currentIndex = 0, initialOffset = null) {
+  if (total <= 1) return "";
+  const visibleCount = Math.min(5, total);
+  const slotSize = 18;
+  const targetOffset = getWardrobeViewerPagerOffset(total, currentIndex, visibleCount);
+  const renderOffset = Number.isFinite(initialOffset) ? initialOffset : targetOffset;
+  const dots = [];
+  for (let index = 0; index < total; index += 1) {
+    dots.push(`<span class="item-viewer-pager-dot ${index === currentIndex ? "is-active" : ""}"></span>`);
+  }
+  return `
+    <span class="item-viewer-pager-window" style="--pager-visible-count:${visibleCount}; --pager-slot-size:${slotSize}px;">
+      <span class="item-viewer-pager-track" data-item-viewer-pager-track data-target-offset="${targetOffset}" style="--pager-offset:${renderOffset};">
+        ${dots.join("")}
+      </span>
+    </span>
+  `;
+}
+
+function buildWardrobeViewerMedia(item = null, className = "item-viewer-photo") {
+  if (!item) return "";
+  const displayPhoto = getItemDisplayPhoto(item);
+  if (displayPhoto) {
+    return `<img class="${className}" src="${escapeHtml(displayPhoto)}" alt="${escapeHtml(item.name || "Wardrobe item")}" draggable="false" />`;
+  }
+  return `<div class="${className} item-viewer-photo-placeholder">${typeEmoji(item.type)}</div>`;
+}
+
+function getWardrobeViewerElements() {
+  return {
+    viewer: els.itemDetailBody?.querySelector("[data-item-viewer-id]") || null,
+    shell: els.itemDetailBody?.querySelector("[data-item-viewer-shell]") || null,
+    stage: els.itemDetailBody?.querySelector("[data-item-viewer-stage]") || null,
+    prevPreview: els.itemDetailBody?.querySelector('[data-item-viewer-preview="prev"]') || null,
+    nextPreview: els.itemDetailBody?.querySelector('[data-item-viewer-preview="next"]') || null,
+  };
+}
+
+function resetWardrobeViewerDragStyles() {
+  const { stage, prevPreview, nextPreview } = getWardrobeViewerElements();
+  [stage, prevPreview, nextPreview].forEach((element) => {
+    if (!element) return;
+    element.classList.remove("is-visible");
+    element.style.removeProperty("transition");
+    element.style.removeProperty("transform");
+    element.style.removeProperty("opacity");
+  });
+}
+
+function updateWardrobeViewerDrag(deltaX = 0, deltaY = 0, axis = "horizontal") {
+  const { stage, prevPreview, nextPreview } = getWardrobeViewerElements();
+  if (!stage) return;
+
+  if (axis === "vertical") {
+    const height = Math.max(stage.clientHeight || window.innerHeight || 1, 1);
+    const progress = Math.max(0, Math.min(1, Math.abs(deltaY) / height));
+    [prevPreview, nextPreview].forEach((preview) => {
+      if (!preview) return;
+      preview.classList.remove("is-visible");
+      preview.style.removeProperty("transition");
+      preview.style.removeProperty("transform");
+      preview.style.removeProperty("opacity");
+    });
+    stage.style.transition = "none";
+    stage.style.transform = `translateY(${deltaY}px) scale(${1 - progress * 0.05})`;
+    stage.style.opacity = `${1 - progress * 0.26}`;
+    return;
+  }
+
+  const width = Math.max(stage.clientWidth || window.innerWidth || 1, 1);
+  const progress = Math.max(-1, Math.min(1, deltaX / width));
+  const direction = deltaX < 0 ? 1 : deltaX > 0 ? -1 : 0;
+  const activePreview = direction === 1 ? nextPreview : direction === -1 ? prevPreview : null;
+  const inactivePreview = direction === 1 ? prevPreview : nextPreview;
+
+  if (inactivePreview) {
+    inactivePreview.classList.remove("is-visible");
+    inactivePreview.style.removeProperty("transition");
+    inactivePreview.style.removeProperty("transform");
+    inactivePreview.style.removeProperty("opacity");
+  }
+
+  if (activePreview && activePreview.childElementCount) {
+    activePreview.classList.add("is-visible");
+    activePreview.style.transition = "none";
+    activePreview.style.opacity = `${0.28 + Math.abs(progress) * 0.72}`;
+    activePreview.style.transform = `translateX(${direction === 1 ? width * 0.16 + deltaX * 0.16 : -width * 0.16 + deltaX * 0.16}px) scale(${0.97 + Math.abs(progress) * 0.03})`;
+  } else if (activePreview) {
+    activePreview.classList.remove("is-visible");
+    activePreview.style.removeProperty("transition");
+    activePreview.style.removeProperty("transform");
+    activePreview.style.removeProperty("opacity");
+  }
+
+  stage.style.transition = "none";
+  stage.style.transform = `translateX(${deltaX}px) scale(${1 - Math.abs(progress) * 0.028})`;
+  stage.style.opacity = `${1 - Math.abs(progress) * 0.2}`;
+}
+
+function animateWardrobeViewerReset() {
+  const { stage, prevPreview, nextPreview } = getWardrobeViewerElements();
+  if (!stage) return;
+  stage.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+  stage.style.transform = "translateX(0) scale(1)";
+  stage.style.opacity = "1";
+  [prevPreview, nextPreview].forEach((preview) => {
+    if (!preview) return;
+    preview.style.transition = "transform .24s cubic-bezier(.22, 1, .36, 1), opacity .24s cubic-bezier(.22, 1, .36, 1)";
+    preview.style.transform = "translateX(0) scale(.98)";
+    preview.style.opacity = "0";
+  });
+  window.setTimeout(resetWardrobeViewerDragStyles, 240);
+}
+
+async function animateWardrobeViewerCommit(direction = 1, deltaX = 0) {
+  const { stage, prevPreview, nextPreview } = getWardrobeViewerElements();
+  if (!stage) {
+    await moveWardrobeItemViewer(direction);
+    return;
+  }
+
+  const activePreview = direction === 1 ? nextPreview : prevPreview;
+  const width = Math.max(stage.clientWidth || window.innerWidth || 1, 1);
+  const exitX = direction === 1 ? -width * 1.04 : width * 1.04;
+  const previewStartX = direction === 1
+    ? width * 0.12 + deltaX * 0.14
+    : -width * 0.12 + deltaX * 0.14;
+
+  stage.style.transition = "transform .22s cubic-bezier(.22, 1, .36, 1), opacity .22s cubic-bezier(.22, 1, .36, 1)";
+  stage.style.transform = `translateX(${exitX}px) scale(.94)`;
+  stage.style.opacity = "0";
+
+  if (activePreview && activePreview.childElementCount) {
+    activePreview.classList.add("is-visible");
+    activePreview.style.transition = "transform .22s cubic-bezier(.22, 1, .36, 1), opacity .22s cubic-bezier(.22, 1, .36, 1)";
+    activePreview.style.transform = `translateX(${previewStartX}px) scale(1.02)`;
+    activePreview.style.opacity = "0.96";
+    requestAnimationFrame(() => {
+      activePreview.style.transform = "translateX(0) scale(1)";
+      activePreview.style.opacity = "1";
+    });
+  }
+
+  await new Promise((resolve) => window.setTimeout(resolve, 200));
+  await moveWardrobeItemViewer(direction);
+}
+
+async function animateWardrobeViewerClose(deltaY = -140) {
+  const { stage, prevPreview, nextPreview } = getWardrobeViewerElements();
+  if (!stage) {
+    closeWardrobeItemViewer();
+    return;
+  }
+  [prevPreview, nextPreview].forEach((preview) => {
+    if (!preview) return;
+    preview.classList.remove("is-visible");
+    preview.style.removeProperty("transition");
+    preview.style.removeProperty("transform");
+    preview.style.removeProperty("opacity");
+  });
+  stage.style.transition = "transform .2s cubic-bezier(.22, 1, .36, 1), opacity .2s cubic-bezier(.22, 1, .36, 1)";
+  stage.style.transform = `translateY(${Math.min(deltaY, -180)}px) scale(.94)`;
+  stage.style.opacity = "0";
+  await new Promise((resolve) => window.setTimeout(resolve, 180));
+  closeWardrobeItemViewer();
+}
+
+function closeWardrobeItemViewer() {
+  wardrobeItemViewerState = {
+    isOpen: false,
+    source: "all",
+    visibleItemIds: [],
+    currentIndex: 0,
+    pagerFromIndex: null,
+    isEditOpen: false,
+  };
+  wardrobeViewerPointerState = null;
+  els.itemDetailDialog?.close?.();
+}
+
+async function renderWardrobeItemViewer(items = null) {
+  if (!wardrobeItemViewerState.isOpen || !els.itemDetailBody) return;
+  const sourceItems = Array.isArray(items) ? items : loadWardrobe();
+  const itemMap = new Map(sourceItems.map((item) => [String(item.id), normalizeWardrobeItemMedia(item)]));
+  const visibleIds = wardrobeItemViewerState.visibleItemIds.filter((id) => itemMap.has(String(id)));
+
+  if (!visibleIds.length) {
+    closeWardrobeItemViewer();
+    return;
+  }
+
+  const boundedIndex = Math.max(0, Math.min(wardrobeItemViewerState.currentIndex, visibleIds.length - 1));
+  wardrobeItemViewerState.visibleItemIds = visibleIds;
+  wardrobeItemViewerState.currentIndex = boundedIndex;
+
+  const currentId = String(visibleIds[boundedIndex]);
+  const currentItem = itemMap.get(currentId);
+  if (!currentItem) {
+    closeWardrobeItemViewer();
+    return;
+  }
+  const pagerVisibleCount = Math.min(5, visibleIds.length);
+  const pagerInitialOffset = Number.isFinite(wardrobeItemViewerState.pagerFromIndex)
+    ? getWardrobeViewerPagerOffset(visibleIds.length, wardrobeItemViewerState.pagerFromIndex, pagerVisibleCount)
+    : null;
+
+  const recommendationUsage = getItemRecommendationUsage(currentItem);
+  const metaLine = getWardrobeViewerMetaLine(currentItem) || "Ready to use in outfits";
+  const prevItem = boundedIndex > 0 ? itemMap.get(String(visibleIds[boundedIndex - 1])) : null;
+  const nextItem = boundedIndex < visibleIds.length - 1 ? itemMap.get(String(visibleIds[boundedIndex + 1])) : null;
+  const detailLines = [
+    currentItem.material ? `Material: ${normalizeWardrobeMaterialValue(currentItem.material)}` : "",
+    Array.isArray(currentItem.careInstructions) && currentItem.careInstructions.length ? `Care: ${currentItem.careInstructions.join(", ")}` : "",
+    itemNeedsMetadataReview(currentItem) ? "Needs review before this item feels fully polished." : "",
+    recommendationUsage.latestMatched ? "Last matched on Today." : "",
+    recommendationUsage.usageCount ? `Used in ${recommendationUsage.usageCount} saved look${recommendationUsage.usageCount === 1 ? "" : "s"}.` : "",
+  ].filter(Boolean);
+
+  els.itemDetailBody.innerHTML = `
+    <div class="item-viewer" data-item-viewer-id="${escapeHtml(currentId)}">
+      <div class="item-viewer-shell" data-item-viewer-shell>
+        <div class="item-viewer-preview item-viewer-preview-prev" data-item-viewer-preview="prev" aria-hidden="true">
+          <div class="item-viewer-preview-card">
+            ${buildWardrobeViewerMedia(prevItem, "item-viewer-preview-photo")}
+          </div>
+        </div>
+        <div class="item-viewer-preview item-viewer-preview-next" data-item-viewer-preview="next" aria-hidden="true">
+          <div class="item-viewer-preview-card">
+            ${buildWardrobeViewerMedia(nextItem, "item-viewer-preview-photo")}
+          </div>
+        </div>
+        <div class="item-viewer-stage" data-item-viewer-stage>
+          ${buildWardrobeViewerMedia(currentItem)}
+          <div class="item-viewer-scrim item-viewer-scrim-top"></div>
+          <div class="item-viewer-scrim item-viewer-scrim-bottom"></div>
+          <div class="item-viewer-overlay item-viewer-overlay-top">
+            <button type="button" class="item-viewer-icon-btn" data-item-viewer-action="close" aria-label="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="item-viewer-top-actions">
+              <button type="button" class="item-viewer-icon-btn ${currentItem.favorite ? "is-active" : ""}" data-item-viewer-action="favorite" aria-label="${currentItem.favorite ? "Remove from favorites" : "Add to favorites"}">
+                <svg viewBox="0 0 24 24" fill="${currentItem.favorite ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.9"><path d="M12 21s-6.7-4.35-8.39-7.68C2.33 10.83 3.57 7 7.4 7c1.96 0 3.18.92 4.6 2.5C13.42 7.92 14.64 7 16.6 7c3.83 0 5.07 3.83 3.79 6.32C18.7 16.65 12 21 12 21Z"/></svg>
+              </button>
+              <button type="button" class="item-viewer-icon-btn" data-item-viewer-action="more" aria-label="More actions">
+                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="item-viewer-overlay item-viewer-overlay-bottom">
+            <div class="item-viewer-position">${boundedIndex + 1} of ${visibleIds.length}</div>
+            <div class="item-viewer-copy">
+              <h2 id="itemDetailTitle" class="item-viewer-title">${escapeHtml(currentItem.name || "Wardrobe item")}</h2>
+              <p class="item-viewer-meta">${escapeHtml(metaLine)}</p>
+            </div>
+            <div class="item-viewer-actions">
+              <button type="button" class="item-viewer-action-btn is-primary${itemNeedsMetadataReview(currentItem) ? " is-attention" : ""}" data-item-viewer-action="edit">${itemNeedsMetadataReview(currentItem) ? "Fix details" : "Edit"}</button>
+            </div>
+            <div class="item-viewer-details-body">
+              ${detailLines.length
+                ? detailLines.map((line) => `<p>${escapeHtml(line)}</p>`).join("")
+                : `<p>Nothing else needs attention right now.</p>`}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item-viewer-pager-rail" data-item-viewer-pager-rail>
+        <div class="item-viewer-pager item-viewer-pager-bottom" aria-label="Wardrobe item position">${buildWardrobeViewerPager(visibleIds.length, boundedIndex, pagerInitialOffset)}</div>
+      </div>
+    </div>
+  `;
+  const pagerTrack = els.itemDetailBody.querySelector("[data-item-viewer-pager-track]");
+  const targetOffset = Number(pagerTrack?.dataset.targetOffset);
+  if (pagerTrack && Number.isFinite(targetOffset) && pagerInitialOffset !== null && pagerInitialOffset !== targetOffset) {
+    requestAnimationFrame(() => {
+      pagerTrack.style.setProperty("--pager-offset", String(targetOffset));
+    });
+  }
+  wardrobeItemViewerState.pagerFromIndex = null;
+
+  if (els.itemDetailDialog) {
+    els.itemDetailDialog.classList.remove("is-opening");
+    void els.itemDetailDialog.offsetWidth;
+    els.itemDetailDialog.classList.add("is-opening");
+  }
+  if (!els.itemDetailDialog?.open) els.itemDetailDialog?.showModal?.();
+  window.setTimeout(() => els.itemDetailDialog?.classList.remove("is-opening"), 280);
+}
+
+async function openWardrobeItemViewer(itemId, visibleItemIds = wardrobeVisibleItemIds) {
+  const ids = (Array.isArray(visibleItemIds) ? visibleItemIds : []).map(String).filter(Boolean);
+  const currentIndex = Math.max(0, ids.indexOf(String(itemId)));
+  wardrobeItemViewerState = {
+    isOpen: true,
+    source: getWardrobeViewerSource(),
+    visibleItemIds: ids.length ? ids : [String(itemId)],
+    currentIndex,
+    pagerFromIndex: null,
+    isEditOpen: false,
+  };
+  await renderWardrobeItemViewer();
+}
+
+async function moveWardrobeItemViewer(direction = 1) {
+  if (!wardrobeItemViewerState.isOpen) return;
+  const total = wardrobeItemViewerState.visibleItemIds.length;
+  if (total <= 1) return;
+  const previousIndex = wardrobeItemViewerState.currentIndex;
+  wardrobeItemViewerState.currentIndex = Math.max(0, Math.min(total - 1, wardrobeItemViewerState.currentIndex + direction));
+  wardrobeItemViewerState.pagerFromIndex = previousIndex;
+  await renderWardrobeItemViewer();
+}
+
+async function syncWardrobeItemViewer(items = null) {
+  if (!wardrobeItemViewerState.isOpen) return;
+  await renderWardrobeItemViewer(items);
 }
 
 function renderWardrobeFilters(items = []) {
@@ -3360,86 +4519,136 @@ function renderWardrobeFilters(items = []) {
     return;
   }
 
+  const stage = getWardrobeCollectionStage(items);
   const categoryCounts = items.reduce((acc, item) => {
     const category = getWardrobeCategory(item);
     acc[category] = (acc[category] || 0) + 1;
     return acc;
-  }, { all: items.length });
-  const categories = ["all", "shirts", "pants", "jackets", "shoes", "accessories", "other"]
-    .filter((category) => category === "all" || categoryCounts[category]);
-  const colors = [...new Set(items.map((item) => normalizeFilterValue(item.color)).filter(Boolean))].sort();
+  }, {});
+  const categories = ["shirts", "pants", "jackets", "shoes", "accessories", "other"]
+    .filter((category) => categoryCounts[category]);
+  const favoriteCount = items.filter((item) => item.favorite).length;
+  const activeRefinements = [
+    wardrobeFilterState.color !== "all",
+    wardrobeFilterState.material !== "all",
+    wardrobeFilterState.season !== "all",
+    wardrobeFilterState.sort !== "newest",
+    wardrobeFilterState.recentOnly,
+    wardrobeFilterState.missingMetadataOnly,
+    wardrobeFilterState.matchedOnly,
+  ].filter(Boolean).length;
+  const showCategoryRail = stage === "active" || stage === "rich";
+  const showFilterButton = stage !== "starter";
 
   els.wardrobeFilters.innerHTML = `
-    <div class="wardrobe-filter-row">
-      <label class="wardrobe-filter-select">
-        <span>Category</span>
-        <select data-wardrobe-filter="category">
-          ${categories.map((category) => `<option value="${escapeHtml(category)}" ${wardrobeFilterState.category === category ? "selected" : ""}>${escapeHtml(getWardrobeCategoryLabel(category))} (${categoryCounts[category] || 0})</option>`).join("")}
-        </select>
-      </label>
-      <label class="wardrobe-filter-select">
-        <span>Color</span>
-        <select data-wardrobe-filter="color">
-          <option value="all">All colors</option>
-          ${colors.map((color) => `<option value="${escapeHtml(color)}" ${wardrobeFilterState.color === color ? "selected" : ""}>${escapeHtml(color.charAt(0).toUpperCase() + color.slice(1))}</option>`).join("")}
-        </select>
-      </label>
-      <label class="wardrobe-filter-select">
-        <span>Date</span>
-        <select data-wardrobe-filter="sort">
-          <option value="newest" ${wardrobeFilterState.sort === "newest" ? "selected" : ""}>Newest first</option>
-          <option value="oldest" ${wardrobeFilterState.sort === "oldest" ? "selected" : ""}>Oldest first</option>
-        </select>
-      </label>
-      <button type="button" class="wardrobe-filter-chip wardrobe-favorite-filter ${wardrobeFilterState.favoritesOnly ? "is-active" : ""}" data-wardrobe-favorites="toggle">
-        <span aria-hidden="true">★</span> Favorites
-      </button>
+    <div class="wardrobe-section-nav">
+      <div class="wardrobe-filter-row wardrobe-filter-row-sections">
+        <button type="button" class="wardrobe-filter-chip ${wardrobeFilterState.view === "all" ? "is-active" : ""}" data-wardrobe-view="all">
+          All
+        </button>
+        <button type="button" class="wardrobe-filter-chip ${wardrobeFilterState.view === "favorites" ? "is-active" : ""}" data-wardrobe-view="favorites">
+          Favorites
+          <span>${favoriteCount}</span>
+        </button>
+        ${showFilterButton ? `
+          <button type="button" class="wardrobe-filter-chip ${activeRefinements ? "has-value" : ""}" data-open-wardrobe-filter>
+            Filter
+            <span>${activeRefinements}</span>
+          </button>
+        ` : ""}
+      </div>
+      ${showCategoryRail ? `
+        <div class="wardrobe-filter-row wardrobe-filter-row-categories">
+          ${categories.map((category) => `
+            <button type="button" class="wardrobe-filter-chip ${wardrobeFilterState.category === category ? "is-active" : ""}" data-wardrobe-category="${escapeHtml(category)}">
+              ${escapeHtml(getWardrobeCategoryLabel(category))}
+              <span>${categoryCounts[category] || 0}</span>
+            </button>
+          `).join("")}
+        </div>
+      ` : ""}
     </div>
   `;
 }
 
 async function renderWardrobe() {
   const items = await loadWardrobeAsync();
+  const stage = getWardrobeCollectionStage(items);
   const visibleItems = getFilteredWardrobeItems(items);
+  wardrobeVisibleItemIds = visibleItems.map((item) => String(item.id)).filter(Boolean);
+  if (els.wardrobeList) {
+    els.wardrobeList.classList.remove("is-refreshing");
+    void els.wardrobeList.offsetWidth;
+    els.wardrobeList.classList.add("is-refreshing");
+  }
   els.wardrobeList.innerHTML = "";
   els.wardrobeEmpty.style.display = items.length ? "none" : "flex";
-  if (els.addItemBtn) els.addItemBtn.style.display = items.length ? "inline-flex" : "none";
-  if (els.wardrobeExplainer) els.wardrobeExplainer.style.display = items.length ? "" : "none";
+  if (els.addItemBtn) {
+    const shouldShowFab = items.length > 0;
+    els.addItemBtn.style.display = shouldShowFab ? "inline-flex" : "none";
+  }
+  if (els.wardrobeSubtitle) {
+    els.wardrobeSubtitle.textContent =
+      stage === "empty" ? "A calm collection of the pieces you actually wear."
+      : stage === "starter" ? "Start with a few staples and grow the collection naturally."
+      : stage === "active" ? "Browse, inspect, and refine your closet in one place."
+      : "Search, filter, and scan your full collection quickly.";
+  }
+  if (els.wardrobeSearchWrap) {
+    els.wardrobeSearchWrap.style.display = stage === "rich" ? "" : "none";
+  }
+  if (els.wardrobeSearchInput && stage !== "rich") {
+    els.wardrobeSearchInput.value = "";
+    wardrobeFilterState.search = "";
+  }
   updateWardrobeCtas(items);
   syncTodayWardrobeDialog(items);
+  renderWardrobeDashboard(items);
   renderWardrobeFilters(items);
 
   if (items.length && !visibleItems.length) {
     els.wardrobeList.innerHTML = `
       <div class="wardrobe-filter-empty">
-        <strong>No items match these filters.</strong>
-        <span>Try another category, color, or turn off Favorites.</span>
+        <strong>Nothing to show in this section yet.</strong>
+        <span>${wardrobeFilterState.view === "favorites" ? "Favorite a few pieces to keep them close." : "Try another filter or add another item."}</span>
       </div>
     `;
     return;
   }
+  const collectionTitle =
+    wardrobeFilterState.view === "favorites" ? "Favorite pieces"
+    : wardrobeFilterState.category !== "all" ? getWardrobeCategoryLabel(wardrobeFilterState.category)
+    : "All items";
+  const collectionDescription =
+    stage === "starter"
+      ? "A lighter collection view while your wardrobe is still taking shape."
+      : `${visibleItems.length} piece${visibleItems.length === 1 ? "" : "s"} ready to browse.`;
 
-  visibleItems.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "wardrobe-item";
-    div.setAttribute("data-id", item.id);
-
-    const photoHtml = item.photoDataUrl
-      ? `<img class="wardrobe-item-photo" src="${escapeHtml(item.photoDataUrl)}" alt="" />`
-      : `<div class="wardrobe-item-placeholder" aria-hidden="true">${typeEmoji(item.type)}</div>`;
-
-    const meta = [item.type, item.color, item.material].filter(Boolean).join(" · ");
-    div.innerHTML = `
-      <button type="button" class="wardrobe-favorite-btn ${item.favorite ? "is-active" : ""}" data-wardrobe-favorite="${escapeHtml(String(item.id))}" aria-label="${item.favorite ? "Remove from favorites" : "Add to favorites"}">★</button>
-      ${photoHtml}
-      <div class="wardrobe-item-info">
-        <div class="wardrobe-item-name">${escapeHtml(item.name)}</div>
-        <div class="wardrobe-item-meta">${escapeHtml(meta)}</div>
+  els.wardrobeList.innerHTML = `
+    <section class="wardrobe-collection">
+      <div class="wardrobe-collection-head">
+        <div>
+          <span class="wardrobe-section-kicker">Collection</span>
+          <h3>${escapeHtml(collectionTitle)}</h3>
+        </div>
+        <span class="wardrobe-collection-meta">${escapeHtml(collectionDescription)}</span>
       </div>
-    `;
-    div.addEventListener("click", () => openItemDialog(item));
-    els.wardrobeList.appendChild(div);
+      <div class="wardrobe-grid wardrobe-collection-grid" data-wardrobe-stage="${escapeHtml(stage)}">
+        ${visibleItems.map((item) => buildWardrobeItemCard(item)).join("")}
+      </div>
+    </section>
+  `;
+  window.requestAnimationFrame(() => {
+    els.wardrobeList?.classList.remove("is-refreshing");
   });
+  if (highlightedWardrobeItemIds.length) {
+    window.setTimeout(() => {
+      highlightedWardrobeItemIds = [];
+      const highlighted = els.wardrobeList?.querySelectorAll(".wardrobe-item.is-highlighted");
+      highlighted?.forEach((node) => node.classList.remove("is-highlighted"));
+    }, 1800);
+  }
+  await syncWardrobeItemViewer(items);
 }
 
 async function toggleWardrobeFavorite(itemId) {
@@ -3461,7 +4670,7 @@ async function toggleWardrobeFavorite(itemId) {
       saveWardrobe(items.map((entry) => String(entry.id) === String(item.id) ? saved : entry));
     } catch (err) {
       console.error("favorite toggle error:", err);
-      alert(err.message || "Could not update favorite.");
+      showAppToast(err.message || "Could not update favorite", "error");
       return;
     }
   } else {
@@ -3470,6 +4679,7 @@ async function toggleWardrobeFavorite(itemId) {
   }
 
   await renderWardrobe();
+  showAppToast(nextItem.favorite ? "Added to favorites" : "Removed from favorites", "success");
 }
 
 function syncTodayWardrobeDialog(items) {
@@ -3504,31 +4714,31 @@ function updateWardrobeCtas(items) {
   }
 
   if (count === 0) {
-    if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Level up";
-    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Build your closet to unlock sharper outfit picks.";
+    if (els.todayCtaKicker) els.todayCtaKicker.textContent = "From your closet";
+    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Get recommendations from your own closet.";
     if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add wardrobe";
-    if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Get personalized fast";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add a few pieces for sharper outfit picks";
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Start with the staples you wear most so WearCast can style from your closet, not generic stock looks.";
+    if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Closet assistant";
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add 5 staples to unlock better daily looks";
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Start with the pieces you wear most. WearCast will organize them and style from what you own.";
     return;
   }
 
   if (count < 4) {
     if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Nice start";
-    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "A few more pieces will make today’s picks feel much more you.";
+    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Keep building your closet so today’s picks can use more of what you own.";
     if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add more";
-    if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Keep going";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add some more items to your wardrobe to get better suggestions.";
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = `You have ${count} item${count === 1 ? "" : "s"} in your wardrobe. Build out the starter mix for stronger outfit picks.`;
+    if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Starter wardrobe";
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "A few more staples will make the collection feel complete";
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = `You have ${count} item${count === 1 ? "" : "s"} saved. Add a few more core pieces to improve outfit coverage.`;
     return;
   }
 
   if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Looking good";
-  if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Your closet is shaping up. Keep it fresh with one more standout piece.";
+  if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Your closet is ready to influence today’s recommendation.";
   if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Keep building";
-  if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Strong foundation";
-  if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `Your ${count}-item wardrobe is already helping`;
-  if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "WearCast can now make more specific recommendations from what you own. Add new pieces anytime to keep the suggestions sharp.";
+  if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Collection progress";
+  if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `Your ${count}-item wardrobe is ready to style from`;
+  if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "WearCast can now use more of your actual closet in recommendations. Add standout pieces anytime to sharpen the mix.";
 }
 
 let editingItemId = null;
@@ -3537,11 +4747,30 @@ let isSavingItem = false;
 let isReadingItemPhoto = false;
 let isReadingScanPhoto = false;
 let isAnalyzingItemPhoto = false;
+let itemFlowStep = "capture";
+let itemBatchItems = [];
+let activeItemBatchIndex = -1;
+let itemRejectedPhotos = [];
+const itemRescanningKeys = new Set();
+let itemImportSession = { totalPhotos: 0, acceptedPhotos: 0, rejectedPhotos: 0 };
+let itemProcessingPlaceholders = 0;
+let editingBatchItemIndex = -1;
+let activeRejectedPhotoIndex = -1;
+let pendingCropPhotoDataUrl = null;
+let pendingCropConfidence = "none";
+let itemMoreDetailsOpen = false;
+let itemQueuedPhotoPreviews = [];
 const wardrobeFilterState = {
+  view: "all",
   category: "all",
   color: "all",
+  material: "all",
+  season: "all",
+  recentOnly: false,
+  missingMetadataOnly: false,
+  search: "",
   sort: "newest",
-  favoritesOnly: false,
+  matchedOnly: false,
 };
 
 function normalizeItemSignature(item) {
@@ -3562,12 +4791,1296 @@ async function hasDuplicateWardrobeItem(itemData, excludeId = null) {
   });
 }
 
+function currentBatchItem() {
+  if (activeItemBatchIndex < 0) return null;
+  return itemBatchItems[activeItemBatchIndex] || null;
+}
+
+function normalizeDetectedBox(value) {
+  if (!value || typeof value !== "object") return null;
+  const clamp01 = (n) => Math.max(0, Math.min(1, Number(n)));
+  const x = clamp01(value.x);
+  const y = clamp01(value.y);
+  const right = clamp01(Number(value.x) + Number(value.width));
+  const bottom = clamp01(Number(value.y) + Number(value.height));
+  const width = right - x;
+  const height = bottom - y;
+  if (![x, y, width, height].every((part) => Number.isFinite(part))) return null;
+  if (width <= 0.03 || height <= 0.03) return null;
+  return { x, y, width, height };
+}
+
+function usesExactDetectedBox(geometrySource = "") {
+  return /product-foreground|product-segmentation|outfit-segmentation|product-llm/.test(String(geometrySource || ""));
+}
+
+function usesProductExactDetectedBox(geometrySource = "") {
+  return /product-foreground|product-segmentation|product-llm/.test(String(geometrySource || ""));
+}
+
+function getDetectedCropTuning(type = "") {
+  const normalizedType = String(type || "").toLowerCase();
+  if (/sneaker|boot|sandal|dress shoe|shoe/.test(normalizedType)) {
+    return { padding: 0.12, minWidth: 0.18, minHeight: 0.14 };
+  }
+  if (/hat|bag|belt|sunglass|scarf|glove|accessor/.test(normalizedType)) {
+    return { padding: 0.14, minWidth: 0.16, minHeight: 0.14 };
+  }
+  if (/dress/.test(normalizedType)) {
+    return { padding: 0.12, minWidth: 0.34, minHeight: 0.5 };
+  }
+  if (/jacket|coat|hoodie|blazer|vest|shirt|t-shirt|polo|sweater|tank/.test(normalizedType)) {
+    return { padding: 0.12, minWidth: 0.34, minHeight: 0.34 };
+  }
+  if (/jean|chino|short|pant|skirt/.test(normalizedType)) {
+    return { padding: 0.12, minWidth: 0.3, minHeight: 0.34 };
+  }
+  return { padding: 0.14, minWidth: 0.28, minHeight: 0.28 };
+}
+
+function expandDetectedBox(box, type = "") {
+  const normalizedBox = normalizeDetectedBox(box);
+  if (!normalizedBox) return null;
+  const tuning = getDetectedCropTuning(type);
+  const centerX = normalizedBox.x + normalizedBox.width / 2;
+  const centerY = normalizedBox.y + normalizedBox.height / 2;
+  const width = Math.max(normalizedBox.width * (1 + tuning.padding * 2), tuning.minWidth);
+  const height = Math.max(normalizedBox.height * (1 + tuning.padding * 2), tuning.minHeight);
+  const left = Math.max(0, Math.min(1 - width, centerX - width / 2));
+  const top = Math.max(0, Math.min(1 - height, centerY - height / 2));
+  return {
+    x: left,
+    y: top,
+    width: Math.min(1, width),
+    height: Math.min(1, height),
+  };
+}
+
+function normalizeRegion(value) {
+  return normalizeDetectedBox(value);
+}
+
+function isAccessoryOrShoeType(type = "") {
+  return /hat|bag|belt|sunglass|scarf|glove|accessor|sneaker|boot|sandal|dress shoe|shoe/.test(String(type || "").toLowerCase());
+}
+
+function getDefaultMainSubjectRegion(aspectRatio = 0.75) {
+  if (aspectRatio > 1.15) return { x: 0.2, y: 0.04, width: 0.6, height: 0.92 };
+  if (aspectRatio < 0.85) return { x: 0.14, y: 0.03, width: 0.72, height: 0.94 };
+  return { x: 0.16, y: 0.03, width: 0.68, height: 0.94 };
+}
+
+function unionBoxes(boxes = []) {
+  const normalized = boxes.map(normalizeRegion).filter(Boolean);
+  if (!normalized.length) return null;
+  const left = Math.min(...normalized.map((box) => box.x));
+  const top = Math.min(...normalized.map((box) => box.y));
+  const right = Math.max(...normalized.map((box) => box.x + box.width));
+  const bottom = Math.max(...normalized.map((box) => box.y + box.height));
+  return normalizeRegion({ x: left, y: top, width: right - left, height: bottom - top });
+}
+
+function expandRegion(box, { padX = 0.12, padY = 0.1, minWidth = 0.5, minHeight = 0.72 } = {}) {
+  const normalized = normalizeRegion(box);
+  if (!normalized) return null;
+  const centerX = normalized.x + normalized.width / 2;
+  const centerY = normalized.y + normalized.height / 2;
+  const width = Math.min(1, Math.max(normalized.width * (1 + padX * 2), minWidth));
+  const height = Math.min(1, Math.max(normalized.height * (1 + padY * 2), minHeight));
+  return normalizeRegion({
+    x: Math.max(0, Math.min(1 - width, centerX - width / 2)),
+    y: Math.max(0, Math.min(1 - height, centerY - height / 2)),
+    width,
+    height,
+  });
+}
+
+function boxCenterWithinRegion(box, region, tolerance = 0) {
+  const normalizedBox = normalizeRegion(box);
+  const normalizedRegion = normalizeRegion(region);
+  if (!normalizedBox || !normalizedRegion) return false;
+  const centerX = normalizedBox.x + normalizedBox.width / 2;
+  const centerY = normalizedBox.y + normalizedBox.height / 2;
+  return centerX >= normalizedRegion.x - tolerance
+    && centerX <= normalizedRegion.x + normalizedRegion.width + tolerance
+    && centerY >= normalizedRegion.y - tolerance
+    && centerY <= normalizedRegion.y + normalizedRegion.height + tolerance;
+}
+
+function constrainBoxToRegion(box, region) {
+  const normalizedBox = normalizeRegion(box);
+  const normalizedRegion = normalizeRegion(region);
+  if (!normalizedBox || !normalizedRegion) return normalizedBox;
+  const left = Math.max(normalizedBox.x, normalizedRegion.x);
+  const top = Math.max(normalizedBox.y, normalizedRegion.y);
+  const right = Math.min(normalizedBox.x + normalizedBox.width, normalizedRegion.x + normalizedRegion.width);
+  const bottom = Math.min(normalizedBox.y + normalizedBox.height, normalizedRegion.y + normalizedRegion.height);
+  if (right - left <= 0.03 || bottom - top <= 0.03) return normalizedBox;
+  return { x: left, y: top, width: right - left, height: bottom - top };
+}
+
+async function estimateMainSubjectRegion(photoDataUrl, items = []) {
+  if (!photoDataUrl) return null;
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Failed to load source image for subject region"));
+    img.src = photoDataUrl;
+  }).catch(() => null);
+
+  const aspectRatio = image ? image.width / Math.max(1, image.height) : 0.75;
+  const prior = getDefaultMainSubjectRegion(aspectRatio);
+  const normalizedItems = (Array.isArray(items) ? items : []).filter((item) => normalizeRegion(item?.box));
+
+  const anchorBoxes = normalizedItems
+    .filter((item) => !isAccessoryOrShoeType(item.type))
+    .map((item) => item.box)
+    .filter((box) => boxCenterWithinRegion(box, prior, 0.08));
+
+  const fallbackBoxes = normalizedItems
+    .map((item) => item.box)
+    .filter((box) => boxCenterWithinRegion(box, prior, 0.12));
+
+  const subjectSeed = unionBoxes(anchorBoxes.length ? anchorBoxes : fallbackBoxes) || prior;
+  return expandRegion(subjectSeed, {
+    padX: 0.12,
+    padY: 0.08,
+    minWidth: Math.max(0.46, prior.width * 0.82),
+    minHeight: Math.max(0.7, prior.height * 0.82),
+  });
+}
+
+function validateDetectedCropHint(box, type = "", subjectRegion = null, geometrySource = "") {
+  const normalizedBox = normalizeDetectedBox(box);
+  if (!normalizedBox) return { trusted: false, reason: "missing-box" };
+  if (usesExactDetectedBox(geometrySource)) {
+    const area = normalizedBox.width * normalizedBox.height;
+    const touchesAllEdges = normalizedBox.x <= 0.005
+      && normalizedBox.y <= 0.005
+      && normalizedBox.x + normalizedBox.width >= 0.995
+      && normalizedBox.y + normalizedBox.height >= 0.995;
+    if (touchesAllEdges || area >= 0.985) return { trusted: false, reason: "frame-sized" };
+    if (area <= 0.0025) return { trusted: false, reason: "too-small" };
+    if (/product-llm/.test(String(geometrySource || ""))) {
+      const normalizedType = String(type || "").toLowerCase();
+      if (/hat|bag|belt|sunglass|scarf|glove|accessor/.test(normalizedType) && area > 0.18) {
+        return { trusted: false, reason: "product-accessory-too-large" };
+      }
+      if (/sneaker|boot|sandal|dress shoe|shoe|watch/.test(normalizedType) && area > 0.26) {
+        return { trusted: false, reason: "product-small-item-too-large" };
+      }
+    }
+    return { trusted: true, reason: "validated-segmentation" };
+  }
+  const normalizedSubjectRegion = normalizeRegion(subjectRegion);
+
+  const normalizedType = String(type || "").toLowerCase();
+  const area = normalizedBox.width * normalizedBox.height;
+  const aspect = normalizedBox.width / Math.max(0.001, normalizedBox.height);
+  const touchesThreeEdges = [normalizedBox.x <= 0.01, normalizedBox.y <= 0.01, normalizedBox.x + normalizedBox.width >= 0.99, normalizedBox.y + normalizedBox.height >= 0.99].filter(Boolean).length >= 3;
+
+  if (normalizedSubjectRegion && !boxCenterWithinRegion(normalizedBox, normalizedSubjectRegion, 0.06)) {
+    return { trusted: false, reason: "outside-subject-region" };
+  }
+  if (touchesThreeEdges) return { trusted: false, reason: "frame-sized" };
+  if (area >= 0.72) return { trusted: false, reason: "too-large" };
+
+  if (/hat|bag|belt|sunglass|scarf|glove|accessor/.test(normalizedType)) {
+    if (area < 0.008 || area > 0.24) return { trusted: false, reason: "accessory-area" };
+    if (aspect < 0.18 || aspect > 4.8) return { trusted: false, reason: "accessory-aspect" };
+    return { trusted: true, reason: "validated" };
+  }
+  if (/sneaker|boot|sandal|dress shoe|shoe/.test(normalizedType)) {
+    if (area < 0.015 || area > 0.3) return { trusted: false, reason: "shoe-area" };
+    if (aspect < 0.35 || aspect > 4.5) return { trusted: false, reason: "shoe-aspect" };
+    return { trusted: true, reason: "validated" };
+  }
+  if (/dress/.test(normalizedType)) {
+    if (area < 0.08 || area > 0.6) return { trusted: false, reason: "dress-area" };
+    if (aspect < 0.28 || aspect > 1.8) return { trusted: false, reason: "dress-aspect" };
+    return { trusted: true, reason: "validated" };
+  }
+  if (/jacket|coat|hoodie|blazer|vest|shirt|t-shirt|polo|sweater|tank/.test(normalizedType)) {
+    if (area < 0.05 || area > 0.52) return { trusted: false, reason: "top-area" };
+    if (aspect < 0.35 || aspect > 2.6) return { trusted: false, reason: "top-aspect" };
+    return { trusted: true, reason: "validated" };
+  }
+  if (/jean|chino|short|pant|skirt/.test(normalizedType)) {
+    if (area < 0.05 || area > 0.55) return { trusted: false, reason: "bottom-area" };
+    if (aspect < 0.28 || aspect > 2.2) return { trusted: false, reason: "bottom-aspect" };
+    return { trusted: true, reason: "validated" };
+  }
+
+  if (area < 0.03 || area > 0.5) return { trusted: false, reason: "generic-area" };
+  if (aspect < 0.2 || aspect > 3.5) return { trusted: false, reason: "generic-aspect" };
+  return { trusted: true, reason: "validated" };
+}
+
+async function cropImageDataUrlToBox(sourceDataUrl, box, { type = "", padding = 0.06, subjectRegion = null, geometrySource = "" } = {}) {
+  if (!sourceDataUrl) return sourceDataUrl;
+  let cropBox = usesExactDetectedBox(geometrySource) ? normalizeDetectedBox(box) : expandDetectedBox(box, type);
+  if (subjectRegion && !usesExactDetectedBox(geometrySource)) {
+    const subjectBounds = expandRegion(subjectRegion, {
+      padX: 0.04,
+      padY: 0.03,
+      minWidth: normalizeRegion(subjectRegion)?.width || 0.5,
+      minHeight: normalizeRegion(subjectRegion)?.height || 0.72,
+    });
+    cropBox = constrainBoxToRegion(cropBox, subjectBounds);
+  }
+  if (!cropBox) return sourceDataUrl;
+
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Failed to load source image for crop"));
+    img.src = sourceDataUrl;
+  });
+
+  const effectivePadding = usesExactDetectedBox(geometrySource)
+    ? (usesProductExactDetectedBox(geometrySource) ? 0.018 : 0.035)
+    : padding;
+  const xPad = cropBox.width * effectivePadding;
+  const yPad = cropBox.height * effectivePadding;
+  const left = Math.max(0, cropBox.x - xPad);
+  const top = Math.max(0, cropBox.y - yPad);
+  const right = Math.min(1, cropBox.x + cropBox.width + xPad);
+  const bottom = Math.min(1, cropBox.y + cropBox.height + yPad);
+
+  const cropX = Math.max(0, Math.round(image.width * left));
+  const cropY = Math.max(0, Math.round(image.height * top));
+  const cropWidth = Math.max(1, Math.round(image.width * (right - left)));
+  const cropHeight = Math.max(1, Math.round(image.height * (bottom - top)));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return sourceDataUrl;
+
+  ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+  return compressLoadedImageToDataUrl(canvas, {
+    maxEdge: 960,
+    quality: 0.74,
+    maxBytes: 380 * 1024,
+  });
+}
+
+async function cropImageDataUrlToRegion(sourceDataUrl, region) {
+  if (!sourceDataUrl) return sourceDataUrl;
+  const cropRegion = normalizeDetectedBox(region);
+  if (!cropRegion) return sourceDataUrl;
+
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Failed to load source image for crop"));
+    img.src = sourceDataUrl;
+  });
+
+  const cropX = Math.max(0, Math.round(image.width * cropRegion.x));
+  const cropY = Math.max(0, Math.round(image.height * cropRegion.y));
+  const cropWidth = Math.max(1, Math.round(image.width * cropRegion.width));
+  const cropHeight = Math.max(1, Math.round(image.height * cropRegion.height));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return sourceDataUrl;
+  ctx.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+  return compressLoadedImageToDataUrl(canvas, {
+    maxEdge: 960,
+    quality: 0.74,
+    maxBytes: 380 * 1024,
+  });
+}
+
+// Display aspect ratio (width / height) used by wardrobe thumbnails and the
+// viewer stage. All crops are constrained to this ratio so cropped content
+// fills every display slot without being clipped by object-fit: cover.
+const CROP_DISPLAY_RATIO = 0.92;
+
+function getDefaultManualCropRegion() {
+  return { x: 0.12, y: 0.08, width: 0.76, height: 0.84 };
+}
+
+function constrainRegionToDisplayRatio(region, imageWidth = 0, imageHeight = 0) {
+  if (!imageWidth || !imageHeight) return region;
+  // region.width / region.height (in normalized coords) should equal
+  // CROP_DISPLAY_RATIO * (imageHeight / imageWidth) so that the pixel output
+  // has CROP_DISPLAY_RATIO aspect.
+  const targetWH = CROP_DISPLAY_RATIO * (imageHeight / imageWidth);
+  let { x, y, width, height } = region;
+  // Pick whichever dimension is smaller relative to the target to avoid
+  // growing beyond the image bounds.
+  if (width / height > targetWH) {
+    width = height * targetWH;
+  } else {
+    height = width / targetWH;
+  }
+  width = Math.min(1, Math.max(0.1, width));
+  height = Math.min(1, Math.max(0.1, height));
+  // Re-check after clamping
+  if (width / height > targetWH) width = height * targetWH;
+  else height = width / targetWH;
+  x = Math.min(Math.max(0, x), 1 - width);
+  y = Math.min(Math.max(0, y), 1 - height);
+  return { x, y, width, height };
+}
+
+function normalizeManualCropRegion(region = null, { imageWidth = 0, imageHeight = 0 } = {}) {
+  const fallback = getDefaultManualCropRegion();
+  const base = normalizeDetectedBox(region) || fallback;
+  const minSize = 0.16;
+  const width = Math.max(minSize, Math.min(1, Number(base.width || fallback.width)));
+  const height = Math.max(minSize, Math.min(1, Number(base.height || fallback.height)));
+  const x = Math.min(Math.max(0, Number(base.x || fallback.x)), 1 - width);
+  const y = Math.min(Math.max(0, Number(base.y || fallback.y)), 1 - height);
+  const region2 = { x, y, width, height };
+  if (imageWidth && imageHeight) {
+    return constrainRegionToDisplayRatio(region2, imageWidth, imageHeight);
+  }
+  return region2;
+}
+
+async function waitForImageReady(imageEl) {
+  if (!imageEl) throw new Error("Missing image element");
+  if (imageEl.complete && imageEl.naturalWidth) return;
+  await new Promise((resolve, reject) => {
+    imageEl.onload = () => resolve();
+    imageEl.onerror = () => reject(new Error("Image failed to load"));
+  });
+}
+
+function setItemCropStatus(message = "") {
+  if (!els.itemCropStatus) return;
+  els.itemCropStatus.textContent = message;
+  els.itemCropStatus.style.display = message ? "block" : "none";
+}
+
+function getItemCropImageBounds() {
+  const session = activeItemCropSession;
+  const stage = els.itemCropStage;
+  if (!session || !stage) return null;
+  const stageWidth = stage.clientWidth || 0;
+  const stageHeight = stage.clientHeight || 0;
+  if (!stageWidth || !stageHeight || !session.imageWidth || !session.imageHeight) return null;
+  const scale = Math.min(stageWidth / session.imageWidth, stageHeight / session.imageHeight);
+  const width = session.imageWidth * scale;
+  const height = session.imageHeight * scale;
+  return {
+    left: (stageWidth - width) / 2,
+    top: (stageHeight - height) / 2,
+    width,
+    height,
+  };
+}
+
+function renderItemCropSelection() {
+  const session = activeItemCropSession;
+  const selection = els.itemCropSelection;
+  const bounds = getItemCropImageBounds();
+  if (!session || !selection || !bounds) return;
+  const region = normalizeManualCropRegion(session.region);
+  session.region = region;
+  selection.style.left = `${bounds.left + region.x * bounds.width}px`;
+  selection.style.top = `${bounds.top + region.y * bounds.height}px`;
+  selection.style.width = `${region.width * bounds.width}px`;
+  selection.style.height = `${region.height * bounds.height}px`;
+}
+
+function closeItemCropDialog({ restore = true } = {}) {
+  const session = activeItemCropSession;
+  activeItemCropPointerState = null;
+  activeItemCropSession = null;
+  setItemCropStatus("");
+  if (els.itemCropImage) els.itemCropImage.removeAttribute("src");
+  els.itemCropDialog?.close?.();
+  if (restore) session?.onCancel?.();
+}
+
+async function openItemCropDialog({
+  sourcePhotoDataUrl,
+  title = "Crop this item",
+  subtitle = "Move the crop box over the item, then drag the corner to resize it.",
+  initialRegion = null,
+  onApply = null,
+  onCancel = null,
+} = {}) {
+  if (!sourcePhotoDataUrl || !els.itemCropDialog || !els.itemCropImage) return false;
+  activeItemCropPointerState = null;
+  activeItemCropSession = {
+    sourcePhotoDataUrl,
+    region: normalizeManualCropRegion(initialRegion),
+    onApply,
+    onCancel,
+    imageWidth: 0,
+    imageHeight: 0,
+  };
+  if (els.itemCropDialogTitle) els.itemCropDialogTitle.textContent = title;
+  if (els.itemCropDialogSubtitle) els.itemCropDialogSubtitle.textContent = subtitle;
+  setItemCropStatus("");
+  els.itemCropImage.src = sourcePhotoDataUrl;
+  try {
+    await waitForImageReady(els.itemCropImage);
+  } catch (err) {
+    setItemCropStatus(err.message || "Couldn’t load this photo for cropping.");
+    const failedSession = activeItemCropSession;
+    activeItemCropSession = null;
+    failedSession?.onCancel?.();
+    return false;
+  }
+  activeItemCropSession.imageWidth = els.itemCropImage.naturalWidth || 0;
+  activeItemCropSession.imageHeight = els.itemCropImage.naturalHeight || 0;
+  activeItemCropSession.region = normalizeManualCropRegion(activeItemCropSession.region, {
+    imageWidth: activeItemCropSession.imageWidth,
+    imageHeight: activeItemCropSession.imageHeight,
+  });
+  els.itemCropDialog.showModal?.();
+  window.requestAnimationFrame(renderItemCropSelection);
+  return true;
+}
+
+function beginItemCropPointerInteraction(event, mode = "move") {
+  if (!activeItemCropSession) return;
+  const bounds = getItemCropImageBounds();
+  if (!bounds) return;
+  event.preventDefault();
+  event.target?.setPointerCapture?.(event.pointerId);
+  activeItemCropPointerState = {
+    mode,
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    region: { ...activeItemCropSession.region },
+  };
+}
+
+function updateItemCropPointerInteraction(event) {
+  if (!activeItemCropPointerState || !activeItemCropSession) return;
+  if (event.pointerId !== activeItemCropPointerState.pointerId) return;
+  const bounds = getItemCropImageBounds();
+  if (!bounds) return;
+  event.preventDefault();
+  const deltaX = (event.clientX - activeItemCropPointerState.startX) / bounds.width;
+  const deltaY = (event.clientY - activeItemCropPointerState.startY) / bounds.height;
+  const start = activeItemCropPointerState.region;
+  const minSize = 0.16;
+
+  const imageDims = {
+    imageWidth: activeItemCropSession.imageWidth || 0,
+    imageHeight: activeItemCropSession.imageHeight || 0,
+  };
+  if (activeItemCropPointerState.mode === "resize") {
+    // Lock to display aspect ratio while resizing. Use the diagonal drag
+    // magnitude to infer the new size and recompute width/height from ratio.
+    const width = Math.max(minSize, Math.min(1 - start.x, start.width + deltaX));
+    const height = Math.max(minSize, Math.min(1 - start.y, start.height + deltaY));
+    activeItemCropSession.region = normalizeManualCropRegion({
+      x: start.x,
+      y: start.y,
+      width,
+      height,
+    }, imageDims);
+  } else {
+    const x = Math.min(Math.max(0, start.x + deltaX), 1 - start.width);
+    const y = Math.min(Math.max(0, start.y + deltaY), 1 - start.height);
+    activeItemCropSession.region = normalizeManualCropRegion({
+      x,
+      y,
+      width: start.width,
+      height: start.height,
+    }, imageDims);
+  }
+  renderItemCropSelection();
+}
+
+function endItemCropPointerInteraction(event) {
+  if (!activeItemCropPointerState) return;
+  if (event.pointerId && event.pointerId !== activeItemCropPointerState.pointerId) return;
+  activeItemCropPointerState = null;
+}
+
+async function normalizeDetectedItems(data, photoDataUrl) {
+  const rawItems = Array.isArray(data?.items) && data.items.length ? data.items : [data];
+  const normalized = rawItems
+    .map((item, index) => {
+      const rawType = compactText(item?.type, "");
+      const rawName = compactText(item?.name, "");
+      return {
+        id: `detected-${Date.now()}-${index}`,
+        type: inferDetectedItemType(rawType, rawName),
+        detectedType: rawType || rawName,
+        name: rawName,
+        color: compactText(item?.color, ""),
+        material: compactText(item?.material, ""),
+        careInstructions: normalizeCareInstructionsInput(item?.careInstructions),
+        box: normalizeDetectedBox(item?.box),
+        geometrySource: compactText(item?.geometrySource || data?.source, ""),
+        kept: item?.kept !== false,
+      };
+    })
+    .filter((item) => item.type || item.name || item.color || item.material || item.careInstructions.length);
+
+  const subjectRegion = await estimateMainSubjectRegion(photoDataUrl, normalized);
+
+  return Promise.all(normalized.map(async (item) => {
+    const cropType = item.detectedType || item.type;
+    const cropAssessment = validateDetectedCropHint(item.box, cropType, subjectRegion, item.geometrySource);
+    const cropPhotoDataUrl = cropAssessment.trusted
+      ? await cropImageDataUrlToBox(photoDataUrl, item.box, { type: cropType, subjectRegion, geometrySource: item.geometrySource })
+      : null;
+    const sourcePhotoDataUrl = photoDataUrl || null;
+    const cropConfidence = cropPhotoDataUrl ? "trusted" : "fallback";
+    return normalizeWardrobeItemMedia({
+      ...item,
+      sourcePhotoDataUrl,
+      cropPhotoDataUrl,
+      cropConfidence,
+      cropFallbackReason: cropAssessment.reason,
+    });
+  }));
+}
+
+function collectItemFormData() {
+  const usingCompactEditFields = !!editingItemId && !!els.itemEditColor;
+  const colorValue = usingCompactEditFields ? (els.itemEditColor?.value || "") : (els.itemColor?.value || "");
+  const materialValue = usingCompactEditFields ? (els.itemEditMaterial?.value || "") : (els.itemMaterial?.value || "");
+  const careValue = usingCompactEditFields ? (els.itemEditCare?.value || "") : (els.itemCare?.value || "");
+  const favoriteValue = usingCompactEditFields ? !!els.itemEditFavorite?.checked : !!els.itemFavorite?.checked;
+  const careRaw = careValue.trim() || "";
+  const currentItem = currentBatchItem();
+  const sourcePhotoDataUrl = currentItem?.sourcePhotoDataUrl || pendingPhotoDataUrl || null;
+  const cropPhotoDataUrl = currentItem?.cropPhotoDataUrl || pendingCropPhotoDataUrl || null;
+  const cropConfidence = currentItem?.cropConfidence || pendingCropConfidence || (cropPhotoDataUrl ? "trusted" : "none");
+  return {
+    type: canonicalizeDetectedItemType(els.itemType?.value?.trim() || ""),
+    name: normalizeWardrobeNameValue(els.itemName?.value?.trim() || "", els.itemType?.value?.trim() || ""),
+    color: normalizeWardrobeColorValue(colorValue.trim() || ""),
+    material: normalizeWardrobeMaterialValue(materialValue.trim() || ""),
+    careInstructions: careRaw ? careRaw.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean) : [],
+    sourcePhotoDataUrl,
+    cropPhotoDataUrl,
+    cropConfidence,
+    photoDataUrl: cropConfidence === "trusted" && cropPhotoDataUrl ? cropPhotoDataUrl : sourcePhotoDataUrl,
+    favorite: favoriteValue,
+  };
+}
+
+function syncCompactEditFieldsFromPrimary() {
+  if (!els.itemEditColor) return;
+  els.itemEditColor.value = els.itemColor?.value || "";
+  els.itemEditMaterial.value = els.itemMaterial?.value || "";
+  els.itemEditCare.value = els.itemCare?.value || "";
+  if (els.itemEditFavorite) els.itemEditFavorite.checked = !!els.itemFavorite?.checked;
+}
+
+function syncPrimaryFieldsFromCompactEdit() {
+  if (!els.itemEditColor) return;
+  if (els.itemColor) els.itemColor.value = els.itemEditColor.value;
+  if (els.itemMaterial) els.itemMaterial.value = els.itemEditMaterial.value;
+  if (els.itemCare) els.itemCare.value = els.itemEditCare.value;
+  if (els.itemFavorite) els.itemFavorite.checked = !!els.itemEditFavorite?.checked;
+}
+
+function fillItemForm(item = {}) {
+  if (els.itemType) els.itemType.value = getWardrobeSubtype(item);
+  if (els.itemName) els.itemName.value = normalizeWardrobeNameValue(item.name, item.type);
+  if (els.itemColor) els.itemColor.value = normalizeWardrobeColorValue(item.color);
+  if (els.itemMaterial) els.itemMaterial.value = normalizeWardrobeMaterialValue(item.material);
+  if (els.itemCare) els.itemCare.value = Array.isArray(item.careInstructions) ? item.careInstructions.join(", ") : "";
+  if (els.itemFavorite) els.itemFavorite.checked = !!item.favorite;
+  syncCompactEditFieldsFromPrimary();
+  setItemMoreDetailsOpen(!!(item.color || item.material || item.careInstructions?.length));
+}
+
+function updateNeedsReviewFieldFlags() {
+  if (!els.itemDialog?.classList.contains("is-needs-review")) return;
+  const colorValue = (els.itemEditColor?.value ?? els.itemColor?.value ?? "").trim();
+  const materialValue = (els.itemEditMaterial?.value ?? els.itemMaterial?.value ?? "").trim();
+  const colorGroups = [els.itemColor?.closest(".form-group"), els.itemEditColor?.closest(".form-group")];
+  const materialGroups = [els.itemMaterial?.closest(".form-group"), els.itemEditMaterial?.closest(".form-group")];
+  colorGroups.forEach((group) => group?.classList.toggle("is-needs-review", !colorValue));
+  materialGroups.forEach((group) => group?.classList.toggle("is-needs-review", !materialValue));
+  if (colorValue && materialValue) {
+    els.itemDialog.classList.remove("is-needs-review");
+  }
+}
+
+function syncActiveBatchItemFromForm() {
+  if (!editingItemId && itemBatchItems.length && itemFlowStep === "review") return;
+  const item = currentBatchItem();
+  if (!item) return;
+  Object.assign(item, collectItemFormData());
+}
+
+function clearItemBatch() {
+  itemBatchItems = [];
+  activeItemBatchIndex = -1;
+}
+
+function hasItemImportSession() {
+  return itemImportSession.totalPhotos > 0;
+}
+
+function clearItemImportSession() {
+  itemImportSession = { totalPhotos: 0, acceptedPhotos: 0, rejectedPhotos: 0 };
+}
+
+function clearItemQueuedPhotoPreviews() {
+  itemQueuedPhotoPreviews.forEach((entry) => {
+    if (entry?.objectUrl) URL.revokeObjectURL(entry.objectUrl);
+  });
+  itemQueuedPhotoPreviews = [];
+}
+
+function setItemQueuedPhotoPreviews(files = []) {
+  clearItemQueuedPhotoPreviews();
+  itemQueuedPhotoPreviews = files.map((file, index) => ({
+    id: `${Date.now()}-${index}`,
+    name: file?.name || `Photo ${index + 1}`,
+    objectUrl: URL.createObjectURL(file),
+  }));
+}
+
+function appendItemQueuedPhotoPreviews(files = []) {
+  const startingIndex = itemQueuedPhotoPreviews.length;
+  itemQueuedPhotoPreviews.push(...files.map((file, index) => ({
+    id: `${Date.now()}-${startingIndex + index}`,
+    name: file?.name || `Photo ${startingIndex + index + 1}`,
+    objectUrl: URL.createObjectURL(file),
+  })));
+}
+
+function updateItemScanningUI() {
+  if (!els.itemScanningThumbs) return;
+  const totalPhotos = itemImportSession.totalPhotos || itemQueuedPhotoPreviews.length || itemProcessingPlaceholders || 0;
+  const acceptedPhotos = itemImportSession.acceptedPhotos || 0;
+  const rejectedPhotos = itemImportSession.rejectedPhotos || 0;
+  const remainingPhotos = Math.max(totalPhotos - acceptedPhotos - rejectedPhotos, itemProcessingPlaceholders, 0);
+
+  if (els.itemScanningSubtitle) {
+    els.itemScanningSubtitle.textContent = totalPhotos > 1
+      ? `Analyzing ${totalPhotos} photos and pulling out the clothing items that look save-ready.`
+      : "Analyzing your photo and detecting the clothing item that looks save-ready.";
+  }
+  if (els.itemScanningStatusPrimary) {
+    els.itemScanningStatusPrimary.textContent = remainingPhotos > 0
+      ? `Scanning ${totalPhotos} photo${totalPhotos === 1 ? "" : "s"}`
+      : "Preparing review";
+  }
+  if (els.itemScanningStatusSecondary) {
+    els.itemScanningStatusSecondary.textContent = remainingPhotos > 0
+      ? `${acceptedPhotos} ready${rejectedPhotos ? ` • ${rejectedPhotos} need help` : ""}`
+      : `Detected ${itemBatchItems.length} item${itemBatchItems.length === 1 ? "" : "s"}${rejectedPhotos ? ` • ${rejectedPhotos} need attention` : ""}`;
+  }
+  els.itemScanningThumbs.innerHTML = itemQueuedPhotoPreviews.map((entry, index) => {
+    const state = index < acceptedPhotos + rejectedPhotos
+      ? (index < acceptedPhotos ? "done" : "warning")
+      : "active";
+    return `
+      <div class="item-scanning-thumb is-${state}">
+        <img src="${escapeHtml(entry.objectUrl)}" alt="${escapeHtml(entry.name)}" />
+      </div>
+    `;
+  }).join("");
+}
+
+function updateItemQueueSummary() {
+  if (!els.itemQueueSummary) return;
+  if (!hasItemImportSession()) {
+    els.itemQueueSummary.style.display = "none";
+    els.itemQueueSummary.textContent = "";
+    return;
+  }
+  els.itemQueueSummary.style.display = "block";
+  const keptCount = itemBatchItems.filter((item) => item.kept !== false).length;
+  const { totalPhotos, acceptedPhotos, rejectedPhotos } = itemImportSession;
+  els.itemQueueSummary.textContent = `Scanned ${totalPhotos} photo${totalPhotos === 1 ? "" : "s"} in parallel. Detected ${keptCount} item${keptCount === 1 ? "" : "s"} from ${acceptedPhotos} photo${acceptedPhotos === 1 ? "" : "s"}${rejectedPhotos ? `, and flagged ${rejectedPhotos} photo${rejectedPhotos === 1 ? "" : "s"} for another shot.` : "."}`;
+}
+
+function currentRejectedPhoto() {
+  if (activeRejectedPhotoIndex < 0) return null;
+  return itemRejectedPhotos[activeRejectedPhotoIndex] || null;
+}
+
+function collectBatchEditFormData() {
+  const careRaw = els.itemBatchEditCare?.value?.trim() || "";
+  return {
+    type: canonicalizeDetectedItemType(els.itemBatchEditType?.value?.trim() || ""),
+    name: normalizeWardrobeNameValue(els.itemBatchEditName?.value?.trim() || "", els.itemBatchEditType?.value?.trim() || ""),
+    color: normalizeWardrobeColorValue(els.itemBatchEditColor?.value?.trim() || ""),
+    material: normalizeWardrobeMaterialValue(els.itemBatchEditMaterial?.value?.trim() || ""),
+    careInstructions: careRaw ? careRaw.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean) : [],
+    favorite: !!els.itemBatchEditFavorite?.checked,
+  };
+}
+
+function setBatchEditStatus(message = "") {
+  if (!els.itemBatchEditStatus) return;
+  els.itemBatchEditStatus.textContent = message;
+  els.itemBatchEditStatus.style.display = message ? "block" : "none";
+}
+
+function openBatchEditDialog(index) {
+  const item = itemBatchItems[index];
+  if (!item) return;
+  editingBatchItemIndex = index;
+  if (els.itemBatchEditTitle) els.itemBatchEditTitle.textContent = item.name || item.type || `Item ${index + 1}`;
+  if (els.itemBatchEditMeta) {
+    els.itemBatchEditMeta.textContent = [item.batchSourceLabel, getWardrobeCategoryLabel(getWardrobeCategory(item)), normalizeWardrobeColorValue(item.color)].filter(Boolean).join(" · ") || "Review the details before saving.";
+  }
+  const displayPhoto = getItemDisplayPhoto(item);
+  if (els.itemBatchEditPhoto) {
+    if (displayPhoto) {
+      els.itemBatchEditPhoto.src = displayPhoto;
+      els.itemBatchEditPhoto.style.display = "block";
+    } else {
+      els.itemBatchEditPhoto.removeAttribute("src");
+      els.itemBatchEditPhoto.style.display = "none";
+    }
+  }
+  if (els.itemBatchEditPhotoPlaceholder) {
+    els.itemBatchEditPhotoPlaceholder.style.display = displayPhoto ? "none" : "flex";
+    els.itemBatchEditPhotoPlaceholder.innerHTML = typeEmoji(item.type || "Other");
+  }
+  if (els.itemBatchEditType) els.itemBatchEditType.value = getWardrobeSubtype(item);
+  if (els.itemBatchEditName) els.itemBatchEditName.value = normalizeWardrobeNameValue(item.name, item.type);
+  if (els.itemBatchEditColor) els.itemBatchEditColor.value = normalizeWardrobeColorValue(item.color);
+  if (els.itemBatchEditMaterial) els.itemBatchEditMaterial.value = normalizeWardrobeMaterialValue(item.material);
+  if (els.itemBatchEditCare) els.itemBatchEditCare.value = Array.isArray(item.careInstructions) ? item.careInstructions.join(", ") : "";
+  if (els.itemBatchEditFavorite) els.itemBatchEditFavorite.checked = !!item.favorite;
+  if (els.itemBatchEditRemoveBtn) {
+    els.itemBatchEditRemoveBtn.textContent = item.kept === false ? "Keep item" : "Discard item";
+  }
+  const needsReview = itemNeedsMetadataReview(item);
+  els.itemBatchEditDialog?.classList.toggle("is-needs-review", needsReview);
+  updateBatchEditNeedsReviewFlags();
+  setBatchEditStatus("");
+  els.itemBatchEditDialog?.showModal?.();
+}
+
+function updateBatchEditNeedsReviewFlags() {
+  if (!els.itemBatchEditDialog?.classList.contains("is-needs-review")) {
+    els.itemBatchEditColor?.closest(".form-group")?.classList.remove("is-needs-review");
+    els.itemBatchEditMaterial?.closest(".form-group")?.classList.remove("is-needs-review");
+    return;
+  }
+  const colorMissing = !els.itemBatchEditColor?.value.trim();
+  const materialMissing = !els.itemBatchEditMaterial?.value.trim();
+  els.itemBatchEditColor?.closest(".form-group")?.classList.toggle("is-needs-review", colorMissing);
+  els.itemBatchEditMaterial?.closest(".form-group")?.classList.toggle("is-needs-review", materialMissing);
+  if (!colorMissing && !materialMissing) {
+    els.itemBatchEditDialog.classList.remove("is-needs-review");
+  }
+}
+
+function closeBatchEditDialog() {
+  editingBatchItemIndex = -1;
+  els.itemBatchEditDialog?.close?.();
+}
+
+function saveBatchEditDialog() {
+  const item = itemBatchItems[editingBatchItemIndex];
+  if (!item) return;
+  const next = collectBatchEditFormData();
+  if (!next.type || !next.name) {
+    setBatchEditStatus("Add the item type and name before saving your changes.");
+    return;
+  }
+  Object.assign(item, next);
+  activeItemBatchIndex = editingBatchItemIndex;
+  if (!pendingPhotoDataUrl) pendingPhotoDataUrl = item.sourcePhotoDataUrl || null;
+  renderItemBatchReview();
+  updateItemSaveState();
+  closeBatchEditDialog();
+}
+
+function toggleBatchEditItemKept(forceKept = null) {
+  const item = itemBatchItems[editingBatchItemIndex];
+  if (!item) return;
+  item.kept = typeof forceKept === "boolean" ? forceKept : item.kept === false;
+  renderItemBatchReview();
+  updateItemSaveState();
+  if (els.itemBatchEditRemoveBtn) {
+    els.itemBatchEditRemoveBtn.textContent = item.kept === false ? "Keep item" : "Discard item";
+  }
+  closeBatchEditDialog();
+}
+
+function focusBatchEditType() {
+  setBatchEditStatus("Pick the right category and subtype, then save when it looks right.");
+  els.itemBatchEditType?.focus();
+}
+
+async function openBatchEditCropDialog() {
+  const batchIndex = editingBatchItemIndex;
+  const item = itemBatchItems[batchIndex];
+  if (!item?.sourcePhotoDataUrl) {
+    setBatchEditStatus("This item doesn’t have a source photo available for a new crop.");
+    return;
+  }
+  closeBatchEditDialog();
+  await openItemCropDialog({
+    sourcePhotoDataUrl: item.sourcePhotoDataUrl,
+    title: "Crop detected item",
+    subtitle: "Move the crop box over the item, then drag the corner to resize it before saving.",
+    onApply: async ({ cropPhotoDataUrl }) => {
+      Object.assign(item, normalizeWardrobeItemMedia({
+        ...item,
+        cropPhotoDataUrl,
+        cropConfidence: "trusted",
+        photoDataUrl: cropPhotoDataUrl,
+      }));
+      renderItemBatchReview();
+      updateItemSaveState();
+      openBatchEditDialog(batchIndex);
+      setBatchEditStatus("Updated the crop for this item.");
+    },
+    onCancel: () => openBatchEditDialog(batchIndex),
+  });
+}
+
+function markBatchEditAsNotItem() {
+  toggleBatchEditItemKept(false);
+}
+
+function keepBatchEditItemAnyway() {
+  const item = itemBatchItems[editingBatchItemIndex];
+  if (!item) return;
+  item.kept = true;
+  renderItemBatchReview();
+  updateItemSaveState();
+  closeBatchEditDialog();
+}
+
+async function createManualBatchItemFromRejected(entry, { cropRegion = null, entryIndex = activeRejectedPhotoIndex } = {}) {
+  if (!entry?.photoDataUrl) return;
+  let cropPhotoDataUrl = null;
+  if (cropRegion) {
+    cropPhotoDataUrl = await cropImageDataUrlToRegion(entry.photoDataUrl, cropRegion).catch(() => null);
+  }
+  itemBatchItems.push(normalizeWardrobeItemMedia({
+    id: `manual-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    type: "",
+    name: "",
+    color: "",
+    material: "",
+    careInstructions: [],
+    kept: true,
+    batchSourceLabel: `Photo ${entry.photoIndex || itemRejectedPhotos.length + 1}`,
+    batchSourceIndex: entry.photoIndex || itemRejectedPhotos.length + 1,
+    sourcePhotoDataUrl: entry.photoDataUrl,
+    cropPhotoDataUrl: cropPhotoDataUrl || null,
+    cropConfidence: cropPhotoDataUrl ? "trusted" : "fallback",
+    photoDataUrl: cropPhotoDataUrl || entry.photoDataUrl,
+    favorite: false,
+  }));
+  itemRejectedPhotos = itemRejectedPhotos.filter((candidate, index) => index !== entryIndex);
+  itemImportSession.rejectedPhotos = itemRejectedPhotos.length;
+  if (!itemImportSession.acceptedPhotos) itemImportSession.acceptedPhotos = 1;
+  activeItemBatchIndex = itemBatchItems.length - 1;
+  renderItemBatchReview();
+  updateItemQueueSummary();
+  updateItemVisual();
+  closeRejectedPhotoDialog();
+  openBatchEditDialog(activeItemBatchIndex);
+}
+
+async function openRejectedPhotoCropDialog(index, { restoreDialog = false } = {}) {
+  const entry = itemRejectedPhotos[index];
+  if (!entry?.photoDataUrl) return;
+  if (restoreDialog) closeRejectedPhotoDialog();
+  await openItemCropDialog({
+    sourcePhotoDataUrl: entry.photoDataUrl,
+    title: "Crop and continue",
+    subtitle: "Frame the clothing item you want to keep — we’ll re-scan that region.",
+    onApply: async ({ region }) => {
+      await reanalyzeRejectedPhotoCrop(entry, region, index);
+    },
+    onCancel: restoreDialog ? (() => openRejectedPhotoDialog(index)) : null,
+  });
+}
+
+function getRejectedEntryKey(entry, index) {
+  return entry?.photoIndex ? `p${entry.photoIndex}` : `i${index}`;
+}
+function setRejectedRescanState(key, isScanning) {
+  if (!key) return;
+  if (isScanning) itemRescanningKeys.add(key);
+  else itemRescanningKeys.delete(key);
+  renderItemBatchReview();
+}
+
+async function reanalyzeRejectedPhotoCrop(entry, cropRegion, entryIndex) {
+  if (!entry?.photoDataUrl) return;
+  const rescanKey = getRejectedEntryKey(entry, entryIndex);
+  setRejectedRescanState(rescanKey, true);
+  let croppedDataUrl = null;
+  try {
+    croppedDataUrl = await cropImageDataUrlToRegion(entry.photoDataUrl, cropRegion);
+  } catch (err) {
+    console.error("recrop failed", err);
+  }
+  if (!croppedDataUrl) {
+    setRejectedRescanState(rescanKey, false);
+    await createManualBatchItemFromRejected(entry, { cropRegion, entryIndex });
+    showAppToast("Couldn't re-scan that crop — added it manually instead.", "warning");
+    return;
+  }
+
+  try {
+    const analysis = await analyzeItemPhoto(croppedDataUrl);
+    const detectedItems = await normalizeDetectedItems(analysis, croppedDataUrl);
+    if (!detectedItems.length) {
+      setRejectedRescanState(rescanKey, false);
+      await createManualBatchItemFromRejected(entry, { cropRegion, entryIndex });
+      showAppToast("Still couldn't detect an item — added it manually so you can finish it.", "warning");
+      return;
+    }
+
+    const photoIndex = entry.photoIndex || (itemBatchItems.length + itemRejectedPhotos.length + 1);
+    const addedItems = detectedItems.map((item, itemIndex) => normalizeWardrobeItemMedia({
+      ...item,
+      id: item.id || `detected-recrop-${Date.now()}-${itemIndex}`,
+      batchSourceLabel: `Photo ${photoIndex}`,
+      batchSourceIndex: photoIndex,
+      // Preserve the original source photo so further recrops can re-scan;
+      // the detection already produced its own crop hint.
+      sourcePhotoDataUrl: entry.photoDataUrl,
+      cropPhotoDataUrl: item.cropPhotoDataUrl || croppedDataUrl,
+      cropConfidence: item.cropPhotoDataUrl ? item.cropConfidence : "trusted",
+      kept: true,
+    }));
+    itemBatchItems.push(...addedItems);
+    itemRejectedPhotos = itemRejectedPhotos.filter((_, i) => i !== entryIndex);
+    itemImportSession.rejectedPhotos = itemRejectedPhotos.length;
+    itemImportSession.acceptedPhotos = (itemImportSession.acceptedPhotos || 0) + 1;
+    setItemFlowStep("review");
+    renderItemBatchReview();
+    updateItemQueueSummary();
+    updateItemSaveState();
+    showAppToast(
+      addedItems.length === 1
+        ? "Re-scanned and added to your items."
+        : `Re-scanned and added ${addedItems.length} items.`,
+      "success"
+    );
+  } catch (err) {
+    console.error("reanalyze crop failed", err);
+    setRejectedRescanState(rescanKey, false);
+    await createManualBatchItemFromRejected(entry, { cropRegion, entryIndex });
+    showAppToast("Re-scan failed — added the crop manually so you can finish it.", "warning");
+  } finally {
+    itemRescanningKeys.delete(rescanKey);
+  }
+}
+
+function openRejectedPhotoDialog(index) {
+  const entry = itemRejectedPhotos[index];
+  if (!entry) return;
+  activeRejectedPhotoIndex = index;
+  if (els.itemRejectedDialogTitle) els.itemRejectedDialogTitle.textContent = entry.fileName || `Photo ${index + 1}`;
+  if (els.itemRejectedDialogMessage) els.itemRejectedDialogMessage.textContent = entry.message || "WearCast flagged this photo before detection. Crop it first, add it manually, or skip it.";
+  if (els.itemRejectedDialogPhoto) {
+    if (entry.photoDataUrl) {
+      els.itemRejectedDialogPhoto.src = entry.photoDataUrl;
+      els.itemRejectedDialogPhoto.style.display = "block";
+    } else {
+      els.itemRejectedDialogPhoto.removeAttribute("src");
+      els.itemRejectedDialogPhoto.style.display = "none";
+    }
+  }
+  els.itemRejectedDialog?.showModal?.();
+}
+
+function closeRejectedPhotoDialog() {
+  activeRejectedPhotoIndex = -1;
+  els.itemRejectedDialog?.close?.();
+}
+
+function dismissRejectedPhoto(index) {
+  itemRejectedPhotos = itemRejectedPhotos.filter((_, entryIndex) => entryIndex !== index);
+  itemImportSession.rejectedPhotos = itemRejectedPhotos.length;
+  renderItemBatchReview();
+  updateItemQueueSummary();
+  if (!itemBatchItems.length && !itemRejectedPhotos.length) {
+    resetNewItemFlow("");
+  }
+}
+
+function renderItemBatchReview() {
+  const hasBatch = itemBatchItems.length > 0 && !editingItemId;
+  const hasRejected = itemRejectedPhotos.length > 0 && !editingItemId;
+  const isProcessing = itemProcessingPlaceholders > 0 && !editingItemId;
+  const showReview = itemFlowStep === "review" && (hasBatch || hasRejected);
+  const hidePhotoPreview = itemFlowStep === "review" || itemFlowStep === "scanning";
+  if (els.itemBatchReview) els.itemBatchReview.style.display = showReview ? "flex" : "none";
+  if (els.itemPhotoPreview) els.itemPhotoPreview.style.display = hidePhotoPreview ? "none" : "";
+  if (els.itemPhotoLabel) {
+    els.itemPhotoLabel.textContent = hasBatch || hasRejected ? "Take more photos" : "Take photos";
+  }
+  if (els.itemRejectedResults) els.itemRejectedResults.style.display = hasRejected ? "flex" : "none";
+  if (els.itemRejectedTitle) {
+    els.itemRejectedTitle.textContent = itemRejectedPhotos.length === 1
+      ? "1 photo needs help"
+      : `${itemRejectedPhotos.length} photos need help`;
+  }
+  if (els.itemRejectedList) {
+    els.itemRejectedList.dataset.layout = itemRejectedPhotos.length <= 1
+      ? "single"
+      : itemRejectedPhotos.length === 2
+        ? "double"
+        : itemRejectedPhotos.length <= 4
+          ? "compact"
+          : "dense";
+    els.itemRejectedList.innerHTML = itemRejectedPhotos.map((entry, index) => {
+      const isRescanning = itemRescanningKeys.has(getRejectedEntryKey(entry, index));
+      const photoLabel = `Photo ${entry.photoIndex || index + 1}`;
+      const fileName = entry.fileName || photoLabel;
+      return `
+      <article class="item-rejected-card${isRescanning ? " is-rescanning" : ""}" data-rejected-index="${index}" role="button" tabindex="0"${isRescanning ? ' aria-busy="true"' : ""}>
+        ${entry.photoDataUrl ? `<div class="item-rejected-photo-wrap">
+          <img src="${escapeHtml(entry.photoDataUrl)}" alt="" />
+          <div class="item-rejected-photo-overlay">
+            <strong class="item-rejected-photo-name" title="${escapeHtml(fileName)}">${escapeHtml(fileName)}</strong>
+            <span class="item-rejected-photo-hint">Tap to fix</span>
+          </div>
+          ${isRescanning ? `<div class="item-rejected-rescan-overlay" role="status" aria-label="Re-scanning">
+            <div class="item-rejected-rescan-orb"></div>
+            <span>Re-scanning…</span>
+          </div>` : ""}
+        </div>` : `<div class="item-rejected-copy">
+          <strong title="${escapeHtml(fileName)}">${escapeHtml(fileName)}</strong>
+          <span class="item-rejected-photo-hint">Tap to fix</span>
+        </div>`}
+      </article>
+    `;
+    }).join("");
+  }
+  if (isProcessing) {
+    if (els.itemBatchTitle) els.itemBatchTitle.textContent = `Scanning ${itemProcessingPlaceholders} photo${itemProcessingPlaceholders === 1 ? "" : "s"}`;
+    if (els.itemBatchSummary) els.itemBatchSummary.textContent = "Preparing your results.";
+    if (els.itemBatchStats) els.itemBatchStats.textContent = "";
+    if (els.itemBatchKeepToggleBtn) els.itemBatchKeepToggleBtn.disabled = true;
+    if (els.itemBatchList) {
+      els.itemBatchList.innerHTML = Array.from({ length: itemProcessingPlaceholders }).map(() => `
+        <div class="item-batch-chip item-batch-chip-skeleton" aria-hidden="true">
+          <span class="item-batch-chip-photo-wrap item-batch-skeleton-block"></span>
+          <span class="item-batch-chip-overlay">
+            <span class="item-batch-chip-copy">
+              <strong class="item-batch-skeleton-line item-batch-skeleton-line-title"></strong>
+              <span class="item-batch-skeleton-line item-batch-skeleton-line-meta"></span>
+            </span>
+          </span>
+        </div>
+      `).join("");
+    }
+    updateItemScanningUI();
+    return;
+  }
+
+  if (!hasBatch) {
+    if (els.itemBatchTitle) els.itemBatchTitle.textContent = hasRejected ? "Review results" : "No items detected yet";
+    if (els.itemBatchSummary) els.itemBatchSummary.textContent = hasRejected
+      ? "Fix the photos below to keep going."
+      : "Scan photos to see your items here.";
+    if (els.itemBatchStats) {
+      els.itemBatchStats.textContent = hasRejected
+        ? `${itemRejectedPhotos.length} photo${itemRejectedPhotos.length === 1 ? "" : "s"} need attention`
+        : "";
+    }
+    if (els.itemBatchList) els.itemBatchList.innerHTML = "";
+    if (els.itemBatchKeepToggleBtn) els.itemBatchKeepToggleBtn.style.display = "none";
+    return;
+  }
+
+  const keptCount = itemBatchItems.filter((item) => item.kept !== false).length;
+  if (els.itemBatchTitle) {
+    els.itemBatchTitle.textContent = keptCount
+      ? `${keptCount} item${keptCount === 1 ? "" : "s"} ready`
+      : "No items selected from these photos";
+  }
+  if (els.itemBatchSummary) {
+    els.itemBatchSummary.textContent = "Tap any item to edit it, then save when you're ready.";
+  }
+  if (els.itemBatchStats) {
+    const parts = [
+      `${keptCount} ready`,
+      itemRejectedPhotos.length ? `${itemRejectedPhotos.length} fix` : "",
+      itemBatchItems.length > 1 ? `${itemBatchItems.length} scanned` : "",
+    ].filter(Boolean);
+    els.itemBatchStats.textContent = parts.join(" • ");
+  }
+  if (els.itemBatchKeepToggleBtn) {
+    els.itemBatchKeepToggleBtn.style.display = "none";
+    els.itemBatchKeepToggleBtn.disabled = true;
+  }
+  if (els.itemBatchList) {
+    els.itemBatchList.dataset.layout = itemBatchItems.length <= 1
+      ? "single"
+      : itemBatchItems.length === 2
+        ? "double"
+        : itemBatchItems.length <= 4
+          ? "compact"
+          : "dense";
+    els.itemBatchList.innerHTML = itemBatchItems.map((item, index) => {
+      const label = item.name || item.type || `Item ${index + 1}`;
+      const stateLabel = item.kept === false ? "Discarded" : itemNeedsMetadataReview(item) ? "Needs review" : "Ready";
+      const meta = [getWardrobeSubtype(item), normalizeWardrobeColorValue(item.color)].filter(Boolean).join(" · ");
+      const removedClass = item.kept === false ? " is-removed" : "";
+      const displayPhoto = getItemDisplayPhoto(item);
+      const stateTone = item.kept === false
+        ? "discarded"
+        : itemNeedsMetadataReview(item)
+          ? "review"
+          : "ready";
+      return `
+        <button
+          type="button"
+          class="item-batch-chip${removedClass}"
+          data-item-batch-index="${index}"
+          data-state-tone="${stateTone}"
+          aria-pressed="false"
+        >
+          ${displayPhoto ? `<span class="item-batch-chip-photo-wrap"><img class="item-batch-chip-photo" src="${escapeHtml(displayPhoto)}" alt="" /></span>` : `<span class="item-batch-chip-photo-wrap item-batch-chip-photo-wrap-empty"></span>`}
+          <span class="item-batch-chip-dismiss" data-item-batch-discard="${index}" role="button" aria-label="${item.kept === false ? "Keep item" : "Discard item"}">${item.kept === false ? "+" : "&times;"}</span>
+          <span class="item-batch-chip-state" data-state-tone="${stateTone}">${escapeHtml(stateLabel)}</span>
+          <span class="item-batch-chip-overlay">
+            <span class="item-batch-chip-copy">
+              <strong>${escapeHtml(label)}</strong>
+              <span>${escapeHtml(meta || stateLabel)}</span>
+            </span>
+          </span>
+        </button>
+      `;
+    }).join("");
+  }
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(syncItemScrollIndicators);
+  } else {
+    syncItemScrollIndicators();
+  }
+}
+
+const itemScrollIndicatorBindings = new WeakSet();
+function updateScrollIndicator(list, indicator) {
+  if (!list || !indicator) return;
+  const overflow = list.scrollWidth - list.clientWidth;
+  if (overflow <= 4 || list.children.length <= 1) {
+    indicator.classList.remove("is-visible");
+    indicator.innerHTML = "";
+    return;
+  }
+  indicator.classList.add("is-visible");
+  const count = Math.max(2, Math.min(list.children.length, Math.ceil(list.scrollWidth / list.clientWidth) + 1));
+  const progress = Math.max(0, Math.min(1, list.scrollLeft / overflow));
+  const activeIndex = Math.round(progress * (count - 1));
+  if (indicator.childElementCount !== count) {
+    indicator.innerHTML = Array.from({ length: count })
+      .map(() => '<span class="item-scroll-dot"></span>')
+      .join("");
+  }
+  Array.from(indicator.children).forEach((dot, i) => {
+    dot.classList.toggle("is-active", i === activeIndex);
+  });
+}
+function bindScrollIndicator(list, indicator) {
+  if (!list || !indicator || itemScrollIndicatorBindings.has(list)) return;
+  itemScrollIndicatorBindings.add(list);
+  const update = () => updateScrollIndicator(list, indicator);
+  list.addEventListener("scroll", update, { passive: true });
+  if (typeof ResizeObserver !== "undefined") {
+    const ro = new ResizeObserver(update);
+    ro.observe(list);
+  } else {
+    window.addEventListener("resize", update);
+  }
+}
+function syncItemScrollIndicators() {
+  const pairs = [
+    [els.itemBatchList, els.itemBatchListDots],
+    [els.itemRejectedList, els.itemRejectedListDots],
+  ];
+  for (const [list, indicator] of pairs) {
+    if (!list || !indicator) continue;
+    bindScrollIndicator(list, indicator);
+    updateScrollIndicator(list, indicator);
+  }
+}
+function loadBatchItemIntoForm(index) {
+  if (!itemBatchItems[index]) return;
+  syncActiveBatchItemFromForm();
+  activeItemBatchIndex = index;
+  fillItemForm(itemBatchItems[index]);
+  revealItemManualDetails();
+  clearItemValidationErrors();
+  updateItemVisual();
+  renderItemBatchReview();
+  updateItemSaveState();
+}
+
 function updateItemSaveState() {
   if (!els.itemSaveBtn) return;
+  const footer = els.itemForm?.querySelector?.(".item-save-footer");
   const busy = isSavingItem || isReadingItemPhoto || isAnalyzingItemPhoto;
-  const hasRequiredFields = !!(els.itemType?.value?.trim() && els.itemName?.value?.trim());
-  els.itemSaveBtn.disabled = busy || !hasRequiredFields;
-  els.itemSaveBtn.textContent = isSavingItem ? "Saving…" : isReadingItemPhoto || isAnalyzingItemPhoto ? "Preparing…" : "Save item";
+  syncActiveBatchItemFromForm();
+  const keptItems = itemBatchItems.filter((item) => item.kept !== false);
+  const hasRequiredFields = editingItemId
+    ? !!(els.itemType?.value?.trim() && els.itemName?.value?.trim())
+    : itemBatchItems.length
+      ? keptItems.length > 0 && keptItems.every((item) => item.type && item.name)
+      : !!(els.itemType?.value?.trim() && els.itemName?.value?.trim());
+  const canContinue = itemFlowStep === "review"
+    ? !busy && keptItems.length > 0
+    : itemFlowStep === "confirm"
+      ? !busy && hasRequiredFields
+      : false;
+  // Use aria-disabled instead of the native disabled attribute so a tap still
+  // reaches the submit handler and can surface a reason toast explaining why
+  // the action is blocked. Keep `disabled` only while we are actually busy
+  // (saving / scanning) — those states genuinely shouldn't be re-triggered.
+  if (busy) {
+    els.itemSaveBtn.disabled = true;
+    els.itemSaveBtn.removeAttribute("aria-disabled");
+    els.itemSaveBtn.classList.remove("is-blocked");
+  } else {
+    els.itemSaveBtn.disabled = false;
+    if (canContinue) {
+      els.itemSaveBtn.removeAttribute("aria-disabled");
+      els.itemSaveBtn.classList.remove("is-blocked");
+    } else {
+      els.itemSaveBtn.setAttribute("aria-disabled", "true");
+      els.itemSaveBtn.classList.add("is-blocked");
+    }
+  }
+  if (footer) footer.style.display = itemFlowStep === "review" || itemFlowStep === "confirm" || !!editingItemId ? "" : "none";
+  els.itemSaveBtn.textContent = isSavingItem
+    ? (editingItemId ? "Saving…" : "Saving items…")
+    : isReadingItemPhoto || isAnalyzingItemPhoto
+      ? "Scanning…"
+      : itemFlowStep === "review"
+        ? (!editingItemId && keptItems.length > 1 ? `Save ${keptItems.length} items` : "Save item")
+        : !editingItemId && keptItems.length > 1
+          ? `Save ${keptItems.length} items`
+          : "Save item";
+  if (els.itemNextPhotoBtn) {
+    const showAddMore = !editingItemId && itemFlowStep === "review";
+    els.itemNextPhotoBtn.style.display = showAddMore ? "inline-flex" : "none";
+    els.itemNextPhotoBtn.disabled = busy;
+    els.itemNextPhotoBtn.textContent = "Add more photos";
+  }
+  if (els.itemEditDetailsBtn) {
+    const showEditDetails = itemFlowStep === "confirm" && !itemBatchItems.length;
+    els.itemEditDetailsBtn.style.display = showEditDetails ? "inline-flex" : "none";
+    els.itemEditDetailsBtn.disabled = busy;
+    els.itemEditDetailsBtn.textContent = itemMoreDetailsOpen ? "Hide details" : "More details";
+  }
+  if (els.itemBackBtn) {
+    els.itemBackBtn.style.display = (editingItemId || itemFlowStep === "review" || itemFlowStep === "confirm") ? "inline-flex" : "none";
+    els.itemBackBtn.disabled = busy;
+  }
 }
 
 function setItemPhotoStatus(message = "", busy = false, tone = "") {
@@ -3578,6 +6091,10 @@ function setItemPhotoStatus(message = "", busy = false, tone = "") {
 }
 
 function setItemFormError(message = "") {
+  if (message && itemFlowStep === "confirm" && !itemMoreDetailsOpen) {
+    setItemMoreDetailsOpen(true);
+    updateItemSaveState();
+  }
   if (!els.itemFormStatus) return;
   els.itemFormStatus.textContent = message;
   els.itemFormStatus.style.display = message ? "block" : "none";
@@ -3597,23 +6114,101 @@ function clearItemValidationErrors() {
   setItemFormError("");
 }
 
-function setItemMoreDetailsOpen(open) {
-  const moreDetails = document.querySelector(".item-more-details");
-  if (!moreDetails) return;
-  if (open) moreDetails.setAttribute("open", "open");
-  else moreDetails.removeAttribute("open");
+function setItemMoreDetailsOpen(open = false) {
+  itemMoreDetailsOpen = !!open;
+  if (els.itemConfirmDetailsPanel) {
+    els.itemConfirmDetailsPanel.style.display = itemMoreDetailsOpen && itemFlowStep === "confirm" ? "" : "none";
+  }
+  if (els.itemManualDetails) {
+    els.itemManualDetails.classList.toggle("is-compact", itemFlowStep === "confirm" && !itemMoreDetailsOpen);
+  }
+}
+
+function setItemFlowStep(step, { focus = false } = {}) {
+  itemFlowStep = step;
+  els.itemDialog?.classList.toggle("is-review-mode", step === "review" && !editingItemId);
+  document.querySelectorAll("[data-item-step-panel]").forEach((panel) => {
+    if (panel.id === "itemConfirmDetailsPanel") {
+      panel.style.display = panel.dataset.itemStepPanel === step && itemMoreDetailsOpen ? "" : "none";
+      return;
+    }
+    panel.style.display = panel.dataset.itemStepPanel === step ? "" : "none";
+  });
+  document.querySelectorAll("[data-item-step-dot]").forEach((dot) => {
+    const dotStep = dot.dataset.itemStepDot;
+    const order = ["capture", "scanning", "review", "confirm"];
+    const currentIndex = order.indexOf(step);
+    const dotIndex = order.indexOf(dotStep);
+    dot.classList.toggle("is-active", dotStep === step);
+    dot.classList.toggle("is-complete", dotIndex < currentIndex);
+  });
+  if (els.itemFlowKicker) {
+    const labelMap = {
+      capture: "Capture",
+      scanning: "Scanning",
+      review: "Review",
+      confirm: "Details",
+    };
+    els.itemFlowKicker.textContent = labelMap[step] || "Step";
+  }
+  if (els.itemFlowAssist) {
+    const assistMap = {
+      capture: hasItemImportSession()
+        ? "Batch scan is active."
+        : "Start with a clear clothing photo.",
+      scanning: "Analyzing your photos and preparing the review.",
+      review: "",
+      confirm: "Check the basics first. Open more details only if needed.",
+    };
+    els.itemFlowAssist.textContent = assistMap[step] || "";
+  }
+  setItemMoreDetailsOpen(itemMoreDetailsOpen);
+  if (focus) {
+    window.setTimeout(() => {
+      if (step === "confirm") {
+        if (!els.itemType?.value) els.itemType?.focus?.();
+        else els.itemName?.focus?.();
+      }
+      if (step === "confirm" && itemMoreDetailsOpen) els.itemColor?.focus?.();
+    }, 60);
+  }
+  updateItemScanningUI();
+  updateItemSaveState();
 }
 
 function revealItemManualDetails({ focus = false } = {}) {
-  els.itemManualDetails?.setAttribute("open", "open");
-  if (!focus) return;
-  window.setTimeout(() => {
-    if (!els.itemType?.value) els.itemType?.focus?.();
-    else els.itemName?.focus?.();
-  }, 60);
+  setItemMoreDetailsOpen(false);
+  setItemFlowStep("confirm", { focus });
+}
+
+function resolveItemFlowAfterScanning() {
+  if (editingItemId || itemFlowStep !== "scanning") return;
+  if (itemBatchItems.length || itemRejectedPhotos.length) {
+    setItemFlowStep("review");
+    return;
+  }
+  setItemFlowStep("capture");
 }
 
 function validateItemForm() {
+  syncActiveBatchItemFromForm();
+  if (!editingItemId && itemBatchItems.length) {
+    const firstInvalid = itemBatchItems.findIndex((item) => item.kept !== false && (!item.type || !item.name));
+    if (firstInvalid !== -1) {
+      activeItemBatchIndex = firstInvalid;
+      renderItemBatchReview();
+      const invalid = itemBatchItems[firstInvalid];
+      setItemFormError("Review each kept item and add its type and name before saving.");
+      openBatchEditDialog(firstInvalid);
+      return false;
+    }
+    if (!itemBatchItems.some((item) => item.kept !== false)) {
+      setItemFormError("Keep at least one detected item or add a different photo.");
+      return false;
+    }
+    return true;
+  }
+
   clearItemValidationErrors();
   const type = els.itemType.value.trim();
   const name = els.itemName.value.trim();
@@ -3639,12 +6234,15 @@ function validateItemForm() {
 }
 
 function updateItemVisual() {
-  const type = els.itemType?.value?.trim();
-  const name = els.itemName?.value?.trim();
-  const meta = [els.itemColor?.value?.trim(), els.itemMaterial?.value?.trim()].filter(Boolean).join(" · ");
-  const photo = pendingPhotoDataUrl;
+  syncActiveBatchItemFromForm();
+  const item = normalizeWardrobeItemMedia(currentBatchItem() || collectItemFormData());
+  const type = item.type;
+  const name = item.name;
+  const meta = [item.color, item.material].filter(Boolean).join(" · ");
+  const photo = getItemDisplayPhoto(item) || pendingPhotoDataUrl;
 
   if (els.itemPhotoImg) {
+    if (photo) els.itemPhotoImg.src = photo;
     els.itemPhotoImg.style.display = photo ? "block" : "none";
   }
   if (els.itemVisualPlaceholder) {
@@ -3653,11 +6251,43 @@ function updateItemVisual() {
   if (els.removePhotoBtn) {
     els.removePhotoBtn.style.display = photo ? "flex" : "none";
   }
-  if (els.itemVisualEmoji) els.itemVisualEmoji.innerHTML = typeEmoji(type || "Other");
-  if (els.itemVisualName) els.itemVisualName.textContent = name || (photo ? "Selected clothing item" : "Add a clothing photo");
-  if (els.itemVisualMeta) {
-    els.itemVisualMeta.textContent = meta || (photo ? "We’ll use the photo to help fill in the details." : "We’ll try to prefill the details for you.");
+  if (els.recropPhotoBtn) {
+    const source = getItemSourcePhoto(item) || pendingPhotoDataUrl || null;
+    const canRecrop = !!editingItemId && !!source;
+    els.recropPhotoBtn.style.display = canRecrop ? "inline-flex" : "none";
   }
+  if (els.itemVisualEmoji) els.itemVisualEmoji.innerHTML = typeEmoji(type || "Other");
+  if (els.itemVisualName) els.itemVisualName.textContent = name || (photo ? "Selected clothing item" : "Upload a photo");
+  if (els.itemVisualMeta) {
+    els.itemVisualMeta.textContent = meta
+      || (photo
+        ? (hasTrustedCrop(item) ? "Using a validated crop for this item." : "Using the full source photo until the crop looks trustworthy.")
+        : "We’ll detect the basics and you can edit anything after.");
+  }
+  if (els.itemEditSummaryImg) {
+    if (photo) {
+      els.itemEditSummaryImg.src = photo;
+      els.itemEditSummaryImg.style.display = "";
+    } else {
+      els.itemEditSummaryImg.style.display = "none";
+      els.itemEditSummaryImg.removeAttribute("src");
+    }
+  }
+  if (els.itemEditSummaryPlaceholder) {
+    els.itemEditSummaryPlaceholder.style.display = photo ? "none" : "grid";
+    els.itemEditSummaryPlaceholder.innerHTML = typeEmoji(type || "Other");
+  }
+  if (els.itemEditSummaryName) {
+    els.itemEditSummaryName.textContent = name || (editingItemId ? "Wardrobe item" : "New item");
+  }
+  if (els.itemEditSummaryMeta) {
+    els.itemEditSummaryMeta.textContent = meta
+      || (editingItemId
+        ? "Update the essentials, then save and keep moving."
+        : "We’ll detect the basics and you can edit anything after.");
+  }
+  updateItemQueueSummary();
+  renderItemBatchReview();
 }
 
 async function analyzeItemPhoto(imageDataUrl) {
@@ -3680,10 +6310,22 @@ function normalizeCareInstructionsInput(value) {
   return values.map((item) => compactText(item, "")).filter(Boolean);
 }
 
-function applyItemPhotoPrefill(data) {
+async function applyItemPhotoPrefill(data) {
   if (!data || data.error) return false;
+  const detectedItems = await normalizeDetectedItems(data, pendingPhotoDataUrl);
+  itemRejectedPhotos = [];
+  itemImportSession = { totalPhotos: 1, acceptedPhotos: 1, rejectedPhotos: 0 };
+  if (detectedItems.length > 1) {
+    itemBatchItems = detectedItems;
+    activeItemBatchIndex = 0;
+    itemProcessingPlaceholders = 0;
+    fillItemForm(itemBatchItems[0]);
+    setItemFlowStep("review");
+    renderItemBatchReview();
+    return true;
+  }
   let applied = false;
-  if (data.type && !els.itemType.value) els.itemType.value = data.type;
+  if (data.type && !els.itemType.value) els.itemType.value = inferDetectedItemType(data.type, data.name);
   if (data.type) applied = true;
   if (data.name && !els.itemName.value.trim()) {
     els.itemName.value = data.name;
@@ -3697,18 +6339,298 @@ function applyItemPhotoPrefill(data) {
     els.itemMaterial.value = data.material;
     applied = true;
   }
+  if (typeof data.favorite === "boolean" && els.itemFavorite && !els.itemFavorite.checked) {
+    els.itemFavorite.checked = data.favorite;
+    applied = true;
+  }
   const careInstructions = normalizeCareInstructionsInput(data.careInstructions);
   if (careInstructions.length && !els.itemCare.value.trim()) {
     els.itemCare.value = careInstructions.join(", ");
     applied = true;
   }
-  if (data.color || data.material || careInstructions.length) {
-    setItemMoreDetailsOpen(true);
-  }
   if (data.type || data.name || data.color || data.material || careInstructions.length) {
-    revealItemManualDetails();
+    setItemFlowStep("confirm");
   }
+
+  if (detectedItems[0]?.cropPhotoDataUrl) pendingCropPhotoDataUrl = detectedItems[0].cropPhotoDataUrl;
+  if (detectedItems[0]?.cropConfidence) pendingCropConfidence = detectedItems[0].cropConfidence;
   return applied;
+}
+
+function resetNewItemFlow(message = "") {
+  clearItemBatch();
+  itemRejectedPhotos = [];
+  clearItemImportSession();
+  clearItemQueuedPhotoPreviews();
+  itemProcessingPlaceholders = 0;
+  editingBatchItemIndex = -1;
+  activeRejectedPhotoIndex = -1;
+  editingItemId = null;
+  pendingPhotoDataUrl = null;
+  pendingCropPhotoDataUrl = null;
+  pendingCropConfidence = "none";
+  itemMoreDetailsOpen = false;
+  els.itemForm?.reset();
+  if (els.itemPhoto) els.itemPhoto.value = "";
+  if (els.itemPhotoImg) els.itemPhotoImg.src = "";
+  if (els.itemFavorite) els.itemFavorite.checked = false;
+  clearItemValidationErrors();
+  setItemMoreDetailsOpen(false);
+  setItemFlowStep("capture");
+  setItemPhotoStatus("", false, "");
+  if (message) showAppToast(message, "success");
+  updateItemVisual();
+  updateItemSaveState();
+}
+
+function resetItemPhotoQueue() {
+  itemRejectedPhotos = [];
+  clearItemImportSession();
+  clearItemQueuedPhotoPreviews();
+  itemProcessingPlaceholders = 0;
+  if (els.itemGalleryPhotos) els.itemGalleryPhotos.value = "";
+  updateItemScanningUI();
+  updateItemQueueSummary();
+  renderItemBatchReview();
+}
+
+function resetPendingItemForm() {
+  pendingCropPhotoDataUrl = null;
+  pendingCropConfidence = "none";
+  els.itemType.value = "";
+  els.itemName.value = "";
+  els.itemColor.value = "";
+  els.itemMaterial.value = "";
+  els.itemCare.value = "";
+  if (els.itemFavorite) els.itemFavorite.checked = false;
+  syncCompactEditFieldsFromPrimary();
+  clearItemValidationErrors();
+  setItemMoreDetailsOpen(false);
+}
+
+async function analyzeSelectedItemPhotoFile(file, { photoIndex = 1 } = {}) {
+  const optimizedPhotoDataUrl = await optimizeImageDataUrl(file);
+  const quality = await assessItemPhotoQuality(optimizedPhotoDataUrl);
+  if (!quality.ok) {
+    return {
+      status: "rejected",
+      fileName: file?.name || `Photo ${photoIndex}`,
+      photoIndex,
+      photoDataUrl: optimizedPhotoDataUrl,
+      message: buildPhotoQualityMessage(quality),
+      quality,
+    };
+  }
+
+  try {
+    const analysis = await analyzeItemPhoto(optimizedPhotoDataUrl);
+    const detectedItems = await normalizeDetectedItems(analysis, optimizedPhotoDataUrl);
+    if (!detectedItems.length) {
+      return {
+        status: "rejected",
+        fileName: file?.name || `Photo ${photoIndex}`,
+        photoIndex,
+        photoDataUrl: optimizedPhotoDataUrl,
+        message: "WearCast could not confidently detect an item in this photo. Try a clearer, tighter shot with the clothing piece filling more of the frame.",
+      };
+    }
+
+    return {
+      status: "accepted",
+      fileName: file?.name || `Photo ${photoIndex}`,
+      photoIndex,
+      photoDataUrl: optimizedPhotoDataUrl,
+      items: detectedItems.map((item, itemIndex) => ({
+        ...item,
+        id: item.id || `detected-${Date.now()}-${photoIndex}-${itemIndex}`,
+        batchSourceLabel: `Photo ${photoIndex}`,
+        batchSourceIndex: photoIndex,
+      })),
+    };
+  } catch (err) {
+    console.error("item photo error:", err);
+    return {
+      status: "rejected",
+      fileName: file?.name || `Photo ${photoIndex}`,
+      photoIndex,
+      photoDataUrl: optimizedPhotoDataUrl,
+      message: "WearCast could not analyze this photo. Try another image with the clothing item more clearly visible.",
+    };
+  }
+}
+
+async function processSelectedItemPhotos(files, { reset = true } = {}) {
+  const usableFiles = (Array.isArray(files) ? files : []).filter((file) => file?.type?.startsWith("image/"));
+  if (!usableFiles.length) return false;
+  const existingAcceptedPhotos = itemImportSession.acceptedPhotos || 0;
+  const existingRejectedPhotos = itemImportSession.rejectedPhotos || 0;
+  const existingTotalPhotos = itemImportSession.totalPhotos || 0;
+  const existingBatchCount = itemBatchItems.length;
+
+  if (reset) {
+    clearItemBatch();
+    itemRejectedPhotos = [];
+    clearItemImportSession();
+    setItemQueuedPhotoPreviews(usableFiles);
+    itemProcessingPlaceholders = usableFiles.length;
+    itemImportSession = { totalPhotos: usableFiles.length, acceptedPhotos: 0, rejectedPhotos: 0 };
+    pendingPhotoDataUrl = null;
+    resetPendingItemForm();
+  } else {
+    appendItemQueuedPhotoPreviews(usableFiles);
+    itemProcessingPlaceholders += usableFiles.length;
+    itemImportSession.totalPhotos = existingTotalPhotos + usableFiles.length;
+  }
+
+  setItemFlowStep("scanning");
+  renderItemBatchReview();
+  isReadingItemPhoto = true;
+  isAnalyzingItemPhoto = true;
+  updateItemSaveState();
+  setItemPhotoStatus(
+    usableFiles.length > 1
+      ? `Scanning ${usableFiles.length} photos in parallel…`
+      : "Preparing your image…",
+    true
+  );
+
+  try {
+    const results = await Promise.all(usableFiles.map((file, index) => analyzeSelectedItemPhotoFile(file, {
+      photoIndex: index + 1,
+    })));
+    const acceptedResults = results.filter((entry) => entry.status === "accepted");
+    const rejectedResults = results.filter((entry) => entry.status === "rejected");
+
+    const appendedItems = acceptedResults.flatMap((entry) => entry.items || []);
+    itemBatchItems = reset ? appendedItems : [...itemBatchItems, ...appendedItems];
+    itemRejectedPhotos = reset ? rejectedResults : [...itemRejectedPhotos, ...rejectedResults];
+    itemProcessingPlaceholders = Math.max(itemProcessingPlaceholders - usableFiles.length, 0);
+    itemImportSession = {
+      totalPhotos: reset ? usableFiles.length : existingTotalPhotos + usableFiles.length,
+      acceptedPhotos: (reset ? 0 : existingAcceptedPhotos) + acceptedResults.length,
+      rejectedPhotos: (reset ? 0 : existingRejectedPhotos) + rejectedResults.length,
+    };
+
+    if (itemBatchItems.length) {
+      activeItemBatchIndex = reset ? 0 : Math.max(activeItemBatchIndex, 0);
+      const preferredItem = itemBatchItems[activeItemBatchIndex] || itemBatchItems[existingBatchCount] || itemBatchItems[0];
+      pendingPhotoDataUrl = preferredItem?.sourcePhotoDataUrl || acceptedResults[0]?.photoDataUrl || pendingPhotoDataUrl || null;
+      pendingCropPhotoDataUrl = preferredItem?.cropPhotoDataUrl || null;
+      pendingCropConfidence = preferredItem?.cropConfidence || "none";
+      if (preferredItem) fillItemForm(preferredItem);
+      setItemMoreDetailsOpen(false);
+      setItemFlowStep("review");
+      setItemPhotoStatus(
+        rejectedResults.length
+          ? `Detected ${itemBatchItems.length} item${itemBatchItems.length === 1 ? "" : "s"}. ${rejectedResults.length} photo${rejectedResults.length === 1 ? "" : "s"} need another shot.`
+          : `Detected ${itemBatchItems.length} item${itemBatchItems.length === 1 ? "" : "s"} from your photo${usableFiles.length === 1 ? "" : "s"}.`,
+        false,
+        rejectedResults.length ? "warning" : "success"
+      );
+      if (rejectedResults.length) {
+        showAppToast(
+          `${rejectedResults.length} photo${rejectedResults.length === 1 ? "" : "s"} need another shot.`,
+          "warning",
+          {
+            clickable: true,
+            clickLabel: "Open photo recovery options",
+            onClick: () => openRejectedPhotoDialog(0),
+          }
+        );
+      }
+      updateItemVisual();
+      renderItemBatchReview();
+      return true;
+    }
+
+    if (reset) {
+      rejectPendingItemPhoto(
+        rejectedResults[0]?.message || "These photos need another shot before WearCast can detect the item reliably."
+      );
+    } else {
+      setItemFlowStep("review");
+      setItemPhotoStatus(
+        rejectedResults.length === 1
+          ? "That photo needs another shot before WearCast can detect the item reliably."
+          : "Those photos need another shot before WearCast can detect the items reliably.",
+        false,
+        "warning"
+      );
+    }
+    if (rejectedResults.length) {
+      showAppToast(
+        rejectedResults.length === 1
+          ? "1 photo needs another shot. Tap to recover it manually."
+          : `${rejectedResults.length} photos need another shot. Tap to review them.`,
+        "warning",
+        {
+          clickable: true,
+          clickLabel: "Open photo recovery options",
+          onClick: () => openRejectedPhotoDialog(0),
+        }
+      );
+    }
+    renderItemBatchReview();
+    return false;
+  } finally {
+    itemProcessingPlaceholders = 0;
+    isReadingItemPhoto = false;
+    isAnalyzingItemPhoto = false;
+    resolveItemFlowAfterScanning();
+    updateItemQueueSummary();
+    updateItemSaveState();
+  }
+}
+
+async function persistNewWardrobeItems(itemsToSave) {
+  const savedItems = [];
+  const skippedItems = [];
+  const currentItems = Array.isArray(_wardrobeCache) ? [..._wardrobeCache] : await loadWardrobeAsync();
+  const existingSignatures = new Set(currentItems.map((item) => normalizeItemSignature(item)));
+
+  for (const item of itemsToSave) {
+    const normalizedMedia = normalizeWardrobeItemMedia(item);
+    const normalized = {
+      type: normalizedMedia.type,
+      name: normalizedMedia.name,
+      color: normalizedMedia.color || null,
+      material: normalizedMedia.material || null,
+      careInstructions: normalizeCareInstructionsInput(item.careInstructions),
+      sourcePhotoDataUrl: normalizedMedia.sourcePhotoDataUrl || pendingPhotoDataUrl || null,
+      cropPhotoDataUrl: normalizedMedia.cropPhotoDataUrl || null,
+      cropConfidence: normalizedMedia.cropConfidence || "none",
+      photoDataUrl: getItemDisplayPhoto(normalizedMedia) || pendingPhotoDataUrl || null,
+      favorite: !!item.favorite,
+    };
+    const signature = normalizeItemSignature(normalized);
+    if (!normalized.type || !normalized.name || existingSignatures.has(signature)) {
+      skippedItems.push(normalized);
+      continue;
+    }
+
+    if (isLoggedIn()) {
+      const res = await authFetch(`${API_BASE}/api/wardrobe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(normalized),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) return null;
+      if (!res.ok) throw new Error(data.error || "Could not save wardrobe item");
+      savedItems.unshift(data);
+    } else {
+      savedItems.unshift({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        ...normalized,
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    existingSignatures.add(signature);
+  }
+
+  saveWardrobe([...savedItems, ...currentItems]);
+  return { savedItems, skippedItems };
 }
 
 function updateScanState(scanning) {
@@ -3722,132 +6644,273 @@ function pendingScanImageReady() {
   return !!window.__wearcastScanImageDataUrl;
 }
 
+function getNextItemFlowStep() {
+  if (itemFlowStep === "capture") return "confirm";
+  if (itemFlowStep === "review") return "review";
+  return "confirm";
+}
+
+function getPreviousItemFlowStep() {
+  if (editingItemId) {
+    return "confirm";
+  }
+  if (itemFlowStep === "confirm") return itemBatchItems.length || itemRejectedPhotos.length ? "review" : "capture";
+  if (itemFlowStep === "review") return "capture";
+  return "capture";
+}
+
+async function handleItemPrimaryAction() {
+  if (isSavingItem || isReadingItemPhoto || isAnalyzingItemPhoto) return;
+  if (itemFlowStep === "review") {
+    const keptItems = itemBatchItems.filter((item) => item.kept !== false);
+    if (!keptItems.length) {
+      if (itemRejectedPhotos.length) {
+        showAppToast("All detected items were discarded. Fix a flagged photo or add another.", "warning");
+      } else if (itemBatchItems.length) {
+        showAppToast("Keep at least one detected item or add another photo.", "warning");
+      } else {
+        showAppToast("Add a photo to get started.", "warning");
+      }
+      setItemFormError("Keep at least one detected item or add a different photo.");
+      return;
+    }
+    const incomplete = keptItems.find((item) => !item.type || !item.name);
+    if (incomplete) {
+      const idx = itemBatchItems.findIndex((item) => item === incomplete);
+      showAppToast(
+        `"${incomplete.name || incomplete.type || "One item"}" is missing a type or name. Tap it to finish.`,
+        "warning"
+      );
+      if (idx >= 0) openBatchEditDialog(idx);
+      return;
+    }
+    await saveItem();
+    return;
+  }
+  if (itemFlowStep === "confirm") {
+    const type = els.itemType?.value?.trim();
+    const name = els.itemName?.value?.trim();
+    if (!type || !name) {
+      showAppToast(
+        !type && !name ? "Add a type and name before saving." : !type ? "Pick a type before saving." : "Add a name before saving.",
+        "warning"
+      );
+      // let validateItemForm inside saveItem highlight the fields
+    }
+  }
+  const saved = await saveItem();
+  if (saved && !editingItemId && hasItemImportSession()) updateItemSaveState();
+}
+
+function handleItemBackAction() {
+  if (isSavingItem || isReadingItemPhoto || isAnalyzingItemPhoto) return;
+  if (itemFlowStep === "capture" && !editingItemId) {
+    closeItemDialog();
+    return;
+  }
+  setItemFlowStep(getPreviousItemFlowStep(), { focus: false });
+}
+
 function openItemDialog(item = null, preset = null) {
   editingItemId = item?.id || null;
   isSavingItem = false;
   isReadingItemPhoto = false;
   isAnalyzingItemPhoto = false;
-  updateItemSaveState();
+  clearItemBatch();
   els.itemForm.reset();
   pendingPhotoDataUrl = null;
+  pendingCropPhotoDataUrl = null;
+  pendingCropConfidence = "none";
+  if (els.itemPhoto) els.itemPhoto.value = "";
+  if (els.itemGalleryPhotos) els.itemGalleryPhotos.value = "";
+  if (els.itemPhotoImg) els.itemPhotoImg.src = "";
+  if (els.itemFavorite) els.itemFavorite.checked = false;
+  resetItemPhotoQueue();
   setItemPhotoStatus("");
   clearItemValidationErrors();
   setItemMoreDetailsOpen(false);
+  itemFlowStep = "capture";
 
+  els.itemDialog.classList.toggle("is-edit-mode", !!item);
+  const editingNeedsReview = !!item && itemNeedsMetadataReview(item);
+  els.itemDialog.classList.toggle("is-needs-review", editingNeedsReview);
+  const colorMissing = editingNeedsReview && !item?.color;
+  const materialMissing = editingNeedsReview && !item?.material;
+  els.itemColor?.closest(".form-group")?.classList.toggle("is-needs-review", colorMissing);
+  els.itemMaterial?.closest(".form-group")?.classList.toggle("is-needs-review", materialMissing);
+  els.itemEditColor?.closest(".form-group")?.classList.toggle("is-needs-review", colorMissing);
+  els.itemEditMaterial?.closest(".form-group")?.classList.toggle("is-needs-review", materialMissing);
+  if (els.itemFlowKicker) {
+    els.itemFlowKicker.style.display = item ? "none" : "";
+  }
   if (item) {
+    const normalizedItem = normalizeWardrobeItemMedia(item);
     els.itemDialogTitle = $("itemDialogTitle");
-    if (els.itemDialogTitle) els.itemDialogTitle.textContent = "Edit Clothing Item";
-    els.itemType.value = item.type || "";
-    els.itemName.value = item.name || "";
-    els.itemColor.value = item.color || "";
-    els.itemMaterial.value = item.material || "";
-    els.itemCare.value = (item.careInstructions || []).join(", ");
-    setItemMoreDetailsOpen(!!(item.color || item.material || item.careInstructions?.length));
-    if (item.photoDataUrl) {
-      pendingPhotoDataUrl = item.photoDataUrl;
-      els.itemPhotoImg.src = item.photoDataUrl;
+    if (els.itemDialogTitle) els.itemDialogTitle.textContent = "Edit item";
+    els.itemType.value = normalizedItem.type || "";
+    els.itemName.value = normalizedItem.name || "";
+    els.itemColor.value = normalizedItem.color || "";
+    els.itemMaterial.value = normalizedItem.material || "";
+    els.itemCare.value = (normalizedItem.careInstructions || []).join(", ");
+    if (els.itemFavorite) els.itemFavorite.checked = !!normalizedItem.favorite;
+    syncCompactEditFieldsFromPrimary();
+    setItemMoreDetailsOpen(!!(normalizedItem.color || normalizedItem.material || normalizedItem.careInstructions?.length));
+    if (getItemSourcePhoto(normalizedItem)) {
+      pendingPhotoDataUrl = getItemSourcePhoto(normalizedItem);
+      pendingCropPhotoDataUrl = normalizedItem.cropPhotoDataUrl || null;
+      pendingCropConfidence = normalizedItem.cropConfidence || (normalizedItem.cropPhotoDataUrl ? "trusted" : "none");
+      els.itemPhotoImg.src = getItemDisplayPhoto(normalizedItem) || getItemSourcePhoto(normalizedItem);
     }
     els.itemDeleteBtn.style.display = "inline-flex";
-    revealItemManualDetails();
+    setItemFlowStep("confirm");
   } else {
     const title = $("itemDialogTitle");
-    if (title) title.textContent = "Add Clothing Item";
+    if (title) title.textContent = "Add items";
     els.itemDeleteBtn.style.display = "none";
-    els.itemManualDetails?.removeAttribute("open");
     if (preset?.type) els.itemType.value = preset.type;
     if (preset?.name) els.itemName.value = preset.name;
-    if (preset?.type || preset?.name) revealItemManualDetails();
+    if (preset?.type || preset?.name) setItemFlowStep("confirm");
   }
 
+  renderItemBatchReview();
   updateItemVisual();
+  syncCompactEditFieldsFromPrimary();
+  if (!item && !(preset?.type || preset?.name)) {
+    setItemFlowStep("capture");
+  }
   updateItemSaveState();
 
   if (typeof els.itemDialog.showModal === "function") els.itemDialog.showModal();
 }
 
 function closeItemDialog() {
+  resetItemPhotoQueue();
   if (typeof els.itemDialog.close === "function") els.itemDialog.close();
 }
 
-async function saveItem() {
-  if (isSavingItem || isReadingItemPhoto) return;
-  if (!validateItemForm()) return;
-  const type = els.itemType.value.trim();
-  const name = els.itemName.value.trim();
+async function removeCurrentItemPhoto() {
+  pendingPhotoDataUrl = null;
+  pendingCropPhotoDataUrl = null;
+  pendingCropConfidence = "none";
+  clearItemBatch();
+  if (els.itemPhoto) els.itemPhoto.value = "";
+  if (els.itemPhotoImg) els.itemPhotoImg.src = "";
+  setItemPhotoStatus("");
 
-  const careRaw = els.itemCare.value.trim();
-  const careInstructions = careRaw ? careRaw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean) : [];
-  const existingItems = editingItemId ? await loadWardrobeAsync() : [];
-  const existingItem = editingItemId
-    ? existingItems.find((item) => String(item.id) === String(editingItemId))
-    : null;
-
-  const itemData = {
-    type, name,
-    color: els.itemColor.value.trim() || null,
-    material: els.itemMaterial.value.trim() || null,
-    careInstructions,
-    photoDataUrl: pendingPhotoDataUrl || null,
-    favorite: !!existingItem?.favorite,
-  };
-
-  if (await hasDuplicateWardrobeItem(itemData, editingItemId)) {
-    els.itemManualDetails?.setAttribute("open", "open");
-    setItemFormError("This item already exists in your wardrobe. Edit the existing item or change the name/details.");
+  if (editingItemId) {
+    updateItemVisual();
+    updateItemSaveState();
     return;
   }
+  resetNewItemFlow("");
+}
+
+function toggleCurrentBatchItemKept() {
+  const item = currentBatchItem();
+  if (!item) return;
+  item.kept = item.kept === false;
+  renderItemBatchReview();
+  updateItemSaveState();
+}
+
+async function saveItem() {
+  if (isSavingItem || isReadingItemPhoto) return false;
+  if (!validateItemForm()) return false;
+  syncActiveBatchItemFromForm();
 
   isSavingItem = true;
   updateItemSaveState();
 
   try {
-    if (isLoggedIn()) {
-      let savedItem = null;
-      if (editingItemId) {
+    if (editingItemId) {
+      const existingItems = await loadWardrobeAsync();
+      const existingItem = existingItems.find((item) => String(item.id) === String(editingItemId));
+      const itemData = {
+        ...collectItemFormData(),
+        color: normalizeWardrobeColorValue(els.itemColor.value.trim()) || null,
+        material: normalizeWardrobeMaterialValue(els.itemMaterial.value.trim()) || null,
+        favorite: !!els.itemFavorite?.checked,
+      };
+
+      if (await hasDuplicateWardrobeItem(itemData, editingItemId)) {
+        setItemFlowStep("confirm", { focus: true });
+        setItemFormError("This item already exists in your wardrobe. Edit the existing item or change the name/details.");
+        return false;
+      }
+
+      if (isLoggedIn()) {
         const res = await authFetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(itemData),
         });
         const data = await res.json().catch(() => ({}));
-        if (res.status === 401) return;
+        if (res.status === 401) return false;
         if (!res.ok) throw new Error(data.error || "Could not update wardrobe item");
-        savedItem = data;
+        markWardrobeItemsHighlighted([data?.id || editingItemId]);
+        saveWardrobe(existingItems.map((item) => String(item.id) === String(editingItemId) ? data : item));
       } else {
-        const res = await authFetch(`${API_BASE}/api/wardrobe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(itemData),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (res.status === 401) return;
-        if (!res.ok) throw new Error(data.error || "Could not save wardrobe item");
-        savedItem = data;
+        const items = loadWardrobeLocal();
+        const idx = items.findIndex((item) => item.id === editingItemId);
+        if (idx !== -1) {
+          items[idx] = normalizeWardrobeItemMedia({
+            ...items[idx],
+            ...itemData,
+            sourcePhotoDataUrl: itemData.sourcePhotoDataUrl || items[idx].sourcePhotoDataUrl || pendingPhotoDataUrl || null,
+            cropPhotoDataUrl: itemData.cropPhotoDataUrl || items[idx].cropPhotoDataUrl || null,
+            cropConfidence: itemData.cropConfidence || items[idx].cropConfidence || "none",
+          });
+          markWardrobeItemsHighlighted([items[idx].id]);
+        }
+        saveWardrobeLocal(items);
       }
-      const currentItems = Array.isArray(_wardrobeCache) ? [..._wardrobeCache] : await loadWardrobeAsync();
-      const nextItems = editingItemId
-        ? currentItems.map((item) => String(item.id) === String(editingItemId) ? savedItem : item)
-        : [savedItem, ...currentItems];
-      saveWardrobe(nextItems);
+
+      await renderWardrobe();
+      closeItemDialog();
+      showAppToast("Item updated", "success");
+      return true;
     } else {
-      const items = loadWardrobeLocal();
-      if (editingItemId) {
-        const idx = items.findIndex(i => i.id === editingItemId);
-        if (idx !== -1) items[idx] = { ...items[idx], ...itemData, photoDataUrl: pendingPhotoDataUrl || items[idx].photoDataUrl || null };
-      } else {
-        items.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), ...itemData, createdAt: new Date().toISOString() });
+      const itemsToSave = itemBatchItems.length
+        ? itemBatchItems.filter((item) => item.kept !== false)
+        : [collectItemFormData()];
+      const result = await persistNewWardrobeItems(itemsToSave);
+      if (!result) return false;
+      markWardrobeItemsHighlighted(result.savedItems.map((item) => item?.id));
+      await renderWardrobe();
+
+      const savedCount = result.savedItems.length;
+      const skippedCount = result.skippedItems.length;
+      if (!savedCount) {
+        setItemFlowStep(itemBatchItems.length ? "review" : "confirm", { focus: !itemBatchItems.length });
+        setItemFormError(skippedCount ? "Those items already exist in your wardrobe. Adjust the details or use a different photo." : "No items were saved.");
+        return false;
       }
-      saveWardrobeLocal(items);
+
+      resetNewItemFlow(
+        skippedCount
+          ? `Saved ${savedCount} item${savedCount === 1 ? "" : "s"}. Skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}. Add another photo when you're ready.`
+          : `Saved ${savedCount} item${savedCount === 1 ? "" : "s"}. Add another photo when you're ready.`
+      );
+      return true;
     }
-    await renderWardrobe();
-    closeItemDialog();
   } catch (err) {
     console.error("save item error:", err);
-    els.itemManualDetails?.setAttribute("open", "open");
+    setItemFlowStep(itemBatchItems.length ? "review" : "confirm", { focus: !itemBatchItems.length });
     setItemFormError(err.message || "Could not save that item. Check the details and try again.");
   } finally {
     isSavingItem = false;
     updateItemSaveState();
+  }
+  return false;
+}
+
+function requestDeleteItem() {
+  if (!editingItemId) return;
+  if (els.deleteItemConfirmDialog?.showModal) {
+    els.deleteItemConfirmDialog.showModal();
+  } else {
+    // Fallback: confirm() can't be guaranteed in Capacitor web views
+    deleteItem();
   }
 }
 
@@ -3856,12 +6919,15 @@ async function deleteItem() {
 
   if (isLoggedIn()) {
     try {
-      await authFetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
+      const res = await authFetch(`${API_BASE}/api/wardrobe/${editingItemId}`, {
         method: "DELETE",
         headers: {},
       });
+      if (!res.ok && res.status !== 404) throw new Error("Server responded " + res.status);
     } catch (err) {
       console.error("delete item error:", err);
+      showAppToast("Could not delete item", "error");
+      return;
     }
   } else {
     const items = loadWardrobeLocal().filter(i => i.id !== editingItemId);
@@ -3870,6 +6936,66 @@ async function deleteItem() {
 
   await renderWardrobe();
   closeItemDialog();
+  showAppToast("Item deleted", "success");
+}
+
+function buildItemDetailTags(item = {}) {
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  const recommendationUsage = getItemRecommendationUsage(normalizedItem);
+  const tags = [];
+  if (normalizedItem.favorite) tags.push("Favorite");
+  tags.push(getWardrobeSubtype(normalizedItem) || getWardrobeCategoryLabel(getWardrobeCategory(normalizedItem)));
+  if (normalizedItem.color) tags.push(normalizeWardrobeColorValue(normalizedItem.color));
+  if (normalizedItem.material) tags.push(normalizeWardrobeMaterialValue(normalizedItem.material));
+  if (itemNeedsMetadataReview(normalizedItem)) tags.push("Needs review");
+  if (recommendationUsage.latestMatched) tags.push("In today’s look");
+  if (/\b(rain|waterproof|shell|trench|boot)\b/i.test(`${normalizedItem.type || ""} ${normalizedItem.name || ""}`)) tags.push("Works in rain");
+  if (/\b(cardigan|shirt|tee|t-shirt|sweater|hoodie|jacket|coat|vest)\b/i.test(`${normalizedItem.type || ""} ${normalizedItem.name || ""}`)) tags.push("Layer-ready");
+  return [...new Set(tags)].slice(0, 4);
+}
+
+function openItemDetailDialog(item) {
+  if (!item) return;
+  openWardrobeItemViewer(item.id);
+}
+
+async function openWardrobeItemActionsDialog(itemId) {
+  if (!els.wardrobeItemActionsBody || !els.wardrobeItemActionsDialog) return;
+  const items = await loadWardrobeAsync();
+  const item = items.find((entry) => String(entry.id) === String(itemId));
+  if (!item) return;
+  const normalizedItem = normalizeWardrobeItemMedia(item);
+  const favoriteLabel = normalizedItem.favorite ? "Remove from favorites" : "Add to favorites";
+  els.wardrobeItemActionsBody.innerHTML = `
+    <div class="wardrobe-item-actions-card">
+      <strong>${escapeHtml(normalizedItem.name || "Wardrobe item")}</strong>
+      <span>${escapeHtml([getWardrobeSubtype(normalizedItem), normalizeWardrobeColorValue(normalizedItem.color)].filter(Boolean).join(" · ") || "Quick ways to manage this piece.")}</span>
+    </div>
+    <div class="wardrobe-item-actions-list">
+      <button type="button" class="settings-row" data-wardrobe-action="favorite" data-wardrobe-item-id="${escapeHtml(String(normalizedItem.id))}">
+        <div class="settings-copy">
+          <strong>${escapeHtml(favoriteLabel)}</strong>
+          <span>Keep this piece easier to find in your collection.</span>
+        </div>
+        <span class="settings-chevron">›</span>
+      </button>
+      <button type="button" class="settings-row" data-wardrobe-action="edit" data-wardrobe-item-id="${escapeHtml(String(normalizedItem.id))}">
+        <div class="settings-copy">
+          <strong>Edit</strong>
+          <span>Adjust the details, crop, or metadata.</span>
+        </div>
+        <span class="settings-chevron">›</span>
+      </button>
+      <button type="button" class="settings-row settings-row-danger" data-wardrobe-action="delete" data-wardrobe-item-id="${escapeHtml(String(normalizedItem.id))}">
+        <div class="settings-copy">
+          <strong>Delete</strong>
+          <span>Remove this item from your wardrobe.</span>
+        </div>
+        <span class="settings-chevron">›</span>
+      </button>
+    </div>
+  `;
+  els.wardrobeItemActionsDialog.showModal?.();
 }
 
 function readFileAsDataUrl(file) {
@@ -3881,119 +7007,682 @@ function readFileAsDataUrl(file) {
   });
 }
 
-async function optimizeImageDataUrl(file, { maxEdge = 1600, quality = 0.82 } = {}) {
-  const sourceDataUrl = await readFileAsDataUrl(file);
-  const image = await new Promise((resolve, reject) => {
+function loadImageFromDataUrl(sourceDataUrl) {
+  return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error("Failed to process image"));
+    img.onerror = () => reject(new Error("Failed to load image"));
     img.src = sourceDataUrl;
   });
+}
 
-  const longestEdge = Math.max(image.width, image.height) || 1;
-  const scale = Math.min(1, maxEdge / longestEdge);
-  const width = Math.max(1, Math.round(image.width * scale));
-  const height = Math.max(1, Math.round(image.height * scale));
+function estimateDataUrlBytes(dataUrl = "") {
+  const commaIndex = String(dataUrl || "").indexOf(",");
+  if (commaIndex < 0) return String(dataUrl || "").length;
+  const base64Length = dataUrl.length - commaIndex - 1;
+  return Math.floor((base64Length * 3) / 4);
+}
 
+function drawImageToCanvas(image, width, height) {
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return sourceDataUrl;
+  if (!ctx) return null;
   ctx.drawImage(image, 0, 0, width, height);
+  return canvas;
+}
 
-  return canvas.toDataURL("image/jpeg", quality);
+async function compressLoadedImageToDataUrl(image, {
+  maxEdge = 1280,
+  quality = 0.76,
+  minQuality = 0.5,
+  maxBytes = 700 * 1024,
+  format = "image/jpeg",
+} = {}) {
+  let width = Math.max(1, Math.round(image.width || 1));
+  let height = Math.max(1, Math.round(image.height || 1));
+  const longestEdge = Math.max(width, height) || 1;
+  const initialScale = Math.min(1, maxEdge / longestEdge);
+  width = Math.max(1, Math.round(width * initialScale));
+  height = Math.max(1, Math.round(height * initialScale));
+
+  let currentQuality = quality;
+  let output = "";
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    const canvas = drawImageToCanvas(image, width, height);
+    if (!canvas) throw new Error("Failed to process image");
+    output = canvas.toDataURL(format, currentQuality);
+    if (estimateDataUrlBytes(output) <= maxBytes || (currentQuality <= minQuality && attempt >= 2)) {
+      return output;
+    }
+    currentQuality = Math.max(minQuality, Number((currentQuality - 0.08).toFixed(2)));
+    width = Math.max(1, Math.round(width * 0.88));
+    height = Math.max(1, Math.round(height * 0.88));
+  }
+
+  return output;
+}
+
+async function optimizeImageDataUrl(file, { maxEdge = 1280, quality = 0.76, maxBytes = 700 * 1024 } = {}) {
+  const sourceDataUrl = await readFileAsDataUrl(file);
+  const image = await loadImageFromDataUrl(sourceDataUrl).catch(() => {
+    throw new Error("Failed to process image");
+  });
+  return compressLoadedImageToDataUrl(image, { maxEdge, quality, maxBytes });
+}
+
+function buildPhotoQualityMessage(quality = null) {
+  const issueLabels = {
+    "low-resolution": "low-resolution",
+    dark: "dark",
+    "washed out": "washed out",
+    flat: "flat",
+    blurry: "blurry",
+    busy: "busy",
+    "background-focused": "focused on the background",
+  };
+  const issues = (Array.isArray(quality?.issues) ? quality.issues : []).map((issue) => issueLabels[issue] || issue);
+  if (!issues.length) return "This photo is too low quality for reliable item detection.";
+  const issueList = issues.length === 1
+    ? issues[0]
+    : `${issues.slice(0, -1).join(", ")}, and ${issues[issues.length - 1]}`;
+  return `This photo is too ${issueList} for reliable item detection. Use a brighter, sharper photo with the clothing item clearly visible.`;
+}
+
+async function assessItemPhotoQuality(sourceDataUrl) {
+  const image = await loadImageFromDataUrl(sourceDataUrl);
+  const minEdge = Math.min(image.width, image.height);
+  const totalPixels = image.width * image.height;
+
+  const sampleMaxEdge = 220;
+  const scale = Math.min(1, sampleMaxEdge / Math.max(image.width, image.height, 1));
+  const width = Math.max(48, Math.round(image.width * scale));
+  const height = Math.max(48, Math.round(image.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return { ok: true, issues: [], metrics: null };
+
+  ctx.drawImage(image, 0, 0, width, height);
+  const { data } = ctx.getImageData(0, 0, width, height);
+  const grayscale = new Float32Array(width * height);
+  let brightnessSum = 0;
+
+  for (let index = 0; index < grayscale.length; index += 1) {
+    const offset = index * 4;
+    const luma = 0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2];
+    grayscale[index] = luma;
+    brightnessSum += luma;
+  }
+
+  const brightness = brightnessSum / Math.max(1, grayscale.length);
+  let contrastAccumulator = 0;
+  for (let index = 0; index < grayscale.length; index += 1) {
+    const delta = grayscale[index] - brightness;
+    contrastAccumulator += delta * delta;
+  }
+  const contrast = Math.sqrt(contrastAccumulator / Math.max(1, grayscale.length));
+
+  let laplacianSum = 0;
+  let laplacianSquaredSum = 0;
+  let laplacianCount = 0;
+  let totalEdgeEnergy = 0;
+  let centerEdgeEnergy = 0;
+  let busyPixels = 0;
+  const centerLeft = Math.floor(width * 0.2);
+  const centerRight = Math.ceil(width * 0.8);
+  const centerTop = Math.floor(height * 0.2);
+  const centerBottom = Math.ceil(height * 0.8);
+  for (let y = 1; y < height - 1; y += 1) {
+    for (let x = 1; x < width - 1; x += 1) {
+      const index = y * width + x;
+      const center = grayscale[index];
+      const laplacian = (4 * center)
+        - grayscale[index - 1]
+        - grayscale[index + 1]
+        - grayscale[index - width]
+        - grayscale[index + width];
+      laplacianSum += laplacian;
+      laplacianSquaredSum += laplacian * laplacian;
+      laplacianCount += 1;
+
+      const gradientX = grayscale[index + 1] - grayscale[index - 1];
+      const gradientY = grayscale[index + width] - grayscale[index - width];
+      const edgeEnergy = Math.abs(gradientX) + Math.abs(gradientY);
+      totalEdgeEnergy += edgeEnergy;
+      if (edgeEnergy > 48) busyPixels += 1;
+      if (x >= centerLeft && x <= centerRight && y >= centerTop && y <= centerBottom) {
+        centerEdgeEnergy += edgeEnergy;
+      }
+    }
+  }
+
+  const laplacianMean = laplacianSum / Math.max(1, laplacianCount);
+  const sharpness = (laplacianSquaredSum / Math.max(1, laplacianCount)) - (laplacianMean * laplacianMean);
+  const textureDensity = busyPixels / Math.max(1, laplacianCount);
+  const centerFocusRatio = centerEdgeEnergy / Math.max(1, totalEdgeEnergy);
+  const outerFocusRatio = Math.max(0, 1 - centerFocusRatio);
+
+  const issues = [];
+  let penalty = 0;
+
+  if (minEdge < 320 || totalPixels < 180000) {
+    issues.push("low-resolution");
+    penalty += minEdge < 260 ? 2 : 1;
+  }
+  if (brightness < 42) {
+    issues.push("dark");
+    penalty += brightness < 28 ? 2 : 1;
+  } else if (brightness > 238) {
+    issues.push("washed out");
+    penalty += brightness > 246 ? 2 : 1;
+  }
+  if (contrast < 24) {
+    issues.push("flat");
+    penalty += contrast < 16 ? 2 : 1;
+  }
+  if (sharpness < 110) {
+    issues.push("blurry");
+    penalty += sharpness < 65 ? 2 : 1;
+  }
+  if (textureDensity > 0.34 && centerFocusRatio < 0.5) {
+    issues.push("busy");
+    penalty += textureDensity > 0.42 ? 2 : 1;
+  }
+  if (centerFocusRatio < 0.34 && outerFocusRatio > 0.66) {
+    issues.push("background-focused");
+    penalty += centerFocusRatio < 0.28 ? 2 : 1;
+  }
+
+  return {
+    ok: penalty < 2,
+    issues,
+    metrics: {
+      minEdge,
+      totalPixels,
+      brightness: Number(brightness.toFixed(1)),
+      contrast: Number(contrast.toFixed(1)),
+      sharpness: Number(sharpness.toFixed(1)),
+      textureDensity: Number(textureDensity.toFixed(3)),
+      centerFocusRatio: Number(centerFocusRatio.toFixed(3)),
+    },
+  };
+}
+
+function rejectPendingItemPhoto(message) {
+  pendingPhotoDataUrl = null;
+  pendingCropPhotoDataUrl = null;
+  pendingCropConfidence = "none";
+  clearItemBatch();
+  if (els.itemPhoto) els.itemPhoto.value = "";
+  if (els.itemPhotoImg) els.itemPhotoImg.src = "";
+  setItemFlowStep("capture");
+  setItemPhotoStatus(message, false, "warning");
+  if (message) showAppToast(message, "warning");
+  updateItemVisual();
+  updateItemSaveState();
+}
+
+function openWardrobeFilterDialog() {
+  if (!els.wardrobeFilterDialog) return;
+  const items = Array.isArray(_wardrobeCache) ? _wardrobeCache : loadWardrobeLocal();
+  const colors = [...new Set(items.map((item) => normalizeFilterValue(item.color)).filter(Boolean))].sort();
+  const materials = [...new Set(items.map((item) => normalizeFilterValue(item.material)).filter(Boolean))].sort();
+  if (els.wardrobeColorFilter) {
+    els.wardrobeColorFilter.innerHTML = [
+      `<option value="all">All colors</option>`,
+      ...colors.map((color) => `<option value="${escapeHtml(color)}">${escapeHtml(color.charAt(0).toUpperCase() + color.slice(1))}</option>`),
+    ].join("");
+    els.wardrobeColorFilter.value = wardrobeFilterState.color || "all";
+  }
+  if (els.wardrobeMaterialFilter) {
+    els.wardrobeMaterialFilter.innerHTML = [
+      `<option value="all">All materials</option>`,
+      ...materials.map((material) => `<option value="${escapeHtml(material)}">${escapeHtml(material.charAt(0).toUpperCase() + material.slice(1))}</option>`),
+    ].join("");
+    els.wardrobeMaterialFilter.value = wardrobeFilterState.material || "all";
+  }
+  if (els.wardrobeSeasonFilter) {
+    els.wardrobeSeasonFilter.value = wardrobeFilterState.season || "all";
+  }
+  if (els.wardrobeSortFilter) {
+    els.wardrobeSortFilter.value = wardrobeFilterState.sort || "newest";
+  }
+  if (els.wardrobeRecentOnlyFilter) {
+    els.wardrobeRecentOnlyFilter.checked = !!wardrobeFilterState.recentOnly;
+  }
+  if (els.wardrobeMissingMetadataFilter) {
+    els.wardrobeMissingMetadataFilter.checked = !!wardrobeFilterState.missingMetadataOnly;
+  }
+  if (els.wardrobeMatchedFilter) {
+    els.wardrobeMatchedFilter.checked = !!wardrobeFilterState.matchedOnly;
+  }
+  els.wardrobeFilterDialog.showModal?.();
 }
 
 function bindWardrobeUI() {
+  const clearWardrobeLongPress = () => {
+    if (wardrobeLongPressTimerId) window.clearTimeout(wardrobeLongPressTimerId);
+    wardrobeLongPressTimerId = null;
+    wardrobeLongPressItemId = null;
+  };
+
   els.addItemBtn?.addEventListener("click", () => openItemDialog());
   els.itemManualToggleBtn?.addEventListener("click", () => revealItemManualDetails({ focus: true }));
-  els.wardrobeFilters?.addEventListener("click", async (event) => {
-    const favoritesButton = event.target.closest("[data-wardrobe-favorites]");
-    if (favoritesButton) {
-      wardrobeFilterState.favoritesOnly = !wardrobeFilterState.favoritesOnly;
-      await renderWardrobe();
+  els.itemNextPhotoBtn?.addEventListener("click", () => {
+    if (isSavingItem || isReadingItemPhoto || isAnalyzingItemPhoto) return;
+    setItemFlowStep("capture");
+    els.itemPhoto?.click?.();
+  });
+  els.itemEditDetailsBtn?.addEventListener("click", () => {
+    const nextOpen = !itemMoreDetailsOpen;
+    setItemMoreDetailsOpen(nextOpen);
+    updateItemSaveState();
+    if (nextOpen) window.setTimeout(() => els.itemColor?.focus?.(), 60);
+  });
+  els.itemBackBtn?.addEventListener("click", handleItemBackAction);
+  els.itemBatchKeepToggleBtn?.addEventListener("click", toggleCurrentBatchItemKept);
+  els.itemBatchList?.addEventListener("click", (event) => {
+    const discardButton = event.target.closest("[data-item-batch-discard]");
+    if (discardButton) {
+      const discardIndex = Number(discardButton.dataset.itemBatchDiscard);
+      if (Number.isFinite(discardIndex) && itemBatchItems[discardIndex]) {
+        itemBatchItems[discardIndex].kept = itemBatchItems[discardIndex].kept === false;
+        renderItemBatchReview();
+        updateItemSaveState();
+      }
+      return;
+    }
+    const batchButton = event.target.closest("[data-item-batch-index]");
+    if (!batchButton) return;
+    const nextIndex = Number(batchButton.dataset.itemBatchIndex);
+    activeItemBatchIndex = nextIndex;
+    renderItemBatchReview();
+    openBatchEditDialog(nextIndex);
+  });
+  els.itemRejectedList?.addEventListener("click", (event) => {
+    const actionButton = event.target.closest("[data-rejected-action]");
+    if (actionButton) {
+      const index = Number(actionButton.dataset.rejectedIndex || -1);
+      if (index < 0) return;
+      const entry = itemRejectedPhotos[index];
+      if (!entry) return;
+      const action = actionButton.dataset.rejectedAction;
+      if (action === "crop") {
+        openRejectedPhotoCropDialog(index);
+      } else if (action === "manual") {
+        createManualBatchItemFromRejected(entry, { cropRegion: null, entryIndex: index });
+      } else if (action === "skip") {
+        dismissRejectedPhoto(index);
+      }
+      return;
+    }
+    const card = event.target.closest(".item-rejected-card");
+    if (!card) return;
+    const cards = [...els.itemRejectedList.querySelectorAll(".item-rejected-card")];
+    const index = cards.indexOf(card);
+    if (index >= 0) openRejectedPhotoDialog(index);
+  });
+  els.itemBatchEditCloseBtn?.addEventListener("click", closeBatchEditDialog);
+  els.itemBatchEditSaveBtn?.addEventListener("click", saveBatchEditDialog);
+  els.itemBatchEditRemoveBtn?.addEventListener("click", toggleBatchEditItemKept);
+  els.itemBatchEditWrongCategoryBtn?.addEventListener("click", focusBatchEditType);
+  els.itemBatchEditNotItemBtn?.addEventListener("click", markBatchEditAsNotItem);
+  els.itemBatchEditCropBtn?.addEventListener("click", openBatchEditCropDialog);
+  els.itemBatchEditUseAnywayBtn?.addEventListener("click", keepBatchEditItemAnyway);
+  els.itemRejectedDialogCloseBtn?.addEventListener("click", closeRejectedPhotoDialog);
+  els.itemRejectedDialogSkipBtn?.addEventListener("click", () => {
+    if (activeRejectedPhotoIndex >= 0) dismissRejectedPhoto(activeRejectedPhotoIndex);
+    closeRejectedPhotoDialog();
+  });
+  els.itemRejectedDialogFullBtn?.addEventListener("click", async () => {
+    const entry = currentRejectedPhoto();
+    if (entry) await createManualBatchItemFromRejected(entry, { cropRegion: null, entryIndex: activeRejectedPhotoIndex });
+  });
+  els.itemRejectedDialogCropBtn?.addEventListener("click", async () => {
+    if (activeRejectedPhotoIndex >= 0) await openRejectedPhotoCropDialog(activeRejectedPhotoIndex, { restoreDialog: true });
+  });
+  els.itemCropCloseBtn?.addEventListener("click", () => closeItemCropDialog());
+  els.itemCropResetBtn?.addEventListener("click", () => {
+    if (!activeItemCropSession) return;
+    activeItemCropSession.region = getDefaultManualCropRegion();
+    renderItemCropSelection();
+    setItemCropStatus("");
+  });
+  els.itemCropApplyBtn?.addEventListener("click", async () => {
+    if (!activeItemCropSession) return;
+    const session = activeItemCropSession;
+    const region = normalizeManualCropRegion(session.region);
+    setItemCropStatus("Applying crop…");
+    els.itemCropApplyBtn.disabled = true;
+    try {
+      const cropPhotoDataUrl = await cropImageDataUrlToRegion(session.sourcePhotoDataUrl, region);
+      closeItemCropDialog({ restore: false });
+      await session.onApply?.({ cropPhotoDataUrl, region });
+    } catch (err) {
+      setItemCropStatus(err.message || "Couldn’t apply this crop. Try again.");
+    } finally {
+      if (els.itemCropApplyBtn) els.itemCropApplyBtn.disabled = false;
     }
   });
-  els.wardrobeFilters?.addEventListener("change", async (event) => {
-    const filter = event.target?.dataset?.wardrobeFilter;
-    if (filter === "category") {
-      wardrobeFilterState.category = event.target.value || "all";
+  els.itemCropSelection?.addEventListener("pointerdown", (event) => {
+    const mode = event.target.closest(".item-crop-handle") ? "resize" : "move";
+    beginItemCropPointerInteraction(event, mode);
+  });
+  els.itemCropSelection?.addEventListener("pointermove", updateItemCropPointerInteraction);
+  els.itemCropSelection?.addEventListener("pointerup", endItemCropPointerInteraction);
+  els.itemCropSelection?.addEventListener("pointercancel", endItemCropPointerInteraction);
+  els.itemCropStage?.addEventListener("pointermove", updateItemCropPointerInteraction);
+  els.itemCropStage?.addEventListener("pointerup", endItemCropPointerInteraction);
+  els.itemCropStage?.addEventListener("pointercancel", endItemCropPointerInteraction);
+  window.addEventListener("resize", renderItemCropSelection);
+  els.itemCropDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeItemCropDialog();
+  });
+  els.wardrobeFilters?.addEventListener("click", async (event) => {
+    const viewButton = event.target.closest("[data-wardrobe-view]");
+    if (viewButton) {
+      wardrobeFilterState.view = viewButton.dataset.wardrobeView || "all";
       await renderWardrobe();
+      return;
     }
-    if (filter === "color") {
-      wardrobeFilterState.color = event.target.value || "all";
-      await renderWardrobe();
+    const filterButton = event.target.closest("[data-open-wardrobe-filter]");
+    if (filterButton) {
+      openWardrobeFilterDialog();
+      return;
     }
-    if (filter === "sort") {
-      wardrobeFilterState.sort = event.target.value || "newest";
+    const categoryButton = event.target.closest("[data-wardrobe-category]");
+    if (categoryButton) {
+      wardrobeFilterState.category = categoryButton.dataset.wardrobeCategory || "all";
       await renderWardrobe();
+      return;
     }
   });
   els.wardrobeList?.addEventListener("click", async (event) => {
     const favoriteButton = event.target.closest("[data-wardrobe-favorite]");
-    if (!favoriteButton) return;
-    event.preventDefault();
-    event.stopPropagation();
-    await toggleWardrobeFavorite(favoriteButton.dataset.wardrobeFavorite);
+    if (favoriteButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      await toggleWardrobeFavorite(favoriteButton.dataset.wardrobeFavorite);
+      return;
+    }
+    const itemCard = event.target.closest("[data-id]");
+    if (!itemCard) return;
+    if (wardrobeLongPressHandled) {
+      wardrobeLongPressHandled = false;
+      return;
+    }
+    await openWardrobeItemViewer(itemCard.dataset.id, wardrobeVisibleItemIds);
   }, true);
+  els.wardrobeList?.addEventListener("pointerdown", (event) => {
+    const itemCard = event.target.closest("[data-id]");
+    if (!itemCard || event.target.closest("[data-wardrobe-favorite]")) return;
+    wardrobeLongPressHandled = false;
+    clearWardrobeLongPress();
+    wardrobeLongPressItemId = itemCard.dataset.id || null;
+    wardrobeLongPressTimerId = window.setTimeout(async () => {
+      wardrobeLongPressHandled = true;
+      const targetId = wardrobeLongPressItemId;
+      clearWardrobeLongPress();
+      if (targetId) await openWardrobeItemActionsDialog(targetId);
+    }, 420);
+  });
+  els.wardrobeList?.addEventListener("pointerup", clearWardrobeLongPress);
+  els.wardrobeList?.addEventListener("pointercancel", clearWardrobeLongPress);
+  els.wardrobeList?.addEventListener("pointermove", (event) => {
+    if (!wardrobeLongPressTimerId) return;
+    if (Math.abs(event.movementX || 0) > 8 || Math.abs(event.movementY || 0) > 8) {
+      clearWardrobeLongPress();
+    }
+  });
+  els.wardrobeList?.addEventListener("contextmenu", async (event) => {
+    const itemCard = event.target.closest("[data-id]");
+    if (!itemCard) return;
+    event.preventDefault();
+    clearWardrobeLongPress();
+    await openWardrobeItemActionsDialog(itemCard.dataset.id);
+  });
   els.itemCancelBtn?.addEventListener("click", closeItemDialog);
-  els.itemDeleteBtn?.addEventListener("click", deleteItem);
+  els.itemDeleteBtn?.addEventListener("click", requestDeleteItem);
+  els.deleteItemCancelBtn?.addEventListener("click", () => els.deleteItemConfirmDialog?.close());
+  els.deleteItemConfirmBtn?.addEventListener("click", async () => {
+    els.deleteItemConfirmDialog?.close();
+    await deleteItem();
+  });
+  els.itemDetailCloseBtn?.addEventListener("click", closeWardrobeItemViewer);
+  els.wardrobeItemActionsCloseBtn?.addEventListener("click", () => els.wardrobeItemActionsDialog?.close());
+  els.wardrobeItemActionsBody?.addEventListener("click", async (event) => {
+    const actionButton = event.target.closest("[data-wardrobe-action]");
+    if (!actionButton) return;
+    const itemId = actionButton.dataset.wardrobeItemId;
+    const action = actionButton.dataset.wardrobeAction;
+    els.wardrobeItemActionsDialog?.close();
+    if (action === "favorite") {
+      await toggleWardrobeFavorite(itemId);
+      return;
+    }
+    if (action === "edit") {
+      const items = await loadWardrobeAsync();
+      const item = items.find((entry) => String(entry.id) === String(itemId));
+      closeWardrobeItemViewer();
+      if (item) openItemDialog(item);
+      return;
+    }
+    if (action === "delete") {
+      editingItemId = itemId;
+      requestDeleteItem();
+    }
+  });
+  els.itemDetailBody?.addEventListener("click", async (event) => {
+    const actionButton = event.target.closest("[data-item-viewer-action]");
+    if (!actionButton) return;
+    const currentId = wardrobeItemViewerState.visibleItemIds[wardrobeItemViewerState.currentIndex];
+    const action = actionButton.dataset.itemViewerAction;
+    if (!currentId) return;
+    if (action === "close") {
+      closeWardrobeItemViewer();
+      return;
+    }
+    if (action === "favorite") {
+      await toggleWardrobeFavorite(currentId);
+      return;
+    }
+    if (action === "more") {
+      await openWardrobeItemActionsDialog(currentId);
+      return;
+    }
+    if (action === "edit") {
+      const items = await loadWardrobeAsync();
+      const item = items.find((entry) => String(entry.id) === String(currentId));
+      const needsReviewFocus = item ? itemNeedsMetadataReview(item) : false;
+      closeWardrobeItemViewer();
+      if (item) {
+        openItemDialog(item);
+        if (needsReviewFocus) {
+          setItemMoreDetailsOpen(true);
+          window.setTimeout(() => {
+            const target = !item.color ? els.itemColor : !item.material ? els.itemMaterial : null;
+            target?.focus?.();
+            target?.scrollIntoView?.({ block: "center", behavior: "smooth" });
+          }, 80);
+        }
+      }
+      return;
+    }
+    if (action === "delete") {
+      editingItemId = currentId;
+      requestDeleteItem();
+    }
+  });
+  els.itemDetailBody?.addEventListener("pointerdown", (event) => {
+    const stage = event.target.closest("[data-item-viewer-stage]");
+    if (!stage) return;
+    if (event.target.closest("[data-item-viewer-action]")) return;
+    wardrobeViewerPointerState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      deltaX: 0,
+      deltaY: 0,
+      isDragging: false,
+      axis: "",
+    };
+    stage.setPointerCapture?.(event.pointerId);
+  });
+  els.itemDetailBody?.addEventListener("pointermove", (event) => {
+    if (!wardrobeViewerPointerState || wardrobeViewerPointerState.pointerId !== event.pointerId) return;
+    wardrobeViewerPointerState.deltaX = event.clientX - wardrobeViewerPointerState.startX;
+    wardrobeViewerPointerState.deltaY = event.clientY - wardrobeViewerPointerState.startY;
+    if (!wardrobeViewerPointerState.isDragging) {
+      const hasHorizontalIntent = Math.abs(wardrobeViewerPointerState.deltaX) > WARDROBE_VIEWER_DRAG_INTENT_THRESHOLD
+        && Math.abs(wardrobeViewerPointerState.deltaX) > Math.abs(wardrobeViewerPointerState.deltaY);
+      const hasVerticalCloseIntent = wardrobeViewerPointerState.deltaY < -WARDROBE_VIEWER_DRAG_INTENT_THRESHOLD
+        && Math.abs(wardrobeViewerPointerState.deltaY) > Math.abs(wardrobeViewerPointerState.deltaX);
+      if (!hasHorizontalIntent && !hasVerticalCloseIntent) return;
+      wardrobeViewerPointerState.isDragging = true;
+      wardrobeViewerPointerState.axis = hasVerticalCloseIntent ? "vertical" : "horizontal";
+    }
+    updateWardrobeViewerDrag(
+      wardrobeViewerPointerState.deltaX,
+      wardrobeViewerPointerState.deltaY,
+      wardrobeViewerPointerState.axis || "horizontal"
+    );
+  });
+  els.itemDetailBody?.addEventListener("pointerup", async (event) => {
+    if (!wardrobeViewerPointerState || wardrobeViewerPointerState.pointerId !== event.pointerId) return;
+    const stage = event.target.closest("[data-item-viewer-stage]") || getWardrobeViewerElements().stage;
+    stage?.releasePointerCapture?.(event.pointerId);
+    const { deltaX, deltaY, isDragging, axis } = wardrobeViewerPointerState;
+    wardrobeViewerPointerState = null;
+    if (!isDragging) return;
+    if (axis === "vertical") {
+      if (deltaY <= -WARDROBE_VIEWER_SWIPE_THRESHOLD && Math.abs(deltaY) > Math.abs(deltaX)) {
+        await animateWardrobeViewerClose(deltaY);
+      } else {
+        animateWardrobeViewerReset();
+      }
+      return;
+    }
+    if (Math.abs(deltaX) < WARDROBE_VIEWER_SWIPE_THRESHOLD || Math.abs(deltaX) < Math.abs(deltaY)) {
+      animateWardrobeViewerReset();
+      return;
+    }
+    const direction = deltaX < 0 ? 1 : -1;
+    const nextIndex = wardrobeItemViewerState.currentIndex + direction;
+    if (nextIndex < 0 || nextIndex >= wardrobeItemViewerState.visibleItemIds.length) {
+      animateWardrobeViewerReset();
+      return;
+    }
+    await animateWardrobeViewerCommit(direction, deltaX);
+  });
+  els.itemDetailBody?.addEventListener("pointercancel", (event) => {
+    const stage = event.target.closest("[data-item-viewer-stage]") || getWardrobeViewerElements().stage;
+    stage?.releasePointerCapture?.(event.pointerId);
+    if (wardrobeViewerPointerState?.isDragging) animateWardrobeViewerReset();
+    wardrobeViewerPointerState = null;
+  });
+  els.itemDetailDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeWardrobeItemViewer();
+  });
+  els.itemDetailDialog?.addEventListener("click", (event) => {
+    if (event.target === els.itemDetailDialog) closeWardrobeItemViewer();
+  });
+  els.itemDetailBody?.addEventListener("click", (event) => {
+    if (event.target.closest("[data-item-viewer-stage]")) return;
+    if (event.target.closest("[data-item-viewer-pager-rail]")) return;
+    if (event.target.closest("[data-item-viewer-action]")) return;
+    closeWardrobeItemViewer();
+  });
+  els.itemDetailDialog?.addEventListener("close", () => {
+    if (!wardrobeItemViewerState.isOpen) return;
+    wardrobeItemViewerState = {
+      isOpen: false,
+      source: "all",
+      visibleItemIds: [],
+      currentIndex: 0,
+      pagerFromIndex: null,
+      isEditOpen: false,
+    };
+    wardrobeViewerPointerState = null;
+  });
 
   els.itemForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    saveItem();
+    handleItemPrimaryAction();
   });
 
   els.itemPhoto?.addEventListener("change", async () => {
     const file = els.itemPhoto.files?.[0];
     if (!file) return;
-    isReadingItemPhoto = true;
-    updateItemSaveState();
-    setItemPhotoStatus("Preparing your image…", true);
-    try {
-      pendingPhotoDataUrl = await optimizeImageDataUrl(file);
-      els.itemPhotoImg.src = pendingPhotoDataUrl;
-      updateItemVisual();
-      isAnalyzingItemPhoto = true;
-      updateItemSaveState();
-      setItemPhotoStatus("Looking at the clothing photo…", true);
-      const analysis = await analyzeItemPhoto(pendingPhotoDataUrl);
-      const appliedPrefill = applyItemPhotoPrefill(analysis);
-      updateItemVisual();
-      if (appliedPrefill && els.itemType.value.trim() && els.itemName.value.trim()) {
-        setItemPhotoStatus("Details prefilled from your photo.", false, "success");
-        clearItemValidationErrors();
-      } else {
-        revealItemManualDetails();
-        setItemPhotoStatus("Photo added. Add type and name below to save it.", false, "warning");
-      }
-    } catch (err) {
-      console.error("item photo error:", err);
-      revealItemManualDetails();
-      setItemPhotoStatus("Photo added. Add type and name below to save it.", false, "warning");
-    } finally {
-      isReadingItemPhoto = false;
-      isAnalyzingItemPhoto = false;
-      updateItemSaveState();
-    }
+    const append = itemFlowStep === "capture" && (itemBatchItems.length > 0 || itemRejectedPhotos.length > 0 || hasItemImportSession());
+    if (!append) resetItemPhotoQueue();
+    await processSelectedItemPhotos([file], { reset: !append });
   });
 
-  els.removePhotoBtn?.addEventListener("click", () => {
-    pendingPhotoDataUrl = null;
-    els.itemPhoto.value = "";
-    setItemPhotoStatus("");
-    updateItemVisual();
-    updateItemSaveState();
+  els.itemGalleryPhotos?.addEventListener("change", async () => {
+    const files = Array.from(els.itemGalleryPhotos.files || []).filter((file) => file?.type?.startsWith("image/"));
+    if (!files.length) return;
+    const append = itemFlowStep === "capture" && (itemBatchItems.length > 0 || itemRejectedPhotos.length > 0 || hasItemImportSession());
+    if (!append) resetItemPhotoQueue();
+    await processSelectedItemPhotos(files, { reset: !append });
+  });
+
+  els.removePhotoBtn?.addEventListener("click", async () => {
+    await removeCurrentItemPhoto();
+  });
+
+  els.recropPhotoBtn?.addEventListener("click", async () => {
+    const source = pendingPhotoDataUrl;
+    if (!source) {
+      showAppToast("No source photo available to crop", "warning");
+      return;
+    }
+    await openItemCropDialog({
+      sourcePhotoDataUrl: source,
+      title: "Recrop this item",
+      subtitle: "Move the crop box over the item, then drag the corner to resize it.",
+      onApply: async ({ cropPhotoDataUrl }) => {
+        pendingCropPhotoDataUrl = cropPhotoDataUrl;
+        pendingCropConfidence = "trusted";
+        if (els.itemPhotoImg && cropPhotoDataUrl) {
+          els.itemPhotoImg.src = cropPhotoDataUrl;
+        }
+        updateItemVisual();
+        updateItemSaveState();
+        showAppToast("Crop updated", "success");
+      },
+    });
   });
 
   [els.itemType, els.itemName, els.itemColor, els.itemMaterial].forEach((input) => {
     input?.addEventListener("input", () => {
       updateItemVisual();
+      syncCompactEditFieldsFromPrimary();
+      updateNeedsReviewFieldFlags();
       updateItemSaveState();
     });
     input?.addEventListener("change", () => {
       updateItemVisual();
+      syncCompactEditFieldsFromPrimary();
+      updateNeedsReviewFieldFlags();
+      updateItemSaveState();
+    });
+  });
+  [els.itemEditColor, els.itemEditMaterial, els.itemEditCare].forEach((input) => {
+    input?.addEventListener("input", () => {
+      syncPrimaryFieldsFromCompactEdit();
+      updateItemVisual();
+      updateNeedsReviewFieldFlags();
+      updateItemSaveState();
+    });
+    input?.addEventListener("change", () => {
+      syncPrimaryFieldsFromCompactEdit();
+      updateItemVisual();
+      updateNeedsReviewFieldFlags();
       updateItemSaveState();
     });
   });
@@ -4005,6 +7694,18 @@ function bindWardrobeUI() {
     if (els.itemName.value.trim()) setFieldError(els.itemName, els.itemNameError, "");
     if (els.itemType.value.trim() && els.itemName.value.trim()) setItemFormError("");
   });
+  [els.itemBatchEditColor, els.itemBatchEditMaterial].forEach((input) => {
+    input?.addEventListener("input", updateBatchEditNeedsReviewFlags);
+    input?.addEventListener("change", updateBatchEditNeedsReviewFlags);
+  });
+  els.itemFavorite?.addEventListener("change", () => {
+    syncCompactEditFieldsFromPrimary();
+    updateItemSaveState();
+  });
+  els.itemEditFavorite?.addEventListener("change", () => {
+    syncPrimaryFieldsFromCompactEdit();
+    updateItemSaveState();
+  });
   els.wardrobeEmpty?.addEventListener("click", (event) => {
     const starterButton = event.target.closest("[data-starter-type]");
     if (!starterButton) return;
@@ -4013,15 +7714,65 @@ function bindWardrobeUI() {
     const starterType = starterButton.getAttribute("data-starter-type") || "";
     openItemDialog(null, getStarterTypePreset(starterType));
   });
+  els.wardrobeMissingChips?.addEventListener("click", (event) => {
+    const chip = event.target.closest("[data-starter-label]");
+    if (!chip) return;
+    const label = chip.dataset.starterLabel || "";
+    const map = {
+      "Outerwear": "Jacket",
+      "Shoes": "Sneakers",
+      "Rain layer": "Jacket",
+      "Staple tops": "T-shirt",
+      "Bottoms": "Jeans",
+    };
+    openItemDialog(null, getStarterTypePreset(map[label] || "Other"));
+  });
+
+  els.wardrobeFilterDialogCloseBtn?.addEventListener("click", () => els.wardrobeFilterDialog?.close());
+  els.wardrobeFilterApplyBtn?.addEventListener("click", async () => {
+    wardrobeFilterState.color = normalizeFilterValue(els.wardrobeColorFilter?.value) || "all";
+    wardrobeFilterState.material = normalizeFilterValue(els.wardrobeMaterialFilter?.value) || "all";
+    wardrobeFilterState.season = els.wardrobeSeasonFilter?.value || "all";
+    wardrobeFilterState.sort = els.wardrobeSortFilter?.value || "newest";
+    wardrobeFilterState.recentOnly = !!els.wardrobeRecentOnlyFilter?.checked;
+    wardrobeFilterState.missingMetadataOnly = !!els.wardrobeMissingMetadataFilter?.checked;
+    wardrobeFilterState.matchedOnly = !!els.wardrobeMatchedFilter?.checked;
+    els.wardrobeFilterDialog?.close();
+    await renderWardrobe();
+  });
+  els.wardrobeFilterResetBtn?.addEventListener("click", async () => {
+    wardrobeFilterState.color = "all";
+    wardrobeFilterState.material = "all";
+    wardrobeFilterState.season = "all";
+    wardrobeFilterState.sort = "newest";
+    wardrobeFilterState.recentOnly = false;
+    wardrobeFilterState.missingMetadataOnly = false;
+    wardrobeFilterState.matchedOnly = false;
+    if (els.wardrobeColorFilter) els.wardrobeColorFilter.value = "all";
+    if (els.wardrobeMaterialFilter) els.wardrobeMaterialFilter.value = "all";
+    if (els.wardrobeSeasonFilter) els.wardrobeSeasonFilter.value = "all";
+    if (els.wardrobeSortFilter) els.wardrobeSortFilter.value = "newest";
+    if (els.wardrobeRecentOnlyFilter) els.wardrobeRecentOnlyFilter.checked = false;
+    if (els.wardrobeMissingMetadataFilter) els.wardrobeMissingMetadataFilter.checked = false;
+    if (els.wardrobeMatchedFilter) els.wardrobeMatchedFilter.checked = false;
+    els.wardrobeFilterDialog?.close();
+    await renderWardrobe();
+  });
+  els.wardrobeSearchInput?.addEventListener("input", async () => {
+    wardrobeFilterState.search = String(els.wardrobeSearchInput?.value || "").trim();
+    await renderWardrobe();
+  });
 
   // Scan tag button opens scan dialog
-  els.scanTagBtn?.addEventListener("click", () => {
+  const openScanTagDialog = () => {
     els.scanPhoto.value = "";
     els.scanPreview.style.display = "none";
     els.scanStatus.textContent = "";
     els.scanSubmitBtn.disabled = true;
     if (typeof els.scanDialog.showModal === "function") els.scanDialog.showModal();
-  });
+  };
+  els.scanTagBtn?.addEventListener("click", openScanTagDialog);
+  els.itemEditScanTagBtn?.addEventListener("click", openScanTagDialog);
 
   els.scanCancelBtn?.addEventListener("click", () => {
     if (typeof els.scanDialog.close === "function") els.scanDialog.close();
@@ -4077,6 +7828,7 @@ function bindWardrobeUI() {
       if (data.brand && !els.itemName.value.trim()) {
         els.itemName.value = data.brand;
       }
+      syncCompactEditFieldsFromPrimary();
       updateItemVisual();
       updateItemSaveState();
       els.scanStatus.textContent = "Done! Tag info added to the form.";
@@ -4334,14 +8086,11 @@ function renderAIRecommendation(data) {
   const outfit = data.outfit || {};
   const weather = lastWeatherForAI || {};
   const headline = buildOutfitHeadline(outfit);
-  const aiSubtitle = shortenRecommendationSubtitle(data.reasoning);
-  const subtitle = isGenericRecommendationSubtitle(aiSubtitle)
-    ? buildLocalRecommendationSubtitle(weather)
-    : aiSubtitle;
-  const chips = getTodayContextChips();
+  const subtitle = buildLocalRecommendationSubtitle(weather);
   const imageMatches = data.outfitImages || {};
   const slotReasons = data.slotReasons || {};
   const itemDetails = data.itemDetails || {};
+  const wardrobeItems = loadWardrobe();
   const accessories = Array.isArray(outfit.accessories)
     ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
     : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
@@ -4356,9 +8105,17 @@ function renderAIRecommendation(data) {
       key: `accessory-${index}`,
     })),
   ].filter((entry) => entry.value);
-  const wardrobePhotoMatches = buildWardrobePhotoMatches(rowEntries, loadWardrobe());
+  const wardrobePhotoMatches = buildWardrobePhotoMatches(rowEntries, wardrobeItems);
+  const wardrobeSummary = getRecommendationWardrobeSummary(rowEntries, wardrobeItems);
+  saveState({
+    latestRecommendation: {
+      matchedItemIds: Object.values(wardrobeSummary.directMatches || {}).map((item) => item?.id).filter(Boolean),
+      outfit,
+      signature: buildLookSignature(outfit),
+      updatedAt: new Date().toISOString(),
+    },
+  });
   const detailsItems = buildRecommendationDetails(data, weather, rowEntries, slotReasons);
-  const metaChips = buildRecommendationMeta(weather, outfit);
   const collageItems = rowEntries.map((entry, index) => {
     const slotKey = String(entry.label || "").toLowerCase();
     const imageMatch = { ...imageMatches, ...wardrobePhotoMatches }[entry.key] || { ...imageMatches, ...wardrobePhotoMatches }[slotKey] || null;
@@ -4381,39 +8138,21 @@ function renderAIRecommendation(data) {
 
   els.aiRecContent.innerHTML = `
     <div class="today-rec-body">
-      <div class="today-rec-hero">
-        <div class="today-rec-outfit">
-          <div class="today-rec-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
-          </div>
-          <div class="today-rec-copy">
-            <h3>${escapeHtml(headline)}</h3>
-            <p>${escapeHtml(subtitle)}</p>
-            ${renderRecommendationMeta(metaChips)}
-          </div>
-        </div>
-        ${renderRecommendationWeatherStrip(weather)}
-      </div>
-      ${rowEntries.length ? renderRecommendationDeckHint(rowEntries) : ""}
       ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, { ...imageMatches, ...wardrobePhotoMatches }, slotReasons) : ""}
-      <div class="today-feedback-panel" aria-label="Refine recommendation">
-        <div class="today-feedback-copy">
-          <span class="today-feedback-kicker">Make it better</span>
-          <strong>Tap items to inspect, then tune the look</strong>
-        </div>
-        <div class="today-feedback-actions">
-          <button type="button" class="today-feedback-chip" data-rec-feedback="too_cold">${renderInlineIcon("cold")} Too cold</button>
-          <button type="button" class="today-feedback-chip" data-rec-feedback="too_warm">${renderInlineIcon("hot")} Too warm</button>
-          <button type="button" class="today-feedback-chip today-feedback-chip-tune" data-rec-action="tune">${renderTuneIcon()} Change style</button>
-        </div>
-        <div class="today-secondary-actions">
-          ${detailsItems.length ? `<button type="button" class="today-details-button today-details-button-wide" data-rec-action="why">View details</button>` : ""}
-        </div>
-      </div>
     </div>
   `;
   els.aiRecContent.dataset.whyItems = JSON.stringify(detailsItems);
   els.aiRecContent.dataset.collageItems = JSON.stringify(collageItems);
+  els.aiRecContent.dataset.wardrobeSummary = JSON.stringify(wardrobeSummary);
+  els.aiRecContent.dataset.savedLook = JSON.stringify({
+    headline,
+    subtitle,
+    outfit,
+    coverage: wardrobeSummary.coverage,
+    missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
+    locationName: loadState().lastLocation?.name || "",
+    signature: buildLookSignature(outfit),
+  });
   els.aiRecWarnings.innerHTML = "";
   els.aiRecMissing.innerHTML = "";
   initializeRecommendationDeck();
@@ -4487,6 +8226,51 @@ function bindRecommendationControls() {
     const tuneButton = event.target.closest("[data-rec-action='tune']");
     if (tuneButton) {
       openTuneLookDialog();
+      return;
+    }
+
+    const saveLookButton = event.target.closest("[data-rec-action='save-look']");
+    if (saveLookButton) {
+      let payload = null;
+      try {
+        payload = JSON.parse(els.aiRecContent?.dataset?.savedLook || "null");
+      } catch {}
+    if (payload && saveRecommendationLook(payload)) {
+      savedLooksExpanded = true;
+      saveLookButton.textContent = "Saved to looks";
+      showAppToast("Look saved to this device. Find it again from From your wardrobe.", "success");
+      }
+      return;
+    }
+
+    const openWardrobeButton = event.target.closest("[data-rec-action='open-wardrobe']");
+    if (openWardrobeButton) {
+      switchTab("tabWardrobe", { direction: 1 });
+      return;
+    }
+
+    const toggleSavedLooksButton = event.target.closest("[data-rec-action='toggle-saved-looks']");
+    if (toggleSavedLooksButton) {
+      savedLooksExpanded = !savedLooksExpanded;
+      return;
+    }
+
+    const addSimilarButton = event.target.closest("[data-rec-action='add-similar']");
+    if (addSimilarButton) {
+      const presetType = addSimilarButton.dataset.recMissingType || "Other";
+      switchTab("tabWardrobe", { direction: 1 });
+      window.setTimeout(() => openItemDialog(null, getStarterTypePreset(presetType)), 240);
+      return;
+    }
+
+    const useOwnedButton = event.target.closest("[data-rec-action='use-owned']");
+    if (useOwnedButton) {
+      const presetType = getRecommendationCategoryPreset(useOwnedButton.dataset.recMissingItem || "");
+      wardrobeFilterState.view = "all";
+      wardrobeFilterState.category = getWardrobeCategory({ type: presetType });
+      switchTab("tabWardrobe", { direction: 1 });
+      await renderWardrobe();
+      showAppToast("Showing similar pieces from your wardrobe.", "info");
       return;
     }
 
@@ -4715,6 +8499,8 @@ function switchTab(tabId, options = {}) {
     tabTransitionTimeoutId = null;
   }
 
+  flushTabDwellMetrics(currentTabId);
+  trackTabOpen(tabId);
   clearTabGestureStyles();
 
   syncTabIndicators(tabId);
@@ -4779,9 +8565,9 @@ function bindIOSSwipeTabs() {
         "#geoBtn",
         "#searchBtn",
         "#userBtn",
+        "#todayUserBtn",
         "#addItemBtn",
         "#todayWardrobeCtaBtn",
-        ".wardrobe-item",
         ".nav-item",
       ].join(", ")
     );
@@ -5119,7 +8905,8 @@ function isValidEmail(email) {
 }
 
 function bindAuthUI() {
-  els.userBtn.addEventListener("click", showUserMenu);
+  els.userBtn?.addEventListener("click", showUserMenu);
+  els.todayUserBtn?.addEventListener("click", showUserMenu);
   els.userMenuCloseBtn?.addEventListener("click", () => els.userMenuDialog?.close());
   els.userMenuAccountBtn?.addEventListener("click", () => {
     els.userMenuDialog?.close();
@@ -5129,6 +8916,7 @@ function bindAuthUI() {
     els.userMenuDialog?.close();
     switchTab("tabPrefs", { direction: 0 });
   });
+  els.wardrobeAuthGateBtn?.addEventListener("click", showAuthDialog);
   els.wardrobeSignInBtn?.addEventListener("click", showAuthDialog);
   els.authCloseBtn.addEventListener("click", () => els.authDialog.close());
   els.authToggleMode.addEventListener("click", () => setAuthMode(!authIsSignup));
@@ -5232,6 +9020,7 @@ function bindAuthUI() {
     _wardrobeCache = null;
     renderWardrobe();
     els.authDialog.close();
+    showAppToast("Signed out", "success");
   });
 
   els.authDeleteBtn?.addEventListener("click", () => {
@@ -5265,6 +9054,7 @@ function bindAuthUI() {
       await renderWardrobe();
       els.deleteAccountDialog.close();
       els.authDialog.close();
+      showAppToast("Account deleted", "success");
     } catch (err) {
       els.deleteAccountError.textContent = err.message;
       els.deleteAccountError.style.display = "";
@@ -5277,7 +9067,7 @@ function bindAuthUI() {
   window.addEventListener("message", (e) => {
     if (e.data?.type === "wearcast-auth" && e.data.token) {
       finalizeAuthSuccess(e.data.token, e.data.user, e.data.refreshToken).catch((err) => {
-        alert(`Login failed: ${err.message}`);
+        showAppToast(`Login failed: ${err.message}`, "error");
       });
     }
   });
@@ -5311,6 +9101,15 @@ function init() {
   bindAuthUI();
   bindNativeGoogleAuth();
   updateAuthUI();
+  trackTabOpen(getActiveTabId(), { now: Date.now() });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      flushTabDwellMetrics(getActiveTabId(), { now: Date.now() });
+    } else {
+      activeTabTrackedAt = Date.now();
+    }
+  });
+  window.addEventListener("beforeunload", () => flushTabDwellMetrics(getActiveTabId(), { now: Date.now() }));
 
   // Also bind the empty-state add button
   els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog());

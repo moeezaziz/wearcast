@@ -120,6 +120,7 @@ NSGraphicsContext.restoreGraphicsState()
 
 let paragraph = NSMutableParagraphStyle()
 paragraph.alignment = .center
+paragraph.lineSpacing = 8
 
 let titleAttributes: [NSAttributedString.Key: Any] = [
   .font: NSFont.systemFont(ofSize: 174, weight: .bold),
@@ -136,10 +137,10 @@ let subtitleAttributes: [NSAttributedString.Key: Any] = [
 ]
 
 let title = NSAttributedString(string: "WearCast", attributes: titleAttributes)
-let subtitle = NSAttributedString(string: "Weather-led outfit guidance, without the guesswork.", attributes: subtitleAttributes)
+let subtitle = NSAttributedString(string: "Weather-led outfit guidance,\nwithout the guesswork.", attributes: subtitleAttributes)
 
 title.draw(in: NSRect(x: 410, y: 1010, width: 1912, height: 210))
-subtitle.draw(in: NSRect(x: 500, y: 910, width: 1732, height: 110))
+subtitle.draw(in: NSRect(x: 500, y: 850, width: 1732, height: 170))
 
 NSGraphicsContext.restoreGraphicsState()
 

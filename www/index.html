@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>WearCast</title>
   <link rel="manifest" href="manifest.webmanifest?v=12" />
   <meta name="theme-color" content="#2979ff" />
@@ -36,13 +36,18 @@
       </div>
 
       <div class="today-stack">
-        <div class="today-intro">
-          <div class="today-intro-main">
-            <span class="today-intro-kicker">Today</span>
-            <div class="today-intro-copy">
-              <h1>Dress with the weather, not against it.</h1>
+        <div class="today-header">
+          <div class="today-header-brand">
+            <img class="today-header-logo" src="icon.svg" alt="WearCast logo" />
+            <div class="today-header-copy">
+              <strong>WearCast</strong>
+              <span>Forecast-led styling</span>
             </div>
           </div>
+          <button id="todayUserBtn" class="today-header-account floating-profile-btn" aria-label="Account" title="Account" type="button">
+            <svg id="todayUserBtnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <img id="todayUserBtnAvatar" class="user-avatar" style="display:none" alt="" />
+          </button>
         </div>
 
         <div class="today-search-card">
@@ -74,7 +79,11 @@
               </div>
               <div class="hero-main">
                 <div class="hero-temp-stack">
-                  <span id="temp" class="hero-temp">—</span>
+                  <div class="hero-temp-row">
+                    <span id="temp" class="hero-temp">—</span>
+                    <span class="hero-temp-unit">C</span>
+                  </div>
+                  <span id="weatherHeroHeadline" class="weather-hero-headline">—</span>
                   <span class="hero-feels">Feels like <span id="apparent">—</span></span>
                 </div>
                 <div class="hero-side">
@@ -92,32 +101,38 @@
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div id="aiRecSection" class="today-rec-card today-rec-card-inline" style="display:none;">
-                <div class="card-header today-rec-header">
-                  <div>
-                    <h2>Today's Recommendation</h2>
-                  </div>
-                  <span id="aiRecBadge" class="pill pill-soft">Best match</span>
+            <div id="aiRecSection" class="today-rec-card today-rec-card-inline" style="display:none;">
+              <div class="card-header today-rec-header">
+                <div class="today-rec-header-copy">
+                  <h2>Today's Recommendation</h2>
+                  <p class="today-rec-expand-hint">Tap a tile to expand</p>
                 </div>
-                <div id="aiRecLoading" class="loading-state" style="display:none;">
-                  <div class="spinner"></div>
-                  <span>Styling your day…</span>
-                </div>
-                <div id="aiRecContent" class="today-rec-content"></div>
-                <div id="aiRecWarnings"></div>
-                <div id="aiRecMissing"></div>
+                <span id="aiRecBadge" class="pill pill-soft">Best match</span>
               </div>
+              <div id="aiRecLoading" class="loading-state" style="display:none;">
+                <div class="spinner"></div>
+                <span>Styling your day…</span>
+              </div>
+              <div id="aiRecContent" class="today-rec-content"></div>
+              <div id="aiRecWarnings"></div>
+              <div id="aiRecMissing"></div>
             </div>
 
             <div id="todayWardrobeInlineCta" class="today-inline-upgrade-card" style="display:none;">
-              <div>
-                <span class="today-inline-upgrade-kicker">Better with your closet</span>
-                <strong>Use your own clothes for sharper outfits.</strong>
-                <p>Add a few pieces so WearCast can recommend items you actually own.</p>
+              <div class="today-inline-upgrade-copy">
+                <span class="today-inline-upgrade-kicker">From your closet</span>
+                <strong>Get recommendations from your own closet.</strong>
+                <p>Add a few staples first. WearCast organizes them automatically and starts using what you actually own in daily looks.</p>
+                <div class="today-cta-preview" aria-label="Wardrobe setup steps">
+                  <div class="today-cta-step"><span>1</span><strong>Add 5 staples</strong></div>
+                  <div class="today-cta-step"><span>2</span><strong>Organize automatically</strong></div>
+                  <div class="today-cta-step"><span>3</span><strong>Get better daily looks</strong></div>
+                </div>
                 <div id="todayWardrobeInlineProgress" class="today-inline-upgrade-progress" aria-hidden="true"></div>
               </div>
-              <button id="todayWardrobeInlineBtn" class="btn-primary-sm" type="button">Add items</button>
+              <button id="todayWardrobeInlineBtn" class="btn-primary-sm" type="button">Start my wardrobe</button>
             </div>
 
             <div id="emptyState" class="empty-state">
@@ -137,35 +152,71 @@
 
     <!-- ── TAB: Wardrobe ── -->
     <section id="tabWardrobe" class="tab-page">
-      <!-- Auth gate -->
       <div id="wardrobeAuthGate" class="empty-state" style="display:none;">
         <div class="empty-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M12 14v2"/></svg>
         </div>
-        <h3>Sign in to use your wardrobe</h3>
-        <p>Create an account to save your clothing items and get personalised outfit recommendations.</p>
-        <button id="wardrobeSignInBtn" class="btn-primary" style="margin-top:16px;">Sign in / Sign up</button>
+        <h3>Sign up to unlock your wardrobe</h3>
+        <p>Save your closet, scan items, and get recommendations styled around what you actually own.</p>
+        <button id="wardrobeAuthGateBtn" class="btn-primary" type="button">Create account or sign in</button>
       </div>
 
-      <!-- Logged-in content -->
-      <div id="wardrobeContent" class="wardrobe-screen" style="display:none;">
+      <div id="wardrobeContent" class="wardrobe-screen">
         <div class="wardrobe-header">
           <div class="tab-top-bar wardrobe-top-bar">
-            <div>
-              <span class="wardrobe-kicker">Wardrobe</span>
+            <div class="wardrobe-top-copy">
               <h2>My Wardrobe</h2>
+              <p id="wardrobeSubtitle" class="wardrobe-subtitle">A calm collection of the pieces you actually wear.</p>
             </div>
-            <button id="addItemBtn" class="btn-primary-sm wardrobe-add-fab" aria-label="Add wardrobe item">+</button>
+            <button id="addItemBtn" class="btn-primary-sm wardrobe-add-btn" aria-label="Add wardrobe item" type="button">
+              <span class="wardrobe-add-btn-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M12 5v14"></path>
+                  <path d="M5 12h14"></path>
+                </svg>
+              </span>
+            </button>
           </div>
-          <div id="wardrobeExplainer" class="card wardrobe-explainer">
-            <div class="wardrobe-explainer-body">
-              <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Get personalized fast</span>
-              <h3 id="wardrobeExplainerTitle">Add a few pieces for sharper outfit picks</h3>
-              <p id="wardrobeExplainerText">Start with the staples you wear most so WearCast can style from your closet, not generic stock looks.</p>
-              <div id="wardrobeExplainerProgress" class="wardrobe-explainer-progress" aria-hidden="true"></div>
+          <div id="wardrobeDashboard" class="card wardrobe-dashboard">
+            <div class="wardrobe-dashboard-main">
+              <div class="wardrobe-dashboard-copy">
+                <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Collection progress</span>
+                <h3 id="wardrobeExplainerTitle">Start with the pieces you reach for most</h3>
+                <p id="wardrobeExplainerText">Add the essentials first, then let the collection get smarter as your closet grows.</p>
+              </div>
+              <div class="wardrobe-coverage" aria-hidden="true">
+                <div class="wardrobe-coverage-ring">
+                  <svg viewBox="0 0 120 120" class="wardrobe-coverage-svg">
+                    <circle class="wardrobe-coverage-track" cx="60" cy="60" r="48"></circle>
+                    <circle id="wardrobeCoverageCircle" class="wardrobe-coverage-value" cx="60" cy="60" r="48"></circle>
+                  </svg>
+                  <div class="wardrobe-coverage-center">
+                    <strong id="wardrobeCoverageValue">0%</strong>
+                    <span id="wardrobeCoverageLabel">Coverage</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="wardrobeExplainerProgress" class="wardrobe-explainer-progress" aria-hidden="true"></div>
+            <div>
+              <span class="wardrobe-dashboard-label">You're missing</span>
+              <div id="wardrobeMissingChips" class="wardrobe-missing-chips"></div>
+            </div>
+            <div id="wardrobeSyncPrompt" class="wardrobe-sync-prompt" style="display:none;">
+              <div class="wardrobe-sync-copy">
+                <strong>Keep this closet safe</strong>
+                <span>Sign in when you want to save and sync your wardrobe across devices.</span>
+              </div>
+              <button id="wardrobeSignInBtn" class="btn-primary-sm" type="button">Sign in to sync</button>
             </div>
           </div>
-          <div id="wardrobeFilters" class="wardrobe-filters" aria-label="Wardrobe filters"></div>
+          <div id="wardrobeFilters" class="wardrobe-filters" aria-label="Wardrobe sections"></div>
+          <div id="wardrobeSearchWrap" class="wardrobe-search-wrap" style="display:none;">
+            <div class="wardrobe-search-field">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+              <input id="wardrobeSearchInput" type="search" class="wardrobe-search-input" placeholder="Search by name, type, color, or material" />
+            </div>
+          </div>
         </div>
 
         <div class="wardrobe-body">
@@ -173,16 +224,30 @@
             <div class="empty-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
             </div>
-            <h3>Your closet is empty</h3>
-            <p>Add a few real pieces so WearCast can style from what you actually own.</p>
+            <h3>Build a closet WearCast can style from</h3>
+            <p>Start with one bundle. Add five staples, let the app organize them, then get sharper daily looks.</p>
+            <div class="wardrobe-empty-bundles" aria-label="Starter bundles">
+              <button type="button" class="wardrobe-empty-bundle" data-starter-type="T-shirt">
+                <strong>Everyday basics</strong>
+                <span>Tops, jeans, sneakers</span>
+              </button>
+              <button type="button" class="wardrobe-empty-bundle" data-starter-type="Jacket">
+                <strong>Cold weather</strong>
+                <span>Layers, knits, outerwear</span>
+              </button>
+              <button type="button" class="wardrobe-empty-bundle" data-starter-type="Boots">
+                <strong>Rain-ready</strong>
+                <span>Shell, boots, backup layers</span>
+              </button>
+            </div>
             <div class="wardrobe-empty-guides" aria-label="Starter categories">
               <button type="button" class="wardrobe-empty-guide" data-starter-type="Shirt">Shirts</button>
               <button type="button" class="wardrobe-empty-guide" data-starter-type="Jeans">Pants</button>
-              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Jackets</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Outerwear</button>
             </div>
             <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Add your first item</button>
           </div>
-          <div id="wardrobeList" class="wardrobe-grid"></div>
+          <div id="wardrobeList" class="wardrobe-sections"></div>
         </div>
       </div>
     </section>
@@ -190,8 +255,8 @@
     <!-- ── TAB: Settings ── -->
     <section id="tabPrefs" class="tab-page settings-screen">
       <div class="settings-page-hero">
-        <span class="today-cta-kicker">Settings</span>
-        <h2>WearCast controls</h2>
+        <span class="today-cta-kicker">Profile / Settings</span>
+        <h2>Your WearCast controls</h2>
       </div>
 
       <div class="card settings-panel">
@@ -224,6 +289,18 @@
             </div>
             <span class="settings-chevron">›</span>
           </button>
+          <div class="settings-row settings-row-static">
+            <div class="settings-copy">
+              <strong>Saved looks</strong>
+              <span id="settingsSavedLooksStatus">Saved looks stay on this device for now.</span>
+            </div>
+          </div>
+          <div class="settings-row settings-row-static">
+            <div class="settings-copy">
+              <strong>Profile tab validation</strong>
+              <span id="settingsProfileValidationStatus">Tracking how often Profile is opened and how long people stay there.</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -340,9 +417,14 @@
   <dialog id="todayWardrobeDialog" class="dialog today-cta-dialog" aria-labelledby="todayWardrobeDialogTitle">
     <div class="dialog-inner today-cta-dialog-inner">
       <button id="todayWardrobeDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
-      <span id="todayCtaKicker" class="today-cta-kicker">Level up</span>
-      <h2 id="todayWardrobeDialogTitle" class="dialog-title">Build your closet to unlock sharper outfit picks.</h2>
-      <p class="dialog-subtitle">Add a few pieces you actually own so WearCast can style from your wardrobe instead of generic outfits.</p>
+      <span id="todayCtaKicker" class="today-cta-kicker">From your closet</span>
+      <h2 id="todayWardrobeDialogTitle" class="dialog-title">Get recommendations from your own closet.</h2>
+      <p class="dialog-subtitle">Add 5 staples, let WearCast organize them automatically, and get better daily looks from the pieces you actually own.</p>
+      <div class="today-cta-preview">
+        <div class="today-cta-step"><span>1</span><strong>Add 5 staples</strong></div>
+        <div class="today-cta-step"><span>2</span><strong>Organize automatically</strong></div>
+        <div class="today-cta-step"><span>3</span><strong>Get better daily looks</strong></div>
+      </div>
       <div class="today-cta-dialog-actions">
         <button id="todayWardrobeCtaBtn" class="btn-primary">Add wardrobe</button>
       </div>
@@ -419,11 +501,38 @@
     <form class="dialog-inner dialog-scroll" id="itemForm" method="dialog">
       <div class="dialog-top-bar">
         <button type="button" id="itemCancelBtn" class="btn-ghost-sm">Cancel</button>
-        <h2 id="itemDialogTitle">Add Item</h2>
+        <div class="item-flow-header">
+          <span id="itemFlowKicker" class="item-flow-kicker">Capture</span>
+          <h2 id="itemDialogTitle">Add items</h2>
+        </div>
         <span class="dialog-top-spacer" aria-hidden="true"></span>
       </div>
 
-      <div class="form-stack">
+        <div class="form-stack">
+          <div id="itemFlowAssist" class="item-flow-assist" role="status">
+            Photo first, then a quick review. If detection misses, you can still finish manually without losing progress.
+          </div>
+          <div class="item-flow-progress" aria-hidden="true">
+            <div class="item-flow-step is-active" data-item-step-dot="capture">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.2"/></svg>
+              </span>
+              <strong>Capture</strong>
+            </div>
+            <div class="item-flow-step" data-item-step-dot="scanning">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M12 18v3"/><path d="M4.93 4.93l2.12 2.12"/><path d="M16.95 16.95l2.12 2.12"/><path d="M3 12h3"/><path d="M18 12h3"/><path d="M4.93 19.07l2.12-2.12"/><path d="M16.95 7.05l2.12-2.12"/></svg>
+              </span>
+              <strong>Scan</strong>
+            </div>
+          <div class="item-flow-step" data-item-step-dot="review">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </span>
+              <strong>Review</strong>
+            </div>
+          </div>
+
         <section class="item-hero-card">
           <div id="itemPhotoPreview" class="item-visual">
             <img id="itemPhotoImg" alt="Selected clothing item" style="display:none;" />
@@ -431,26 +540,101 @@
               <div id="itemVisualEmoji" class="item-visual-emoji" aria-hidden="true">
                 <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
               </div>
-              <div id="itemVisualName" class="item-visual-name">Add a clothing photo</div>
-              <div id="itemVisualMeta" class="item-visual-meta">We’ll try to prefill the details for you.</div>
+              <div id="itemVisualName" class="item-visual-name">Upload a photo</div>
+              <div id="itemVisualMeta" class="item-visual-meta">We’ll detect the basics and you can edit anything after.</div>
             </div>
             <button type="button" id="removePhotoBtn" class="img-remove" aria-label="Remove photo" style="display:none;">&times;</button>
+            <button type="button" id="recropPhotoBtn" class="img-recrop" aria-label="Recrop photo" style="display:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
+              <span>Recrop</span>
+            </button>
           </div>
-          <label class="file-upload file-upload-primary">
-            <input type="file" id="itemPhoto" accept="image/*" />
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            <span>Add clothing photo</span>
-          </label>
-          <button type="button" id="itemManualToggleBtn" class="item-manual-toggle">Add details manually</button>
+          <div class="item-step-panel item-scanning-panel" data-item-step-panel="scanning" style="display:none;">
+            <div class="item-step-intro item-step-intro-centered">
+              <span class="item-step-section-kicker">Scanning</span>
+              <strong>Reading your photos</strong>
+              <span id="itemScanningSubtitle">Identifying the item, cleaning up the crop, and preparing a faster review.</span>
+            </div>
+            <div class="item-scanning-visual">
+              <div class="item-scanning-orb" aria-hidden="true"></div>
+              <div class="item-scanning-copy">
+                <strong id="itemScanningStatusPrimary">Analyzing photos</strong>
+                <span id="itemScanningStatusSecondary">Preparing review</span>
+              </div>
+            </div>
+            <div id="itemScanningThumbs" class="item-scanning-thumbs" aria-label="Selected photos"></div>
+          </div>
+          <div id="itemBatchReview" class="item-batch-review item-step-panel" data-item-step-panel="review" style="display:none;">
+            <div class="item-review-summary-card">
+              <span class="item-batch-kicker">Review results</span>
+              <strong id="itemBatchTitle">0 items detected</strong>
+              <span id="itemBatchSummary">Tap an item to edit it, then save when you're ready.</span>
+            </div>
+            <div class="item-batch-section">
+              <div id="itemBatchStats" class="item-batch-summary"></div>
+              <div id="itemBatchList" class="item-batch-list" aria-label="Detected clothing items"></div>
+              <div id="itemBatchListDots" class="item-scroll-indicator" data-for="itemBatchList" aria-hidden="true"></div>
+              <div class="item-batch-contextual-actions">
+                <button type="button" id="itemBatchKeepToggleBtn" class="item-batch-keep-toggle">Discard item</button>
+              </div>
+            </div>
+            <div id="itemRejectedResults" class="item-rejected-results" style="display:none;">
+              <div class="item-rejected-header">
+                <span class="item-batch-kicker">Needs attention</span>
+                <strong id="itemRejectedTitle">Some photos need help</strong>
+              </div>
+              <div id="itemRejectedList" class="item-rejected-list" aria-label="Rejected clothing photos"></div>
+              <div id="itemRejectedListDots" class="item-scroll-indicator" data-for="itemRejectedList" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="item-step-panel item-capture-panel" data-item-step-panel="capture">
+            <div class="item-capture-actions item-capture-actions-stacked">
+              <label class="file-upload file-upload-primary">
+                <input type="file" id="itemPhoto" accept="image/*" capture="environment" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="file-upload-copy">
+                  <strong id="itemPhotoLabel">Take photos</strong>
+                  <small>Use the camera for the cleanest detection</small>
+                </span>
+              </label>
+              <label class="file-upload item-gallery-upload">
+                <input type="file" id="itemGalleryPhotos" accept="image/*" multiple />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 0 1 2-2h3l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="9" cy="13" r="1.5"/><path d="m20 17-4.5-4.5L7 21"/></svg>
+                <span class="file-upload-copy">
+                  <strong>Upload from library</strong>
+                  <small>Scan several saved photos together</small>
+                </span>
+              </label>
+              <button type="button" id="itemManualToggleBtn" class="btn-outline item-manual-toggle">Add manually</button>
+            </div>
+            <div class="item-capture-guidance">
+              <span>One item per photo works best.</span>
+              <span>Plain backgrounds help.</span>
+              <span>You can scan multiple photos at once.</span>
+            </div>
+            <div id="itemQueueSummary" class="item-queue-summary" style="display:none;"></div>
+          </div>
           <div id="itemPhotoStatus" class="status-text item-photo-status"></div>
         </section>
 
-        <details class="card item-manual-card" id="itemManualDetails">
-          <summary class="card-header card-header-clickable">
-            <h3>Add details manually</h3>
-            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
+        <section class="card item-manual-card item-step-panel" id="itemManualDetails" data-item-step-panel="confirm">
+          <div class="item-step-section-head">
+            <span class="item-step-section-kicker">Confirm item</span>
+            <h3>Save this piece</h3>
+            <p>Check the essentials first. Open the extra details only if something needs adjusting.</p>
+          </div>
           <div class="item-manual-body">
+            <div class="item-edit-summary" aria-hidden="true">
+              <div class="item-edit-summary-media">
+                <img id="itemEditSummaryImg" alt="" style="display:none;" />
+                <div id="itemEditSummaryPlaceholder" class="item-edit-summary-placeholder"></div>
+              </div>
+              <div class="item-edit-summary-copy">
+                <span class="item-edit-summary-kicker">Editing</span>
+                <strong id="itemEditSummaryName">Wardrobe item</strong>
+                <span id="itemEditSummaryMeta">Update the core details and save when it feels right.</span>
+              </div>
+            </div>
             <div class="form-group">
               <label for="itemType" class="input-label">Type *</label>
               <select id="itemType" required class="select-input">
@@ -471,40 +655,84 @@
 
             <div class="form-group">
               <label for="itemName" class="input-label">Name *</label>
-              <input id="itemName" type="text" class="text-input" placeholder="e.g. Blue denim jacket" required />
+              <input id="itemName" type="text" class="text-input" placeholder="Name this piece" required />
               <div id="itemNameError" class="field-error" role="alert"></div>
             </div>
-
-            <details class="item-more-details">
-              <summary>More details</summary>
-              <div class="item-more-details-body">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="itemColor" class="input-label">Color</label>
-                    <input id="itemColor" type="text" class="text-input" placeholder="e.g. Navy" />
-                  </div>
-                  <div class="form-group">
-                    <label for="itemMaterial" class="input-label">Material</label>
-                    <input id="itemMaterial" type="text" class="text-input" placeholder="e.g. Cotton" />
-                  </div>
-                </div>
-
+            <div class="item-edit-inline-fields">
+              <div class="form-row">
                 <div class="form-group">
-                  <label for="itemCare" class="input-label">Care Instructions</label>
-                  <textarea id="itemCare" rows="2" class="text-input" placeholder="e.g. Machine wash cold, tumble dry low" style="resize:vertical;"></textarea>
-                  <button type="button" id="scanTagBtn" class="btn-outline" style="margin-top:8px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                    Scan care tag
-                  </button>
+                  <label for="itemEditColor" class="input-label">Color</label>
+                  <input id="itemEditColor" type="text" class="text-input" placeholder="Add a color" />
+                </div>
+                <div class="form-group">
+                  <label for="itemEditMaterial" class="input-label">Material</label>
+                  <input id="itemEditMaterial" type="text" class="text-input" placeholder="Add material details" />
                 </div>
               </div>
-            </details>
+              <div class="form-group">
+                <label for="itemEditCare" class="input-label">Care</label>
+                <div class="item-edit-care-row">
+                  <input id="itemEditCare" type="text" class="text-input" placeholder="Add care instructions" />
+                  <button type="button" id="itemEditScanTagBtn" class="btn-outline item-edit-scan-btn">Scan tag</button>
+                </div>
+              </div>
+              <label class="option-row item-favorite-toggle item-favorite-toggle-inline">
+                <input type="checkbox" id="itemEditFavorite" class="toggle-input" />
+                <span class="toggle-track"></span>
+                <div class="option-text">
+                  <strong>Favorite</strong>
+                  <span>Keep it easier to find in your wardrobe.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card item-manual-card item-step-panel item-confirm-details-panel" id="itemConfirmDetailsPanel" data-item-step-panel="confirm" style="display:none;">
+          <div class="item-step-section-head">
+            <span class="item-step-section-kicker">Edit details</span>
+            <h3>Adjust anything that needs help</h3>
+            <p>Add optional details now, or keep this lightweight and edit later.</p>
+          </div>
+          <div class="item-manual-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemColor" class="input-label">Color</label>
+                <input id="itemColor" type="text" class="text-input" placeholder="Add a color" />
+              </div>
+              <div class="form-group">
+                <label for="itemMaterial" class="input-label">Material</label>
+                <input id="itemMaterial" type="text" class="text-input" placeholder="Add material details" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="itemCare" class="input-label">Care Instructions</label>
+              <textarea id="itemCare" rows="2" class="text-input" placeholder="Add care instructions" style="resize:vertical;"></textarea>
+              <button type="button" id="scanTagBtn" class="btn-outline" style="margin-top:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Scan care tag
+              </button>
+            </div>
+            <label class="option-row item-favorite-toggle">
+              <input type="checkbox" id="itemFavorite" class="toggle-input" />
+              <span class="toggle-track"></span>
+              <div class="option-text">
+                <strong>Favorite this piece</strong>
+                <span>Keep it close in the wardrobe and use it more in outfits.</span>
+              </div>
+            </label>
             <div id="itemFormStatus" class="form-status" role="alert"></div>
           </div>
-        </details>
+        </section>
 
+      </div>
+      <div class="item-save-footer">
         <div class="item-save-bar">
-          <button type="submit" id="itemSaveBtn" class="btn-primary item-save-btn">Save item</button>
+          <button type="button" id="itemBackBtn" class="btn-ghost item-back-btn" style="display:none;">Back</button>
+          <button type="submit" id="itemSaveBtn" class="btn-primary item-save-btn">Continue</button>
+          <button type="button" id="itemNextPhotoBtn" class="btn-outline item-next-photo-btn" style="display:none;">Add more photos</button>
+          <button type="button" id="itemEditDetailsBtn" class="btn-outline item-next-photo-btn" style="display:none;">Edit details</button>
           <button type="button" id="itemDeleteBtn" class="btn-danger-primary item-delete-btn" style="display:none;">Delete item</button>
         </div>
       </div>
@@ -532,12 +760,202 @@
     </div>
   </dialog>
 
+  <dialog id="wardrobeFilterDialog" class="dialog wardrobe-filter-dialog" aria-labelledby="wardrobeFilterDialogTitle">
+    <div class="dialog-inner wardrobe-filter-dialog-inner">
+      <button id="wardrobeFilterDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <h2 id="wardrobeFilterDialogTitle" class="dialog-title">Refine your closet view</h2>
+      <div class="form-group">
+        <label for="wardrobeColorFilter" class="input-label">Color</label>
+        <select id="wardrobeColorFilter" class="select-input"></select>
+      </div>
+      <div class="form-group">
+        <label for="wardrobeMaterialFilter" class="input-label">Material</label>
+        <select id="wardrobeMaterialFilter" class="select-input"></select>
+      </div>
+      <div class="form-group">
+        <label for="wardrobeSeasonFilter" class="input-label">Season / weather</label>
+        <select id="wardrobeSeasonFilter" class="select-input">
+          <option value="all">All seasons</option>
+          <option value="warm">Warm weather</option>
+          <option value="cold">Cold weather</option>
+          <option value="rain">Rain-ready</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="wardrobeSortFilter" class="input-label">Sort</label>
+        <select id="wardrobeSortFilter" class="select-input">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="name">Name A–Z</option>
+          <option value="type">Type A–Z</option>
+        </select>
+      </div>
+      <div class="option-list wardrobe-filter-options">
+        <label class="option-row">
+          <input type="checkbox" id="wardrobeRecentOnlyFilter" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Recently added</strong>
+            <span>Show pieces added in the last 30 days.</span>
+          </div>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="wardrobeMissingMetadataFilter" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Needs review</strong>
+            <span>Only show items with missing color or material details.</span>
+          </div>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="wardrobeMatchedFilter" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Matched to recommendations</strong>
+            <span>Only show items already used in recent or saved looks.</span>
+          </div>
+        </label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="wardrobeFilterResetBtn" class="btn-ghost">Reset</button>
+        <button type="button" id="wardrobeFilterApplyBtn" class="btn-primary">Apply</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="itemDetailDialog" class="dialog item-detail-dialog" aria-labelledby="itemDetailTitle">
+    <div class="dialog-inner item-detail-inner">
+      <button id="itemDetailCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <div id="itemDetailBody"></div>
+    </div>
+  </dialog>
+
+  <dialog id="wardrobeItemActionsDialog" class="dialog wardrobe-item-actions-dialog" aria-labelledby="wardrobeItemActionsTitle">
+    <div class="dialog-inner wardrobe-item-actions-inner">
+      <button id="wardrobeItemActionsCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <span class="today-cta-kicker">Quick actions</span>
+      <h2 id="wardrobeItemActionsTitle" class="dialog-title">Manage this item</h2>
+      <div id="wardrobeItemActionsBody" class="wardrobe-item-actions-body"></div>
+    </div>
+  </dialog>
+
+  <dialog id="itemBatchEditDialog" class="dialog item-batch-edit-dialog" aria-labelledby="itemBatchEditTitle">
+    <div class="dialog-inner item-batch-edit-inner">
+      <button id="itemBatchEditCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <div class="item-batch-edit-media">
+        <img id="itemBatchEditPhoto" alt="Detected wardrobe item" style="display:none;" />
+        <div id="itemBatchEditPhotoPlaceholder" class="item-detail-photo item-detail-photo-placeholder"></div>
+        <button type="button" id="itemBatchEditCropBtn" class="item-batch-edit-crop-btn" aria-label="Edit crop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 3v12a3 3 0 0 0 3 3h12"/>
+            <path d="M3 6h12a3 3 0 0 1 3 3v12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="item-batch-edit-copy">
+        <span class="today-cta-kicker">Detected item</span>
+        <h2 id="itemBatchEditTitle" class="dialog-title">Edit item</h2>
+        <p id="itemBatchEditMeta" class="dialog-subtitle">Review the details before saving.</p>
+      </div>
+      <div class="form-group">
+        <label for="itemBatchEditType" class="input-label">Type *</label>
+        <select id="itemBatchEditType" required class="select-input">
+          <option value="">Select type…</option>
+          <option>T-shirt</option><option>Shirt</option><option>Polo</option>
+          <option>Sweater</option><option>Hoodie</option><option>Jacket</option>
+          <option>Coat</option><option>Blazer</option><option>Vest</option>
+          <option>Tank top</option><option>Jeans</option><option>Chinos</option>
+          <option>Shorts</option><option>Sweatpants</option><option>Dress pants</option>
+          <option>Skirt</option><option>Dress</option><option>Sneakers</option>
+          <option>Boots</option><option>Sandals</option><option>Dress shoes</option>
+          <option>Scarf</option><option>Hat</option><option>Gloves</option>
+          <option>Sunglasses</option><option>Belt</option><option>Bag</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="itemBatchEditName" class="input-label">Name *</label>
+        <input id="itemBatchEditName" type="text" class="text-input" placeholder="Name this piece" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="itemBatchEditColor" class="input-label">Color</label>
+          <input id="itemBatchEditColor" type="text" class="text-input" placeholder="Add a color" />
+        </div>
+        <div class="form-group">
+          <label for="itemBatchEditMaterial" class="input-label">Material</label>
+          <input id="itemBatchEditMaterial" type="text" class="text-input" placeholder="Add material details" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="itemBatchEditCare" class="input-label">Care Instructions</label>
+        <textarea id="itemBatchEditCare" rows="1" class="text-input" placeholder="Add care instructions"></textarea>
+      </div>
+      <div class="item-batch-edit-footer">
+        <label class="option-row item-favorite-toggle item-favorite-toggle-compact">
+          <input type="checkbox" id="itemBatchEditFavorite" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Favorite this piece</strong>
+            <span>Keep it close in your wardrobe.</span>
+          </div>
+        </label>
+        <div id="itemBatchEditStatus" class="form-status" role="alert"></div>
+        <div class="dialog-actions item-batch-edit-actions">
+          <button type="button" id="itemBatchEditRemoveBtn" class="btn-outline">Discard item</button>
+          <button type="button" id="itemBatchEditSaveBtn" class="btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="itemRejectedDialog" class="dialog item-rejected-dialog" aria-labelledby="itemRejectedDialogTitle">
+    <div class="dialog-inner item-rejected-dialog-inner">
+      <button id="itemRejectedDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <div class="item-batch-edit-media">
+        <img id="itemRejectedDialogPhoto" alt="Rejected wardrobe photo" style="display:none;" />
+      </div>
+      <span class="today-cta-kicker">Photo needs help</span>
+      <h2 id="itemRejectedDialogTitle" class="dialog-title">Recover this photo</h2>
+      <p id="itemRejectedDialogMessage" class="dialog-subtitle">WearCast flagged this image before detection. Crop the item first, add it manually from the full photo, or skip it.</p>
+      <div class="dialog-actions item-rejected-dialog-actions item-rejected-dialog-actions-primary">
+        <button type="button" id="itemRejectedDialogCropBtn" class="btn-primary">Crop and continue</button>
+        <button type="button" id="itemRejectedDialogFullBtn" class="btn-outline">Add manually</button>
+      </div>
+      <div class="dialog-actions item-rejected-dialog-actions-tertiary">
+        <button type="button" id="itemRejectedDialogSkipBtn" class="btn-ghost">Skip photo</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="itemCropDialog" class="dialog item-crop-dialog" aria-labelledby="itemCropDialogTitle">
+    <div class="dialog-inner item-crop-dialog-inner">
+      <button id="itemCropCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <span class="today-cta-kicker">Adjust crop</span>
+      <h2 id="itemCropDialogTitle" class="dialog-title">Crop this item</h2>
+      <p id="itemCropDialogSubtitle" class="dialog-subtitle">Move the crop box over the item, then drag the corner to resize it.</p>
+      <div id="itemCropStage" class="item-crop-stage">
+        <img id="itemCropImage" alt="Photo for manual crop" />
+        <div id="itemCropSelection" class="item-crop-selection" role="presentation">
+          <div class="item-crop-selection-grid" aria-hidden="true"></div>
+          <div id="itemCropHandle" class="item-crop-handle" aria-hidden="true"></div>
+        </div>
+      </div>
+      <p class="item-crop-hint">Drag inside the box to move it. Drag the corner handle to resize it.</p>
+      <div id="itemCropStatus" class="form-status" role="alert"></div>
+      <div class="dialog-actions item-crop-actions">
+        <button type="button" id="itemCropResetBtn" class="btn-outline">Reset crop</button>
+        <button type="button" id="itemCropApplyBtn" class="btn-primary">Use this crop</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- ═══ Auth dialog ═══ -->
   <dialog id="authDialog" class="dialog auth-dialog">
     <div class="dialog-card auth-dialog-card">
       <span class="today-cta-kicker">Account</span>
       <h2 id="authDialogTitle" class="dialog-title">Sign in</h2>
-      <p class="auth-subtitle">Sign in to sync your wardrobe across devices</p>
+      <p class="auth-subtitle">Sign in when you want to save and sync your wardrobe across devices</p>
 
       <div id="authFormWrap">
         <!-- Email/Password form -->
@@ -591,6 +1009,17 @@
       <div class="dialog-actions">
         <button type="button" id="deleteAccountCancelBtn" class="btn-ghost">Keep account</button>
         <button type="button" id="deleteAccountConfirmBtn" class="btn-danger">Delete forever</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="deleteItemConfirmDialog" class="dialog">
+    <div class="dialog-inner">
+      <h2>Delete this item?</h2>
+      <p class="dialog-subtitle">This removes the item from your wardrobe. You can’t undo this.</p>
+      <div class="dialog-actions">
+        <button type="button" id="deleteItemCancelBtn" class="btn-ghost">Keep item</button>
+        <button type="button" id="deleteItemConfirmBtn" class="btn-danger">Delete item</button>
       </div>
     </div>
   </dialog>

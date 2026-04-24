@@ -17,6 +17,16 @@ function normalizeCareInstructions(value) {
   return [];
 }
 
+function normalizeCropConfidence(value) {
+  return value === "trusted" || value === "fallback" ? value : "none";
+}
+
+function selectStoredDisplayPhoto(sourcePhotoDataUrl, cropPhotoDataUrl, cropConfidence) {
+  if (cropConfidence === "trusted" && cropPhotoDataUrl) return cropPhotoDataUrl;
+  // Avoid storing a duplicate of the source image when display media can be derived.
+  return null;
+}
+
 // ─── List wardrobe items ─────────────────────────────────────
 router.get("/", async (req, res) => {
   try {
@@ -36,8 +46,12 @@ router.get("/", async (req, res) => {
 // ─── Add item ────────────────────────────────────────────────
 router.post("/", async (req, res) => {
   try {
-    const { type, name, color, material, careInstructions, photoDataUrl, favorite } = req.body;
+    const { type, name, color, material, careInstructions, photoDataUrl, sourcePhotoDataUrl, cropPhotoDataUrl, cropConfidence, favorite } = req.body;
     const normalizedCareInstructions = normalizeCareInstructions(careInstructions);
+    const normalizedSource = sourcePhotoDataUrl || photoDataUrl || null;
+    const normalizedCrop = cropPhotoDataUrl || null;
+    const normalizedConfidence = normalizeCropConfidence(cropConfidence);
+    const storedDisplayPhoto = selectStoredDisplayPhoto(normalizedSource, normalizedCrop, normalizedConfidence);
     console.info(`[POST] /api/wardrobe - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn("/api/wardrobe: Type and name required");
@@ -45,9 +59,9 @@ router.post("/", async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url, favorite)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [req.userId, type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), photoDataUrl || null, !!favorite]
+      `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url, source_photo_data_url, crop_photo_data_url, crop_confidence, favorite)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+      [req.userId, type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), storedDisplayPhoto, normalizedSource, normalizedCrop, normalizedConfidence, !!favorite]
     );
     console.info("/api/wardrobe: added item", result.rows[0]?.id);
     res.json(rowToItem(result.rows[0]));
@@ -60,8 +74,12 @@ router.post("/", async (req, res) => {
 // ─── Update item ─────────────────────────────────────────────
 router.put("/:id", async (req, res) => {
   try {
-    const { type, name, color, material, careInstructions, photoDataUrl, favorite } = req.body;
+    const { type, name, color, material, careInstructions, photoDataUrl, sourcePhotoDataUrl, cropPhotoDataUrl, cropConfidence, favorite } = req.body;
     const normalizedCareInstructions = normalizeCareInstructions(careInstructions);
+    const normalizedSource = sourcePhotoDataUrl || photoDataUrl || null;
+    const normalizedCrop = cropPhotoDataUrl || null;
+    const normalizedConfidence = normalizeCropConfidence(cropConfidence);
+    const storedDisplayPhoto = selectStoredDisplayPhoto(normalizedSource, normalizedCrop, normalizedConfidence);
     console.info(`[PUT] /api/wardrobe/${req.params.id} - userId: ${req.userId}, body:`, req.body);
     if (!type || !name) {
       console.warn(`/api/wardrobe/${req.params.id}: Type and name required`);
@@ -71,9 +89,10 @@ router.put("/:id", async (req, res) => {
     const result = await pool.query(
       `UPDATE wardrobe_items
        SET type = $1, name = $2, color = $3, material = $4,
-           care_instructions = $5, photo_data_url = $6, favorite = $7, updated_at = NOW()
-       WHERE id = $8 AND user_id = $9 RETURNING *`,
-      [type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), photoDataUrl || null, !!favorite, req.params.id, req.userId]
+           care_instructions = $5, photo_data_url = $6, source_photo_data_url = $7,
+           crop_photo_data_url = $8, crop_confidence = $9, favorite = $10, updated_at = NOW()
+       WHERE id = $11 AND user_id = $12 RETURNING *`,
+      [type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), storedDisplayPhoto, normalizedSource, normalizedCrop, normalizedConfidence, !!favorite, req.params.id, req.userId]
     );
     if (!result.rows.length) {
       console.warn(`/api/wardrobe/${req.params.id}: Item not found for update`);
@@ -116,6 +135,9 @@ function rowToItem(row) {
     material: row.material,
     careInstructions: Array.isArray(row.care_instructions) ? row.care_instructions : [],
     photoDataUrl: row.photo_data_url,
+    sourcePhotoDataUrl: row.source_photo_data_url || row.photo_data_url,
+    cropPhotoDataUrl: row.crop_photo_data_url,
+    cropConfidence: normalizeCropConfidence(row.crop_confidence),
     favorite: !!row.favorite,
     createdAt: row.created_at,
   };

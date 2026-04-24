@@ -30,6 +30,9 @@ export async function initDB() {
       material          TEXT,
       care_instructions JSONB DEFAULT '[]',
       photo_data_url    TEXT,
+      source_photo_data_url TEXT,
+      crop_photo_data_url TEXT,
+      crop_confidence   TEXT,
       favorite          BOOLEAN DEFAULT FALSE,
       created_at        TIMESTAMPTZ DEFAULT NOW(),
       updated_at        TIMESTAMPTZ DEFAULT NOW()
@@ -57,7 +60,10 @@ export async function initDB() {
 
   await pool.query(`
     ALTER TABLE wardrobe_items
-      ADD COLUMN IF NOT EXISTS favorite BOOLEAN DEFAULT FALSE;
+      ADD COLUMN IF NOT EXISTS favorite BOOLEAN DEFAULT FALSE,
+      ADD COLUMN IF NOT EXISTS source_photo_data_url TEXT,
+      ADD COLUMN IF NOT EXISTS crop_photo_data_url TEXT,
+      ADD COLUMN IF NOT EXISTS crop_confidence TEXT;
   `);
 
   await pool.query(`

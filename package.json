@@ -5,6 +5,12 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "web:serve": "node scripts/dev_web_server.mjs",
+    "ios:dev": "node scripts/ios_dev.mjs",
+    "ios:dev:enable": "node scripts/set_capacitor_server.mjs http://127.0.0.1:5173",
+    "ios:dev:disable": "node scripts/set_capacitor_server.mjs",
+    "ios:dev:copy": "npm run ios:dev:enable && npx cap copy ios",
+    "ios:dev:sync": "npm run ios:dev:enable && npx cap sync ios",
     "eval:recommendations": "WEARCAST_RECOMMEND_URL=https://wearcast.fly.dev WEARCAST_MATRIX_CONCURRENCY=6 node scripts/sample_recommendations.mjs && node scripts/evaluate_recommendation_value.mjs",
     "phone:codex": "hey codex",
     "phone:codex:new": "hey codex --new",

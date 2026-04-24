@@ -5,19 +5,24 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "compress:wardrobe-images": "node scripts/compress_wardrobe_images.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@huggingface/transformers": "^4.1.0",
+    "@imgly/background-removal-node": "^1.4.5",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jimp": "^1.6.1",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "sharp": "^0.34.5"
   },
   "description": ""
 }

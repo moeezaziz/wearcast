@@ -2,10 +2,12 @@ import { config } from "dotenv";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { readFileSync } from "fs";
+import { writeFile, unlink } from "fs/promises";
 import https from "https";
 import { randomUUID } from "crypto";
 import express from "express";
 import cors from "cors";
+import { Jimp } from "jimp";
 import { initDB } from "./db.js";
 import authRoutes from "./routes/auth.js";
 import wardrobeRoutes from "./routes/wardrobe.js";
@@ -17,7 +19,49 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+// Keep the JSON limit tight. Wardrobe sync payloads can batch a handful of
+// base64-encoded thumbnails; 8mb covers that comfortably while giving us
+// meaningful backpressure against accidental huge uploads that previously
+// contributed to RSS spikes / OOM kills.
+app.use(express.json({ limit: "8mb" }));
+
+// Simple in-process concurrency guard for the ML-heavy endpoints. Running
+// transformers.js segmentation + @imgly/background-removal-node concurrently
+// is the main source of memory spikes. Serializing them keeps the working
+// set bounded without materially hurting p95 latency on this instance.
+const HEAVY_ML_CONCURRENCY = Number(process.env.HEAVY_ML_CONCURRENCY || 1);
+let heavyMlInFlight = 0;
+const heavyMlQueue = [];
+function acquireHeavyMlSlot() {
+  return new Promise((resolve) => {
+    const tryAcquire = () => {
+      if (heavyMlInFlight < HEAVY_ML_CONCURRENCY) {
+        heavyMlInFlight += 1;
+        resolve(() => {
+          heavyMlInFlight -= 1;
+          const next = heavyMlQueue.shift();
+          if (next) next();
+        });
+      } else {
+        heavyMlQueue.push(tryAcquire);
+      }
+    };
+    tryAcquire();
+  });
+}
+
+// Log process memory warnings so we can tell whether future crashes are still
+// OOM vs something else. Noisy-but-useful during the memory stabilization
+// window; fine to leave in production.
+if (process.env.NODE_ENV === "production") {
+  setInterval(() => {
+    const mem = process.memoryUsage();
+    const rssMb = Math.round(mem.rss / 1024 / 1024);
+    if (rssMb > 800) {
+      console.warn("[memory] high-rss", { rssMb, heapUsedMb: Math.round(mem.heapUsed / 1024 / 1024) });
+    }
+  }, 30_000).unref();
+}
 
 // Serve the frontend static files from the 'www' directory
 app.use(express.static(join(__dirname, "..", "www")));
@@ -28,6 +72,7 @@ const MODEL = "auto";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
 const RECOMMENDATION_COPY_VERSION = 14;
+const DEBUG_LOGS = String(process.env.DEBUG || "").toLowerCase() === "true";
 const weatherCache = new Map();
 const recommendationCache = new Map();
 const STOCK_IMAGE_CATALOG = {
@@ -917,6 +962,946 @@ function normalizeCareInstructions(value, { limit = 8 } = {}) {
     .map((item) => cleanInlineText(item))
     .filter(Boolean)
     .slice(0, limit);
+}
+
+function normalizeRelativeBox(value) {
+  if (!value || typeof value !== "object") return null;
+  const x = toNumber(value.x);
+  const y = toNumber(value.y);
+  const width = toNumber(value.width);
+  const height = toNumber(value.height);
+  if (![x, y, width, height].every((part) => Number.isFinite(part))) return null;
+  if (width <= 0.03 || height <= 0.03) return null;
+
+  const clamp01 = (n) => Math.max(0, Math.min(1, n));
+  const left = clamp01(x);
+  const top = clamp01(y);
+  const right = clamp01(x + width);
+  const bottom = clamp01(y + height);
+  const normalizedWidth = right - left;
+  const normalizedHeight = bottom - top;
+
+  if (normalizedWidth <= 0.03 || normalizedHeight <= 0.03) return null;
+
+  return {
+    x: left,
+    y: top,
+    width: normalizedWidth,
+    height: normalizedHeight,
+  };
+}
+
+let clothesSegmentationPipelinePromise = null;
+let backgroundRemovalModulePromise = null;
+const BODY_SEGMENTATION_LABELS = new Set([
+  "hair",
+  "face",
+  "left-leg",
+  "right-leg",
+  "left-arm",
+  "right-arm",
+]);
+
+async function getClothesSegmentationPipeline() {
+  if (!clothesSegmentationPipelinePromise) {
+    clothesSegmentationPipelinePromise = import("@huggingface/transformers")
+      .then(({ pipeline }) => pipeline("image-segmentation", "Xenova/segformer_b2_clothes"));
+  }
+  return clothesSegmentationPipelinePromise;
+}
+
+async function getBackgroundRemovalFn() {
+  if (!backgroundRemovalModulePromise) {
+    backgroundRemovalModulePromise = import("@imgly/background-removal-node")
+      .then(({ removeBackground }) => removeBackground);
+  }
+  return backgroundRemovalModulePromise;
+}
+
+function summarizeAnalyzeItems(items = []) {
+  return (Array.isArray(items) ? items : []).slice(0, 6).map((item) => {
+    const box = normalizeRelativeBox(item?.box);
+    const area = box ? Number((box.width * box.height).toFixed(4)) : null;
+    return {
+      type: item?.type || null,
+      name: item?.name || null,
+      color: item?.color || null,
+      geometrySource: item?.geometrySource || null,
+      area,
+      box,
+    };
+  });
+}
+
+function createAnalyzeLogger(requestId) {
+  const startedAt = Date.now();
+  return {
+    event(stage, details = {}) {
+      console.info("[analyze-item-photo]", {
+        requestId,
+        stage,
+        elapsedMs: Date.now() - startedAt,
+        ...details,
+      });
+    },
+    debug(stage, details = {}) {
+      if (!DEBUG_LOGS) return;
+      console.info("[analyze-item-photo:debug]", {
+        requestId,
+        stage,
+        elapsedMs: Date.now() - startedAt,
+        ...details,
+      });
+    },
+    warn(stage, details = {}) {
+      console.warn("[analyze-item-photo]", {
+        requestId,
+        stage,
+        elapsedMs: Date.now() - startedAt,
+        ...details,
+      });
+    },
+    error(stage, err, details = {}) {
+      console.error("[analyze-item-photo]", {
+        requestId,
+        stage,
+        elapsedMs: Date.now() - startedAt,
+        error: err?.message || String(err),
+        stack: DEBUG_LOGS ? err?.stack || null : undefined,
+        ...details,
+      });
+    },
+  };
+}
+
+function boxArea(box) {
+  const normalized = normalizeRelativeBox(box);
+  if (!normalized) return 0;
+  return normalized.width * normalized.height;
+}
+
+function boxIntersectionArea(a, b) {
+  const boxA = normalizeRelativeBox(a);
+  const boxB = normalizeRelativeBox(b);
+  if (!boxA || !boxB) return 0;
+  const left = Math.max(boxA.x, boxB.x);
+  const top = Math.max(boxA.y, boxB.y);
+  const right = Math.min(boxA.x + boxA.width, boxB.x + boxB.width);
+  const bottom = Math.min(boxA.y + boxA.height, boxB.y + boxB.height);
+  if (right <= left || bottom <= top) return 0;
+  return (right - left) * (bottom - top);
+}
+
+function boxOverlapRatio(a, b) {
+  const intersection = boxIntersectionArea(a, b);
+  if (!intersection) return 0;
+  const minArea = Math.max(0.0001, Math.min(boxArea(a), boxArea(b)));
+  return intersection / minArea;
+}
+
+function normalizeItemTypeKey(type = "") {
+  const normalized = cleanInlineText(type).toLowerCase();
+  if (/t-shirt|shirt|tee|polo|sweater|hoodie|blouse|top|tank/.test(normalized)) return "top";
+  if (/jacket|coat|blazer|overshirt|outerwear/.test(normalized)) return "outer";
+  if (/jean|pant|trouser|legging|short|skirt/.test(normalized)) return "bottom";
+  if (/shoe|loafer|boot|sneaker|sandal/.test(normalized)) return "shoes";
+  if (/watch|hat|cap|bag|belt|scarf|glove|sunglass|bracelet|necklace|accessor/.test(normalized)) return "accessory";
+  return normalized || "other";
+}
+
+function clamp01(value) {
+  return Math.max(0, Math.min(1, value));
+}
+
+function recenterBox(box, { width = null, height = null } = {}) {
+  const normalized = normalizeRelativeBox(box);
+  if (!normalized) return null;
+  const nextWidth = clamp01(width ?? normalized.width);
+  const nextHeight = clamp01(height ?? normalized.height);
+  const centerX = normalized.x + normalized.width / 2;
+  const centerY = normalized.y + normalized.height / 2;
+  return normalizeRelativeBox({
+    x: clamp01(centerX - nextWidth / 2),
+    y: clamp01(centerY - nextHeight / 2),
+    width: nextWidth,
+    height: nextHeight,
+  });
+}
+
+function tightenProductBox(box, type = "") {
+  const normalized = normalizeRelativeBox(box);
+  if (!normalized) return null;
+
+  const typeKey = normalizeItemTypeKey(type);
+  const area = boxArea(normalized);
+  const aspect = normalized.width / Math.max(0.001, normalized.height);
+
+  const limits = {
+    top: { maxArea: 0.24, widthScale: 0.82, heightScale: 0.88 },
+    outer: { maxArea: 0.34, widthScale: 0.86, heightScale: 0.9 },
+    bottom: { maxArea: 0.3, widthScale: 0.84, heightScale: 0.9 },
+    shoes: { maxArea: 0.16, widthScale: 0.76, heightScale: 0.78 },
+    accessory: { maxArea: 0.09, widthScale: 0.74, heightScale: 0.74 },
+    other: { maxArea: 0.22, widthScale: 0.84, heightScale: 0.88 },
+  }[typeKey] || { maxArea: 0.22, widthScale: 0.84, heightScale: 0.88 };
+
+  let tightened = normalized;
+  if (area > limits.maxArea) {
+    tightened = recenterBox(normalized, {
+      width: normalized.width * limits.widthScale,
+      height: normalized.height * limits.heightScale,
+    }) || normalized;
+  }
+
+  if (typeKey === "top" || typeKey === "outer") {
+    if (aspect > 1.1) {
+      tightened = recenterBox(tightened, {
+        width: tightened.width * 0.88,
+        height: tightened.height,
+      }) || tightened;
+    }
+  }
+
+  if (typeKey === "accessory" && boxArea(tightened) > 0.09) {
+    tightened = recenterBox(tightened, {
+      width: tightened.width * 0.78,
+      height: tightened.height * 0.78,
+    }) || tightened;
+  }
+
+  if (typeKey === "shoes" && boxArea(tightened) > 0.18) {
+    tightened = recenterBox(tightened, {
+      width: tightened.width * 0.84,
+      height: tightened.height * 0.84,
+    }) || tightened;
+  }
+
+  return tightened;
+}
+
+function canonicalizeDetectedTypeLabel(type = "", name = "") {
+  const rawType = cleanInlineText(type);
+  const rawName = cleanInlineText(name);
+  const combined = `${rawType} ${rawName}`.toLowerCase();
+  if (!combined) return rawType || null;
+
+  if (/\bpolo\b/.test(combined)) return "Polo";
+  if (/\b(t-?shirt|tee)\b/.test(combined)) return "T-shirt";
+  if (/\b(tank(\s+top)?)\b/.test(combined)) return "Tank top";
+  if (/\b(button[\s-]?up|button[\s-]?down|oxford|dress shirt)\b/.test(combined)) return "Shirt";
+  if (/\b(loafer|oxford shoe|derby|dress shoe)\b/.test(combined)) return "Dress shoes";
+  if (/\b(sneaker|trainer|runner)\b/.test(combined)) return "Sneakers";
+  if (/\b(boot|chelsea|combat boot)\b/.test(combined)) return "Boots";
+  if (/\b(sandal|slide)\b/.test(combined)) return "Sandals";
+  if (/\b(baseball cap|cap|beanie|sun hat|bucket hat)\b/.test(combined)) return "Hat";
+  if (/\b(sunglass|shades|eyewear)\b/.test(combined)) return "Sunglasses";
+  if (/\b(glove|mittens?)\b/.test(combined)) return "Gloves";
+  if (/\b(scarf)\b/.test(combined)) return "Scarf";
+  if (/\b(belt)\b/.test(combined)) return "Belt";
+  if (/\b(tote|bag|backpack|purse|handbag)\b/.test(combined)) return "Bag";
+  return rawType || null;
+}
+
+function sanitizeInferredMaterial(material, { source = "", classifiedMode = null } = {}) {
+  const value = cleanInlineText(material);
+  if (!value) return null;
+  const normalized = value.toLowerCase();
+
+  if (/\bor\b|\band\b|\/|,/.test(normalized)) return null;
+  if (/\blikely\b|\bmaybe\b|\bpossibly\b|\bappears\b|\blooks\b|\bseems\b/.test(normalized)) return null;
+  if (classifiedMode === "product" && source === "llm-primary") return null;
+
+  const allowList = new Set([
+    "cotton",
+    "wool",
+    "linen",
+    "silk",
+    "leather",
+    "denim",
+    "suede",
+    "nylon",
+    "polyester",
+    "cashmere",
+    "fleece",
+    "canvas",
+    "metal",
+    "rubber",
+  ]);
+
+  return allowList.has(normalized) ? value : null;
+}
+
+function finalizeDetectedItems(items = [], { classifiedMode = null, source = "" } = {}) {
+  const normalizedItems = (Array.isArray(items) ? items : [])
+    .map((item) => {
+      const canonicalType = canonicalizeDetectedTypeLabel(item?.type, item?.name);
+      return {
+        ...item,
+        type: canonicalType,
+        material: sanitizeInferredMaterial(item?.material, { source, classifiedMode }),
+        box: classifiedMode === "product"
+          ? tightenProductBox(item?.box, canonicalType || item?.type)
+          : normalizeRelativeBox(item?.box),
+      };
+    })
+    .filter((item) => item.type || item.name || item.color || item.material || item.careInstructions?.length);
+
+  if (classifiedMode !== "product") return normalizedItems;
+
+  const withArea = normalizedItems
+    .map((item) => ({ item, area: boxArea(item.box) }))
+    .sort((a, b) => b.area - a.area);
+
+  if (!withArea.length) return normalizedItems;
+
+  const best = withArea[0];
+  const retained = withArea.filter(({ area, item }, index) => {
+    if (index === 0) return true;
+    if (!item.box || !best.item.box) return false;
+    return area >= best.area * 0.72;
+  });
+
+  return retained.map(({ item }) => item).slice(0, 1);
+}
+
+function finalizeOutfitDetectedItems(items = [], { source = "" } = {}) {
+  const normalizedItems = (Array.isArray(items) ? items : [])
+    .map((item) => {
+      const canonicalType = canonicalizeDetectedTypeLabel(item?.type, item?.name);
+      return {
+        ...item,
+        type: canonicalType,
+        material: sanitizeInferredMaterial(item?.material, { source, classifiedMode: "outfit" }),
+        box: normalizeRelativeBox(item?.box),
+        area: boxArea(item?.box),
+        typeKey: normalizeItemTypeKey(canonicalType || item?.type),
+      };
+    })
+    .filter((item) => item.type || item.name || item.color || item.material || item.careInstructions?.length)
+    .sort((a, b) => b.area - a.area);
+
+  const kept = [];
+  for (const item of normalizedItems) {
+    if (!item.box) {
+      if (!kept.length) kept.push(item);
+      continue;
+    }
+
+    if (item.area < 0.035 && kept.length) continue;
+
+    const duplicatesExisting = kept.some((existing) => {
+      if (!existing.box) return false;
+      const overlap = boxOverlapRatio(existing.box, item.box);
+      if (overlap < 0.68) return false;
+      return existing.typeKey === item.typeKey || item.area <= existing.area * 0.82;
+    });
+    if (duplicatesExisting) continue;
+
+    const weakAccessory = item.typeKey === "accessory" && item.area < 0.055 && kept.length > 0;
+    if (weakAccessory) continue;
+
+    kept.push(item);
+  }
+
+  return kept
+    .slice(0, 4)
+    .map(({ area, typeKey, ...item }) => item);
+}
+
+function decodeImageDataUrl(image) {
+  const match = String(image || "").match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+  if (!match) throw new Error("Invalid image data URL");
+  return {
+    mimeType: match[1],
+    buffer: Buffer.from(match[2], "base64"),
+  };
+}
+
+function fileExtensionForMimeType(mimeType = "") {
+  if (mimeType.includes("png")) return "png";
+  if (mimeType.includes("webp")) return "webp";
+  return "jpg";
+}
+
+async function writeTempImageFromDataUrl(image) {
+  const { mimeType, buffer } = decodeImageDataUrl(image);
+  const filePath = join("/tmp", `${randomUUID()}.${fileExtensionForMimeType(mimeType)}`);
+  await writeFile(filePath, buffer);
+  return filePath;
+}
+
+function mapSegmentationLabelToWardrobeItem(label = "") {
+  const normalized = cleanInlineText(label).toLowerCase();
+  const table = {
+    "upper-clothes": { key: "upper-clothes", type: "Shirt", name: "Shirt" },
+    "dress": { key: "dress", type: "Dress", name: "Dress" },
+    "pants": { key: "pants", type: "Jeans", name: "Pants" },
+    "skirt": { key: "skirt", type: "Skirt", name: "Skirt" },
+    "hat": { key: "hat", type: "Hat", name: "Hat" },
+    "bag": { key: "bag", type: "Bag", name: "Bag" },
+    "scarf": { key: "scarf", type: "Scarf", name: "Scarf" },
+    "belt": { key: "belt", type: "Belt", name: "Belt" },
+    "sunglasses": { key: "sunglasses", type: "Sunglasses", name: "Sunglasses" },
+    "left-shoe": { key: "shoes", type: "Sneakers", name: "Shoes" },
+    "right-shoe": { key: "shoes", type: "Sneakers", name: "Shoes" },
+  };
+  return table[normalized] || null;
+}
+
+function countMaskPixels(mask) {
+  if (!mask?.data || !mask.width || !mask.height) return 0;
+  let count = 0;
+  for (let index = 0; index < mask.data.length; index += 1) {
+    if (mask.data[index] > 0) count += 1;
+  }
+  return count;
+}
+
+function maskBoundingBox(mask) {
+  if (!mask?.data || !mask.width || !mask.height) return null;
+  let minX = mask.width;
+  let minY = mask.height;
+  let maxX = -1;
+  let maxY = -1;
+  const data = mask.data;
+
+  for (let y = 0; y < mask.height; y += 1) {
+    for (let x = 0; x < mask.width; x += 1) {
+      if (data[y * mask.width + x] > 0) {
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  if (maxX < minX || maxY < minY) return null;
+  return {
+    minX,
+    minY,
+    maxX,
+    maxY,
+    width: maxX - minX + 1,
+    height: maxY - minY + 1,
+  };
+}
+
+function unionPixelBoxes(boxes = []) {
+  const valid = boxes.filter(Boolean);
+  if (!valid.length) return null;
+  return {
+    minX: Math.min(...valid.map((box) => box.minX)),
+    minY: Math.min(...valid.map((box) => box.minY)),
+    maxX: Math.max(...valid.map((box) => box.maxX)),
+    maxY: Math.max(...valid.map((box) => box.maxY)),
+    width: Math.max(...valid.map((box) => box.maxX)) - Math.min(...valid.map((box) => box.minX)) + 1,
+    height: Math.max(...valid.map((box) => box.maxY)) - Math.min(...valid.map((box) => box.minY)) + 1,
+  };
+}
+
+function pixelBoxToRelativeBox(box, width, height) {
+  if (!box || !width || !height) return null;
+  return normalizeRelativeBox({
+    x: box.minX / width,
+    y: box.minY / height,
+    width: box.width / width,
+    height: box.height / height,
+  });
+}
+
+function nearestColorName(r, g, b) {
+  const palette = [
+    { name: "Black", rgb: [32, 32, 32] },
+    { name: "White", rgb: [236, 236, 236] },
+    { name: "Gray", rgb: [128, 128, 128] },
+    { name: "Navy", rgb: [40, 60, 120] },
+    { name: "Blue", rgb: [60, 110, 200] },
+    { name: "Brown", rgb: [110, 74, 45] },
+    { name: "Beige", rgb: [214, 194, 154] },
+    { name: "Green", rgb: [70, 128, 80] },
+    { name: "Red", rgb: [180, 56, 52] },
+    { name: "Pink", rgb: [222, 138, 170] },
+    { name: "Purple", rgb: [124, 88, 164] },
+    { name: "Yellow", rgb: [224, 196, 72] },
+    { name: "Orange", rgb: [220, 132, 48] },
+  ];
+
+  let best = palette[0];
+  let bestDistance = Infinity;
+  for (const entry of palette) {
+    const distance = Math.sqrt(
+      (r - entry.rgb[0]) ** 2 +
+      (g - entry.rgb[1]) ** 2 +
+      (b - entry.rgb[2]) ** 2
+    );
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = entry;
+    }
+  }
+  return best.name;
+}
+
+function dominantColorForMasks(image, masks = [], unionBox = null) {
+  if (!image?.bitmap?.data || !Array.isArray(masks) || !masks.length || !unionBox) return null;
+  const { data, width } = image.bitmap;
+  const step = Math.max(1, Math.floor(Math.sqrt((unionBox.width * unionBox.height) / 2400)));
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  let count = 0;
+
+  for (const mask of masks) {
+    for (let y = unionBox.minY; y <= unionBox.maxY; y += step) {
+      for (let x = unionBox.minX; x <= unionBox.maxX; x += step) {
+        if (mask.data[y * mask.width + x] <= 0) continue;
+        const offset = (y * width + x) * 4;
+        red += data[offset];
+        green += data[offset + 1];
+        blue += data[offset + 2];
+        count += 1;
+      }
+    }
+  }
+
+  if (!count) return null;
+  return nearestColorName(
+    Math.round(red / count),
+    Math.round(green / count),
+    Math.round(blue / count)
+  );
+}
+
+async function segmentWardrobeItemsFromImage(imageDataUrl) {
+  const release = await acquireHeavyMlSlot();
+  const tempPath = await writeTempImageFromDataUrl(imageDataUrl);
+  try {
+    const [segmenter, image] = await Promise.all([
+      getClothesSegmentationPipeline(),
+      Jimp.read(tempPath),
+    ]);
+    const result = await segmenter(tempPath);
+    const grouped = new Map();
+
+    for (const entry of Array.isArray(result) ? result : []) {
+      const mapped = mapSegmentationLabelToWardrobeItem(entry?.label);
+      if (!mapped || !entry?.mask) continue;
+      const pixelBox = maskBoundingBox(entry.mask);
+      if (!pixelBox) continue;
+
+      const existing = grouped.get(mapped.key) || {
+        key: mapped.key,
+        type: mapped.type,
+        baseName: mapped.name,
+        masks: [],
+        boxes: [],
+      };
+      existing.masks.push(entry.mask);
+      existing.boxes.push(pixelBox);
+      grouped.set(mapped.key, existing);
+    }
+
+    return [...grouped.values()]
+      .map((group) => {
+        const unionBox = unionPixelBoxes(group.boxes);
+        const relativeBox = pixelBoxToRelativeBox(unionBox, image.bitmap.width, image.bitmap.height);
+        if (!relativeBox) return null;
+        const color = dominantColorForMasks(image, group.masks, unionBox);
+        const name = color ? `${color} ${group.baseName}` : group.baseName;
+        return {
+          type: group.type,
+          name,
+          color,
+          material: null,
+          careInstructions: [],
+          box: relativeBox,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => (b.box?.height || 0) * (b.box?.width || 0) - (a.box?.height || 0) * (a.box?.width || 0));
+  } finally {
+    await unlink(tempPath).catch(() => {});
+    release();
+  }
+}
+
+async function segmentWardrobeOutfitImage(imageDataUrl) {
+  const release = await acquireHeavyMlSlot();
+  const tempPath = await writeTempImageFromDataUrl(imageDataUrl);
+  try {
+    const [segmenter, image] = await Promise.all([
+      getClothesSegmentationPipeline(),
+      Jimp.read(tempPath),
+    ]);
+    const result = await segmenter(tempPath);
+    const grouped = new Map();
+    let hasBodySignal = false;
+
+    for (const entry of Array.isArray(result) ? result : []) {
+      const label = cleanInlineText(entry?.label).toLowerCase();
+      const pixelCount = countMaskPixels(entry?.mask);
+      const areaRatio = pixelCount / Math.max(1, image.bitmap.width * image.bitmap.height);
+      if (BODY_SEGMENTATION_LABELS.has(label) && areaRatio >= 0.01) hasBodySignal = true;
+
+      const mapped = mapSegmentationLabelToWardrobeItem(entry?.label);
+      if (!mapped || !entry?.mask) continue;
+      const pixelBox = maskBoundingBox(entry.mask);
+      if (!pixelBox) continue;
+
+      const existing = grouped.get(mapped.key) || {
+        key: mapped.key,
+        type: mapped.type,
+        baseName: mapped.name,
+        masks: [],
+        boxes: [],
+      };
+      existing.masks.push(entry.mask);
+      existing.boxes.push(pixelBox);
+      grouped.set(mapped.key, existing);
+    }
+
+    const items = [...grouped.values()]
+      .map((group) => {
+        const unionBox = unionPixelBoxes(group.boxes);
+        const relativeBox = pixelBoxToRelativeBox(unionBox, image.bitmap.width, image.bitmap.height);
+        if (!relativeBox) return null;
+        const color = dominantColorForMasks(image, group.masks, unionBox);
+        const name = color ? `${color} ${group.baseName}` : group.baseName;
+        return {
+          type: group.type,
+          name,
+          color,
+          material: null,
+          careInstructions: [],
+          box: relativeBox,
+          geometrySource: "outfit-segmentation",
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => (b.box?.height || 0) * (b.box?.width || 0) - (a.box?.height || 0) * (a.box?.width || 0));
+
+    return {
+      items,
+      hasBodySignal,
+    };
+  } finally {
+    await unlink(tempPath).catch(() => {});
+    release();
+  }
+}
+
+async function extractForegroundBoxFromImage(imageDataUrl) {
+  const release = await acquireHeavyMlSlot();
+  const tempPath = await writeTempImageFromDataUrl(imageDataUrl);
+  try {
+    const removeBackground = await getBackgroundRemovalFn();
+    const blob = await removeBackground(tempPath, {
+      model: "small",
+      output: {
+        format: "image/png",
+        type: "mask",
+      },
+    });
+    const maskBuffer = Buffer.from(await blob.arrayBuffer());
+    const maskImage = await Jimp.read(maskBuffer);
+    const { data, width, height } = maskImage.bitmap;
+
+    let minX = width;
+    let minY = height;
+    let maxX = -1;
+    let maxY = -1;
+    let count = 0;
+
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const alpha = data[(y * width + x) * 4 + 3];
+        if (alpha <= 16) continue;
+        count += 1;
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+
+    if (!count || maxX < minX || maxY < minY) return null;
+
+    return pixelBoxToRelativeBox({
+      minX,
+      minY,
+      maxX,
+      maxY,
+      width: maxX - minX + 1,
+      height: maxY - minY + 1,
+    }, width, height);
+  } finally {
+    await unlink(tempPath).catch(() => {});
+    release();
+  }
+}
+
+async function classifyWardrobePhotoMode(image, { requestId = null } = {}) {
+  try {
+    const text = await chatCompletion([
+      {
+        role: "user",
+        content: [
+          { type: "image_url", image_url: { url: image } },
+          {
+            type: "text",
+            text: `Classify this wardrobe photo for crop strategy.
+
+Return ONLY valid JSON:
+{
+  "mode": "product" or "outfit"
+}
+
+Use "product" when the image mainly shows one isolated clothing item, shoe, bag, hat, or folded/flat-lay garment.
+Use "outfit" when the image mainly shows a person wearing clothing, including mirror selfies, street photos, torso shots, or full-body photos.`,
+          },
+        ],
+      },
+    ], { maxTokens: 40, compactJsonRetry: true, requestId, traceLabel: "analyze-classify-mode" });
+
+    const parsed = parseModelJson(text);
+    return parsed?.mode === "product" || parsed?.mode === "outfit" ? parsed.mode : null;
+  } catch {
+    return null;
+  }
+}
+
+async function analyzeProductPhotoMetadata(image, { requestId = null } = {}) {
+  const text = await chatCompletion([
+    {
+      role: "user",
+      content: [
+        { type: "image_url", image_url: { url: image } },
+        {
+          type: "text",
+          text: `You are analysing a single clothing product photo for a wardrobe app.
+
+Return ONLY valid JSON:
+{
+  "type": "best clothing category such as Polo, T-shirt, Shirt, Jacket, Jeans, Dress shoes, Sneakers, Hat, Sunglasses, Watch, Bag, Other",
+  "name": "short natural item name",
+  "color": "main visible color or null",
+  "material": "likely material if reasonably inferable, otherwise null",
+  "careInstructions": []
+}
+
+Rules:
+- Assume there is one main wardrobe item.
+- Use the most specific everyday wardrobe label you can.
+- Distinguish Polo from Shirt: if the top has a soft collar and short placket but is not a full button-up, use Polo.
+- For small items like shoes, hats, sunglasses, and watches, describe only that item and not the surrounding empty background.
+- Keep values short.
+- Use null when unsure.
+- Return careInstructions as an array of plain strings. Use [] if there is no readable care label.
+- Do not include markdown fences or extra text.`,
+        },
+      ],
+    },
+  ], { maxTokens: 160, compactJsonRetry: true, requestId, traceLabel: "analyze-product-metadata" });
+
+  const parsed = parseModelJson(text);
+  return {
+    type: typeof parsed?.type === "string" ? parsed.type : null,
+    name: typeof parsed?.name === "string" ? parsed.name : null,
+    color: typeof parsed?.color === "string" ? parsed.color : null,
+    material: typeof parsed?.material === "string" ? parsed.material : null,
+    careInstructions: normalizeCareInstructions(parsed?.careInstructions),
+  };
+}
+
+async function analyzeWardrobeItemsWithLLM(image, { requestId = null } = {}) {
+  const baseMessages = [
+    {
+      role: "user",
+      content: [
+        { type: "image_url", image_url: { url: image } },
+        {
+          type: "text",
+          text: `You are analysing a clothing photo for a wardrobe app.
+
+The user may send:
+- a single clothing item photo, or
+- a full-body outfit photo that contains multiple visible wardrobe items.
+
+Return ONLY valid JSON with this shape:
+{
+  "items": [
+    {
+      "type": "best clothing category such as Polo, T-shirt, Shirt, Jacket, Jeans, Dress shoes, Sneakers, Hat, Sunglasses, Watch, Other",
+      "name": "short natural item name",
+      "color": "main visible color or null",
+      "material": "likely material if reasonably inferable, otherwise null",
+      "careInstructions": [],
+      "box": {
+        "x": 0.1,
+        "y": 0.1,
+        "width": 0.5,
+        "height": 0.5
+      }
+    }
+  ]
+}
+
+Rules:
+- Return one array entry per distinct visible wardrobe item worth saving.
+- For full-body photos, prefer major wearable items such as tops, bottoms, outerwear, shoes, dresses, hats, bags, sunglasses.
+- Do not invent hidden garments.
+- Do not include the same item twice.
+- Return between 1 and 6 items.
+- If a simple photo shows one obvious wardrobe item, always return exactly one best-guess item.
+- Never return an empty array when at least one visible wearable item is present.
+- Use the most specific everyday wardrobe label you can.
+- Distinguish Polo from Shirt: if the top has a soft collar and short placket but is not a full button-up, use Polo.
+- Keep values short.
+- Use null when unsure.
+- Return careInstructions as an array of plain strings. Use [] if there is no readable care label.
+- Include a best-effort normalized box for each visible item.
+- Box coordinates must be fractions from 0 to 1 relative to the full image.
+- x/y are the top-left corner. width/height are the item size.
+- Keep each box tight around the visible clothing item. Include the whole item, not the whole person.
+- For smaller items such as shoes, hats, sunglasses, and watches, boxes should stay close to the visible object and usually occupy much less of the frame than a shirt or jacket.
+- Do not include markdown fences or extra text.`,
+        },
+      ],
+    },
+  ];
+
+  const parseItems = (payload) => (Array.isArray(payload?.items) ? payload.items : [{
+    type: payload?.type,
+    name: payload?.name,
+    color: payload?.color,
+    material: payload?.material,
+    careInstructions: payload?.careInstructions,
+    box: payload?.box,
+  }])
+    .map((item) => ({
+      type: typeof item?.type === "string" ? item.type : null,
+      name: typeof item?.name === "string" ? item.name : null,
+      color: typeof item?.color === "string" ? item.color : null,
+      material: typeof item?.material === "string" ? item.material : null,
+      careInstructions: normalizeCareInstructions(item?.careInstructions),
+      box: normalizeRelativeBox(item?.box),
+    }))
+    .filter((item) => item.type || item.name || item.color || item.material || item.careInstructions.length);
+
+  const text = await chatCompletion(baseMessages, {
+    maxTokens: 420,
+    requestId,
+    traceLabel: "analyze-llm-items",
+  });
+  let items = parseItems(parseModelJson(text));
+
+  if (!items.length) {
+    const retryText = await chatCompletion([
+      ...baseMessages,
+      {
+        role: "user",
+        content: "The first pass returned no usable items. Retry and return one best-guess visible wardrobe item from this image, even if some details are uncertain. Use type \"Other\" only if needed. Return valid JSON only.",
+      },
+    ], {
+      maxTokens: 220,
+      compactJsonRetry: true,
+      requestId,
+      traceLabel: "analyze-llm-items-retry",
+    });
+    items = parseItems(parseModelJson(retryText));
+  }
+
+  return items;
+}
+
+async function refineProductPrimaryItem(image, item, { requestId = null } = {}) {
+  const currentType = cleanInlineText(item?.type);
+  const currentName = cleanInlineText(item?.name);
+  if (!currentType && !currentName) return item;
+
+  const text = await chatCompletion([
+    {
+      role: "user",
+      content: [
+        { type: "image_url", image_url: { url: image } },
+        {
+          type: "text",
+          text: `Refine the wardrobe type for the main product item in this image.
+
+Current guess:
+{
+  "type": ${JSON.stringify(currentType || null)},
+  "name": ${JSON.stringify(currentName || null)}
+}
+
+Return ONLY valid JSON:
+{
+  "type": "one best label",
+  "name": "short natural item name or null"
+}
+
+Allowed type labels:
+Polo, T-shirt, Shirt, Tank top, Sweater, Hoodie, Jacket, Coat, Blazer, Vest, Jeans, Chinos, Shorts, Sweatpants, Dress pants, Skirt, Dress, Sneakers, Boots, Sandals, Dress shoes, Hat, Sunglasses, Scarf, Gloves, Belt, Bag, Watch, Other
+
+Rules:
+- Use the most specific label you can.
+- If the top has a soft collar and short placket but is not a full button-up, choose Polo.
+- If this is a loafer, oxford, or derby, choose Dress shoes.
+- Keep the name short and natural.
+- Return JSON only.`,
+        },
+      ],
+    },
+  ], { maxTokens: 120, compactJsonRetry: true, requestId, traceLabel: "analyze-refine-product-type" });
+
+  const parsed = parseModelJson(text);
+  const refinedType = canonicalizeDetectedTypeLabel(parsed?.type, parsed?.name || currentName);
+  const refinedName = typeof parsed?.name === "string" ? parsed.name : null;
+
+  return {
+    ...item,
+    type: refinedType || currentType || item?.type || null,
+    name: refinedName || currentName || item?.name || null,
+  };
+}
+
+async function checkIfPoloTop(image, item, { requestId = null } = {}) {
+  const text = await chatCompletion([
+    {
+      role: "user",
+      content: [
+        { type: "image_url", image_url: { url: image } },
+        {
+          type: "text",
+          text: `Inspect the main top in this image and identify the front closure details.
+
+Return ONLY valid JSON:
+{
+  "closure": "partial-placket" or "full-button-front" or "unclear",
+  "collar": "soft-polo-collar" or "structured-shirt-collar" or "none" or "unclear",
+  "isPolo": true or false,
+  "name": "short natural polo name if isPolo is true, otherwise null"
+}
+
+Use isPolo=true only when the garment has polo-style features:
+- a soft fold-down collar
+- a short partial placket near the neck
+- not a full button-up front extending to the hem
+
+Use isPolo=false for full button-up shirts, blouses, camp shirts, tunics, or dress shirts.
+Ignore the current guessed label and judge only from visible garment features.
+Return JSON only.`,
+        },
+      ],
+    },
+  ], { maxTokens: 90, compactJsonRetry: true, requestId, traceLabel: "analyze-check-polo" });
+
+  const parsed = parseModelJson(text);
+  return {
+    isPolo: parsed?.isPolo === true,
+    name: typeof parsed?.name === "string" ? parsed.name : null,
+  };
 }
 
 function humanizeCatalogKey(key, entry = null) {
@@ -2501,49 +3486,173 @@ function buildFallbackRecommendation(weather) {
 
 // ─── POST /api/scan-tag ───────────────────────────────────────
 app.post("/api/analyze-item-photo", async (req, res) => {
+  const requestId = randomUUID();
+  const log = createAnalyzeLogger(requestId);
   try {
     const { image } = req.body;
-    if (!image) return res.status(400).json({ error: "No image provided" });
+    res.set("X-WearCast-Request-Id", requestId);
+    if (!image) return res.status(400).json({ error: "No image provided", requestId });
 
-    const text = await chatCompletion([
-      {
-        role: "user",
-        content: [
-          { type: "image_url", image_url: { url: image } },
-          {
-            type: "text",
-            text: `You are analysing a clothing photo for a wardrobe app.
+    log.event("start", {
+      imageChars: typeof image === "string" ? image.length : 0,
+    });
 
-Return ONLY valid JSON with this shape:
-{
-  "type": "best clothing category such as T-shirt, Jacket, Jeans, Dress, Sneakers, Other",
-  "name": "short natural item name",
-  "color": "main visible color or null",
-  "material": "likely material if reasonably inferable, otherwise null",
-  "careInstructions": ["machine wash cold"]
-}
+    const classifiedMode = await classifyWardrobePhotoMode(image, { requestId });
+    log.event("mode-classified", { classifiedMode });
 
-Rules:
-- Keep values short.
-- Use null when unsure.
-- Return careInstructions as an array of plain strings. Use [] if there is no readable care label.
-- Do not include markdown fences or extra text.`,
-          },
-        ],
-      },
-    ], { maxTokens: 180 });
+    let source = "llm-primary";
+    let items = [];
 
-    const parsed = parseModelJson(text);
+    if (classifiedMode === "product") {
+      const [boxResult, metadataResult] = await Promise.allSettled([
+        extractForegroundBoxFromImage(image),
+        analyzeProductPhotoMetadata(image, { requestId }),
+      ]);
+      const box = boxResult.status === "fulfilled" ? boxResult.value : null;
+      const metadata = metadataResult.status === "fulfilled"
+        ? metadataResult.value
+        : {
+            type: null,
+            name: null,
+            color: null,
+            material: null,
+            careInstructions: [],
+          };
+
+      if (boxResult.status === "rejected") {
+        log.warn("product-foreground-failed", { error: boxResult.reason?.message || String(boxResult.reason) });
+      }
+      if (metadataResult.status === "rejected") {
+        log.warn("product-metadata-failed", { error: metadataResult.reason?.message || String(metadataResult.reason) });
+      }
+
+      if (box) {
+        items = [{
+          type: metadata.type || "Other",
+          name: metadata.name || metadata.type || "Clothing item",
+          color: metadata.color || null,
+          material: metadata.material || null,
+          careInstructions: metadata.careInstructions || [],
+          box,
+          geometrySource: "product-foreground",
+        }];
+        source = "product-foreground";
+      }
+    }
+
+    if (!items.length) {
+      try {
+        items = await analyzeWardrobeItemsWithLLM(image, { requestId });
+        if (items.length) {
+          source = "llm-primary";
+          log.event("llm-items", {
+            count: items.length,
+            items: summarizeAnalyzeItems(items),
+          });
+        }
+      } catch (err) {
+        log.warn("llm-items-failed", { error: err?.message || String(err) });
+      }
+    }
+
+    if (!items.length && classifiedMode !== "product") {
+      try {
+        const outfitAnalysis = await segmentWardrobeOutfitImage(image);
+        log.debug("outfit-segmentation", {
+          itemCount: outfitAnalysis.items.length,
+          hasBodySignal: outfitAnalysis.hasBodySignal,
+          items: summarizeAnalyzeItems(outfitAnalysis.items),
+        });
+        if (outfitAnalysis.items.length && (classifiedMode === "outfit" || outfitAnalysis.hasBodySignal)) {
+          items = outfitAnalysis.items;
+          source = "outfit-segmentation-fallback";
+        } else if (outfitAnalysis.items.length) {
+          items = outfitAnalysis.items;
+          source = "segmentation-fallback";
+        } else {
+          const segmentedItems = await segmentWardrobeItemsFromImage(image);
+          if (segmentedItems.length) {
+            items = segmentedItems.map((item) => ({
+              ...item,
+              geometrySource: item.geometrySource || "segmentation-fallback",
+            }));
+            source = "segmentation-fallback";
+          }
+        }
+      } catch (err) {
+        log.warn("segmentation-fallback-failed", { error: err?.message || String(err) });
+      }
+    }
+
+    items = classifiedMode === "outfit"
+      ? finalizeOutfitDetectedItems(items, { source })
+      : finalizeDetectedItems(items, { classifiedMode, source });
+
+    if (classifiedMode === "product" && source === "llm-primary" && items.length === 1) {
+      const candidate = items[0];
+      const needsTypeRefinement = /^(shirt|top|other)$/i.test(cleanInlineText(candidate?.type || ""));
+      if (needsTypeRefinement) {
+        try {
+          const refined = await refineProductPrimaryItem(image, candidate, { requestId });
+          items = finalizeDetectedItems([refined], { classifiedMode, source });
+          log.event("product-type-refined", {
+            before: summarizeAnalyzeItems([candidate]),
+            after: summarizeAnalyzeItems(items),
+          });
+        } catch (err) {
+          log.warn("product-type-refinement-failed", { error: err?.message || String(err) });
+        }
+      }
+
+      const poloAmbiguous = /^shirt$/i.test(cleanInlineText(items[0]?.type || ""))
+        || /\bshirt\b/i.test(cleanInlineText(items[0]?.name || ""));
+      if (poloAmbiguous) {
+        try {
+          const poloCheck = await checkIfPoloTop(image, items[0], { requestId });
+          if (poloCheck.isPolo) {
+            items = finalizeDetectedItems([{
+              ...items[0],
+              type: "Polo",
+              name: cleanInlineText(poloCheck.name) || `${cleanInlineText(items[0]?.color) || "Polo"} Polo`,
+            }], { classifiedMode, source });
+            log.event("product-polo-promoted", {
+              result: summarizeAnalyzeItems(items),
+            });
+          }
+        } catch (err) {
+          log.warn("product-polo-check-failed", { error: err?.message || String(err) });
+        }
+      }
+    }
+
+    if (classifiedMode === "product" && source === "llm-primary") {
+      items = items.map((item) => ({
+        ...item,
+        geometrySource: item.geometrySource || "product-llm",
+      }));
+    }
+
+    const first = items[0] || {};
+    log.event("success", {
+      source,
+      count: items.length,
+      items: summarizeAnalyzeItems(items),
+    });
+
     res.json({
-      type: typeof parsed?.type === "string" ? parsed.type : null,
-      name: typeof parsed?.name === "string" ? parsed.name : null,
-      color: typeof parsed?.color === "string" ? parsed.color : null,
-      material: typeof parsed?.material === "string" ? parsed.material : null,
-      careInstructions: normalizeCareInstructions(parsed?.careInstructions),
+      requestId,
+      items,
+      type: first.type || null,
+      name: first.name || null,
+      color: first.color || null,
+      material: first.material || null,
+      careInstructions: first.careInstructions || [],
+      box: first.box || null,
+      source,
     });
   } catch (err) {
-    console.error("analyze-item-photo error:", err);
-    res.status(500).json({ error: "Failed to analyse clothing photo" });
+    log.error("fatal", err);
+    res.status(500).json({ error: "Failed to analyse clothing photo", requestId });
   }
 });
 
