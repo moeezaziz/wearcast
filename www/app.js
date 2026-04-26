@@ -8,6 +8,11 @@ const GOOGLE_REDIRECT_WEB = "https://wearcast.fly.dev/api/auth/google/callback";
 // Detect if running in Capacitor (native app)
 const isNative = typeof window.Capacitor !== "undefined" && !!window.Capacitor.isNativePlatform;
 const nativePlugins = window.Capacitor?.Plugins || {};
+const runtimeConfig = window.WEARCAST_RUNTIME_CONFIG || {};
+const APP_VERSION = runtimeConfig.sentryRelease || "wearcast-local";
+const subscriptionsPlugin = typeof window.Capacitor?.registerPlugin === "function"
+  ? window.Capacitor.registerPlugin("Subscriptions")
+  : null;
 
 function getGoogleClientId() {
   // This flow always goes through the backend HTTPS bridge, so it must use
@@ -50,6 +55,14 @@ const els = {
   searchBtn: $("searchBtn"),
   refreshBtn: $("refreshBtn"),
   pullRefreshIndicator: $("pullRefreshIndicator"),
+  onboardingOverlay: $("onboardingOverlay"),
+  onboardingProgressBar: $("onboardingProgressBar"),
+  onboardingSkipBtn: $("onboardingSkipBtn"),
+  onboardingPrevBtn: $("onboardingPrevBtn"),
+  onboardingNextBtn: $("onboardingNextBtn"),
+  onboardingUseLocationBtn: $("onboardingUseLocationBtn"),
+  onboardingSearchBtn: $("onboardingSearchBtn"),
+  onboardingSkipFinalBtn: $("onboardingSkipFinalBtn"),
 
   recBadge: $("recBadge"),
   recommendation: $("recommendation"),
@@ -111,6 +124,7 @@ const els = {
   wardrobeSearchWrap: $("wardrobeSearchWrap"),
   wardrobeSearchInput: $("wardrobeSearchInput"),
   itemDialog: $("itemDialog"),
+  itemDialogTitle: $("itemDialogTitle"),
   itemForm: $("itemForm"),
   itemType: $("itemType"),
   itemName: $("itemName"),
@@ -221,7 +235,7 @@ const els = {
   aiRecSection: $("aiRecSection"),
   aiRecLoading: $("aiRecLoading"),
   aiRecContent: $("aiRecContent"),
-  aiRecBadge: $("aiRecBadge"),
+  aiRecAdjustBtn: $("aiRecAdjustBtn"),
   aiRecWarnings: $("aiRecWarnings"),
   aiRecMissing: $("aiRecMissing"),
   whyWorksDialog: $("whyWorksDialog"),
@@ -233,13 +247,21 @@ const els = {
   tuneLookDialog: $("tuneLookDialog"),
   tuneLookDialogBody: $("tuneLookDialogBody"),
   tuneLookDialogCloseBtn: $("tuneLookDialogCloseBtn"),
+  tuneLookDialogKicker: $("tuneLookDialogKicker"),
+  tuneLookDialogTitle: $("tuneLookDialogTitle"),
+  tuneLookDialogSubtitle: $("tuneLookDialogSubtitle"),
 
   // Fashion notes
   fashionNotes: $("fashionNotes"),
   settingsAccountTitle: $("settingsAccountTitle"),
   settingsAccountStatus: $("settingsAccountStatus"),
   settingsAccountBtn: $("settingsAccountBtn"),
+  settingsUpgradeBtn: $("settingsUpgradeBtn"),
+  settingsUpgradeStatus: $("settingsUpgradeStatus"),
+  settingsRestorePurchasesBtn: $("settingsRestorePurchasesBtn"),
+  settingsManageSubscriptionBtn: $("settingsManageSubscriptionBtn"),
   settingsDeleteAccountBtn: $("settingsDeleteAccountBtn"),
+  settingsSupportBtn: $("settingsSupportBtn"),
   settingsPrivacyBtn: $("settingsPrivacyBtn"),
   settingsPrivacyStatus: $("settingsPrivacyStatus"),
   settingsClearLocationBtn: $("settingsClearLocationBtn"),
@@ -256,6 +278,8 @@ const els = {
 
   // New UI
   weatherHero: $("weatherHero"),
+  weatherExpandedPanel: $("weatherExpandedPanel"),
+  weatherExpandToggle: $("weatherExpandToggle"),
   emptyState: $("emptyState"),
   emptyStateTitle: $("emptyStateTitle"),
   emptyStateText: $("emptyStateText"),
@@ -334,9 +358,24 @@ const els = {
   authUserName: $("authUserName"),
   authUserEmail: $("authUserEmail"),
   authUserBadge: $("authUserBadge"),
+  authUpgradeBtn: $("authUpgradeBtn"),
+  authRestorePurchasesBtn: $("authRestorePurchasesBtn"),
   authLogoutBtn: $("authLogoutBtn"),
   authDeleteBtn: $("authDeleteBtn"),
   authCloseBtn: $("authCloseBtn"),
+  paywallDialog: $("paywallDialog"),
+  paywallCloseBtn: $("paywallCloseBtn"),
+  paywallKicker: $("paywallKicker"),
+  paywallTitle: $("paywallTitle"),
+  paywallSubtitle: $("paywallSubtitle"),
+  paywallFeatureList: $("paywallFeatureList"),
+  paywallPrimaryBtn: $("paywallPrimaryBtn"),
+  paywallSecondaryBtn: $("paywallSecondaryBtn"),
+  paywallRestoreBtn: $("paywallRestoreBtn"),
+  paywallAnnualPrice: $("paywallAnnualPrice"),
+  paywallAnnualMeta: $("paywallAnnualMeta"),
+  paywallMonthlyPrice: $("paywallMonthlyPrice"),
+  paywallMonthlyMeta: $("paywallMonthlyMeta"),
   deleteAccountDialog: $("deleteAccountDialog"),
   deleteAccountPrompt: $("deleteAccountPrompt"),
   deleteAccountPassword: $("deleteAccountPassword"),
@@ -354,6 +393,14 @@ const AUTH_REFRESH_TOKEN_KEY = "wearcast:refresh-token";
 const AUTH_USER_KEY = "wearcast:user";
 const API_BASE = "https://wearcast.fly.dev";
 const GOOGLE_CALLBACK_PATH = "/oauth2redirect/google";
+const FREE_WARDROBE_ITEM_LIMIT = 15;
+const FREE_SAVED_LOOK_LIMIT = 3;
+const FREE_PHOTO_SCANS_PER_WINDOW = 5;
+const PHOTO_SCAN_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+const PREMIUM_SAVED_LOOK_LIMIT = 100;
+const PRODUCT_ID_MONTHLY = "wearcast_ai_premium_monthly";
+const PRODUCT_ID_ANNUAL = "wearcast_ai_premium_annual";
+const APPLE_MANAGE_SUBSCRIPTIONS_URL = "https://apps.apple.com/account/subscriptions";
 
 // ─── Auth state ──────────────────────────────────────────────
 let authToken = localStorage.getItem(AUTH_TOKEN_KEY) || null;
@@ -375,6 +422,16 @@ function setAuth(token, user, refreshToken = authRefreshToken) {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_REFRESH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
+  }
+  if (sentryEnabled()) {
+    if (user?.email || user?.id) {
+      window.Sentry.setUser({
+        id: user?.id ? String(user.id) : undefined,
+        email: user?.email || undefined,
+      });
+    } else {
+      window.Sentry.setUser(null);
+    }
   }
   updateAuthUI();
 }
@@ -461,20 +518,31 @@ async function getCurrentPositionNative() {
   } catch {}
 
   return geolocation.getCurrentPosition({
-    enableHighAccuracy: true,
-    timeout: 20000,
-    maximumAge: 0,
+    enableHighAccuracy: false,
+    timeout: 12000,
+    maximumAge: 5 * 60 * 1000,
   });
 }
 
 async function finalizeAuthSuccess(token, user, refreshToken = authRefreshToken) {
   const wasLoggedIn = !!authToken;
   setAuth(token, user, refreshToken);
-  await syncLocalWardrobeToServer();
-  await renderWardrobe();
   if (els.authDialog?.open) els.authDialog.close();
+  trackAnalyticsEvent("auth_completed", {
+    title: `auth_completed:${user?.authProvider || "email"}`,
+    method: user?.authProvider || "email",
+    mode: wasLoggedIn ? "refresh" : "new_session",
+  });
   if (!wasLoggedIn && typeof showAppToast === "function") {
     showAppToast(`Signed in${user?.name ? ` as ${user.name}` : ""}`, "success");
+  }
+  await refreshSubscriptionState({ silent: true });
+  try {
+    await syncLocalWardrobeToServer();
+    await renderWardrobe();
+  } catch (err) {
+    console.error("post-auth wardrobe sync error:", err);
+    showAppToast("Signed in, but your wardrobe is still loading. Pull to refresh or reopen the Wardrobe tab.", "warning");
   }
 }
 
@@ -531,6 +599,7 @@ async function handleGoogleAuthRedirect(urlString, { clearBrowserUrl = false, cl
   if (!urlString || !isGoogleCallbackUrl(urlString)) return false;
 
   const url = new URL(urlString);
+  if (closeBrowser) await closeNativeBrowser();
   try {
     const handled = await completeGoogleAuth(url.searchParams);
     if (!handled) return false;
@@ -541,8 +610,6 @@ async function handleGoogleAuthRedirect(urlString, { clearBrowserUrl = false, cl
   } catch (err) {
     showAppToast(`Login failed: ${err.message}`, "error");
     return false;
-  } finally {
-    if (closeBrowser) await closeNativeBrowser();
   }
 }
 
@@ -601,6 +668,33 @@ const DEFAULT_STATE = {
       tabPrefs: { opens: 0, dwellMs: 0 },
     },
   },
+  onboarding: {
+    completed: false,
+    firstRecommendationSeen: false,
+    tuningCompleted: false,
+    wardrobePromptCompleted: false,
+  },
+  analytics: {
+    firstOpenTracked: false,
+    onboardingDeckSeen: false,
+    activationTuneSeen: false,
+    wardrobePromptSeen: false,
+    firstWardrobeItemTracked: false,
+    fiveWardrobeItemsTracked: false,
+    firstWardrobeRecommendationTracked: false,
+    lastEvents: [],
+  },
+  subscription: {
+    status: "free",
+    plan: "free",
+    trialActive: false,
+    renewalStatus: "none",
+    usagePromptShown: false,
+  },
+  usage: {
+    photoScans: [],
+    successfulUseDays: [],
+  },
   prefs: {
     cold: false,
     hot: false,
@@ -653,7 +747,17 @@ let recommendationDialogSwipeActive = false;
 let settingsFeedbackTimeoutId = null;
 let consentDialogSource = null;
 let activeTabTrackedAt = Date.now();
+let activeOnboardingSlide = 0;
+let activeItemStarterPreset = null;
+let activePaywallPlan = "annual";
+let subscriptionCatalog = {};
+let subscriptionRefreshPromise = null;
+let latestWeatherSnapshot = null;
+let latestRecommendationSnapshot = null;
+let isWeatherExpanded = false;
 const TAB_ORDER = ["tabToday", "tabWardrobe"];
+const ANALYTICS_EVENT_HISTORY_LIMIT = 40;
+const ANALYTICS_SESSION_ID = `session-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 function loadConsent() {
   try {
@@ -703,6 +807,25 @@ function loadState() {
           ...((parsed.productValidation && parsed.productValidation.tabs) || {}),
         },
       },
+      onboarding: {
+        ...structuredClone(DEFAULT_STATE).onboarding,
+        ...(parsed.onboarding || {}),
+      },
+      analytics: {
+        ...structuredClone(DEFAULT_STATE).analytics,
+        ...(parsed.analytics || {}),
+        lastEvents: Array.isArray(parsed.analytics?.lastEvents) ? parsed.analytics.lastEvents : [],
+      },
+      subscription: {
+        ...structuredClone(DEFAULT_STATE).subscription,
+        ...(parsed.subscription || {}),
+      },
+      usage: {
+        ...structuredClone(DEFAULT_STATE).usage,
+        ...(parsed.usage || {}),
+        photoScans: Array.isArray(parsed.usage?.photoScans) ? parsed.usage.photoScans : [],
+        successfulUseDays: Array.isArray(parsed.usage?.successfulUseDays) ? parsed.usage.successfulUseDays : [],
+      },
       prefs: { ...DEFAULT_STATE.prefs, ...(parsed.prefs || {}) },
     };
   } catch {
@@ -722,6 +845,27 @@ function saveState(partial) {
     ...prev,
     ...partial,
     ...(partial.lastLocation !== undefined ? { lastLocation: normalizedLocation } : {}),
+    onboarding: {
+      ...prev.onboarding,
+      ...(partial.onboarding || {}),
+    },
+    analytics: {
+      ...prev.analytics,
+      ...(partial.analytics || {}),
+      lastEvents: Array.isArray(partial.analytics?.lastEvents)
+        ? partial.analytics.lastEvents
+        : prev.analytics?.lastEvents || [],
+    },
+    subscription: {
+      ...prev.subscription,
+      ...(partial.subscription || {}),
+    },
+    usage: {
+      ...prev.usage,
+      ...(partial.usage || {}),
+      photoScans: Array.isArray(partial.usage?.photoScans) ? partial.usage.photoScans : prev.usage?.photoScans || [],
+      successfulUseDays: Array.isArray(partial.usage?.successfulUseDays) ? partial.usage.successfulUseDays : prev.usage?.successfulUseDays || [],
+    },
     prefs: { ...prev.prefs, ...(partial.prefs || {}) },
   };
 
@@ -879,10 +1023,498 @@ function summarizeRecommendationTuning(prefs = loadState().prefs) {
   return chips.length ? `Current tuning: ${chips.slice(0, 3).join(" • ")}.` : "Using custom outfit tuning.";
 }
 
+function getSubscriptionState(state = loadState()) {
+  return {
+    ...structuredClone(DEFAULT_STATE).subscription,
+    ...(state?.subscription || {}),
+  };
+}
+
+function hasPremiumAccess(state = loadState()) {
+  const subscription = getSubscriptionState(state);
+  return ["premium_active", "premium_trial", "premium_grace_period"].includes(subscription.status);
+}
+
+function getRecentPhotoScanTimestamps(state = loadState(), now = Date.now()) {
+  const usage = state?.usage || {};
+  return (Array.isArray(usage.photoScans) ? usage.photoScans : [])
+    .map((value) => new Date(value).getTime())
+    .filter((value) => Number.isFinite(value) && value >= now - PHOTO_SCAN_WINDOW_MS)
+    .sort((a, b) => a - b);
+}
+
+function getRemainingWardrobeSlots(items = loadWardrobe(), state = loadState()) {
+  if (hasPremiumAccess(state)) return Number.POSITIVE_INFINITY;
+  return Math.max(0, FREE_WARDROBE_ITEM_LIMIT - (Array.isArray(items) ? items.length : 0));
+}
+
+function getRemainingSavedLooks(state = loadState()) {
+  if (hasPremiumAccess(state)) return Number.POSITIVE_INFINITY;
+  const count = Array.isArray(state.savedLooks) ? state.savedLooks.length : 0;
+  return Math.max(0, FREE_SAVED_LOOK_LIMIT - count);
+}
+
+function getRemainingPhotoScans(state = loadState(), now = Date.now()) {
+  if (hasPremiumAccess(state)) return Number.POSITIVE_INFINITY;
+  return Math.max(0, FREE_PHOTO_SCANS_PER_WINDOW - getRecentPhotoScanTimestamps(state, now).length);
+}
+
+function consumePhotoScanCredits(count = 1) {
+  if (!Number.isFinite(count) || count <= 0) return loadState();
+  const state = loadState();
+  if (hasPremiumAccess(state)) return state;
+  const now = Date.now();
+  const nextPhotoScans = [
+    ...getRecentPhotoScanTimestamps(state, now).map((value) => new Date(value).toISOString()),
+    ...Array.from({ length: count }, () => new Date(now).toISOString()),
+  ];
+  return saveState({
+    usage: {
+      ...(state.usage || {}),
+      photoScans: nextPhotoScans,
+    },
+  });
+}
+
+function getPlanSummary(state = loadState()) {
+  const subscription = getSubscriptionState(state);
+  if (hasPremiumAccess(state)) {
+    const planLabel = subscription.plan === "annual" ? "Premium annual" : "Premium monthly";
+    const trialLabel = subscription.trialActive ? " • Trial active" : "";
+    return `${planLabel}${trialLabel}`;
+  }
+  return "Free plan";
+}
+
+function getSubscriptionsPlugin() {
+  return subscriptionsPlugin || nativePlugins?.Subscriptions || null;
+}
+
+function hasNativeSubscriptionsPlugin() {
+  const plugin = getSubscriptionsPlugin();
+  return !!(isNative && plugin?.getEntitlements && plugin?.getProducts && plugin?.purchase && plugin?.restorePurchases);
+}
+
+function updateSubscriptionCatalog(products = []) {
+  const nextCatalog = {};
+  for (const product of Array.isArray(products) ? products : []) {
+    if (product?.id) nextCatalog[product.id] = product;
+  }
+  subscriptionCatalog = nextCatalog;
+  if (els.paywallAnnualPrice && nextCatalog[PRODUCT_ID_ANNUAL]?.displayPrice) {
+    els.paywallAnnualPrice.textContent = `${nextCatalog[PRODUCT_ID_ANNUAL].displayPrice} / year`;
+  }
+  if (els.paywallAnnualMeta && nextCatalog[PRODUCT_ID_ANNUAL]?.subscriptionPeriod) {
+    els.paywallAnnualMeta.textContent = nextCatalog[PRODUCT_ID_ANNUAL].introductoryOffer
+      ? nextCatalog[PRODUCT_ID_ANNUAL].introductoryOffer
+      : nextCatalog[PRODUCT_ID_ANNUAL].subscriptionPeriod;
+  }
+  if (els.paywallMonthlyPrice && nextCatalog[PRODUCT_ID_MONTHLY]?.displayPrice) {
+    els.paywallMonthlyPrice.textContent = `${nextCatalog[PRODUCT_ID_MONTHLY].displayPrice} / month`;
+  }
+  if (els.paywallMonthlyMeta && nextCatalog[PRODUCT_ID_MONTHLY]?.subscriptionPeriod) {
+    els.paywallMonthlyMeta.textContent = nextCatalog[PRODUCT_ID_MONTHLY].subscriptionPeriod;
+  }
+}
+
+function applySubscriptionSnapshot(snapshot = {}) {
+  if (Array.isArray(snapshot.products)) updateSubscriptionCatalog(snapshot.products);
+  const state = loadState();
+  const previousSubscription = getSubscriptionState(state);
+  if (previousSubscription.trialActive && !snapshot.trialActive && snapshot.status === "premium_active") {
+    trackAnalyticsEvent("trial_converted", {
+      title: "trial_converted",
+      plan: snapshot.plan || previousSubscription.plan || "unknown",
+    });
+  }
+  const nextState = saveState({
+    subscription: {
+      ...getSubscriptionState(state),
+      status: snapshot.status || "free",
+      plan: snapshot.plan || "free",
+      trialActive: !!snapshot.trialActive,
+      renewalStatus: snapshot.renewalStatus || "none",
+      usagePromptShown: !!(state.subscription?.usagePromptShown),
+    },
+  });
+  updateAuthUI();
+  return nextState;
+}
+
+async function loadSubscriptionProducts({ force = false } = {}) {
+  if (!hasNativeSubscriptionsPlugin()) return [];
+  if (!force && Object.keys(subscriptionCatalog).length) return Object.values(subscriptionCatalog);
+  try {
+    const plugin = getSubscriptionsPlugin();
+    const result = await plugin.getProducts({
+      productIds: [PRODUCT_ID_ANNUAL, PRODUCT_ID_MONTHLY],
+    });
+    const products = Array.isArray(result?.products) ? result.products : [];
+    updateSubscriptionCatalog(products);
+    return products;
+  } catch (err) {
+    console.error("subscription products error:", err);
+    return [];
+  }
+}
+
+async function refreshSubscriptionState({ silent = true } = {}) {
+  if (!hasNativeSubscriptionsPlugin()) return loadState();
+  if (subscriptionRefreshPromise) return subscriptionRefreshPromise;
+  const plugin = getSubscriptionsPlugin();
+  subscriptionRefreshPromise = (async () => {
+    try {
+      const result = await plugin.getEntitlements();
+      return applySubscriptionSnapshot(result);
+    } catch (err) {
+      if (!silent) {
+        console.error("subscription entitlement refresh error:", err);
+        showAppToast(err?.message || "Could not refresh subscription status right now.", "warning");
+      }
+      return loadState();
+    } finally {
+      subscriptionRefreshPromise = null;
+    }
+  })();
+  return subscriptionRefreshPromise;
+}
+
+function getPaywallPlanLabel(plan = activePaywallPlan) {
+  return plan === "monthly" ? "monthly" : "annual";
+}
+
+function getProductIdForPlan(plan = activePaywallPlan) {
+  return plan === "monthly" ? PRODUCT_ID_MONTHLY : PRODUCT_ID_ANNUAL;
+}
+
+function getActiveSubscriptionPlan(state = loadState()) {
+  const subscription = getSubscriptionState(state);
+  return subscription.plan === "monthly" || subscription.plan === "annual" ? subscription.plan : "free";
+}
+
+function isSelectedCurrentPremiumPlan(plan = activePaywallPlan, state = loadState()) {
+  return hasPremiumAccess(state) && getActiveSubscriptionPlan(state) === getPaywallPlanLabel(plan);
+}
+
+function planHasIntroductoryOffer(plan = activePaywallPlan) {
+  const product = subscriptionCatalog[getProductIdForPlan(plan)];
+  return !!product?.introductoryOffer;
+}
+
+function getPaywallPrimaryLabel(plan = activePaywallPlan, state = loadState()) {
+  if (isSelectedCurrentPremiumPlan(plan, state)) return "Current plan";
+  if (hasPremiumAccess(state)) return `Switch to ${getPaywallPlanLabel(plan)}`;
+  if (!isLoggedIn()) return "Create account";
+  if (plan === "annual") return "Start 7-day free trial";
+  return "Choose monthly";
+}
+
+function setActivePaywallPlan(plan = "annual") {
+  activePaywallPlan = plan === "monthly" ? "monthly" : "annual";
+  document.querySelectorAll("[data-paywall-plan]").forEach((node) => {
+    node.classList.toggle("is-selected", node.getAttribute("data-paywall-plan") === activePaywallPlan);
+  });
+  if (els.paywallPrimaryBtn) {
+    els.paywallPrimaryBtn.textContent = getPaywallPrimaryLabel(activePaywallPlan);
+  }
+}
+
+async function openManageSubscription() {
+  try {
+    const plugin = getSubscriptionsPlugin();
+    if (isNative && typeof plugin?.manageSubscriptions === "function") {
+      await plugin.manageSubscriptions();
+      return;
+    }
+    if (isNative && nativePlugins?.Browser?.open) {
+      await nativePlugins.Browser.open({ url: APPLE_MANAGE_SUBSCRIPTIONS_URL });
+      return;
+    }
+    window.location.href = APPLE_MANAGE_SUBSCRIPTIONS_URL;
+  } catch {
+    showAppToast("Could not open subscription settings right now.", "warning");
+  }
+}
+
+async function purchaseSelectedPlan() {
+  if (!hasNativeSubscriptionsPlugin()) {
+    showAppToast("Native checkout support is not available in this build yet.", "warning");
+    return false;
+  }
+  const plugin = getSubscriptionsPlugin();
+  const plan = getPaywallPlanLabel(activePaywallPlan);
+  const productId = getProductIdForPlan(activePaywallPlan);
+  const trigger = els.paywallDialog?.dataset?.trigger || "generic";
+  const source = els.paywallDialog?.dataset?.source || "paywall";
+  const wasPremiumBeforePurchase = hasPremiumAccess();
+  if (isSelectedCurrentPremiumPlan(activePaywallPlan)) {
+    showAppToast("This is your current Premium plan. Use Manage subscription to cancel or review billing.", "info");
+    return false;
+  }
+  try {
+    const products = await loadSubscriptionProducts({ force: true });
+    const productAvailable = products.some((product) => product?.id === productId);
+    if (!productAvailable) {
+      trackAnalyticsEvent("purchase_failed", {
+        title: `purchase_failed:${plan}:product_unavailable`,
+        plan,
+        trigger,
+        source,
+        productId,
+        loadedProductIds: products.map((product) => product?.id).filter(Boolean).join(","),
+        reason: "product_unavailable",
+      });
+      showAppToast("This subscription is not available to this build yet. Check App Store Connect setup and try again shortly.", "warning");
+      return false;
+    }
+    trackAnalyticsEvent("purchase_started", {
+      title: `purchase_started:${plan}`,
+      plan,
+      trigger,
+      source,
+      productId,
+    });
+    if (els.paywallPrimaryBtn) {
+      els.paywallPrimaryBtn.disabled = true;
+      els.paywallPrimaryBtn.textContent = hasPremiumAccess()
+        ? `Switching to ${plan}…`
+        : plan === "annual"
+          ? "Starting trial…"
+          : "Starting checkout…";
+    }
+    const result = await plugin.purchase({ productId });
+    applySubscriptionSnapshot(result);
+    if (result?.status === "premium_active" || result?.status === "premium_trial" || result?.status === "premium_grace_period") {
+      trackAnalyticsEvent("purchase_succeeded", {
+        title: `purchase_succeeded:${plan}`,
+        plan,
+        trigger,
+        source,
+        trialActive: !!result?.trialActive,
+      });
+      if (result?.trialActive) {
+        trackAnalyticsEvent("trial_started", {
+          title: `trial_started:${plan}`,
+          plan,
+          trigger,
+          source,
+        });
+      }
+      closePaywall();
+      showAppToast(
+        wasPremiumBeforePurchase
+          ? `Switched to ${plan} billing. Apple may apply the billing change at renewal depending on your subscription.`
+          : result?.trialActive
+          ? `Started your ${plan} trial. Premium is now active.`
+          : `Started your ${plan} subscription. Premium is now active.`,
+        "success"
+      );
+      return true;
+    }
+    if (result?.purchaseState === "cancelled") {
+      trackAnalyticsEvent("purchase_cancelled", {
+        title: `purchase_cancelled:${plan}`,
+        plan,
+        trigger,
+        source,
+      });
+      return false;
+    }
+    if (result?.purchaseState === "pending") {
+      trackAnalyticsEvent("purchase_pending", {
+        title: `purchase_pending:${plan}`,
+        plan,
+        trigger,
+        source,
+      });
+      showAppToast("Purchase is pending approval. We’ll unlock premium once Apple confirms it.", "info");
+      return false;
+    }
+    trackAnalyticsEvent("purchase_failed", {
+      title: `purchase_failed:${plan}`,
+      plan,
+      trigger,
+      source,
+      reason: result?.purchaseState || "incomplete",
+    });
+    showAppToast("Purchase didn’t complete. Please try again.", "warning");
+    return false;
+  } catch (err) {
+    trackAnalyticsEvent("purchase_failed", {
+      title: `purchase_failed:${plan}`,
+      plan,
+      trigger,
+      source,
+      reason: err?.message || "error",
+    });
+    console.error("subscription purchase error:", err);
+    showAppToast(err?.message || "Could not complete the purchase right now.", "error");
+    return false;
+  } finally {
+    if (els.paywallPrimaryBtn) {
+      els.paywallPrimaryBtn.disabled = false;
+      els.paywallPrimaryBtn.textContent = getPaywallPrimaryLabel(activePaywallPlan);
+    }
+  }
+}
+
+function recordSuccessfulUseDay() {
+  const state = loadState();
+  const today = new Date().toISOString().slice(0, 10);
+  const days = Array.isArray(state.usage?.successfulUseDays) ? state.usage.successfulUseDays : [];
+  if (days.includes(today)) return state;
+  return saveState({
+    usage: {
+      ...(state.usage || {}),
+      successfulUseDays: [...days, today].slice(-14),
+    },
+  });
+}
+
+function maybePromptUsageMilestonePaywall() {
+  const state = loadState();
+  const days = Array.isArray(state.usage?.successfulUseDays) ? state.usage.successfulUseDays : [];
+  const subscription = getSubscriptionState(state);
+  if (hasPremiumAccess(state) || subscription.usagePromptShown || days.length < 3) return;
+  saveState({
+    subscription: {
+      ...subscription,
+      usagePromptShown: true,
+    },
+  });
+  window.setTimeout(() => openPaywall("generic", { source: "three-successful-days", successfulUseDays: days.length }), 260);
+}
+
+function buildPaywallContent(trigger = "generic", context = {}) {
+  const copyMap = {
+    generic: {
+      kicker: "WearCast Premium",
+      title: "Unlock your full digital closet",
+      subtitle: "Get more from your wardrobe with unlimited items, more saved looks, and more scans.",
+    },
+    manage_subscription: {
+      kicker: "WearCast Premium",
+      title: "Manage your Premium plan",
+      subtitle: "Switch between annual and monthly billing here. To cancel or review billing dates, open your App Store subscription settings.",
+    },
+    wardrobe_cap: {
+      kicker: "Closet full",
+      title: "Keep building your full wardrobe",
+      subtitle: `Free includes up to ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep growing the closet WearCast can style from.`,
+    },
+    saved_looks_cap: {
+      kicker: "Saved looks limit",
+      title: "Keep a bigger library of outfit references",
+      subtitle: `Free includes ${FREE_SAVED_LOOK_LIMIT} saved looks. Go premium to save more outfits and revisit them anytime.`,
+    },
+    scan_cap: {
+      kicker: "Weekly scan limit",
+      title: "Scan your wardrobe without the weekly cap",
+      subtitle: `Free includes ${FREE_PHOTO_SCANS_PER_WINDOW} clothing photo scans every 7 days. Go premium for unlimited scans.`,
+    },
+    starter_ready: {
+      kicker: "Starter ready",
+      title: "You’ve unlocked the best moment to upgrade",
+      subtitle: "Your starter wardrobe is ready. Go premium to keep building your full closet and get more from every recommendation.",
+    },
+  };
+  return {
+    ...(copyMap[trigger] || copyMap.generic),
+    primaryLabel: getPaywallPrimaryLabel(activePaywallPlan),
+    features: [
+      "Unlimited wardrobe items",
+      "Unlimited photo scans",
+      "Unlimited saved looks",
+      "Smarter recommendations from your closet",
+    ],
+    context,
+  };
+}
+
+function openPaywall(trigger = "generic", context = {}) {
+  if (!els.paywallDialog) return;
+  const activePlan = getActiveSubscriptionPlan();
+  if (activePlan === "monthly" || activePlan === "annual") {
+    activePaywallPlan = activePlan;
+  }
+  const content = buildPaywallContent(trigger, context);
+  const state = loadState();
+  els.paywallDialog.dataset.trigger = trigger;
+  els.paywallDialog.dataset.source = context?.source || "";
+  if (els.paywallKicker) els.paywallKicker.textContent = content.kicker;
+  if (els.paywallTitle) els.paywallTitle.textContent = content.title;
+  if (els.paywallSubtitle) els.paywallSubtitle.textContent = content.subtitle;
+  if (els.paywallPrimaryBtn) els.paywallPrimaryBtn.textContent = content.primaryLabel;
+  if (els.paywallRestoreBtn) {
+    els.paywallRestoreBtn.textContent = hasPremiumAccess(state) ? "Manage or cancel in App Store" : "Restore purchases";
+  }
+  if (els.paywallFeatureList) {
+    els.paywallFeatureList.innerHTML = content.features
+      .map((feature) => `<div class="paywall-feature">${escapeHtml(feature)}</div>`)
+      .join("");
+  }
+  setActivePaywallPlan(activePaywallPlan);
+  void loadSubscriptionProducts();
+  trackAnalyticsEvent("paywall_viewed", {
+    title: `paywall_viewed:${trigger}`,
+    trigger,
+    source: context?.source || "",
+    selectedPlan: activePaywallPlan,
+    wardrobeCount: Array.isArray(_wardrobeCache) ? _wardrobeCache.length : loadWardrobeLocal().length,
+    savedLooksCount: Array.isArray(state.savedLooks) ? state.savedLooks.length : 0,
+    successfulUseDays: Array.isArray(state.usage?.successfulUseDays) ? state.usage.successfulUseDays.length : 0,
+  });
+  if (typeof els.paywallDialog.showModal === "function" && !els.paywallDialog.open) els.paywallDialog.showModal();
+}
+
+function closePaywall() {
+  if (els.paywallDialog?.open) els.paywallDialog.close();
+}
+
+async function restorePurchases() {
+  trackAnalyticsEvent("restore_started", { title: "restore_started" });
+  if (!hasNativeSubscriptionsPlugin()) {
+    showAppToast("Restore is available once native subscriptions are enabled in this build.", "info");
+    return false;
+  }
+  try {
+    const plugin = getSubscriptionsPlugin();
+    const result = await plugin.restorePurchases();
+    applySubscriptionSnapshot(result);
+    if (hasPremiumAccess(loadState())) {
+      trackAnalyticsEvent("restore_succeeded", {
+        title: "restore_succeeded",
+        plan: result?.plan || "unknown",
+        trialActive: !!result?.trialActive,
+      });
+      showAppToast("Purchases restored. Premium is active again.", "success");
+      return true;
+    }
+    trackAnalyticsEvent("restore_failed", {
+      title: "restore_failed:none_found",
+      reason: "none_found",
+    });
+    showAppToast("No active premium purchases were found to restore.", "info");
+    return false;
+  } catch (err) {
+    trackAnalyticsEvent("restore_failed", {
+      title: "restore_failed:error",
+      reason: err?.message || "error",
+    });
+    console.error("subscription restore error:", err);
+    showAppToast(err?.message || "Could not restore purchases right now.", "error");
+    return false;
+  }
+}
+
 function summarizeSavedLooksStatus(state = loadState()) {
   const count = Array.isArray(state.savedLooks) ? state.savedLooks.length : 0;
-  if (!count) return "Saved looks stay on this device for now. You haven’t saved any yet.";
-  return `${count} saved look${count === 1 ? "" : "s"} stored on this device. Find them from Today > From your wardrobe.`;
+  const remaining = getRemainingSavedLooks(state);
+  const limitText = hasPremiumAccess(state)
+    ? "Unlimited with premium."
+    : `${remaining} free save${remaining === 1 ? "" : "s"} left.`;
+  if (!count) return `Saved looks stay on this device for now. You haven’t saved any yet. ${limitText}`;
+  return `${count} saved look${count === 1 ? "" : "s"} stored on this device. These are local for now and are not removed unless you clear device data. ${limitText}`;
 }
 
 function summarizeProfileValidationStatus(state = loadState()) {
@@ -890,10 +1522,10 @@ function summarizeProfileValidationStatus(state = loadState()) {
   const opens = Number(metrics.opens || 0);
   const dwellMs = Number(metrics.dwellMs || 0);
   if (!opens) {
-    return "Tracking how often Profile is opened and how long people stay there.";
+    return "Tracking how often people use settings so we can simplify the app over time.";
   }
   const avgSeconds = Math.max(1, Math.round(dwellMs / Math.max(1, opens) / 1000));
-  return `Opened ${opens} time${opens === 1 ? "" : "s"} on this device • average dwell ${avgSeconds}s. Compare later against saved looks and wardrobe usage.`;
+  return `Opened ${opens} time${opens === 1 ? "" : "s"} on this device • average dwell ${avgSeconds}s. Use this to decide what settings should become simpler or more visible.`;
 }
 
 function renderSettingsDataUI() {
@@ -916,11 +1548,179 @@ function renderSettingsDataUI() {
   }
 }
 
+function getAnalyticsState(state = loadState()) {
+  return {
+    ...structuredClone(DEFAULT_STATE).analytics,
+    ...(state?.analytics || {}),
+    lastEvents: Array.isArray(state?.analytics?.lastEvents) ? state.analytics.lastEvents : [],
+  };
+}
+
+function sentryConfigured() {
+  return !!runtimeConfig.sentryBrowserDsn;
+}
+
+function sentryEnabled() {
+  return !!(window.Sentry && sentryConfigured());
+}
+
+function initBrowserSentry(attempt = 0) {
+  if (!sentryConfigured() || window.__wearcastSentryInitialized) return;
+  if (!window.Sentry) {
+    if (attempt < 10) {
+      window.setTimeout(() => initBrowserSentry(attempt + 1), 300);
+    }
+    return;
+  }
+  window.Sentry.init({
+    dsn: runtimeConfig.sentryBrowserDsn,
+    environment: runtimeConfig.sentryEnvironment || "production",
+    release: runtimeConfig.sentryRelease || APP_VERSION,
+    sendDefaultPii: false,
+  });
+  window.Sentry.setTag("platform", isNative ? "native" : "web");
+  if (authUser?.email || authUser?.id) {
+    window.Sentry.setUser({
+      id: authUser?.id ? String(authUser.id) : undefined,
+      email: authUser?.email || undefined,
+    });
+  }
+  window.__wearcastSentryInitialized = true;
+}
+
+function getRecentAnalyticsEventsForReporting(limit = 8) {
+  return getAnalyticsState(loadState()).lastEvents.slice(-limit);
+}
+
+let clientErrorReportInFlight = false;
+
+function reportClientError(payload = {}) {
+  if (clientErrorReportInFlight) return;
+  clientErrorReportInFlight = true;
+  const body = JSON.stringify({
+    type: payload.type || "client_error",
+    message: payload.message || "",
+    stack: payload.stack || "",
+    source: payload.source || "",
+    line: payload.line || null,
+    column: payload.column || null,
+    url: payload.url || window.location.href,
+    native: isNative,
+    appVersion: APP_VERSION,
+    recentEvents: getRecentAnalyticsEventsForReporting(),
+  });
+
+  const finalize = () => {
+    window.setTimeout(() => {
+      clientErrorReportInFlight = false;
+    }, 1500);
+  };
+
+  try {
+    fetch(`${API_BASE}/api/client-log`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {}).finally(finalize);
+  } catch {
+    finalize();
+  }
+}
+
+function bindClientSafetyReporting() {
+  window.addEventListener("error", (event) => {
+    const message = event?.message || "Unhandled client error";
+    trackAnalyticsEvent("client_error", {
+      title: "client_error",
+      source: "window.error",
+      message,
+    });
+    if (sentryEnabled() && event?.error) {
+      window.Sentry.captureException(event.error);
+    } else if (sentryEnabled()) {
+      window.Sentry.captureMessage(message, "error");
+    }
+    reportClientError({
+      type: "window_error",
+      message,
+      stack: event?.error?.stack || "",
+      source: event?.filename || "",
+      line: event?.lineno || null,
+      column: event?.colno || null,
+    });
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    const reason = event?.reason;
+    const message = reason?.message || String(reason || "Unhandled promise rejection");
+    trackAnalyticsEvent("client_error", {
+      title: "client_error:unhandledrejection",
+      source: "window.unhandledrejection",
+      message,
+    });
+    if (sentryEnabled()) {
+      if (reason instanceof Error) window.Sentry.captureException(reason);
+      else window.Sentry.captureMessage(message, "error");
+    }
+    reportClientError({
+      type: "unhandled_rejection",
+      message,
+      stack: reason?.stack || "",
+      source: "promise",
+    });
+  });
+}
+
+function sanitizeAnalyticsMetadata(metadata = {}) {
+  const sanitized = {};
+  for (const [key, value] of Object.entries(metadata || {})) {
+    if (value === undefined || value === null) continue;
+    if (typeof value === "string") {
+      sanitized[key] = value.slice(0, 160);
+      continue;
+    }
+    if (typeof value === "number" || typeof value === "boolean") {
+      sanitized[key] = value;
+      continue;
+    }
+    if (Array.isArray(value)) {
+      sanitized[key] = value.map((entry) => String(entry)).slice(0, 8).join("|").slice(0, 160);
+      continue;
+    }
+    try {
+      sanitized[key] = JSON.stringify(value).slice(0, 160);
+    } catch {
+      sanitized[key] = String(value).slice(0, 160);
+    }
+  }
+  return sanitized;
+}
+
 function trackAnalyticsEvent(name, metadata = {}) {
+  const details = sanitizeAnalyticsMetadata(metadata);
+  try {
+    const state = loadState();
+    const analytics = getAnalyticsState(state);
+    saveState({
+      analytics: {
+        ...analytics,
+        lastEvents: [
+          ...analytics.lastEvents,
+          {
+            name,
+            at: new Date().toISOString(),
+            sessionId: ANALYTICS_SESSION_ID,
+            ...details,
+          },
+        ].slice(-ANALYTICS_EVENT_HISTORY_LIMIT),
+      },
+    });
+  } catch {}
   try {
     window.goatcounter?.count?.({
       path: `${window.location.pathname}#${name}`,
-      title: metadata.title || name,
+      title: details.title || name,
       event: true,
     });
   } catch {}
@@ -981,11 +1781,11 @@ function resetTodayLocationState() {
   if (els.aiRecContent) els.aiRecContent.innerHTML = "";
   if (els.aiRecWarnings) els.aiRecWarnings.innerHTML = "";
   if (els.aiRecMissing) els.aiRecMissing.innerHTML = "";
-  if (els.aiRecBadge) els.aiRecBadge.textContent = "Best match";
   if (els.emptyState) els.emptyState.style.display = "";
   setEmptyStateLoading(false);
   if (els.updatedAt) els.updatedAt.textContent = "—";
   if (els.weatherHeroHeadline) els.weatherHeroHeadline.textContent = "—";
+  updateTodayOnboardingUI();
 }
 
 function setEmptyStateLoading(active, message = "Fetching your local weather…") {
@@ -1001,8 +1801,139 @@ function setEmptyStateLoading(active, message = "Fetching your local weather…"
   if (els.emptyStateText) {
     els.emptyStateText.textContent = active
       ? message
-      : "Search a city or share your location to get weather-based outfit suggestions.";
+      : "Search a city or share your location to get a weather-smart outfit recommendation for today.";
   }
+}
+
+function getOnboardingState(state = loadState()) {
+  return {
+    ...structuredClone(DEFAULT_STATE).onboarding,
+    ...(state?.onboarding || {}),
+  };
+}
+
+function shouldShowOnboardingDeck(state = loadState()) {
+  const onboarding = getOnboardingState(state);
+  return !state?.lastLocation && !onboarding.completed && !onboarding.firstRecommendationSeen;
+}
+
+function setActiveOnboardingSlide(index = 0) {
+  const slides = Array.from(document.querySelectorAll("[data-onboarding-slide]"));
+  const dots = Array.from(document.querySelectorAll(".onboarding-dot"));
+  const maxIndex = Math.max(0, slides.length - 1);
+  activeOnboardingSlide = Math.max(0, Math.min(maxIndex, index));
+
+  slides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("is-active", slideIndex === activeOnboardingSlide);
+  });
+  dots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activeOnboardingSlide);
+  });
+
+  if (els.onboardingProgressBar) {
+    const progress = slides.length > 1
+      ? ((activeOnboardingSlide + 1) / slides.length) * 100
+      : 100;
+    els.onboardingProgressBar.style.width = `${progress}%`;
+  }
+
+  if (els.onboardingPrevBtn) {
+    els.onboardingPrevBtn.disabled = activeOnboardingSlide === 0;
+  }
+  if (els.onboardingNextBtn) {
+    const isLastSlide = activeOnboardingSlide === maxIndex;
+    els.onboardingNextBtn.style.display = isLastSlide ? "none" : "";
+  }
+}
+
+function completeOnboarding(extra = {}) {
+  const state = loadState();
+  const onboarding = getOnboardingState(state);
+  const nextState = saveState({
+    onboarding: {
+      ...onboarding,
+      completed: true,
+      ...extra,
+    },
+  });
+  updateTodayOnboardingUI(nextState);
+  return nextState;
+}
+
+function shouldPromptActivationTune(state = loadState()) {
+  const onboarding = getOnboardingState(state);
+  return !!(onboarding.completed && onboarding.firstRecommendationSeen && !onboarding.tuningCompleted);
+}
+
+function completeActivationTune(extra = {}) {
+  const state = loadState();
+  const onboarding = getOnboardingState(state);
+  const nextState = saveState({
+    onboarding: {
+      ...onboarding,
+      tuningCompleted: true,
+      ...extra,
+    },
+  });
+  syncTodayWardrobeDialog(loadWardrobe());
+  return nextState;
+}
+
+function shouldShowWardrobeUpgradePrompt(items = [], state = loadState()) {
+  const onboarding = getOnboardingState(state);
+  const count = Array.isArray(items) ? items.length : 0;
+  return !!(
+    onboarding.firstRecommendationSeen
+    && onboarding.tuningCompleted
+    && !onboarding.wardrobePromptCompleted
+    && count === 0
+  );
+}
+
+function completeWardrobeUpgradePrompt(extra = {}) {
+  const state = loadState();
+  const onboarding = getOnboardingState(state);
+  const nextState = saveState({
+    onboarding: {
+      ...onboarding,
+      wardrobePromptCompleted: true,
+      ...extra,
+    },
+  });
+  syncTodayWardrobeDialog(loadWardrobe());
+  return nextState;
+}
+
+function updateTodayOnboardingUI(state = loadState()) {
+  const showDeck = shouldShowOnboardingDeck(state);
+  if (els.onboardingOverlay) {
+    els.onboardingOverlay.style.display = showDeck ? "" : "none";
+    els.onboardingOverlay.setAttribute("aria-hidden", showDeck ? "false" : "true");
+  }
+  const analytics = getAnalyticsState(state);
+  if (showDeck && !analytics.onboardingDeckSeen) {
+    trackAnalyticsEvent("onboarding_viewed", { title: "onboarding_viewed" });
+    saveState({
+      analytics: {
+        ...analytics,
+        onboardingDeckSeen: true,
+      },
+    });
+  }
+  if (showDeck) {
+    setActiveOnboardingSlide(activeOnboardingSlide);
+  }
+}
+
+function markOnboardingRecommendationSeen() {
+  const state = loadState();
+  const onboarding = getOnboardingState(state);
+  if (onboarding.firstRecommendationSeen && onboarding.completed) {
+    updateTodayOnboardingUI(state);
+    return;
+  }
+
+  completeOnboarding({ firstRecommendationSeen: true });
 }
 
 function privacyPromptFallback({ source = null } = {}) {
@@ -1201,7 +2132,9 @@ function classifySeverity(current, ctx, effectiveC, hourly) {
 }
 
 function weatherCodeLabel(code) {
+  if (!Number.isFinite(Number(code))) return "Weather";
   // Open-Meteo WMO weather interpretation codes (simplified labels)
+  const normalizedCode = Number(code);
   const m = {
     0: "Clear",
     1: "Mainly clear",
@@ -1232,7 +2165,7 @@ function weatherCodeLabel(code) {
     96: "Thunderstorm + hail",
     99: "Thunderstorm + hail",
   };
-  return m[code] ?? `Code ${code}`;
+  return m[normalizedCode] ?? "Weather";
 }
 
 async function geocodePlace(query) {
@@ -1294,6 +2227,17 @@ function pickHourlyAtTime(hourly, isoTime) {
     cloud: get("cloud_cover"),
     uv: get("uv_index"),
   };
+}
+
+function getCurrentPrecipChance(current = {}, hourly = {}, derived = {}) {
+  const direct = Number(derived?.precipProb ?? current?.precipitation_probability);
+  if (Number.isFinite(direct)) return Math.max(0, Math.round(direct));
+  const hourlyNow = pickHourlyAtTime(hourly, current?.time);
+  const hourlyProb = Number(hourlyNow?.precipProb);
+  if (Number.isFinite(hourlyProb)) return Math.max(0, Math.round(hourlyProb));
+  const precipitation = Number(current?.precipitation ?? hourlyNow?.precip ?? hourlyNow?.rain);
+  if (Number.isFinite(precipitation)) return precipitation > 0 ? 100 : 0;
+  return null;
 }
 
 function sumNextHours(hourly, isoTime, key, hours = 2) {
@@ -1537,9 +2481,10 @@ function renderWeather(current, derived, hourly) {
   els.heroHumidity.textContent = `${fmt(current.relative_humidity_2m)}%`;
   if (els.cloud) els.cloud.textContent = `${fmt(current.cloud_cover, "%")}`;
   if (els.precip) els.precip.textContent = `${fmt1(current.precipitation)} mm`;
-  if (els.precipProb) els.precipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
+  const precipChance = getCurrentPrecipChance(current, hourly, derived);
+  if (els.precipProb) els.precipProb.textContent = precipChance != null ? `${fmt(precipChance, "%")}` : "—";
   if (els.heroPrecipProb) {
-    els.heroPrecipProb.textContent = derived?.precipProb != null ? `${fmt(derived.precipProb, "%")}` : "—";
+    els.heroPrecipProb.textContent = precipChance != null ? `${fmt(precipChance, "%")}` : "—";
   }
 
   const dew = dewPointC(current.temperature_2m, current.relative_humidity_2m);
@@ -1567,6 +2512,259 @@ function renderWeather(current, derived, hourly) {
   if (els.heroConditionIcon) {
     els.heroConditionIcon.innerHTML = weatherConditionIcon(conditionLabel);
   }
+  latestWeatherSnapshot = {
+    ...(latestWeatherSnapshot || {}),
+    current,
+    derived,
+    hourly,
+    effective,
+    severity: sev,
+    conditionLabel,
+    headline: buildWeatherHeroHeadline(current, derived, effective),
+  };
+  renderWeatherExpandedPanel();
+}
+
+function getNextWeatherHours(current, hourly, count = 15) {
+  const times = Array.isArray(hourly?.time) ? hourly.time : [];
+  if (!times.length || !current?.time) return [];
+  const exactIndex = times.indexOf(current.time);
+  const startIndex = exactIndex >= 0
+    ? exactIndex
+    : Math.max(0, times.findIndex((time) => new Date(time).getTime() >= new Date(current.time).getTime()));
+  const indices = [];
+  for (let offset = 0; offset < count && startIndex + offset < times.length; offset += 1) {
+    indices.push(startIndex + offset);
+  }
+  return indices.map((index, itemIndex) => {
+    const time = new Date(times[index]);
+    const hour = Number.isNaN(time.getTime())
+      ? (itemIndex === 0 ? "Now" : "")
+      : itemIndex === 0
+        ? "Now"
+        : time.toLocaleTimeString([], { hour: "numeric" }).replace(/\s/g, "");
+    const temp = hourly.apparent_temperature?.[index] ?? hourly.temperature_2m?.[index];
+    const precipAmount = hourly.precipitation?.[index] ?? hourly.rain?.[index];
+    const rawRain = hourly.precipitation_probability?.[index];
+    const rain = Number.isFinite(Number(rawRain))
+      ? Number(rawRain)
+      : Number.isFinite(Number(precipAmount))
+        ? Number(precipAmount) > 0 ? 100 : 0
+        : null;
+    const wind = hourly.wind_speed_10m?.[index];
+    const code = hourly.weather_code?.[index];
+    const label = weatherCodeLabel(code);
+    return { index, itemIndex, time, hour, temp, rain, wind, code, label };
+  });
+}
+
+function renderWeatherExpandedPanel() {
+  if (!els.weatherExpandedPanel) return;
+  const snapshot = latestWeatherSnapshot;
+  if (!snapshot?.current) {
+    els.weatherExpandedPanel.innerHTML = "";
+    return;
+  }
+  const { current, hourly } = snapshot;
+  const hours = getNextWeatherHours(current, hourly, 15);
+  const timeline = hours.length
+    ? hours.map((hour) => `
+        <div class="weather-expanded-hour ${hour.itemIndex === 0 ? "is-now" : ""}">
+          <span class="weather-expanded-hour-time">${escapeHtml(hour.hour || "—")}</span>
+          <span class="weather-expanded-hour-icon" aria-hidden="true">${renderTimelineWeatherIcon(hour.label)}</span>
+          <strong>${Number.isFinite(Number(hour.temp)) ? fmt1(hour.temp, "°") : "—"}</strong>
+          <span class="weather-expanded-hour-meta">${Number.isFinite(Number(hour.rain)) ? `${fmt(Math.round(Number(hour.rain)), "")}% rain` : "Rain —"}</span>
+        </div>
+      `).join("")
+    : `<p class="weather-expanded-muted">Hourly forecast is not available right now.</p>`;
+  const outlook = renderOutfitDayOutlook(hours, latestRecommendationSnapshot);
+
+  els.weatherExpandedPanel.innerHTML = `
+    <div class="weather-expanded-inner">
+      <section class="weather-expanded-section">
+        <div class="weather-expanded-section-head">
+        <span class="today-cta-kicker">Next 15 hours</span>
+        <p>Swipe sideways</p>
+      </div>
+        <div class="weather-expanded-timeline" aria-label="Hourly forecast for the next 15 hours">
+        ${timeline}
+      </div>
+    </section>
+      ${outlook}
+    </div>
+  `;
+}
+
+function getRecommendedOutfitItemsForOutlook() {
+  const snapshot = latestRecommendationSnapshot;
+  if (!snapshot?.outfit) return [];
+  return [
+    preserveUsefulItemLabel(snapshot.outfit.top),
+    preserveUsefulItemLabel(snapshot.outfit.bottom),
+    preserveUsefulItemLabel(snapshot.outfit.outer),
+    preserveUsefulItemLabel(snapshot.outfit.shoes),
+    ...(Array.isArray(snapshot.outfit.accessories) ? snapshot.outfit.accessories : [snapshot.outfit.accessories])
+      .map(preserveUsefulItemLabel),
+  ].filter(Boolean);
+}
+
+function summarizeOutlookWindow(items = [], fallbackLabel = "Later") {
+  const validTemps = items.map((item) => Number(item.temp)).filter(Number.isFinite);
+  const validRain = items.map((item) => Number(item.rain)).filter(Number.isFinite);
+  const validWind = items.map((item) => Number(item.wind)).filter(Number.isFinite);
+  const labels = items.map((item) => item.label).filter(Boolean);
+  const minTemp = validTemps.length ? Math.min(...validTemps) : null;
+  const maxTemp = validTemps.length ? Math.max(...validTemps) : null;
+  const maxRain = validRain.length ? Math.max(...validRain) : null;
+  const maxWind = validWind.length ? Math.max(...validWind) : null;
+  const labelCounts = labels.reduce((acc, label) => {
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {});
+  const dominantLabel = Object.entries(labelCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || fallbackLabel;
+  return { minTemp, maxTemp, maxRain, maxWind, label: dominantLabel };
+}
+
+function cleanOutlookItemName(value = "") {
+  return String(value || "")
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/\b(smart|casual|weather[- ]ready|breathable|durable|lightweight)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getOutlookPieceNames(outfitItems = []) {
+  const cleaned = outfitItems.map(cleanOutlookItemName).filter(Boolean);
+  const outerSlot = cleaned[2] || "";
+  return {
+    top: cleaned[0] || "the top",
+    bottom: cleaned[1] || "the bottoms",
+    outer: outerSlot || cleaned.find((item) => /jacket|coat|overshirt|hoodie|layer/i.test(item)) || "",
+    shoes: cleaned.find((item) => /shoe|sneaker|boot|loafer|trainer/i.test(item)) || cleaned[3] || "your shoes",
+    lead: cleaned.slice(0, 3),
+  };
+}
+
+function buildOutlookHeading(outfitItems = [], fallback = "") {
+  const pieces = getOutlookPieceNames(outfitItems);
+  if (pieces.lead.length >= 3) return `${pieces.lead[0]}, ${pieces.lead[1]}, and ${pieces.lead[2]}`;
+  if (pieces.lead.length === 2) return `${pieces.lead[0]} with ${pieces.lead[1]}`;
+  if (pieces.lead.length === 1) return `${pieces.lead[0]} through the day`;
+  return fallback || "How today’s look should wear";
+}
+
+function buildOutlookGuidance(summary, outfitItems, period) {
+  const pieces = getOutlookPieceNames(outfitItems);
+  const outer = pieces.outer || outfitItems.find((item) => /jacket|coat|overshirt|hoodie|layer/i.test(item));
+  const shoes = outfitItems.find((item) => /shoe|sneaker|boot|loafer|trainer/i.test(item));
+  const top = pieces.top;
+  const layer = cleanOutlookItemName(outer || pieces.outer || "the extra layer");
+  const footwear = cleanOutlookItemName(shoes || pieces.shoes);
+  const tempSwing = Number.isFinite(summary.maxTemp) && Number.isFinite(summary.minTemp)
+    ? summary.maxTemp - summary.minTemp
+    : 0;
+  if (Number(summary.maxRain) >= 45) {
+    return `Keep the look practical here: ${footwear} matters most, and a rain layer would be worth carrying.`;
+  } else if (/rain|drizzle|shower/i.test(summary.label)) {
+    return `The outfit still works, but keep a light shell nearby in case the showers actually show up.`;
+  } else if (Number(summary.maxWind) >= 24) {
+    return `${layer} is doing useful work in this window; the wind can make things feel cooler than the number suggests.`;
+  } else if (tempSwing >= 4) {
+    return `${layer} gives the outfit some flexibility, so you can wear it open or take it off as the day softens.`;
+  }
+  if (period === "later" && Number(summary.maxTemp) >= 20 && Number(summary.maxRain || 0) < 35) {
+    return `This is the easiest part of the day for the outfit; ${top} can carry more of the look once it warms up.`;
+  }
+  if (period === "evening" && Number(summary.minTemp) <= 13) {
+    return `If you will still be out, keep ${layer} with you rather than treating it as optional.`;
+  }
+  if (period === "now") return `A comfortable start: ${top} and ${footwear} should feel easy without needing much adjustment.`;
+  return `No major outfit change needed here; the recommendation should stay balanced and wearable.`;
+}
+
+function renderOutfitDayOutlook(hours = [], recommendationSnapshot = latestRecommendationSnapshot) {
+  const outfitItems = getRecommendedOutfitItemsForOutlook();
+  const windows = [
+    { label: "Now", period: "now", items: hours.slice(0, 4) },
+    { label: "Later", period: "later", items: hours.slice(4, 10) },
+    { label: "Evening", period: "evening", items: hours.slice(10, 15) },
+  ].filter((entry) => entry.items.length);
+  if (!windows.length) {
+    return `
+      <section class="weather-expanded-outlook">
+        <span class="today-cta-kicker">Outfit outlook</span>
+        <strong>Outlook will appear once hourly weather loads</strong>
+        <p>WearCast will connect the forecast to today’s outfit recommendation here.</p>
+      </section>
+    `;
+  }
+  const headline = buildOutlookHeading(outfitItems, recommendationSnapshot?.headline);
+  return `
+    <section class="weather-expanded-outlook">
+      <div class="weather-expanded-section-head">
+        <span class="today-cta-kicker">Outfit outlook</span>
+        <p>${outfitItems.length ? "Based on today’s look" : "Weather-aware"}</p>
+      </div>
+      <strong>${escapeHtml(headline)}</strong>
+      <div class="weather-expanded-outlook-list">
+        ${windows.map((window) => {
+          const summary = summarizeOutlookWindow(window.items, window.label);
+          const tempLabel = Number.isFinite(summary.minTemp) && Number.isFinite(summary.maxTemp)
+            ? `${fmt1(summary.minTemp, "°")}–${fmt1(summary.maxTemp, "°")}`
+            : "—";
+          const rainLabel = Number.isFinite(summary.maxRain) ? `${Math.round(summary.maxRain)}% rain` : "Rain —";
+          return `
+            <article class="weather-expanded-outlook-row">
+              <div>
+                <span>${escapeHtml(window.label)}</span>
+                <strong>${escapeHtml(tempLabel)}</strong>
+              </div>
+              <p>${escapeHtml(buildOutlookGuidance(summary, outfitItems, window.period))}</p>
+              <small>${escapeHtml(summary.label)} • ${escapeHtml(rainLabel)}</small>
+            </article>
+          `;
+        }).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function setWeatherExpanded(expanded) {
+  isWeatherExpanded = !!expanded;
+  els.weatherHero?.classList.toggle("is-expanded", isWeatherExpanded);
+  els.weatherHero?.setAttribute("aria-expanded", isWeatherExpanded ? "true" : "false");
+  els.weatherHero?.setAttribute("aria-label", isWeatherExpanded ? "Collapse weather details" : "Expand weather details");
+  els.weatherExpandToggle?.setAttribute("aria-label", isWeatherExpanded ? "Collapse weather details" : "Expand weather details");
+  els.aiRecSection?.classList.toggle("is-weather-collapsed", isWeatherExpanded);
+  els.weatherHero?.closest(".today-column-primary")?.classList.toggle("is-weather-expanded", isWeatherExpanded);
+  if (isWeatherExpanded) renderWeatherExpandedPanel();
+}
+
+function toggleWeatherExpanded() {
+  setWeatherExpanded(!isWeatherExpanded);
+}
+
+function renderTimelineWeatherIcon(label = "") {
+  const text = String(label).toLowerCase();
+  if (text.includes("thunder")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 14.2h8.1a3.1 3.1 0 0 0 .6-6.1A4.9 4.9 0 0 0 6.5 7a3.5 3.5 0 0 0 .9 7.2Z" fill="currentColor" opacity=".58"/><path d="m12.3 13.2-1.4 4h2.2l-1.2 4.3 4.4-6.2H14l1-2.1Z" fill="currentColor"/></svg>';
+  }
+  if (text.includes("snow")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 13.6h8.1a3.1 3.1 0 0 0 .6-6.1A4.9 4.9 0 0 0 6.5 6.4a3.5 3.5 0 0 0 .9 7.2Z" fill="currentColor" opacity=".55"/><path d="M10 17.2h4M12 15.2v4M9.9 15.9l4.2 2.6M14.1 15.9l-4.2 2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  }
+  if (text.includes("rain") || text.includes("drizzle")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 13.7h8.1a3.1 3.1 0 0 0 .6-6.1A4.9 4.9 0 0 0 6.5 6.5a3.5 3.5 0 0 0 .9 7.2Z" fill="currentColor" opacity=".58"/><path d="M9.5 16.2v2.4M13 16.6v2.8M16.5 16.2v2.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+  }
+  if (text.includes("partly")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.2" cy="8.2" r="3.6" fill="currentColor" opacity=".68"/><path d="M8 16.2h8.1a3 3 0 0 0 .5-6 4.7 4.7 0 0 0-8.9 1.1A2.9 2.9 0 0 0 8 16.2Z" fill="currentColor"/></svg>';
+  }
+  if (text.includes("cloud") || text.includes("overcast")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 16.3h9.4a3.5 3.5 0 0 0 .5-7A5.6 5.6 0 0 0 6.6 8a4.1 4.1 0 0 0 .6 8.3Z" fill="currentColor"/></svg>';
+  }
+  if (text.includes("fog")) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8.4h14M3.8 12h16.4M5 15.6h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.6" fill="currentColor"/><path d="M12 2.8v2.1M12 19.1v2.1M4.3 4.3l1.5 1.5M18.2 18.2l1.5 1.5M2.8 12h2.1M19.1 12h2.1M4.3 19.7l1.5-1.5M18.2 5.8l1.5-1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 }
 
 function buildWeatherHeroHeadline(current, derived, effectiveTemp) {
@@ -1942,13 +3140,6 @@ function buildOutfitHeadline(outfit) {
   return "A weather-ready outfit";
 }
 
-function getRecommendationBadge(outfit, weather) {
-  if (normalizeItemLabel(outfit.outer)) return "Layered";
-  if ((weather?.precipProb || 0) >= 45) return "Ready";
-  if ((weather?.temperature ?? 99) >= 22) return "Light";
-  return "Best match";
-}
-
 function getRecommendationTileIcon(label) {
   const key = String(label || "").toLowerCase();
   if (key === "top") return renderInlineIcon("top");
@@ -2307,6 +3498,13 @@ function saveRecommendationLook(payload) {
   const state = loadState();
   const existing = Array.isArray(state.savedLooks) ? state.savedLooks : [];
   const signature = payload.signature || buildLookSignature(payload.outfit);
+  const isAlreadySaved = existing.some((entry) => entry.signature === signature);
+  if (!hasPremiumAccess(state) && !isAlreadySaved && existing.length >= FREE_SAVED_LOOK_LIMIT) {
+    openPaywall("saved_looks_cap", { source: "save-look" });
+    showAppToast(`Free includes ${FREE_SAVED_LOOK_LIMIT} saved looks. Go premium to keep more outfit references.`, "warning");
+    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:saved_looks_cap" });
+    return false;
+  }
   const nextEntry = {
     id: payload.id || `look-${Date.now()}`,
     createdAt: payload.createdAt || new Date().toISOString(),
@@ -2318,8 +3516,14 @@ function saveRecommendationLook(payload) {
     signature,
     outfit: payload.outfit || {},
   };
-  const nextLooks = [nextEntry, ...existing.filter((entry) => entry.signature !== signature)].slice(0, 12);
+  const nextLooks = [nextEntry, ...existing.filter((entry) => entry.signature !== signature)]
+    .slice(0, hasPremiumAccess(state) ? PREMIUM_SAVED_LOOK_LIMIT : FREE_SAVED_LOOK_LIMIT);
   saveState({ savedLooks: nextLooks });
+  trackAnalyticsEvent("saved_look_added", {
+    title: "saved_look_added",
+    totalSavedLooks: nextLooks.length,
+    coverage: Number(nextEntry.coverage || 0),
+  });
   return true;
 }
 
@@ -2512,12 +3716,14 @@ function renderRecommendationItemDialogMedia(item, className = "today-item-dialo
 
 function getRecommendationCollageTextPlacement(positionClass = "") {
   const position = String(positionClass || "");
-  if (/top-right|middle-right/.test(position)) return "has-text-top-right";
+  if (/middle-right/.test(position)) return "has-text-middle-right";
+  if (/middle-left/.test(position)) return "has-text-middle-left";
+  if (/top-right/.test(position)) return "has-text-top-right";
   if (/top-center/.test(position)) return "has-text-top-center";
-  if (/top-left|middle-left/.test(position)) return "has-text-top-left";
-  if (/bottom-right/.test(position)) return "has-text-bottom-right";
+  if (/top-left/.test(position)) return "has-text-top-left";
+  if (/bottom-right|bottom-right-wide/.test(position)) return "has-text-bottom-right";
   if (/bottom-center/.test(position)) return "has-text-bottom-center";
-  if (/bottom-left/.test(position)) return "has-text-bottom-left";
+  if (/bottom-left|bottom-left-wide/.test(position)) return "has-text-bottom-left";
   return "has-text-bottom-left";
 }
 
@@ -2540,6 +3746,7 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
       photo: art.photo,
       icon: art.icon,
       fromWardrobe: imageMatch?.source === "wardrobe",
+      imageConfidence: Number(imageMatch?.confidence || 0),
       reason,
       positionClass: positionClasses[index] || "is-grid-center",
       textPlacementClass: getRecommendationCollageTextPlacement(positionClasses[index] || "is-grid-center"),
@@ -2658,76 +3865,119 @@ function getTodayContextChips() {
   return chips.slice(0, 3);
 }
 
-function renderRecommendationControls() {
+function renderRecommendationControls({ mode = "default" } = {}) {
   const prefs = pendingRecommendationPrefs || loadState().prefs || {};
   const comfortValue = prefs.cold ? "cold" : prefs.hot ? "hot" : "neutral";
-  const groups = [
-    {
-      label: "Comfort",
-      key: "comfortBias",
-      activeValue: comfortValue,
-      options: [
-        ["neutral", "Balanced"],
-        ["cold", "I’m usually cold"],
-        ["hot", "I’m usually hot"],
-      ],
-    },
-    {
-      label: "Activity",
-      key: "activityContext",
-      activeValue: prefs.activityContext || DEFAULT_STATE.prefs.activityContext,
-      options: [
-        ["everyday", "Everyday"],
-        ["walking", "Walking"],
-        ["commute", "Commute"],
-        ["errands", "Errands"],
-        ["office", "Office"],
-        ["workout", "Workout"],
-        ["travel", "Travel"],
-        ["evening", "Evening"],
-      ],
-    },
-    {
-      label: "Setting",
-      key: "locationContext",
-      activeValue: prefs.locationContext || DEFAULT_STATE.prefs.locationContext,
-      options: [
-        ["indoors", "Indoors"],
-        ["mixed", "Mixed"],
-        ["outdoors", "Outdoors"],
-        ["transit", "Transit"],
-        ["event", "Event"],
-        ["exposed", "Exposed"],
-      ],
-    },
-    {
-      label: "Style",
-      key: "styleFocus",
-      activeValue: prefs.styleFocus || DEFAULT_STATE.prefs.styleFocus,
-      options: [
-        ["auto", "Auto"],
-        ["casual", "Casual"],
-        ["polished", "Polished"],
-        ["sporty", "Sporty"],
-        ["streetwear", "Streetwear"],
-        ["minimalist", "Minimal"],
-      ],
-    },
-  ];
+  const isActivationMode = mode === "activation";
+  const groups = isActivationMode
+    ? [
+        {
+          label: "Comfort",
+          key: "comfortBias",
+          activeValue: comfortValue,
+          options: [
+            ["neutral", "Balanced"],
+            ["cold", "Usually cold"],
+            ["hot", "Usually warm"],
+          ],
+        },
+        {
+          label: "Day type",
+          key: "activityContext",
+          activeValue: prefs.activityContext || DEFAULT_STATE.prefs.activityContext,
+          options: [
+            ["everyday", "Everyday"],
+            ["office", "Office"],
+            ["workout", "Active"],
+            ["evening", "Evening"],
+          ],
+        },
+        {
+          label: "Style",
+          key: "styleFocus",
+          activeValue: prefs.styleFocus || DEFAULT_STATE.prefs.styleFocus,
+          options: [
+            ["casual", "Casual"],
+            ["polished", "Polished"],
+            ["sporty", "Sporty"],
+            ["minimalist", "Minimalist"],
+          ],
+        },
+      ]
+    : [
+        {
+          label: "Comfort",
+          key: "comfortBias",
+          activeValue: comfortValue,
+          options: [
+            ["neutral", "Balanced"],
+            ["cold", "I’m usually cold"],
+            ["hot", "I’m usually hot"],
+          ],
+        },
+        {
+          label: "Activity",
+          key: "activityContext",
+          activeValue: prefs.activityContext || DEFAULT_STATE.prefs.activityContext,
+          options: [
+            ["everyday", "Everyday"],
+            ["walking", "Walking"],
+            ["commute", "Commute"],
+            ["errands", "Errands"],
+            ["office", "Office"],
+            ["workout", "Workout"],
+            ["travel", "Travel"],
+            ["evening", "Evening"],
+          ],
+        },
+        {
+          label: "Setting",
+          key: "locationContext",
+          activeValue: prefs.locationContext || DEFAULT_STATE.prefs.locationContext,
+          options: [
+            ["indoors", "Indoors"],
+            ["mixed", "Mixed"],
+            ["outdoors", "Outdoors"],
+            ["transit", "Transit"],
+            ["event", "Event"],
+            ["exposed", "Exposed"],
+          ],
+        },
+        {
+          label: "Style",
+          key: "styleFocus",
+          activeValue: prefs.styleFocus || DEFAULT_STATE.prefs.styleFocus,
+          options: [
+            ["auto", "Auto"],
+            ["casual", "Casual"],
+            ["polished", "Polished"],
+            ["sporty", "Sporty"],
+            ["streetwear", "Streetwear"],
+            ["minimalist", "Minimal"],
+          ],
+        },
+      ];
 
-  const descriptions = {
-    Comfort: "Bias the outfit warmer or lighter based on how you usually feel.",
-    Activity: "Adjust the look for how much movement your day actually has.",
-    Setting: "Tell WearCast whether you’ll stay inside, outside, or in transit.",
-    Style: "Shift the overall vibe without changing the weather logic.",
-  };
+  const descriptions = isActivationMode
+    ? {
+        Comfort: "Tell WearCast whether you usually need a warmer or lighter outfit.",
+        "Day type": "Choose the shape of today so the recommendation fits the moment.",
+        Style: "Pick the vibe you want without losing the weather logic.",
+      }
+    : {
+        Comfort: "Bias the outfit warmer or lighter based on how you usually feel.",
+        Activity: "Adjust the look for how much movement your day actually has.",
+        Setting: "Tell WearCast whether you’ll stay inside, outside, or in transit.",
+        Style: "Shift the overall vibe without changing the weather logic.",
+      };
 
   return `
     <div class="today-control-groups">
       <div class="today-control-intro">
-        <span class="today-control-intro-kicker">Change style</span>
-        <strong>Shape the outfit direction before refreshing.</strong>
-        <p>These changes apply to today’s recommendation only and keep the weather logic intact.</p>
+        <span class="today-control-intro-kicker">${isActivationMode ? "Quick tune" : "Personal fit"}</span>
+        <strong>${isActivationMode ? "Make the next recommendation feel more like you." : "Tell WearCast what kind of day this really is."}</strong>
+        <p>${isActivationMode ? "Answer three quick questions and WearCast will refresh today’s look with a better fit." : "Adjust the human context around the forecast. Weather still stays in charge, but the outfit should feel more like yours."}</p>
+        <div class="today-control-summary">${escapeHtml(summarizeRecommendationTuning(prefs))}</div>
       </div>
       ${groups.map((group) => `
         <div class="today-control-group">
@@ -2750,7 +4000,29 @@ function renderRecommendationControls() {
           </div>
         </div>
       `).join("")}
-      <button type="button" class="btn-primary-sm today-update-btn" data-rec-action="apply">Refresh today’s look</button>
+      ${!isActivationMode ? `
+        <div class="today-control-group today-control-notes">
+          <div class="today-control-heading">
+            <div>
+              <div class="today-control-label">Notes</div>
+              <p class="today-control-help">Optional details like “dinner after work”, “walking a lot”, or “avoid bulky layers”.</p>
+            </div>
+            <span class="today-control-current">Optional</span>
+          </div>
+          <textarea
+            class="today-tuning-notes"
+            data-rec-notes
+            maxlength="180"
+            placeholder="Anything WearCast should know about today?"
+          >${escapeHtml(prefs.fashionNotes || "")}</textarea>
+        </div>
+      ` : ""}
+      <div class="today-control-actions">
+        <button type="button" class="btn-primary-sm today-update-btn" data-rec-action="apply">${isActivationMode ? "Save and refresh" : "Refresh today’s look"}</button>
+        ${isActivationMode
+          ? '<button type="button" class="today-secondary-action" data-rec-action="skip-activation-tune">Maybe later</button>'
+          : '<button type="button" class="today-secondary-action" data-rec-action="reset-tuning">Reset to defaults</button>'}
+      </div>
     </div>
   `;
 }
@@ -2899,6 +4171,44 @@ function renderRecommendationMeta(chips = []) {
     <div class="today-rec-meta-chips" aria-label="Recommendation signals">
       ${chips.map((chip) => `<span class="today-rec-meta-chip today-rec-meta-chip-${escapeHtml(chip.kind || "default")}">${escapeHtml(chip.text || "")}</span>`).join("")}
     </div>
+  `;
+}
+
+function renderRecommendationTrustSignals(data = {}, weather = {}, wardrobeSummary = {}) {
+  const serverSignals = Array.isArray(data.trustSignals) ? data.trustSignals.filter(Boolean) : [];
+  const localSignals = buildRecommendationMeta(weather, data.outfit || {}).map((chip) => chip.text).filter(Boolean);
+  const wardrobeSignal = Number(wardrobeSummary.matchedCount || 0) > 0
+    ? `${wardrobeSummary.matchedCount} from your wardrobe`
+    : "Suggested staples";
+  const qualitySignals = data.quality?.severeCount > 0
+    ? ["Needs review"]
+    : ["Weather checked"];
+  const chips = Array.from(new Set([...serverSignals, ...localSignals, wardrobeSignal, ...qualitySignals]))
+    .slice(0, 5)
+    .map((text) => ({ kind: /review/i.test(text) ? "warning" : /wardrobe|closet/i.test(text) ? "wardrobe" : "default", text }));
+  return renderRecommendationMeta(chips);
+}
+
+function renderRecommendationFeedbackPanel() {
+  const options = [
+    ["good", "This was good"],
+    ["too_warm", "Too warm"],
+    ["too_cold", "Too cold"],
+    ["too_formal", "Too formal"],
+    ["too_casual", "Too casual"],
+    ["not_my_style", "Not my style"],
+    ["use_more_wardrobe", "Use more wardrobe"],
+  ];
+  return `
+    <section class="today-feedback-panel" aria-label="Recommendation feedback">
+      <div class="today-feedback-copy">
+        <span class="today-feedback-kicker">Tune WearCast</span>
+        <strong>Did this feel right for today?</strong>
+      </div>
+      <div class="today-feedback-actions">
+        ${options.map(([value, label]) => `<button type="button" class="today-feedback-chip" data-rec-feedback="${escapeHtml(value)}">${escapeHtml(label)}</button>`).join("")}
+      </div>
+    </section>
   `;
 }
 
@@ -3070,25 +4380,90 @@ function openRecommendationItemDialog(item, index = null, transitionDirection = 
   if (typeof els.todayItemDialog.showModal === "function") els.todayItemDialog.showModal();
 }
 
-function openTuneLookDialog() {
+function openTuneLookDialog({ mode = "default" } = {}) {
   if (!els.tuneLookDialog || !els.tuneLookDialogBody) return;
-  els.tuneLookDialogBody.innerHTML = renderRecommendationControls();
+  const isActivationMode = mode === "activation";
+  const analytics = getAnalyticsState(loadState());
+  if (isActivationMode && !analytics.activationTuneSeen) {
+    trackAnalyticsEvent("activation_tune_viewed", { title: "activation_tune_viewed" });
+    saveState({
+      analytics: {
+        ...analytics,
+        activationTuneSeen: true,
+      },
+    });
+  }
+  els.tuneLookDialog.dataset.mode = mode;
+  if (els.tuneLookDialogKicker) {
+    els.tuneLookDialogKicker.textContent = isActivationMode ? "Quick tune" : "Outfit tuning";
+  }
+  if (els.tuneLookDialogTitle) {
+    els.tuneLookDialogTitle.textContent = isActivationMode
+      ? "Make the next recommendation fit you better"
+      : "Adjust today’s recommendation";
+  }
+  if (els.tuneLookDialogSubtitle) {
+    els.tuneLookDialogSubtitle.textContent = isActivationMode
+      ? "Answer three quick questions and WearCast will refresh today’s outfit with a more personal fit."
+      : "Tune comfort, plans, setting, style, and any notes before WearCast rebuilds the look.";
+  }
+  els.tuneLookDialogBody.innerHTML = renderRecommendationControls({ mode });
   if (typeof els.tuneLookDialog.showModal === "function") els.tuneLookDialog.showModal();
 }
 
 function getStarterTypePreset(type = "") {
   const normalized = compactText(type, "").toLowerCase();
   if (!normalized) return {};
-  const nameMap = {
-    shirt: "Everyday shirt",
-    "t-shirt": "Everyday tee",
-    jacket: "Light jacket",
-    jeans: "Everyday jeans",
-    chinos: "Everyday trousers",
+  const presetMap = {
+    shirt: {
+      type: "Shirt",
+      name: "Everyday shirt",
+      guideLabel: "Staple tops",
+      benefit: "This gives WearCast a reliable top to build around.",
+    },
+    "t-shirt": {
+      type: "T-shirt",
+      name: "Everyday tee",
+      guideLabel: "Staple tops",
+      benefit: "This gives WearCast a reliable top to build around.",
+    },
+    jacket: {
+      type: "Jacket",
+      name: "Light jacket",
+      guideLabel: "Outerwear",
+      benefit: "This helps future recommendations handle layering and temperature swings.",
+    },
+    jeans: {
+      type: "Jeans",
+      name: "Everyday jeans",
+      guideLabel: "Bottoms",
+      benefit: "This gives future recommendations a dependable bottom option.",
+    },
+    chinos: {
+      type: "Chinos",
+      name: "Everyday trousers",
+      guideLabel: "Bottoms",
+      benefit: "This gives future recommendations a dependable bottom option.",
+    },
+    sneakers: {
+      type: "Sneakers",
+      name: "Daily sneakers",
+      guideLabel: "Shoes",
+      benefit: "Shoes make outfit recommendations feel much more wearable.",
+    },
+    boots: {
+      type: "Boots",
+      name: "Weather-ready boots",
+      guideLabel: "Shoes",
+      benefit: "This helps WearCast handle rain and cold-weather outfit picks.",
+    },
   };
   return {
     type,
-    name: nameMap[normalized] || "",
+    name: "",
+    guideLabel: "",
+    benefit: "",
+    ...(presetMap[normalized] || {}),
   };
 }
 
@@ -3140,9 +4515,22 @@ function showAppToast(message, tone = "info", options = {}) {
 async function runForLocation(loc) {
   if (!loc) return;
 
+  trackAnalyticsEvent("weather_requested", {
+    title: "weather_requested",
+    source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+    locationName: loc.name || "",
+  });
   setStatus(`Fetching weather for ${loc.name}…`);
   try {
+    const weatherStartedAt = performance.now();
     const data = await fetchWeather(loc.lat, loc.lon);
+    trackAnalyticsEvent("weather_fetched", {
+      title: "weather_fetched",
+      source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+      durationMs: Math.round(performance.now() - weatherStartedAt),
+      provider: data?.provider || "",
+      locationName: loc.name || "",
+    });
     const current = data?.current;
     if (!current) throw new Error("No current weather in response");
 
@@ -3164,6 +4552,12 @@ async function runForLocation(loc) {
 
     const updated = new Date(data.current.time || Date.now());
     els.updatedAt.textContent = `Updated ${updated.toLocaleString()}`;
+    latestWeatherSnapshot = {
+      ...(latestWeatherSnapshot || {}),
+      location: loc,
+      updatedLabel: `Updated ${updated.toLocaleString()}`,
+    };
+    renderWeatherExpandedPanel();
 
     setStatus(`Using: ${loc.name}`);
     saveState({ lastLocation: loc });
@@ -3181,16 +4575,35 @@ async function onSearch() {
     return;
   }
 
+  trackAnalyticsEvent("location_search_started", {
+    title: "location_search_started",
+    source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+    queryLength: query.length,
+  });
   setStatus(`Searching for “${query}”…`);
   try {
     const loc = await geocodePlace(query);
     if (!loc) {
+      trackAnalyticsEvent("location_search_failed", {
+        title: "location_search_failed:no_result",
+        source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+      });
       setStatus(`No results for “${query}”. Try a city + country (e.g., “Paris, FR”).`);
       return;
     }
     saveState({ lastQuery: query, lastLocation: loc });
+    trackAnalyticsEvent("location_search_succeeded", {
+      title: "location_search_succeeded",
+      source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+      locationName: loc.name || "",
+    });
     await runForLocation(loc);
   } catch (err) {
+    trackAnalyticsEvent("location_search_failed", {
+      title: "location_search_failed:error",
+      source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
+      reason: err?.message || "error",
+    });
     console.error(err);
     setStatus(`Error: ${err.message}`);
   }
@@ -3236,7 +4649,7 @@ async function getBrowserGeoPermissionState() {
 
 async function getGeoBestEffort() {
   try {
-    return await getGeoFresh();
+    return await getGeo();
   } catch (err) {
     const message = String(err?.message || "");
     const shouldFallback =
@@ -3246,7 +4659,7 @@ async function getGeoBestEffort() {
 
     if (!shouldFallback) throw err;
 
-    return getGeo();
+    return getGeoFresh();
   }
 }
 
@@ -3314,18 +4727,27 @@ async function resolveLocationFromCoords(lat, lon) {
   }
 }
 
-function onUseMyLocation() {
+function onUseMyLocation(source = "today") {
   // IMPORTANT (mobile Safari/Chrome): the geolocation permission prompt often only appears
   // when geolocation is requested *synchronously* from a user gesture.
   // So: do NOT open dialogs/confirm prompts before calling geolocation.
 
   // Quick environment checks
   if (!isNative && typeof window !== "undefined" && window.isSecureContext === false) {
+    trackAnalyticsEvent("location_permission_failed", {
+      title: "location_permission_failed:insecure_context",
+      source,
+      reason: "insecure_context",
+    });
     setLocationLoading(false);
     setStatus("Location requires HTTPS. Open WearCast via https://… (not a local file or http://)." );
     return;
   }
 
+  trackAnalyticsEvent("location_permission_requested", {
+    title: "location_permission_requested",
+    source,
+  });
   setLocationLoading(true, "Requesting location permission…");
 
   if (isNative && nativePlugins.Geolocation?.getCurrentPosition) {
@@ -3338,10 +4760,20 @@ function onUseMyLocation() {
         const loc = await resolveLocationFromCoords(lat, lon);
         els.placeInput.value = loc.name;
         saveState({ lastQuery: "", lastLocation: loc });
+        trackAnalyticsEvent("location_permission_granted", {
+          title: "location_permission_granted",
+          source,
+          locationName: loc.name || "",
+        });
         await runForLocation(loc);
         setLocationLoading(false);
         if (!consent.seen) showConsentDialog({ forceModal: true });
       } catch (err) {
+        trackAnalyticsEvent("location_permission_failed", {
+          title: "location_permission_failed:native_error",
+          source,
+          reason: err?.message || "error",
+        });
         setLocationLoading(false);
         setStatus(`Location error: ${err.message || "Could not get current location"}`);
         if (!consent.seen) showConsentDialog({ forceModal: true });
@@ -3351,6 +4783,11 @@ function onUseMyLocation() {
   }
 
   if (!navigator.geolocation) {
+    trackAnalyticsEvent("location_permission_failed", {
+      title: "location_permission_failed:unsupported",
+      source,
+      reason: "unsupported",
+    });
     setLocationLoading(false);
     setStatus("Geolocation is not supported in this browser. Search by city instead.");
     return;
@@ -3365,10 +4802,20 @@ function onUseMyLocation() {
       const loc = await resolveLocationFromCoords(lat, lon);
       els.placeInput.value = loc.name;
       saveState({ lastQuery: "", lastLocation: loc });
+      trackAnalyticsEvent("location_permission_granted", {
+        title: "location_permission_granted",
+        source,
+        locationName: loc.name || "",
+      });
       await runForLocation(loc);
       setLocationLoading(false);
       if (!consent.seen) showConsentDialog({ forceModal: true });
     } catch (err) {
+      trackAnalyticsEvent("location_permission_failed", {
+        title: "location_permission_failed:web_error",
+        source,
+        reason: err?.message || "error",
+      });
       setLocationLoading(false);
       const detail = await buildGeoErrorMessage(err);
       setStatus(`Location error: ${detail}`);
@@ -3462,25 +4909,48 @@ function syncPreferenceInputs(prefs = {}) {
 
 function renderSettingsUI() {
   if (!els.settingsAccountTitle || !els.settingsAccountStatus) return;
+  const state = loadState();
+  const planSummary = getPlanSummary(state);
   if (authUser) {
     els.settingsAccountTitle.textContent = authUser.name || authUser.email || "Signed in";
     els.settingsAccountStatus.textContent = authUser.email
-      ? `${authUser.email} • ${authUser.authProvider === "google" ? "Google account" : "Email account"}`
+      ? `${authUser.email} • ${authUser.authProvider === "google" ? "Google account" : "Email account"} • ${planSummary}`
       : "Your account is connected.";
     if (els.settingsAccountBtn) els.settingsAccountBtn.querySelector("strong").textContent = "Open account";
     if (els.settingsDeleteAccountBtn) els.settingsDeleteAccountBtn.style.display = "";
   } else {
     els.settingsAccountTitle.textContent = "Not signed in";
-    els.settingsAccountStatus.textContent = "Sign in to sync your wardrobe and account settings.";
+    els.settingsAccountStatus.textContent = `Sign in to sync your wardrobe and account settings. Current plan: ${planSummary}.`;
     if (els.settingsAccountBtn) els.settingsAccountBtn.querySelector("strong").textContent = "Sign in";
     if (els.settingsDeleteAccountBtn) els.settingsDeleteAccountBtn.style.display = "none";
+  }
+  if (els.settingsUpgradeBtn) {
+    els.settingsUpgradeBtn.querySelector("strong").textContent = hasPremiumAccess(state) ? "Change Premium plan" : "Upgrade to premium";
+  }
+  if (els.settingsManageSubscriptionBtn) {
+    els.settingsManageSubscriptionBtn.style.display = hasPremiumAccess(state) ? "" : "none";
+  }
+  if (els.settingsUpgradeStatus) {
+    const remainingSaves = getRemainingSavedLooks(state);
+    const remainingSlots = getRemainingWardrobeSlots(loadWardrobe(), state);
+    const remainingScans = getRemainingPhotoScans(state);
+    els.settingsUpgradeStatus.textContent = hasPremiumAccess(state)
+      ? `${planSummary}. Switch billing plans or manage cancellation from the App Store.`
+      : `${remainingSaves} save${remainingSaves === 1 ? "" : "s"} left • ${remainingSlots} item slots left • ${remainingScans} scan${remainingScans === 1 ? "" : "s"} left this week.`;
   }
   renderSettingsDataUI();
 }
 
 function bindSettingsUI() {
   els.settingsAccountBtn?.addEventListener("click", showAuthDialog);
+  els.settingsUpgradeBtn?.addEventListener("click", () => openPaywall("generic", { source: "settings" }));
+  els.settingsRestorePurchasesBtn?.addEventListener("click", restorePurchases);
+  els.settingsManageSubscriptionBtn?.addEventListener("click", openManageSubscription);
   els.settingsDeleteAccountBtn?.addEventListener("click", () => els.authDeleteBtn?.click());
+  els.settingsSupportBtn?.addEventListener("click", () => {
+    setSettingsFeedback("");
+    window.location.href = "./support.html";
+  });
   els.settingsPrivacyBtn?.addEventListener("click", () => {
     setSettingsFeedback("");
     showConsentDialog({ forceModal: true, source: "settings" });
@@ -3737,7 +5207,7 @@ function bindConsentUI() {
     // Auto-trigger geolocation after consent if location was granted and no saved location
     if (!!els.consentLocation?.checked) {
       const st = loadState();
-      if (!st.lastLocation) onUseMyLocation();
+      if (!st.lastLocation) onUseMyLocation("consent");
     }
   });
 }
@@ -4101,8 +5571,109 @@ function getWardrobeMissingCategories(items = []) {
   return missing.slice(0, 4);
 }
 
+function getWardrobeStarterGroupsCovered(items = []) {
+  return new Set(
+    (items || [])
+      .map((item) => getWardrobeCategory(item))
+      .filter((category) => ["shirts", "pants", "jackets"].includes(category))
+  );
+}
+
+function isWardrobeStarterReady(items = []) {
+  const categories = getWardrobeStarterGroupsCovered(items);
+  return Array.isArray(items) && items.length >= 5 && categories.size === 3;
+}
+
 function getWardrobeCoverage(items = []) {
-  return Math.max(0, Math.min(100, Math.round((Math.min(items.length, 5) / 5) * 100)));
+  const itemProgress = Math.min((Array.isArray(items) ? items.length : 0) / 5, 1);
+  const groupProgress = getWardrobeStarterGroupsCovered(items).size / 3;
+  return Math.max(0, Math.min(100, Math.round(((itemProgress * 0.55) + (groupProgress * 0.45)) * 100)));
+}
+
+function getWardrobeStarterQualityCopy(items = []) {
+  const count = Array.isArray(items) ? items.length : 0;
+  if (count <= 0) return "Add your first few staples to unlock better daily outfit picks.";
+  if (count < 3) return "Good start. A few more staples will make recommendations feel more personal.";
+  if (!isWardrobeStarterReady(items) && count >= 5) {
+    return "You have enough pieces, but one core category is still missing. Add the last gap to make recommendations feel grounded.";
+  }
+  if (count < 5) return "Almost there. One or two more staples will make daily outfits much easier to ground in your closet.";
+  return "Starter wardrobe ready. WearCast now has enough core pieces to build stronger recommendations from your closet.";
+}
+
+function getWardrobeStarterHeadline(items = []) {
+  const count = Array.isArray(items) ? items.length : 0;
+  if (count <= 0) return "Add 5 staples to unlock wardrobe-powered daily outfits";
+  if (count < 3) return "Your starter wardrobe is taking shape";
+  if (!isWardrobeStarterReady(items) && count >= 5) return "You are one missing staple group away from a recommendation-ready closet";
+  if (count < 5) return "You are one or two pieces away from a recommendation-ready closet";
+  return "Starter wardrobe ready to dress from";
+}
+
+function getStarterTypeForLabel(label = "") {
+  const map = {
+    "Outerwear": "Jacket",
+    "Shoes": "Sneakers",
+    "Rain layer": "Jacket",
+    "Staple tops": "T-shirt",
+    "Bottoms": "Jeans",
+  };
+  return map[label] || "Other";
+}
+
+function buildWardrobeSaveMomentum(items = [], { savedCount = 0, skippedCount = 0 } = {}) {
+  const totalCount = Array.isArray(items) ? items.length : 0;
+  const nextLabel = getWardrobeMissingCategories(items)[0] || "";
+
+  if (isWardrobeStarterReady(items)) {
+    return {
+      message: skippedCount
+        ? `Starter wardrobe ready. Saved ${savedCount} item${savedCount === 1 ? "" : "s"} and skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}.`
+        : "Starter wardrobe ready. WearCast can now build stronger outfit picks from your closet.",
+      nextLabel: "",
+    };
+  }
+
+  const progressMessage = `${Math.min(totalCount, 5)} of 5 staples added.`;
+  const nextMessage = nextLabel
+    ? ` Add ${nextLabel.toLowerCase()} next to improve recommendation coverage.`
+    : " Add another staple to improve recommendation coverage.";
+  const skippedMessage = skippedCount
+    ? ` Skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}.`
+    : "";
+
+  return {
+    message: `${progressMessage}${nextMessage}${skippedMessage}`,
+    nextLabel,
+  };
+}
+
+function buildWardrobeStarterProgress(items = []) {
+  const categories = getWardrobeStarterGroupsCovered(items);
+  const starterProgress = `${categories.size} of 3 starter groups`;
+  const starterHtml = `
+    <span class="starter-pill ${categories.has("shirts") ? "is-complete" : ""}">Shirts</span>
+    <span class="starter-pill ${categories.has("pants") ? "is-complete" : ""}">Pants</span>
+    <span class="starter-pill ${categories.has("jackets") ? "is-complete" : ""}">Layers</span>
+  `;
+  const nextSuggestions = getWardrobeMissingCategories(items).slice(0, 2);
+  const nextHtml = nextSuggestions.length
+    ? `
+      <div class="starter-next-row">
+        <span class="starter-next-label">Add next</span>
+        <div class="starter-next-actions">
+          ${nextSuggestions.map((label) => `<button type="button" class="starter-next-chip" data-starter-label="${escapeHtml(label)}">${escapeHtml(label)}</button>`).join("")}
+        </div>
+      </div>
+    `
+    : `<div class="starter-next-row"><span class="starter-next-label is-complete">Starter set covered</span></div>`;
+
+  return `
+    <span class="starter-progress-label">${starterProgress}</span>
+    <div class="starter-pill-row">${starterHtml}</div>
+    <p class="starter-progress-note">${escapeHtml(getWardrobeStarterQualityCopy(items))}</p>
+    ${nextHtml}
+  `;
 }
 
 function renderWardrobeDashboard(items = []) {
@@ -4112,17 +5683,23 @@ function renderWardrobeDashboard(items = []) {
   const filledLength = circumference * (coverage / 100);
   const missing = getWardrobeMissingCategories(items);
   const shouldShowDashboard = stage === "starter";
+  const isStarterReady = isWardrobeStarterReady(items);
 
   if (els.wardrobeDashboard) {
     els.wardrobeDashboard.style.display = shouldShowDashboard ? "" : "none";
     els.wardrobeDashboard.classList.toggle("is-compact", shouldShowDashboard);
+    els.wardrobeDashboard.classList.toggle("is-ready", isStarterReady);
   }
   if (els.wardrobeCoverageCircle) {
     els.wardrobeCoverageCircle.style.strokeDasharray = `${filledLength} ${circumference}`;
   }
   if (els.wardrobeCoverageValue) els.wardrobeCoverageValue.textContent = `${coverage}%`;
   if (els.wardrobeCoverageLabel) {
-    els.wardrobeCoverageLabel.textContent = items.length >= 5 ? "Ready to style" : `${Math.max(0, 5 - items.length)} left`;
+    els.wardrobeCoverageLabel.textContent = isStarterReady
+      ? "Ready to style"
+      : items.length >= 5
+        ? `${Math.max(1, missing.length)} gap left`
+        : `${Math.max(0, 5 - items.length)} left`;
   }
   if (els.wardrobeMissingChips) {
     els.wardrobeMissingChips.innerHTML = missing.length
@@ -4683,62 +6260,69 @@ async function toggleWardrobeFavorite(itemId) {
 }
 
 function syncTodayWardrobeDialog(items) {
-  const emptyWardrobe = !Array.isArray(items) || items.length === 0;
   if (els.todayWardrobeInlineCta) {
-    els.todayWardrobeInlineCta.style.display = emptyWardrobe ? "grid" : "none";
+    els.todayWardrobeInlineCta.style.display = "none";
   }
-  if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+  const showInlinePrompt = false;
+  const analytics = getAnalyticsState(loadState());
+  if (showInlinePrompt && !analytics.wardrobePromptSeen) {
+    trackAnalyticsEvent("wardrobe_prompt_viewed", { title: "wardrobe_prompt_viewed" });
+    saveState({
+      analytics: {
+        ...analytics,
+        wardrobePromptSeen: true,
+      },
+    });
+  }
+  if (!showInlinePrompt && els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
 }
 
 function updateWardrobeCtas(items) {
   const count = Array.isArray(items) ? items.length : 0;
-  const categories = new Set((items || []).map((item) => getWardrobeCategory(item)).filter((category) => ["shirts", "pants", "jackets"].includes(category)));
-  const starterProgress = `${categories.size} of 3 starter groups`;
-  const starterHtml = `
-    <span class="starter-pill ${categories.has("shirts") ? "is-complete" : ""}">Shirts</span>
-    <span class="starter-pill ${categories.has("pants") ? "is-complete" : ""}">Pants</span>
-    <span class="starter-pill ${categories.has("jackets") ? "is-complete" : ""}">Jackets</span>
-  `;
-
+  const starterReady = isWardrobeStarterReady(items);
   if (els.todayWardrobeInlineProgress) {
-    els.todayWardrobeInlineProgress.innerHTML = `
-      <span class="starter-progress-label">${starterProgress}</span>
-      <div class="starter-pill-row">${starterHtml}</div>
-    `;
+    els.todayWardrobeInlineProgress.innerHTML = buildWardrobeStarterProgress(items);
   }
   if (els.wardrobeExplainerProgress) {
-    els.wardrobeExplainerProgress.innerHTML = `
-      <span class="starter-progress-label">${starterProgress}</span>
-      <div class="starter-pill-row">${starterHtml}</div>
-    `;
+    els.wardrobeExplainerProgress.innerHTML = buildWardrobeStarterProgress(items);
   }
 
   if (count === 0) {
     if (els.todayCtaKicker) els.todayCtaKicker.textContent = "From your closet";
-    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Get recommendations from your own closet.";
-    if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add wardrobe";
+    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Make tomorrow’s recommendation work from the clothes you already own.";
+    if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Start my wardrobe";
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Closet assistant";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "Add 5 staples to unlock better daily looks";
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Start with the pieces you wear most. WearCast will organize them and style from what you own.";
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = getWardrobeStarterHeadline(items);
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "Start with the pieces you wear most. WearCast will organize them and build recommendations from what you already own.";
     return;
   }
 
   if (count < 4) {
     if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Nice start";
-    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Keep building your closet so today’s picks can use more of what you own.";
+    if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Keep building your closet so today’s outfit picks can use more of what you own.";
     if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Add more";
     if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Starter wardrobe";
-    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = "A few more staples will make the collection feel complete";
-    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = `You have ${count} item${count === 1 ? "" : "s"} saved. Add a few more core pieces to improve outfit coverage.`;
+    if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = getWardrobeStarterHeadline(items);
+    if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = `You have ${count} item${count === 1 ? "" : "s"} saved. Add a few more core pieces so WearCast can build stronger daily outfits from your closet.`;
     return;
   }
 
-  if (els.todayCtaKicker) els.todayCtaKicker.textContent = "Looking good";
-  if (els.todayCtaTitle) els.todayCtaTitle.textContent = "Your closet is ready to influence today’s recommendation.";
+  if (els.todayCtaKicker) els.todayCtaKicker.textContent = starterReady ? "Starter ready" : "Looking good";
+  if (els.todayCtaTitle) els.todayCtaTitle.textContent = starterReady
+    ? "Your closet is ready to shape outfit picks from what you actually own."
+    : count >= 5
+      ? "You have enough pieces. Add the last missing staple group so outfit picks feel more grounded."
+      : "Your closet is ready to shape today’s outfit recommendation.";
   if (els.todayWardrobeCtaBtn) els.todayWardrobeCtaBtn.textContent = "Keep building";
-  if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = "Collection progress";
-  if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = `Your ${count}-item wardrobe is ready to style from`;
-  if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = "WearCast can now use more of your actual closet in recommendations. Add standout pieces anytime to sharpen the mix.";
+  if (els.wardrobeExplainerKicker) els.wardrobeExplainerKicker.textContent = starterReady ? "Starter ready" : "Collection progress";
+  if (els.wardrobeExplainerTitle) els.wardrobeExplainerTitle.textContent = starterReady
+    ? getWardrobeStarterHeadline(items)
+    : `Your ${count}-item wardrobe is ready to dress from`;
+  if (els.wardrobeExplainerText) els.wardrobeExplainerText.textContent = starterReady
+    ? "WearCast now has enough core pieces to build recommendations that feel much more grounded in your real closet."
+    : count >= 5
+      ? "You have enough pieces to build from. Fill the last starter gap and WearCast will make much stronger recommendations from your closet."
+      : "WearCast can now use more of your real closet in daily recommendations. Add standout pieces anytime to sharpen the mix.";
 }
 
 let editingItemId = null;
@@ -6152,13 +7736,20 @@ function setItemFlowStep(step, { focus = false } = {}) {
     els.itemFlowKicker.textContent = labelMap[step] || "Step";
   }
   if (els.itemFlowAssist) {
+    const starterGuideText = activeItemStarterPreset?.guideLabel
+      ? `${activeItemStarterPreset.guideLabel} starter`
+      : "starter piece";
     const assistMap = {
       capture: hasItemImportSession()
         ? "Batch scan is active."
-        : "Start with a clear clothing photo.",
+        : activeItemStarterPreset?.benefit
+          ? `Add a clear photo for this ${starterGuideText}. ${activeItemStarterPreset.benefit}`
+          : "Start with a clear clothing photo.",
       scanning: "Analyzing your photos and preparing the review.",
       review: "",
-      confirm: "Check the basics first. Open more details only if needed.",
+      confirm: activeItemStarterPreset?.benefit
+        ? `${activeItemStarterPreset.benefit} Check the basics first, then save it to move your starter wardrobe forward.`
+        : "Check the basics first. Open more details only if needed.",
     };
     els.itemFlowAssist.textContent = assistMap[step] || "";
   }
@@ -6366,6 +7957,7 @@ function resetNewItemFlow(message = "") {
   editingBatchItemIndex = -1;
   activeRejectedPhotoIndex = -1;
   editingItemId = null;
+  activeItemStarterPreset = null;
   pendingPhotoDataUrl = null;
   pendingCropPhotoDataUrl = null;
   pendingCropConfidence = "none";
@@ -6460,8 +8052,22 @@ async function analyzeSelectedItemPhotoFile(file, { photoIndex = 1 } = {}) {
 }
 
 async function processSelectedItemPhotos(files, { reset = true } = {}) {
-  const usableFiles = (Array.isArray(files) ? files : []).filter((file) => file?.type?.startsWith("image/"));
+  let usableFiles = (Array.isArray(files) ? files : []).filter((file) => file?.type?.startsWith("image/"));
   if (!usableFiles.length) return false;
+  const state = loadState();
+  const remainingScans = getRemainingPhotoScans(state);
+  if (!hasPremiumAccess(state) && remainingScans <= 0) {
+    openPaywall("scan_cap", { source: "wardrobe-scan" });
+    showAppToast("You have used this week’s free scans. Go premium for unlimited wardrobe scans.", "warning");
+    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap" });
+    return false;
+  }
+  if (!hasPremiumAccess(state) && usableFiles.length > remainingScans) {
+    usableFiles = usableFiles.slice(0, remainingScans);
+    openPaywall("scan_cap", { source: "wardrobe-scan-partial" });
+    showAppToast(`Free includes ${FREE_PHOTO_SCANS_PER_WINDOW} scans per week. Processing your next ${remainingScans} photo${remainingScans === 1 ? "" : "s"} now.`, "warning");
+    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap_partial" });
+  }
   const existingAcceptedPhotos = itemImportSession.acceptedPhotos || 0;
   const existingRejectedPhotos = itemImportSession.rejectedPhotos || 0;
   const existingTotalPhotos = itemImportSession.totalPhotos || 0;
@@ -6486,6 +8092,7 @@ async function processSelectedItemPhotos(files, { reset = true } = {}) {
   renderItemBatchReview();
   isReadingItemPhoto = true;
   isAnalyzingItemPhoto = true;
+  consumePhotoScanCredits(usableFiles.length);
   updateItemSaveState();
   setItemPhotoStatus(
     usableFiles.length > 1
@@ -6585,10 +8192,16 @@ async function processSelectedItemPhotos(files, { reset = true } = {}) {
 async function persistNewWardrobeItems(itemsToSave) {
   const savedItems = [];
   const skippedItems = [];
+  const limitSkippedItems = [];
   const currentItems = Array.isArray(_wardrobeCache) ? [..._wardrobeCache] : await loadWardrobeAsync();
   const existingSignatures = new Set(currentItems.map((item) => normalizeItemSignature(item)));
+  let remainingSlots = getRemainingWardrobeSlots(currentItems);
 
   for (const item of itemsToSave) {
+    if (Number.isFinite(remainingSlots) && remainingSlots <= 0) {
+      limitSkippedItems.push(item);
+      continue;
+    }
     const normalizedMedia = normalizeWardrobeItemMedia(item);
     const normalized = {
       type: normalizedMedia.type,
@@ -6627,10 +8240,20 @@ async function persistNewWardrobeItems(itemsToSave) {
     }
 
     existingSignatures.add(signature);
+    if (Number.isFinite(remainingSlots)) remainingSlots -= 1;
   }
 
   saveWardrobe([...savedItems, ...currentItems]);
-  return { savedItems, skippedItems };
+  return {
+    savedItems,
+    skippedItems,
+    limitHit: limitSkippedItems.length
+      ? {
+          trigger: "wardrobe_cap",
+          skippedCount: limitSkippedItems.length,
+        }
+      : null,
+  };
 }
 
 function updateScanState(scanning) {
@@ -6712,6 +8335,7 @@ function handleItemBackAction() {
 }
 
 function openItemDialog(item = null, preset = null) {
+  activeItemStarterPreset = preset?.type ? preset : null;
   editingItemId = item?.id || null;
   isSavingItem = false;
   isReadingItemPhoto = false;
@@ -6744,8 +8368,8 @@ function openItemDialog(item = null, preset = null) {
     els.itemFlowKicker.style.display = item ? "none" : "";
   }
   if (item) {
+    activeItemStarterPreset = null;
     const normalizedItem = normalizeWardrobeItemMedia(item);
-    els.itemDialogTitle = $("itemDialogTitle");
     if (els.itemDialogTitle) els.itemDialogTitle.textContent = "Edit item";
     els.itemType.value = normalizedItem.type || "";
     els.itemName.value = normalizedItem.name || "";
@@ -6764,8 +8388,11 @@ function openItemDialog(item = null, preset = null) {
     els.itemDeleteBtn.style.display = "inline-flex";
     setItemFlowStep("confirm");
   } else {
-    const title = $("itemDialogTitle");
-    if (title) title.textContent = "Add items";
+    if (els.itemDialogTitle) {
+      els.itemDialogTitle.textContent = activeItemStarterPreset?.guideLabel
+        ? `Add a ${activeItemStarterPreset.guideLabel.toLowerCase()} piece`
+        : "Add items";
+    }
     els.itemDeleteBtn.style.display = "none";
     if (preset?.type) els.itemType.value = preset.type;
     if (preset?.name) els.itemName.value = preset.name;
@@ -6817,6 +8444,9 @@ async function saveItem() {
   if (isSavingItem || isReadingItemPhoto) return false;
   if (!validateItemForm()) return false;
   syncActiveBatchItemFromForm();
+  const stateBeforeSave = loadState();
+  const currentItemsBeforeSave = Array.isArray(_wardrobeCache) ? [..._wardrobeCache] : await loadWardrobeAsync();
+  const hadPremiumBeforeSave = hasPremiumAccess(stateBeforeSave);
 
   isSavingItem = true;
   updateItemSaveState();
@@ -6877,20 +8507,62 @@ async function saveItem() {
       if (!result) return false;
       markWardrobeItemsHighlighted(result.savedItems.map((item) => item?.id));
       await renderWardrobe();
+      const latestItems = Array.isArray(_wardrobeCache) ? _wardrobeCache : await loadWardrobeAsync();
 
       const savedCount = result.savedItems.length;
       const skippedCount = result.skippedItems.length;
       if (!savedCount) {
+        if (result.limitHit) {
+          openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount });
+          showAppToast(`Your free closet is full at ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep building your wardrobe.`, "warning");
+          trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
+        }
         setItemFlowStep(itemBatchItems.length ? "review" : "confirm", { focus: !itemBatchItems.length });
         setItemFormError(skippedCount ? "Those items already exist in your wardrobe. Adjust the details or use a different photo." : "No items were saved.");
         return false;
       }
 
-      resetNewItemFlow(
-        skippedCount
-          ? `Saved ${savedCount} item${savedCount === 1 ? "" : "s"}. Skipped ${skippedCount} duplicate${skippedCount === 1 ? "" : "s"}. Add another photo when you're ready.`
-          : `Saved ${savedCount} item${savedCount === 1 ? "" : "s"}. Add another photo when you're ready.`
-      );
+      const momentum = buildWardrobeSaveMomentum(latestItems, { savedCount, skippedCount });
+      resetNewItemFlow("");
+      const latestState = loadState();
+      const analytics = getAnalyticsState(latestState);
+      if (!analytics.firstWardrobeItemTracked && currentItemsBeforeSave.length === 0 && latestItems.length > 0) {
+        trackAnalyticsEvent("first_wardrobe_item_added", {
+          title: "first_wardrobe_item_added",
+          totalWardrobeItems: latestItems.length,
+        });
+        saveState({
+          analytics: {
+            ...analytics,
+            firstWardrobeItemTracked: true,
+          },
+        });
+      } else if (!analytics.fiveWardrobeItemsTracked && currentItemsBeforeSave.length < 5 && latestItems.length >= 5) {
+        trackAnalyticsEvent("five_wardrobe_items_added", {
+          title: "five_wardrobe_items_added",
+          totalWardrobeItems: latestItems.length,
+          starterReady: isWardrobeStarterReady(latestItems),
+        });
+        saveState({
+          analytics: {
+            ...analytics,
+            fiveWardrobeItemsTracked: true,
+          },
+        });
+      }
+      showAppToast(momentum.message, "success", momentum.nextLabel
+        ? {
+            clickable: true,
+            clickLabel: `Add ${momentum.nextLabel}`,
+            onClick: () => openItemDialog(null, getStarterTypePreset(getStarterTypeForLabel(momentum.nextLabel))),
+          }
+        : {});
+      if (result.limitHit) {
+        window.setTimeout(() => openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount }), 180);
+        trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
+      } else if (!hadPremiumBeforeSave && currentItemsBeforeSave.length < 5 && latestItems.length >= 5) {
+        window.setTimeout(() => openPaywall("starter_ready", { source: "starter-milestone" }), 180);
+      }
       return true;
     }
   } catch (err) {
@@ -7727,6 +9399,21 @@ function bindWardrobeUI() {
     };
     openItemDialog(null, getStarterTypePreset(map[label] || "Other"));
   });
+  const handleStarterProgressClick = (event) => {
+    const chip = event.target.closest("[data-starter-label]");
+    if (!chip) return;
+    const label = chip.dataset.starterLabel || "";
+    const map = {
+      "Outerwear": "Jacket",
+      "Shoes": "Sneakers",
+      "Rain layer": "Jacket",
+      "Staple tops": "T-shirt",
+      "Bottoms": "Jeans",
+    };
+    openItemDialog(null, getStarterTypePreset(map[label] || "Other"));
+  };
+  els.todayWardrobeInlineProgress?.addEventListener("click", handleStarterProgressClick);
+  els.wardrobeExplainerProgress?.addEventListener("click", handleStarterProgressClick);
 
   els.wardrobeFilterDialogCloseBtn?.addEventListener("click", () => els.wardrobeFilterDialog?.close());
   els.wardrobeFilterApplyBtn?.addEventListener("click", async () => {
@@ -8007,7 +9694,7 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
           <span class="rec-skeleton-action"></span>
           <span class="rec-skeleton-action rec-skeleton-action-accent"></span>
         </div>
-        <div class="rec-skeleton-caption">Styling your day from weather and wardrobe context…</div>
+        <div class="rec-skeleton-caption">Building today’s outfit recommendation from weather and wardrobe context…</div>
       </div>
     `;
   }
@@ -8081,6 +9768,7 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
 }
 
 function renderAIRecommendation(data) {
+  const stateBeforeSave = loadState();
   pendingRecommendationPrefs = null;
   els.aiRecSection?.classList.remove("is-loading-first");
   const outfit = data.outfit || {};
@@ -8116,6 +9804,16 @@ function renderAIRecommendation(data) {
     },
   });
   const detailsItems = buildRecommendationDetails(data, weather, rowEntries, slotReasons);
+  latestRecommendationSnapshot = {
+    headline,
+    subtitle,
+    outfit,
+    detailsItems,
+    wardrobeSummary,
+    missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
+    reasoning: data.reasoning || "",
+  };
+  renderWeatherExpandedPanel();
   const collageItems = rowEntries.map((entry, index) => {
     const slotKey = String(entry.label || "").toLowerCase();
     const imageMatch = { ...imageMatches, ...wardrobePhotoMatches }[entry.key] || { ...imageMatches, ...wardrobePhotoMatches }[slotKey] || null;
@@ -8132,12 +9830,9 @@ function renderAIRecommendation(data) {
     };
   });
 
-  if (els.aiRecBadge) {
-    els.aiRecBadge.textContent = getRecommendationBadge(outfit, weather);
-  }
-
   els.aiRecContent.innerHTML = `
     <div class="today-rec-body">
+      ${renderRecommendationTrustSignals(data, weather, wardrobeSummary)}
       ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, { ...imageMatches, ...wardrobePhotoMatches }, slotReasons) : ""}
     </div>
   `;
@@ -8150,13 +9845,45 @@ function renderAIRecommendation(data) {
     outfit,
     coverage: wardrobeSummary.coverage,
     missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
-    locationName: loadState().lastLocation?.name || "",
+    locationName: stateBeforeSave.lastLocation?.name || "",
     signature: buildLookSignature(outfit),
   });
   els.aiRecWarnings.innerHTML = "";
   els.aiRecMissing.innerHTML = "";
   initializeRecommendationDeck();
   animateRecommendationRefreshIn();
+  recordSuccessfulUseDay();
+  const analytics = getAnalyticsState(loadState());
+  if (!getOnboardingState(stateBeforeSave).firstRecommendationSeen) {
+    trackAnalyticsEvent("first_recommendation_generated", {
+      title: "first_recommendation_generated",
+      coverage: Number(wardrobeSummary.coverage || 0),
+      matchedItems: Number(wardrobeSummary.matchedCount || 0),
+    });
+  }
+  if (!analytics.firstWardrobeRecommendationTracked && Number(wardrobeSummary.matchedCount || 0) > 0) {
+    trackAnalyticsEvent("first_wardrobe_powered_recommendation", {
+      title: "first_wardrobe_powered_recommendation",
+      coverage: Number(wardrobeSummary.coverage || 0),
+      matchedItems: Number(wardrobeSummary.matchedCount || 0),
+    });
+    saveState({
+      analytics: {
+        ...analytics,
+        firstWardrobeRecommendationTracked: true,
+      },
+    });
+  }
+  markOnboardingRecommendationSeen();
+  const latestState = loadState();
+  if (shouldPromptActivationTune(latestState) && !els.tuneLookDialog?.open) {
+    window.setTimeout(() => {
+      if (shouldPromptActivationTune(loadState()) && !els.tuneLookDialog?.open) {
+        openTuneLookDialog({ mode: "activation" });
+      }
+    }, 280);
+  }
+  maybePromptUsageMilestonePaywall();
 }
 
 function bindRecommendationControls() {
@@ -8164,14 +9891,56 @@ function bindRecommendationControls() {
     const latestState = loadState();
     const basePrefs = latestState.prefs || {};
     let nextPrefs = { ...basePrefs };
+    trackAnalyticsEvent("recommendation_feedback_tapped", {
+      title: `recommendation_feedback_tapped:${feedback}`,
+      feedback,
+    });
+    try {
+      const savedLook = JSON.parse(els.aiRecContent?.dataset?.savedLook || "null");
+      const wardrobeSummary = JSON.parse(els.aiRecContent?.dataset?.wardrobeSummary || "null");
+      fetch(`${API_BASE}/api/recommend/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          feedback,
+          outfit: savedLook?.outfit || null,
+          weather: lastWeatherForAI || null,
+          wardrobeUsageCount: Number(wardrobeSummary?.matchedCount || 0),
+        }),
+      }).catch(() => {});
+    } catch {}
 
     if (feedback === "too_cold") {
       nextPrefs = { ...nextPrefs, cold: true, hot: false };
     } else if (feedback === "too_warm") {
       nextPrefs = { ...nextPrefs, cold: false, hot: true };
+    } else if (feedback === "too_formal") {
+      nextPrefs = { ...nextPrefs, styleFocus: "casual", formal: false, casual: true };
+    } else if (feedback === "too_casual") {
+      nextPrefs = { ...nextPrefs, styleFocus: "polished", formal: true, casual: false };
+    } else if (feedback === "not_my_style") {
+      openTuneLookDialog();
+      sourceButton?.classList.add("is-active");
+      return;
+    } else if (feedback === "use_more_wardrobe") {
+      switchTab("tabWardrobe", { direction: 1 });
+      showAppToast("Add or review staples so the next look can use more of your closet.", "info");
+      sourceButton?.classList.add("is-active");
+      return;
     }
 
-    saveState({ prefs: nextPrefs });
+    const feedbackHistory = Array.isArray(latestState.recommendationFeedback) ? latestState.recommendationFeedback : [];
+    saveState({
+      prefs: nextPrefs,
+      recommendationFeedback: [
+        {
+          feedback,
+          createdAt: new Date().toISOString(),
+          weather: lastWeatherForAI || null,
+        },
+        ...feedbackHistory,
+      ].slice(0, 25),
+    });
     pendingRecommendationPrefs = null;
     syncPreferenceInputs(nextPrefs);
     sourceButton?.classList.add("is-active");
@@ -8202,7 +9971,30 @@ function bindRecommendationControls() {
     const actionButton = event.target.closest("[data-rec-action='apply']");
     if (actionButton) {
       const latestState = loadState();
-      const nextPrefs = normalizeRecommendationPrefs(pendingRecommendationPrefs || latestState.prefs);
+      const notesInput = els.tuneLookDialogBody?.querySelector("[data-rec-notes]");
+      const draftPrefs = {
+        ...(pendingRecommendationPrefs || latestState.prefs),
+        ...(notesInput ? { fashionNotes: notesInput.value.trim() } : {}),
+      };
+      const nextPrefs = normalizeRecommendationPrefs(draftPrefs);
+      pendingRecommendationPrefs = null;
+      if (els.tuneLookDialog?.dataset.mode === "activation") {
+        trackAnalyticsEvent("activation_tune_completed", { title: "activation_tune_completed" });
+        completeActivationTune();
+      }
+      saveState({ prefs: nextPrefs });
+      syncPreferenceInputs(nextPrefs);
+      if (typeof els.tuneLookDialog?.close === "function") els.tuneLookDialog.close();
+      if (latestState.lastLocation) {
+        await runForLocation(latestState.lastLocation);
+      }
+      return;
+    }
+
+    const resetTuningButton = event.target.closest("[data-rec-action='reset-tuning']");
+    if (resetTuningButton) {
+      const latestState = loadState();
+      const nextPrefs = structuredClone(DEFAULT_STATE.prefs);
       pendingRecommendationPrefs = null;
       saveState({ prefs: nextPrefs });
       syncPreferenceInputs(nextPrefs);
@@ -8210,6 +10002,15 @@ function bindRecommendationControls() {
       if (latestState.lastLocation) {
         await runForLocation(latestState.lastLocation);
       }
+      return;
+    }
+
+    const skipActivationTuneButton = event.target.closest("[data-rec-action='skip-activation-tune']");
+    if (skipActivationTuneButton) {
+      pendingRecommendationPrefs = null;
+      trackAnalyticsEvent("activation_tune_skipped", { title: "activation_tune_skipped" });
+      completeActivationTune();
+      if (typeof els.tuneLookDialog?.close === "function") els.tuneLookDialog.close();
       return;
     }
 
@@ -8299,10 +10100,24 @@ function bindRecommendationControls() {
     allButtons.forEach((btn) => {
       btn.classList.toggle("is-active", btn.dataset.recValue === value);
     });
+    document.querySelectorAll(`#tuneLookDialogBody .today-control-group`).forEach((group) => {
+      const activeButton = group.querySelector(".today-chip-toggle.is-active");
+      const currentLabel = group.querySelector(".today-control-current");
+      if (activeButton && currentLabel) currentLabel.textContent = activeButton.textContent.trim();
+    });
   };
 
   els.aiRecContent?.addEventListener("click", handleRecommendationControlInteraction);
+  els.aiRecAdjustBtn?.addEventListener("click", handleRecommendationControlInteraction);
   els.tuneLookDialogBody?.addEventListener("click", handleRecommendationControlInteraction);
+  els.tuneLookDialogBody?.addEventListener("input", (event) => {
+    const notesInput = event.target.closest("[data-rec-notes]");
+    if (!notesInput) return;
+    pendingRecommendationPrefs = {
+      ...(pendingRecommendationPrefs || loadState().prefs),
+      fashionNotes: notesInput.value,
+    };
+  });
   els.todayItemDialogCloseBtn?.addEventListener("click", () => {
     if (els.todayItemDialog?.open) els.todayItemDialog.close();
   });
@@ -8560,6 +10375,8 @@ function bindIOSSwipeTabs() {
         ".today-rec-deck-copy",
         ".today-rec-deck-media",
         ".today-chip-row-controls",
+        ".weather-expanded-timeline",
+        ".weather-expanded-hour",
         ".ac-dropdown",
         ".location-input-wrap",
         "#geoBtn",
@@ -8729,10 +10546,20 @@ function bindTabNav() {
     });
   });
   els.todayWardrobeCtaBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("wardrobe_prompt_tapped", {
+      title: "wardrobe_prompt_tapped:dialog",
+      source: "dialog",
+    });
+    completeWardrobeUpgradePrompt();
     if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
     switchTab("tabWardrobe", { direction: 1 });
   });
   els.todayWardrobeInlineBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("wardrobe_prompt_tapped", {
+      title: "wardrobe_prompt_tapped:inline",
+      source: "inline",
+    });
+    completeWardrobeUpgradePrompt();
     switchTab("tabWardrobe", { direction: 1 });
     window.setTimeout(() => openItemDialog(), 240);
   });
@@ -8741,7 +10568,78 @@ function bindTabNav() {
     if (els.whyWorksDialog?.open) els.whyWorksDialog.close();
   });
   els.tuneLookDialogCloseBtn?.addEventListener("click", () => {
+    if (els.tuneLookDialog?.dataset.mode === "activation") {
+      pendingRecommendationPrefs = null;
+      trackAnalyticsEvent("activation_tune_skipped", { title: "activation_tune_skipped:close" });
+      completeActivationTune();
+    }
     if (els.tuneLookDialog?.open) els.tuneLookDialog.close();
+  });
+  els.todayWardrobeDialogCloseBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("wardrobe_prompt_dismissed", {
+      title: "wardrobe_prompt_dismissed",
+    });
+    completeWardrobeUpgradePrompt();
+    if (els.todayWardrobeDialog?.open) els.todayWardrobeDialog.close();
+  });
+}
+
+function bindOnboardingUI() {
+  els.onboardingSkipBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("onboarding_skipped", {
+      title: "onboarding_skipped:header",
+      step: activeOnboardingSlide + 1,
+    });
+    completeOnboarding();
+  });
+  els.onboardingSkipFinalBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("onboarding_skipped", {
+      title: "onboarding_skipped:final",
+      step: activeOnboardingSlide + 1,
+    });
+    completeOnboarding();
+  });
+  els.onboardingPrevBtn?.addEventListener("click", () => {
+    setActiveOnboardingSlide(activeOnboardingSlide - 1);
+  });
+  els.onboardingNextBtn?.addEventListener("click", () => {
+    setActiveOnboardingSlide(activeOnboardingSlide + 1);
+  });
+  els.onboardingUseLocationBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("onboarding_completed", {
+      title: "onboarding_completed:use_location",
+      action: "use_location",
+    });
+    completeOnboarding();
+    onUseMyLocation("onboarding");
+  });
+  els.onboardingSearchBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("onboarding_completed", {
+      title: "onboarding_completed:manual_search",
+      action: "manual_search",
+    });
+    completeOnboarding();
+    els.placeInput?.focus();
+    try {
+      els.placeInput?.select?.();
+    } catch {}
+    setStatus("Search for a city to get your first recommendation.");
+  });
+}
+
+function bindWeatherDetailUI() {
+  els.weatherHero?.addEventListener("click", toggleWeatherExpanded);
+  els.weatherHero?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    toggleWeatherExpanded();
+  });
+  els.weatherExpandedPanel?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+  els.weatherExpandToggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleWeatherExpanded();
   });
 }
 
@@ -8861,7 +10759,12 @@ function renderAC(results) {
 // ─── Auth UI binding ─────────────────────────────────────────
 let authIsSignup = false;
 
-function showAuthDialog() {
+function showAuthDialog(source = "generic") {
+  trackAnalyticsEvent("auth_dialog_opened", {
+    title: `auth_dialog_opened:${source}`,
+    source,
+    loggedIn: isLoggedIn(),
+  });
   if (isLoggedIn()) {
     els.authFormWrap.style.display = "none";
     els.authLoggedIn.style.display = "";
@@ -8874,7 +10777,10 @@ function showAuthDialog() {
       if (els.authUserBadge) {
         const provider = authUser.authProvider === "google" ? "Google account" : "Email account";
         const verified = authUser.emailVerified === false ? "Unverified" : "Verified";
-        els.authUserBadge.textContent = `${provider} • ${verified}`;
+        els.authUserBadge.textContent = `${provider} • ${verified} • ${getPlanSummary()}`;
+      }
+      if (els.authUpgradeBtn) {
+        els.authUpgradeBtn.textContent = hasPremiumAccess() ? "Change Premium plan" : "Upgrade to premium";
       }
     }
   } else {
@@ -8910,14 +10816,14 @@ function bindAuthUI() {
   els.userMenuCloseBtn?.addEventListener("click", () => els.userMenuDialog?.close());
   els.userMenuAccountBtn?.addEventListener("click", () => {
     els.userMenuDialog?.close();
-    showAuthDialog();
+    showAuthDialog("user_menu");
   });
   els.userMenuSettingsBtn?.addEventListener("click", () => {
     els.userMenuDialog?.close();
     switchTab("tabPrefs", { direction: 0 });
   });
-  els.wardrobeAuthGateBtn?.addEventListener("click", showAuthDialog);
-  els.wardrobeSignInBtn?.addEventListener("click", showAuthDialog);
+  els.wardrobeAuthGateBtn?.addEventListener("click", () => showAuthDialog("wardrobe_gate"));
+  els.wardrobeSignInBtn?.addEventListener("click", () => showAuthDialog("wardrobe_sign_in"));
   els.authCloseBtn.addEventListener("click", () => els.authDialog.close());
   els.authToggleMode.addEventListener("click", () => setAuthMode(!authIsSignup));
 
@@ -8941,6 +10847,11 @@ function bindAuthUI() {
 
     els.authSubmitBtn.disabled = true;
     try {
+      trackAnalyticsEvent("auth_started", {
+        title: `auth_started:${authIsSignup ? "signup" : "login"}`,
+        method: "email",
+        mode: authIsSignup ? "signup" : "login",
+      });
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -8949,6 +10860,11 @@ function bindAuthUI() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Auth failed");
       if (data.requiresVerification) {
+        trackAnalyticsEvent("auth_verification_required", {
+          title: `auth_verification_required:${authIsSignup ? "signup" : "login"}`,
+          method: "email",
+          mode: authIsSignup ? "signup" : "login",
+        });
         lastVerificationEmail = email;
         if (els.authInfo) {
           els.authInfo.textContent = data.message || "Check your email to verify your account.";
@@ -8959,6 +10875,12 @@ function bindAuthUI() {
       }
       await finalizeAuthSuccess(data.token, data.user, data.refreshToken);
     } catch (err) {
+      trackAnalyticsEvent("auth_failed", {
+        title: `auth_failed:${authIsSignup ? "signup" : "login"}`,
+        method: "email",
+        mode: authIsSignup ? "signup" : "login",
+        reason: err?.message || "error",
+      });
       els.authError.textContent = err.message;
       els.authError.style.display = "";
       if (/verify your email/i.test(err.message)) {
@@ -8997,6 +10919,11 @@ function bindAuthUI() {
 
   // Use Capacitor Browser plugin for in-app browser on native, fallback to window.open on web
   els.googleSignInBtn.addEventListener("click", async () => {
+    trackAnalyticsEvent("auth_started", {
+      title: "auth_started:google",
+      method: "google",
+      mode: authIsSignup ? "signup" : "login",
+    });
     const oauthUrl = buildGoogleOAuthUrl();
     if (isNative && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
       await window.Capacitor.Plugins.Browser.open({ url: oauthUrl });
@@ -9022,6 +10949,8 @@ function bindAuthUI() {
     els.authDialog.close();
     showAppToast("Signed out", "success");
   });
+  els.authUpgradeBtn?.addEventListener("click", () => openPaywall("generic", { source: "account" }));
+  els.authRestorePurchasesBtn?.addEventListener("click", restorePurchases);
 
   els.authDeleteBtn?.addEventListener("click", () => {
     if (!authUser) return;
@@ -9029,8 +10958,8 @@ function bindAuthUI() {
     els.deleteAccountPassword.value = "";
     els.deleteAccountConfirmText.value = "";
     els.deleteAccountPrompt.textContent = authUser.authProvider === "google"
-      ? "Type DELETE to confirm. This permanently removes your account and wardrobe."
-      : "Enter your password to confirm. This permanently removes your account and wardrobe.";
+      ? "Type DELETE to confirm. This permanently removes your account and synced wardrobe from WearCast."
+      : "Enter your password to confirm. This permanently removes your account and synced wardrobe from WearCast.";
     if (typeof els.deleteAccountDialog.showModal === "function") els.deleteAccountDialog.showModal();
   });
 
@@ -9081,24 +11010,66 @@ function showUserMenu() {
   if (typeof els.userMenuDialog.showModal === "function") els.userMenuDialog.showModal();
 }
 
+function bindPaywallUI() {
+  document.querySelectorAll("[data-paywall-plan]").forEach((node) => {
+    node.addEventListener("click", () => {
+      const nextPlan = node.getAttribute("data-paywall-plan") || "annual";
+      setActivePaywallPlan(nextPlan);
+    });
+  });
+  els.paywallCloseBtn?.addEventListener("click", closePaywall);
+  els.paywallSecondaryBtn?.addEventListener("click", closePaywall);
+  els.paywallRestoreBtn?.addEventListener("click", () => {
+    if (hasPremiumAccess()) {
+      openManageSubscription();
+      return;
+    }
+    restorePurchases();
+  });
+  els.paywallPrimaryBtn?.addEventListener("click", async () => {
+    const trigger = els.paywallDialog?.dataset?.trigger || "generic";
+    const selectedPlan = getPaywallPlanLabel(activePaywallPlan);
+    trackAnalyticsEvent("paywall_cta_tapped", { title: `paywall_cta_tapped:${trigger}:${selectedPlan}` });
+    if (isSelectedCurrentPremiumPlan(activePaywallPlan)) {
+      showAppToast("This is your current Premium plan. Use Manage subscription to cancel or review billing.", "info");
+      return;
+    }
+    if (!isLoggedIn()) {
+      closePaywall();
+      showAuthDialog();
+      return;
+    }
+    await purchaseSelectedPlan();
+  });
+  els.paywallDialog?.addEventListener("close", () => {
+    const trigger = els.paywallDialog?.dataset?.trigger || "generic";
+    trackAnalyticsEvent("paywall_dismissed", { title: `paywall_dismissed:${trigger}` });
+  });
+}
+
 // Handle Google OAuth code in URL (web flow)
 window.addEventListener('DOMContentLoaded', async () => {
   await handleGoogleAuthRedirect(window.location.href, { clearBrowserUrl: true });
 });
 
 function init() {
+  initBrowserSentry();
   configureNativeViewport();
   disableNativeDoubleTapZoom();
+  bindClientSafetyReporting();
   bindTabNav();
   bindIOSSwipeTabs();
   bindPullToRefresh();
   setupInstallUI();
   bindConsentUI();
+  bindOnboardingUI();
+  bindWeatherDetailUI();
   bindPrefs();
   bindSettingsUI();
   bindRecommendationControls();
   bindWardrobeUI();
   bindAuthUI();
+  bindPaywallUI();
   bindNativeGoogleAuth();
   updateAuthUI();
   trackTabOpen(getActiveTabId(), { now: Date.now() });
@@ -9112,10 +11083,10 @@ function init() {
   window.addEventListener("beforeunload", () => flushTabDwellMetrics(getActiveTabId(), { now: Date.now() }));
 
   // Also bind the empty-state add button
-  els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog());
+  els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog(null, getStarterTypePreset("T-shirt")));
 
-  els.searchBtn.addEventListener("click", onSearch);
-  els.geoBtn.addEventListener("click", onUseMyLocation);
+  els.searchBtn.addEventListener("click", () => onSearch());
+  els.geoBtn.addEventListener("click", () => onUseMyLocation("today"));
   els.refreshBtn.addEventListener("click", () => {
     const st = loadState();
     if (st.lastLocation) runForLocation(st.lastLocation);
@@ -9129,20 +11100,27 @@ function init() {
   // ── Autocomplete dropdown ──
   setupAutocomplete();
 
-  // Show GDPR-style privacy choices on first visit.
-  if (!consent.seen) {
-    showConsentDialog({ forceModal: true });
-  }
-
   const st = loadState();
+  trackAnalyticsEvent("session_started", { title: "session_started" });
+  if (!getAnalyticsState(st).firstOpenTracked) {
+    trackAnalyticsEvent("first_open", { title: "first_open" });
+    saveState({
+      analytics: {
+        ...getAnalyticsState(st),
+        firstOpenTracked: true,
+      },
+    });
+  }
+  updateTodayOnboardingUI(st);
+  void loadSubscriptionProducts();
+  void refreshSubscriptionState({ silent: true });
   if (st.lastLocation) {
     els.placeInput.value = formatCityLevelLocation(st.lastLocation.name);
     runForLocation(st.lastLocation);
-  } else if (consent.seen) {
+  } else if (!shouldShowOnboardingDeck(st) && consent.seen) {
     // No saved location — silently try cached/granted geolocation (no prompt)
     tryAutoGeo();
   }
-  // If consent not yet seen, auto-geo triggers after consent accept (see bindConsentUI)
 
   registerSW();
 }

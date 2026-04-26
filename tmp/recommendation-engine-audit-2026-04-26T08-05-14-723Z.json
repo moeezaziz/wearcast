@@ -1,0 +1,1760 @@
+{
+  "summary": {
+    "baseUrl": "https://wearcast.fly.dev",
+    "runId": "2026-04-26T08-05-14-723Z",
+    "totalCases": 18,
+    "successes": 18,
+    "failures": 0,
+    "weatherTiming": {
+      "avgMs": 121,
+      "maxMs": 262,
+      "byLocation": {
+        "berlin": {
+          "status": 200,
+          "durationMs": 262,
+          "provider": "open-meteo"
+        },
+        "dublin": {
+          "status": 200,
+          "durationMs": 61,
+          "provider": "open-meteo"
+        },
+        "karachi": {
+          "status": 200,
+          "durationMs": 41,
+          "provider": "open-meteo"
+        }
+      }
+    },
+    "recommendationTiming": {
+      "avgMs": 5954,
+      "p50Ms": 5823,
+      "p90Ms": 7530,
+      "maxMs": 16183
+    },
+    "scoreAverages": {
+      "weatherFit": 96,
+      "profileFit": 96,
+      "wardrobeUsage": 90,
+      "stockImages": 100
+    },
+    "weakCases": [
+      {
+        "location": "Karachi, Pakistan",
+        "profile": "everyday_auto",
+        "wardrobeVariant": "appropriate_capsule",
+        "recommendationMs": 6931,
+        "scores": {
+          "weatherFit": 100,
+          "profileFit": 100,
+          "wardrobeUsage": 55,
+          "stockImages": 100
+        },
+        "wardrobeMatched": [],
+        "stockImageMisses": [],
+        "outfit": {
+          "top": "lightweight tee",
+          "bottom": "cotton shorts",
+          "outer": "",
+          "shoes": "canvas sneakers",
+          "accessories": [
+            "cap"
+          ]
+        },
+        "reasoning": "Clear, very hot day with intense UV—strip down to essentials and protect your head."
+      },
+      {
+        "location": "Karachi, Pakistan",
+        "profile": "office_polished",
+        "wardrobeVariant": "empty",
+        "recommendationMs": 5815,
+        "scores": {
+          "weatherFit": 65,
+          "profileFit": 75,
+          "wardrobeUsage": 100,
+          "stockImages": 100
+        },
+        "wardrobeMatched": [],
+        "stockImageMisses": [],
+        "outfit": {
+          "top": "fine merino crewneck",
+          "bottom": "structured wool trousers",
+          "outer": "",
+          "shoes": "leather derby shoes",
+          "accessories": [
+            "lightweight linen scarf"
+          ]
+        },
+        "reasoning": "Extreme heat and clear skies demand minimal layers and breathable fabrics; polished silhouette preserved through tailored trousers and refined knits."
+      },
+      {
+        "location": "Karachi, Pakistan",
+        "profile": "office_polished",
+        "wardrobeVariant": "mismatched_capsule",
+        "recommendationMs": 16183,
+        "scores": {
+          "weatherFit": 65,
+          "profileFit": 75,
+          "wardrobeUsage": 55,
+          "stockImages": 100
+        },
+        "wardrobeMatched": [],
+        "stockImageMisses": [],
+        "outfit": {
+          "top": "lightweight merino crewneck",
+          "bottom": "tropical-wool structured trousers",
+          "outer": "tailored cotton overshirt",
+          "shoes": "derby shoes",
+          "accessories": [
+            "compact folding umbrella"
+          ]
+        },
+        "reasoning": "Clear, hot day (35°C, feels like 39°C) with moderate wind—light breathable fabrics keep the look smart without overheating."
+      }
+    ]
+  },
+  "results": [
+    {
+      "index": 1,
+      "location": "Berlin, Germany",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 5510,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "long-sleeve knit",
+        "bottom": "dark jeans",
+        "outer": "casual overshirt",
+        "shoes": "canvas sneakers",
+        "accessories": [
+          "lightweight scarf"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_long_sleeve_tshirt_studio",
+          "path": "assets/recommendation-stock/top-white-long-sleeve-tshirt-studio.jpg",
+          "description": "white long sleeve T-shirt on a clean studio background"
+        },
+        "bottom": {
+          "key": "bottom_blue_jeans_stack",
+          "path": "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
+          "description": "stack of blue jeans in studio light"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_pattern_scarf_studio",
+          "path": "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+          "description": "patterned silk scarf on a white background"
+        }
+      },
+      "reasoning": "Cool morning with afternoon warmth—layer smart to handle the 5°C wind chill now and easy removal as it climbs.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 2,
+      "location": "Berlin, Germany",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 5615,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 80,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 80,
+        "usedCount": 1,
+        "matchedNames": [
+          "Black Shell Jacket"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Long-sleeve knit",
+        "bottom": "Dark jeans",
+        "outer": "Black Shell Jacket",
+        "shoes": "Casual sneakers",
+        "accessories": [
+          "Lightweight scarf"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_long_sleeve_tshirt_studio",
+          "path": "assets/recommendation-stock/top-white-long-sleeve-tshirt-studio.jpg",
+          "description": "white long sleeve T-shirt on a clean studio background"
+        },
+        "bottom": {
+          "key": "bottom_blue_jeans_stack",
+          "path": "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
+          "description": "stack of blue jeans in studio light"
+        },
+        "outer": {
+          "key": "outer_black_shell_jacket_city",
+          "path": "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+          "description": "black shell jacket worn outdoors in the city"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_pattern_scarf_studio",
+          "path": "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+          "description": "patterned silk scarf on a white background"
+        }
+      },
+      "reasoning": "Cool morning with afternoon warmth—layer smart and stay ready for wind.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 3,
+      "location": "Berlin, Germany",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 34,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "long-sleeve knit",
+        "bottom": "dark jeans",
+        "outer": "casual overshirt",
+        "shoes": "canvas sneakers",
+        "accessories": [
+          "lightweight scarf"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_long_sleeve_tshirt_studio",
+          "path": "assets/recommendation-stock/top-white-long-sleeve-tshirt-studio.jpg",
+          "description": "white long sleeve T-shirt on a clean studio background"
+        },
+        "bottom": {
+          "key": "bottom_blue_jeans_stack",
+          "path": "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
+          "description": "stack of blue jeans in studio light"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_pattern_scarf_studio",
+          "path": "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+          "description": "patterned silk scarf on a white background"
+        }
+      },
+      "reasoning": "Cool morning with afternoon warmth—layer smart to handle the 5°C wind chill now and easy removal as it climbs.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 4,
+      "location": "Berlin, Germany",
+      "profile": "office_polished",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 5823,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "refined knit polo",
+        "bottom": "clean chinos",
+        "outer": "minimal overshirt",
+        "shoes": "leather loafers",
+        "accessories": [
+          "understated watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_polo_studio",
+          "path": "assets/recommendation-stock/top-white-polo-studio.jpg",
+          "description": "white polo shirt against a clean white background"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Cool morning with afternoon warming to 14°C; dry conditions favour layering over heavy outerwear.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 5,
+      "location": "Berlin, Germany",
+      "profile": "office_polished",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 6353,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 80,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 80,
+        "usedCount": 1,
+        "matchedNames": [
+          "Black Shell Jacket"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Refined knit polo",
+        "bottom": "Clean chinos",
+        "outer": "Black Shell Jacket",
+        "shoes": "Leather loafers",
+        "accessories": [
+          "Understated watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_polo_studio",
+          "path": "assets/recommendation-stock/top-white-polo-studio.jpg",
+          "description": "white polo shirt against a clean white background"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_shell_jacket_city",
+          "path": "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+          "description": "black shell jacket worn outdoors in the city"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Cool morning (feels 5.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 6,
+      "location": "Berlin, Germany",
+      "profile": "office_polished",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 262,
+      "recommendationMs": 7340,
+      "weather": {
+        "temperature": 8.9,
+        "feelsLike": 5.7,
+        "wind": 8.3,
+        "gusts": 20.2,
+        "humidity": 57,
+        "cloud": 11,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 3.15,
+        "weatherLabel": "Partly cloudy",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "9°C – 14°C",
+          "feelsLikeRange": "6°C – 11°C",
+          "maxWind": "11 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 6,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Refined knit polo",
+        "bottom": "Clean chinos",
+        "outer": "Lightweight overshirt",
+        "shoes": "Minimal leather loafers",
+        "accessories": [
+          "Understated watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_polo_studio",
+          "path": "assets/recommendation-stock/top-white-polo-studio.jpg",
+          "description": "white polo shirt against a clean white background"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_light_overshirt_street",
+          "path": "assets/recommendation-stock/outer-black-light-overshirt-street.jpg",
+          "description": "black lightweight overshirt styled in a streetwear shot"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Cool morning with afternoon warmth; dry conditions allow layering flexibility without waterproof gear.",
+      "warnings": [],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 7,
+      "location": "Dublin, Ireland",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 5983,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "long-sleeve oxford shirt",
+        "bottom": "chinos",
+        "outer": "lightweight overshirt",
+        "shoes": "clean leather sneakers",
+        "accessories": [
+          "watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_light_overshirt_street",
+          "path": "assets/recommendation-stock/outer-black-light-overshirt-street.jpg",
+          "description": "black lightweight overshirt styled in a streetwear shot"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Mild overcast morning with heavy rain moving in by evening—layer light and stay ready.",
+      "warnings": [
+        "Rain risk rises sharply after midday—have backup rain cover nearby"
+      ],
+      "missingItems": [
+        "compact umbrella or packable rain layer"
+      ],
+      "error": null
+    },
+    {
+      "index": 8,
+      "location": "Dublin, Ireland",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 5600,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 80,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 80,
+        "usedCount": 1,
+        "matchedNames": [
+          "Black Shell Jacket"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Long-sleeve oxford shirt",
+        "bottom": "Chinos",
+        "outer": "Black Shell Jacket",
+        "shoes": "Clean leather sneakers",
+        "accessories": [
+          "Practical watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_shell_jacket_city",
+          "path": "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+          "description": "black shell jacket worn outdoors in the city"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Overcast now with heavy rain expected later—layer smart and stay dry without overdressing.",
+      "warnings": [
+        "Rain probability rises to 88% later; don't leave home without the shell jacket"
+      ],
+      "missingItems": [],
+      "error": null
+    },
+    {
+      "index": 9,
+      "location": "Dublin, Ireland",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 31,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "long-sleeve oxford shirt",
+        "bottom": "chinos",
+        "outer": "lightweight overshirt",
+        "shoes": "clean leather sneakers",
+        "accessories": [
+          "watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_light_overshirt_street",
+          "path": "assets/recommendation-stock/outer-black-light-overshirt-street.jpg",
+          "description": "black lightweight overshirt styled in a streetwear shot"
+        },
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Mild overcast morning with heavy rain moving in by evening—layer light and stay ready.",
+      "warnings": [
+        "Rain risk rises sharply after midday—have backup rain cover nearby"
+      ],
+      "missingItems": [
+        "compact umbrella or packable rain layer"
+      ],
+      "error": null
+    },
+    {
+      "index": 10,
+      "location": "Dublin, Ireland",
+      "profile": "office_polished",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 5835,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "open-collar woven shirt",
+        "bottom": "pleated tapered trousers",
+        "outer": "clean overshirt",
+        "shoes": "leather loafers",
+        "accessories": [
+          "refined watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Mild but cooling afternoon with rain arriving later; layering with an overshirt keeps you polished and prepared without looking overdressed.",
+      "warnings": [],
+      "missingItems": [
+        "compact umbrella for later rain"
+      ],
+      "error": null
+    },
+    {
+      "index": 11,
+      "location": "Dublin, Ireland",
+      "profile": "office_polished",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 5618,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 2,
+        "matchedNames": [
+          "White Oxford Shirt",
+          "Black Shell Jacket"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "White Oxford Shirt",
+        "bottom": "Charcoal Pleated Trousers",
+        "outer": "Black Shell Jacket",
+        "shoes": "Tan Leather Loafers",
+        "accessories": [
+          "Stainless Steel Watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_black_shell_jacket_city",
+          "path": "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+          "description": "black shell jacket worn outdoors in the city"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Overcast now with heavy rain arriving later; moderate temps call for a polished layer strategy that stays dry and office-ready.",
+      "warnings": [
+        "Rain probability rises to 88% later—shell jacket is essential, not optional"
+      ],
+      "missingItems": [
+        "Compact umbrella recommended as backup for heavier downpours"
+      ],
+      "error": null
+    },
+    {
+      "index": 12,
+      "location": "Dublin, Ireland",
+      "profile": "office_polished",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 61,
+      "recommendationMs": 7530,
+      "weather": {
+        "temperature": 12.1,
+        "feelsLike": 10.4,
+        "wind": 7.9,
+        "gusts": 17.3,
+        "humidity": 76,
+        "cloud": 91,
+        "precip": 0,
+        "precipProb": 2,
+        "uv": 0.75,
+        "weatherLabel": "Overcast",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "12°C – 17°C",
+          "feelsLikeRange": "10°C – 16°C",
+          "maxWind": "12 km/h",
+          "maxPrecipProb": "88%",
+          "totalPrecip": "0.1 mm",
+          "peakUV": 4,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Open-collar woven shirt",
+        "bottom": "Pleated tapered trousers",
+        "outer": "Clean overshirt",
+        "shoes": "Leather loafers",
+        "accessories": [
+          "Refined watch"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_black_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+          "description": "black loafers in a studio product shot"
+        },
+        "accessory-0": {
+          "key": "accessory_watch_studio",
+          "path": "assets/recommendation-stock/accessory-watch-studio.jpg",
+          "description": "wristwatch on a white product background"
+        }
+      },
+      "reasoning": "Overcast and cool now; rain builds significantly by evening.",
+      "warnings": [
+        "Rain likely later; umbrella recommended for commute"
+      ],
+      "missingItems": [
+        "Compact umbrella"
+      ],
+      "error": null
+    },
+    {
+      "index": 13,
+      "location": "Karachi, Pakistan",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 5596,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 4,
+        "matched": 4,
+        "misses": []
+      },
+      "outfit": {
+        "top": "lightweight tee",
+        "bottom": "cotton shorts",
+        "outer": "",
+        "shoes": "canvas sneakers",
+        "accessories": [
+          "baseball cap"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_tshirt_studio",
+          "path": "assets/recommendation-stock/top-white-tshirt-studio.jpg",
+          "description": "white crew-neck T-shirt in a clean studio flat lay"
+        },
+        "bottom": {
+          "key": "bottom_blue_denim_shorts_studio",
+          "path": "assets/recommendation-stock/bottom-blue-denim-shorts-studio.jpg",
+          "description": "blue denim shorts on a clean white background"
+        },
+        "outer": null,
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_black_baseball_cap_outdoors",
+          "path": "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
+          "description": "black baseball cap worn outdoors"
+        }
+      },
+      "reasoning": "Clear skies and intense heat all day—keep it minimal, light, and sun-smart.",
+      "warnings": [
+        "High UV index—sunscreen and hat are essential, not optional"
+      ],
+      "missingItems": [
+        "sunscreen (SPF 30+)"
+      ],
+      "error": null
+    },
+    {
+      "index": 14,
+      "location": "Karachi, Pakistan",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 6931,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 55,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 55,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 4,
+        "matched": 4,
+        "misses": []
+      },
+      "outfit": {
+        "top": "lightweight tee",
+        "bottom": "cotton shorts",
+        "outer": "",
+        "shoes": "canvas sneakers",
+        "accessories": [
+          "cap"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_tshirt_studio",
+          "path": "assets/recommendation-stock/top-white-tshirt-studio.jpg",
+          "description": "white crew-neck T-shirt in a clean studio flat lay"
+        },
+        "bottom": {
+          "key": "bottom_blue_denim_shorts_studio",
+          "path": "assets/recommendation-stock/bottom-blue-denim-shorts-studio.jpg",
+          "description": "blue denim shorts on a clean white background"
+        },
+        "outer": null,
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_black_baseball_cap_outdoors",
+          "path": "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
+          "description": "black baseball cap worn outdoors"
+        }
+      },
+      "reasoning": "Clear, very hot day with intense UV—strip down to essentials and protect your head.",
+      "warnings": [
+        "UV index is very high (7.8–8); sunscreen and a cap are essential"
+      ],
+      "missingItems": [
+        "sunscreen (not clothing, but critical)"
+      ],
+      "error": null
+    },
+    {
+      "index": 15,
+      "location": "Karachi, Pakistan",
+      "profile": "everyday_auto",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 5071,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 75,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 3,
+        "matchedNames": [
+          "Sleeveless Linen Tank",
+          "Denim Shorts",
+          "Straw Sun Hat"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 4,
+        "matched": 4,
+        "misses": []
+      },
+      "outfit": {
+        "top": "Sleeveless Linen Tank",
+        "bottom": "Denim Shorts",
+        "outer": "",
+        "shoes": "Canvas Sneakers",
+        "accessories": [
+          "Straw Sun Hat"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_tank_top_studio",
+          "path": "assets/recommendation-stock/top-white-tank-top-studio.jpg",
+          "description": "white tank top on a bright studio background"
+        },
+        "bottom": {
+          "key": "bottom_blue_denim_shorts_studio",
+          "path": "assets/recommendation-stock/bottom-blue-denim-shorts-studio.jpg",
+          "description": "blue denim shorts on a clean white background"
+        },
+        "outer": null,
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_white_sun_hat_studio",
+          "path": "assets/recommendation-stock/accessory-white-sun-hat-studio.jpg",
+          "description": "white wide-brim sun hat on a clean background"
+        }
+      },
+      "reasoning": "Extreme heat and intense UV demand minimal, breathable layers and sun protection—no outer layer needed.",
+      "warnings": [
+        "High UV index (7.8–8): sunscreen and hat are essential, not optional"
+      ],
+      "missingItems": [
+        "Sunglasses for eye protection"
+      ],
+      "error": null
+    },
+    {
+      "index": 16,
+      "location": "Karachi, Pakistan",
+      "profile": "office_polished",
+      "wardrobeVariant": "empty",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 5815,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 65,
+        "profileFit": 75,
+        "wardrobeUsage": 100,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 100,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 4,
+        "matched": 4,
+        "misses": []
+      },
+      "outfit": {
+        "top": "fine merino crewneck",
+        "bottom": "structured wool trousers",
+        "outer": "",
+        "shoes": "leather derby shoes",
+        "accessories": [
+          "lightweight linen scarf"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_knit_sweater_hanger",
+          "path": "assets/recommendation-stock/top-knit-sweater-hanger.jpg",
+          "description": "knit sweater hanging on a wooden hanger"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": null,
+        "shoes": {
+          "key": "shoes_black_dress_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-dress-loafers-studio.jpg",
+          "description": "black leather dress loafers on a white background"
+        },
+        "accessory-0": {
+          "key": "accessory_pattern_scarf_studio",
+          "path": "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+          "description": "patterned silk scarf on a white background"
+        }
+      },
+      "reasoning": "Extreme heat and clear skies demand minimal layers and breathable fabrics; polished silhouette preserved through tailored trousers and refined knits.",
+      "warnings": [
+        "UV is intense; consider sunscreen on exposed skin and reapply after any perspiration"
+      ],
+      "missingItems": [
+        "sunglasses (not in wardrobe; recommended for commute and outdoor time)"
+      ],
+      "error": null
+    },
+    {
+      "index": 17,
+      "location": "Karachi, Pakistan",
+      "profile": "office_polished",
+      "wardrobeVariant": "appropriate_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 6308,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 100,
+        "profileFit": 100,
+        "wardrobeUsage": 95,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 95,
+        "usedCount": 2,
+        "matchedNames": [
+          "White Oxford Shirt",
+          "White Leather Sneakers"
+        ]
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 4,
+        "matched": 4,
+        "misses": []
+      },
+      "outfit": {
+        "top": "White Oxford Shirt",
+        "bottom": "Lightweight Linen Trousers",
+        "outer": "",
+        "shoes": "White Leather Sneakers",
+        "accessories": [
+          "Lightweight Cotton Scarf"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_white_button_up_shirt",
+          "path": "assets/recommendation-stock/top-white-button-up-shirt.jpg",
+          "description": "white button-up shirt on hangers in soft studio light"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": null,
+        "shoes": {
+          "key": "shoes_white_sneakers_minimal",
+          "path": "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
+          "description": "minimal white sneakers on a light background"
+        },
+        "accessory-0": {
+          "key": "accessory_pattern_scarf_studio",
+          "path": "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg",
+          "description": "patterned silk scarf on a white background"
+        }
+      },
+      "reasoning": "Extreme heat and clear skies demand maximum breathability without sacrificing office polish.",
+      "warnings": [
+        "No outer layer in an extreme-heat office environment may feel underdressed in very formal settings; assess your workplace culture"
+      ],
+      "missingItems": [
+        "Sunglasses recommended for the commute and outdoor movement"
+      ],
+      "error": null
+    },
+    {
+      "index": 18,
+      "location": "Karachi, Pakistan",
+      "profile": "office_polished",
+      "wardrobeVariant": "mismatched_capsule",
+      "ok": true,
+      "status": 200,
+      "weatherMs": 41,
+      "recommendationMs": 16183,
+      "weather": {
+        "temperature": 35.2,
+        "feelsLike": 39.1,
+        "wind": 16,
+        "gusts": 42.5,
+        "humidity": 42,
+        "cloud": 0,
+        "precip": 0,
+        "precipProb": 0,
+        "uv": 7.8,
+        "weatherLabel": "Clear",
+        "isDay": true,
+        "remainingForecast": {
+          "tempRange": "28°C – 35°C",
+          "feelsLikeRange": "32°C – 39°C",
+          "maxWind": "17 km/h",
+          "maxPrecipProb": "0%",
+          "totalPrecip": "0.0 mm",
+          "peakUV": 8,
+          "avgHumidity": ""
+        }
+      },
+      "scores": {
+        "weatherFit": 65,
+        "profileFit": 75,
+        "wardrobeUsage": 55,
+        "stockImages": 100
+      },
+      "wardrobeUsage": {
+        "score": 55,
+        "usedCount": 0,
+        "matchedNames": []
+      },
+      "stockImages": {
+        "score": 100,
+        "checked": 5,
+        "matched": 5,
+        "misses": []
+      },
+      "outfit": {
+        "top": "lightweight merino crewneck",
+        "bottom": "tropical-wool structured trousers",
+        "outer": "tailored cotton overshirt",
+        "shoes": "derby shoes",
+        "accessories": [
+          "compact folding umbrella"
+        ]
+      },
+      "outfitImages": {
+        "top": {
+          "key": "top_knit_sweater_hanger",
+          "path": "assets/recommendation-stock/top-knit-sweater-hanger.jpg",
+          "description": "knit sweater hanging on a wooden hanger"
+        },
+        "bottom": {
+          "key": "bottom_black_trousers_studio",
+          "path": "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+          "description": "black tailored trousers on a white studio background"
+        },
+        "outer": {
+          "key": "outer_charcoal_overshirt_studio",
+          "path": "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg",
+          "description": "charcoal overshirt jacket over a knit top"
+        },
+        "shoes": {
+          "key": "shoes_black_dress_loafers_studio",
+          "path": "assets/recommendation-stock/shoes-black-dress-loafers-studio.jpg",
+          "description": "black leather dress loafers on a white background"
+        },
+        "accessory-0": {
+          "key": "accessory_white_umbrella_studio",
+          "path": "assets/recommendation-stock/accessory-white-umbrella-studio.jpg",
+          "description": "umbrella silhouette in a clean dramatic product-style scene"
+        }
+      },
+      "reasoning": "Clear, hot day (35°C, feels like 39°C) with moderate wind—light breathable fabrics keep the look smart without overheating.",
+      "warnings": [
+        "Consider removing the overshirt outdoors during peak sun to avoid overheating."
+      ],
+      "missingItems": [
+        "Replace open sandals and straw hat with leather derbies and compact umbrella for a more polished office look"
+      ],
+      "error": null
+    }
+  ]
+}

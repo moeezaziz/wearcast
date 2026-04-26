@@ -1,7 +1,7 @@
 {
   "name": "WearCast",
   "short_name": "WearCast",
-  "description": "Clothing suggestions based on local weather (Open‑Meteo).",
+  "description": "Weather-smart outfit recommendations that get better when you add your own wardrobe.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f0f7ff",

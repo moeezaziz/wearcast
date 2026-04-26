@@ -1,6 +1,6 @@
-# What to Wear (local-first)
+# WearCast
 
-A tiny webapp that suggests what to wear based on local weather (temperature, feels-like, wind, humidity, cloud cover, precipitation, UV).
+WearCast helps you decide what to wear today with weather-smart outfit recommendations that get better as you add your own wardrobe.
 
 - Weather: **Open‑Meteo** (no API key)
 - Location search / reverse geocode: **OpenStreetMap Nominatim**

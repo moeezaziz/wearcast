@@ -1,0 +1,278 @@
+{
+  "inputPath": "/Users/moeezaziz/Downloads/wearcast/wearcast/tmp/recommendation-matrix-2026-04-12T03-33-14-800Z.jsonl",
+  "overall": {
+    "totalCases": 360,
+    "avgWeatherFit": 99.2,
+    "avgProfileFit": 94.7,
+    "avgDecisionFatigue": 96.1,
+    "completeOutfitRate": 100
+  },
+  "verdict": {
+    "providesDailyValue": true,
+    "reducesDecisionFatigue": true,
+    "hasHealthyVariability": true
+  },
+  "profileSummary": {
+    "office_mild_clear": {
+      "cases": 60,
+      "uniqueOutfits": 19,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 98.8,
+      "avgDecisionFatigue": 96.3
+    },
+    "commute_rain": {
+      "cases": 60,
+      "uniqueOutfits": 29,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 90,
+      "avgDecisionFatigue": 93.1
+    },
+    "sporty_exposed_breezy": {
+      "cases": 60,
+      "uniqueOutfits": 19,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 97.8,
+      "avgDecisionFatigue": 94
+    },
+    "cold_outdoors": {
+      "cases": 60,
+      "uniqueOutfits": 35,
+      "avgWeatherFit": 97,
+      "avgProfileFit": 100,
+      "avgDecisionFatigue": 97.8
+    },
+    "minimal_indoor_transition": {
+      "cases": 60,
+      "uniqueOutfits": 6,
+      "avgWeatherFit": 100,
+      "avgProfileFit": 81.7,
+      "avgDecisionFatigue": 99
+    },
+    "hot_urban_evening": {
+      "cases": 60,
+      "uniqueOutfits": 53,
+      "avgWeatherFit": 98.3,
+      "avgProfileFit": 99.8,
+      "avgDecisionFatigue": 96.5
+    }
+  },
+  "diversityFailures": [],
+  "weakestExamples": [
+    {
+      "city": "Berlin, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear skies and mild temperatures in Berlin call for a tonal, layered look that stays comfortable indoors and adapts easily to a brief step outside."
+    },
+    {
+      "city": "Berlin, Germany",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear and mild with gentle wind—a tonal overshirt set keeps you composed indoors while offering light protection if you step outside."
+    },
+    {
+      "city": "Faisalabad, Pakistan",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Mild and clear with a gentle wind shift later—a tonal overshirt set keeps you composed indoors while staying ready for slight cooling."
+    },
+    {
+      "city": "Turin, Italy",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 85,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear skies and mild temps allow a single refined layer; wind picks up slightly later, so the overshirt provides gentle coverage without bulk."
+    },
+    {
+      "city": "Galway, Ireland",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 35,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "Long-sleeve top",
+        "bottom": "Comfortable pants",
+        "outer": "Light overshirt",
+        "shoes": "Sneakers",
+        "accessories": [
+          "Watch"
+        ]
+      },
+      "reasoning": "Today looks mild and mainly clear, so the outfit leans into comfort, coverage, and weather protection without feeling overbuilt."
+    },
+    {
+      "city": "Waterford, Ireland",
+      "profile": "sporty_exposed_breezy",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 35,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "Long-sleeve top",
+        "bottom": "Comfortable pants",
+        "outer": "Light overshirt",
+        "shoes": "Sneakers",
+        "accessories": [
+          "Watch"
+        ]
+      },
+      "reasoning": "Today looks mild and mainly clear, so the outfit leans into comfort, coverage, and weather protection without feeling overbuilt."
+    },
+    {
+      "city": "Chicago, United States",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear, mild afternoon with gentle wind—one refined layer handles both comfort and style."
+    },
+    {
+      "city": "Chicago, United States",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear and mild with gentle wind—a tonal overshirt set keeps you layered without fuss."
+    },
+    {
+      "city": "Faisalabad, Pakistan",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Mild, clear day with gentle wind—a tonal overshirt set provides subtle layering without overcomplication."
+    },
+    {
+      "city": "Waterford, Ireland",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear skies and mild temps allow a pared-back tonal set; light overshirt handles the afternoon wind without bulk."
+    },
+    {
+      "city": "Waterford, Ireland",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "starter_capsule",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear skies and mild conditions call for a refined, pared-back look that lets understated pieces do the talking."
+    },
+    {
+      "city": "Turin, Italy",
+      "profile": "minimal_indoor_transition",
+      "wardrobeVariant": "empty",
+      "weatherFit": 100,
+      "profileFit": 45,
+      "decisionFatigue": 100,
+      "outfit": {
+        "top": "fine-gauge knit polo",
+        "bottom": "sleek tonal trousers",
+        "outer": "ultra-clean overshirt",
+        "shoes": "quiet low-profile sneakers",
+        "accessories": [
+          "slim sunglasses"
+        ]
+      },
+      "reasoning": "Clear, mild afternoon with gentle wind—overshirt adds refinement and light layering without excess."
+    }
+  ]
+}

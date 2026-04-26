@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-label="warm ivory short-sleeve linen shirt">
+  <rect width="900" height="900" fill="#f7efe2"/>
+  <path d="M250 210 385 150h130l135 60 74 170-98 42-44-91v365H318V331l-44 91-98-42 74-170Z" fill="#fff8ec" stroke="#d6bd91" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M386 150 450 232l64-82" fill="none" stroke="#c7a66e" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M450 232v464" stroke="#d8bd86" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="450" cy="326" r="11" fill="#c19a5b"/>
+  <circle cx="450" cy="420" r="11" fill="#c19a5b"/>
+  <circle cx="450" cy="514" r="11" fill="#c19a5b"/>
+</svg>

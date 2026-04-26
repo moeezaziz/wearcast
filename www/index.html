@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <title>WearCast</title>
+  <title>WearCast | Weather-Smart Outfits From Your Closet</title>
+  <meta name="description" content="WearCast helps you decide what to wear today with weather-smart outfit picks that get better as you add your own wardrobe." />
   <link rel="manifest" href="manifest.webmanifest?v=12" />
   <meta name="theme-color" content="#2979ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -41,7 +42,7 @@
             <img class="today-header-logo" src="icon.svg" alt="WearCast logo" />
             <div class="today-header-copy">
               <strong>WearCast</strong>
-              <span>Forecast-led styling</span>
+              <span>Weather-smart outfits from your closet</span>
             </div>
           </div>
           <button id="todayUserBtn" class="today-header-account floating-profile-btn" aria-label="Account" title="Account" type="button">
@@ -71,7 +72,7 @@
 
         <div class="today-main">
           <div class="today-column today-column-primary">
-            <div id="weatherHero" class="weather-hero" style="display:none;">
+            <div id="weatherHero" class="weather-hero weather-hero-clickable" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weather details" style="display:none;">
               <div class="weather-hero-sheen" aria-hidden="true"></div>
               <div class="weather-hero-topline">
                 <span class="weather-hero-kicker">Right now</span>
@@ -101,6 +102,8 @@
                   </div>
                 </div>
               </div>
+              <div id="weatherExpandedPanel" class="weather-expanded-panel" aria-live="polite"></div>
+              <button id="weatherExpandToggle" class="weather-expand-toggle" type="button" aria-label="Expand weather details"></button>
             </div>
 
             <div id="aiRecSection" class="today-rec-card today-rec-card-inline" style="display:none;">
@@ -109,7 +112,9 @@
                   <h2>Today's Recommendation</h2>
                   <p class="today-rec-expand-hint">Tap a tile to expand</p>
                 </div>
-                <span id="aiRecBadge" class="pill pill-soft">Best match</span>
+                <button id="aiRecAdjustBtn" class="today-adjust-btn" type="button" data-rec-action="tune" aria-label="Adjust recommendation preferences">
+                  Adjust
+                </button>
               </div>
               <div id="aiRecLoading" class="loading-state" style="display:none;">
                 <div class="spinner"></div>
@@ -122,13 +127,13 @@
 
             <div id="todayWardrobeInlineCta" class="today-inline-upgrade-card" style="display:none;">
               <div class="today-inline-upgrade-copy">
-                <span class="today-inline-upgrade-kicker">From your closet</span>
-                <strong>Get recommendations from your own closet.</strong>
-                <p>Add a few staples first. WearCast organizes them automatically and starts using what you actually own in daily looks.</p>
+                <span class="today-inline-upgrade-kicker">Next step</span>
+                <strong>Want the next recommendation to use clothes you actually own?</strong>
+                <p>Add a few staples first. WearCast organizes them and starts building daily recommendations from your real wardrobe.</p>
                 <div class="today-cta-preview" aria-label="Wardrobe setup steps">
                   <div class="today-cta-step"><span>1</span><strong>Add 5 staples</strong></div>
                   <div class="today-cta-step"><span>2</span><strong>Organize automatically</strong></div>
-                  <div class="today-cta-step"><span>3</span><strong>Get better daily looks</strong></div>
+                  <div class="today-cta-step"><span>3</span><strong>Get wardrobe-powered outfits</strong></div>
                 </div>
                 <div id="todayWardrobeInlineProgress" class="today-inline-upgrade-progress" aria-hidden="true"></div>
               </div>
@@ -143,7 +148,7 @@
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
               <h3 id="emptyStateTitle">Where are you headed?</h3>
-              <p id="emptyStateText">Search a city or share your location to get weather-based outfit suggestions.</p>
+              <p id="emptyStateText">Search a city or share your location to get a weather-smart outfit recommendation for today.</p>
             </div>
           </div>
         </div>
@@ -156,8 +161,8 @@
         <div class="empty-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M12 14v2"/></svg>
         </div>
-        <h3>Sign up to unlock your wardrobe</h3>
-        <p>Save your closet, scan items, and get recommendations styled around what you actually own.</p>
+        <h3>Sign in to save your wardrobe</h3>
+        <p>Keep your closet synced, scan pieces faster, and get recommendations built around what you actually own.</p>
         <button id="wardrobeAuthGateBtn" class="btn-primary" type="button">Create account or sign in</button>
       </div>
 
@@ -166,7 +171,7 @@
           <div class="tab-top-bar wardrobe-top-bar">
             <div class="wardrobe-top-copy">
               <h2>My Wardrobe</h2>
-              <p id="wardrobeSubtitle" class="wardrobe-subtitle">A calm collection of the pieces you actually wear.</p>
+              <p id="wardrobeSubtitle" class="wardrobe-subtitle">Build the closet WearCast can use in your daily outfit picks.</p>
             </div>
             <button id="addItemBtn" class="btn-primary-sm wardrobe-add-btn" aria-label="Add wardrobe item" type="button">
               <span class="wardrobe-add-btn-icon" aria-hidden="true">
@@ -181,8 +186,8 @@
             <div class="wardrobe-dashboard-main">
               <div class="wardrobe-dashboard-copy">
                 <span id="wardrobeExplainerKicker" class="wardrobe-explainer-kicker">Collection progress</span>
-                <h3 id="wardrobeExplainerTitle">Start with the pieces you reach for most</h3>
-                <p id="wardrobeExplainerText">Add the essentials first, then let the collection get smarter as your closet grows.</p>
+                <h3 id="wardrobeExplainerTitle">Start with the staples you reach for most</h3>
+                <p id="wardrobeExplainerText">Add the essentials first, then let WearCast build better daily outfits from what you already wear.</p>
               </div>
               <div class="wardrobe-coverage" aria-hidden="true">
                 <div class="wardrobe-coverage-ring">
@@ -204,8 +209,8 @@
             </div>
             <div id="wardrobeSyncPrompt" class="wardrobe-sync-prompt" style="display:none;">
               <div class="wardrobe-sync-copy">
-                <strong>Keep this closet safe</strong>
-                <span>Sign in when you want to save and sync your wardrobe across devices.</span>
+                <strong>Keep your closet synced</strong>
+                <span>Sign in when you want your wardrobe and recommendations to follow you across devices.</span>
               </div>
               <button id="wardrobeSignInBtn" class="btn-primary-sm" type="button">Sign in to sync</button>
             </div>
@@ -224,20 +229,20 @@
             <div class="empty-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
             </div>
-            <h3>Build a closet WearCast can style from</h3>
-            <p>Start with one bundle. Add five staples, let the app organize them, then get sharper daily looks.</p>
+            <h3>Build the closet WearCast can dress from</h3>
+            <p>Start with one bundle. Add five staples, let WearCast organize them, and unlock wardrobe-powered outfit picks that feel easier to trust.</p>
             <div class="wardrobe-empty-bundles" aria-label="Starter bundles">
               <button type="button" class="wardrobe-empty-bundle" data-starter-type="T-shirt">
                 <strong>Everyday basics</strong>
-                <span>Tops, jeans, sneakers</span>
+                <span>Add the pieces most daily recommendations depend on first.</span>
               </button>
               <button type="button" class="wardrobe-empty-bundle" data-starter-type="Jacket">
                 <strong>Cold weather</strong>
-                <span>Layers, knits, outerwear</span>
+                <span>Build better layered recommendations for colder days.</span>
               </button>
               <button type="button" class="wardrobe-empty-bundle" data-starter-type="Boots">
                 <strong>Rain-ready</strong>
-                <span>Shell, boots, backup layers</span>
+                <span>Give WearCast a stronger fallback when weather turns messy.</span>
               </button>
             </div>
             <div class="wardrobe-empty-guides" aria-label="Starter categories">
@@ -245,7 +250,7 @@
               <button type="button" class="wardrobe-empty-guide" data-starter-type="Jeans">Pants</button>
               <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Outerwear</button>
             </div>
-            <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Add your first item</button>
+            <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Start with my first staple</button>
           </div>
           <div id="wardrobeList" class="wardrobe-sections"></div>
         </div>
@@ -255,8 +260,8 @@
     <!-- ── TAB: Settings ── -->
     <section id="tabPrefs" class="tab-page settings-screen">
       <div class="settings-page-hero">
-        <span class="today-cta-kicker">Profile / Settings</span>
-        <h2>Your WearCast controls</h2>
+        <span class="today-cta-kicker">Settings</span>
+        <h2>Your account, preferences, and closet settings</h2>
       </div>
 
       <div class="card settings-panel">
@@ -297,19 +302,32 @@
           </div>
           <div class="settings-row settings-row-static">
             <div class="settings-copy">
-              <strong>Profile tab validation</strong>
-              <span id="settingsProfileValidationStatus">Tracking how often Profile is opened and how long people stay there.</span>
+              <strong>App insights</strong>
+              <span id="settingsProfileValidationStatus">Tracking how often people use settings so we can simplify the experience over time.</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="card settings-panel">
+        <div class="card-header"><h3>Help</h3></div>
+        <div class="settings-list">
+          <button id="settingsSupportBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Support</strong>
+              <span>Report a problem, ask a question, or get help with your account.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card settings-panel">
         <div class="card-header"><h3>About</h3></div>
         <div class="about-content">
-          <p><strong>WearCast</strong> suggests outfits based on real-time weather.</p>
-          <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. AI by <a href="https://ai.google.dev/" target="_blank" rel="noreferrer">Gemini</a>.</p>
-          <p><a href="./privacy.html">Privacy Policy</a></p>
+          <p><strong>WearCast</strong> helps you decide what to wear today using live weather and, when you add it, your own wardrobe.</p>
+          <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. Recommendations powered by large language models via the WearCast backend.</p>
+          <p><a href="./privacy.html">Privacy Policy</a> • <a href="./terms.html">Terms of Use</a> • <a href="./support.html">Support</a></p>
         </div>
       </div>
 
@@ -326,6 +344,27 @@
             <div class="settings-copy">
               <strong>Manage account</strong>
               <span>Sign in, review account details, or log out.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsUpgradeBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Upgrade to premium</strong>
+              <span id="settingsUpgradeStatus">Unlock your full closet, more saved looks, and more scans.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsRestorePurchasesBtn" class="settings-row" type="button">
+            <div class="settings-copy">
+              <strong>Restore purchases</strong>
+              <span>Reconnect premium access on this device when subscriptions are enabled.</span>
+            </div>
+            <span class="settings-chevron">›</span>
+          </button>
+          <button id="settingsManageSubscriptionBtn" class="settings-row" type="button" style="display:none;">
+            <div class="settings-copy">
+              <strong>Cancel or manage subscription</strong>
+              <span>Open App Store subscription settings to cancel, review renewal dates, or manage billing.</span>
             </div>
             <span class="settings-chevron">›</span>
           </button>
@@ -360,6 +399,52 @@
       <span class="nav-swipe-dot"></span>
     </div>
   </nav>
+
+  <div id="onboardingOverlay" class="onboarding-overlay" style="display:none;" aria-hidden="true">
+    <div class="onboarding-shell">
+      <button id="onboardingSkipBtn" class="onboarding-skip-btn" type="button">Skip</button>
+      <div class="onboarding-progress" aria-hidden="true">
+        <span id="onboardingProgressBar" class="onboarding-progress-bar"></span>
+      </div>
+      <div class="onboarding-slides">
+        <section class="onboarding-slide is-active" data-onboarding-slide="0">
+          <span class="onboarding-kicker">WearCast</span>
+          <h1>What to wear today, based on the weather and your closet.</h1>
+          <p>WearCast turns live weather into a fast outfit recommendation so getting dressed feels easy.</p>
+        </section>
+        <section class="onboarding-slide" data-onboarding-slide="1">
+          <span class="onboarding-kicker">Fast Value</span>
+          <h1>Get a recommendation in seconds.</h1>
+          <p>Check today, get a weather-smart outfit suggestion, and move on with your day.</p>
+        </section>
+        <section class="onboarding-slide" data-onboarding-slide="2">
+          <span class="onboarding-kicker">From Your Closet</span>
+          <h1>Add your wardrobe later for better picks.</h1>
+          <p>Add a few staples and WearCast starts building recommendations from what you already own.</p>
+        </section>
+        <section class="onboarding-slide onboarding-slide-actions" data-onboarding-slide="3">
+          <span class="onboarding-kicker">Start Now</span>
+          <h1>Ready for today’s recommendation?</h1>
+          <p>Use your location for the fastest start, or search for a city manually.</p>
+          <div class="onboarding-primary-actions">
+            <button id="onboardingUseLocationBtn" class="btn-primary" type="button">Use my location</button>
+            <button id="onboardingSearchBtn" class="onboarding-secondary-btn" type="button">Search manually</button>
+          </div>
+          <button id="onboardingSkipFinalBtn" class="onboarding-text-btn" type="button">Skip for now</button>
+        </section>
+      </div>
+      <div class="onboarding-footer">
+        <button id="onboardingPrevBtn" class="onboarding-nav-btn" type="button">Back</button>
+        <div class="onboarding-dots" aria-hidden="true">
+          <span class="onboarding-dot is-active"></span>
+          <span class="onboarding-dot"></span>
+          <span class="onboarding-dot"></span>
+          <span class="onboarding-dot"></span>
+        </div>
+        <button id="onboardingNextBtn" class="btn-primary-sm" type="button">Next</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ Install banner ═══ -->
   <div id="installBanner" class="install-banner" role="status" aria-live="polite" style="display:none;">
@@ -417,16 +502,16 @@
   <dialog id="todayWardrobeDialog" class="dialog today-cta-dialog" aria-labelledby="todayWardrobeDialogTitle">
     <div class="dialog-inner today-cta-dialog-inner">
       <button id="todayWardrobeDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
-      <span id="todayCtaKicker" class="today-cta-kicker">From your closet</span>
-      <h2 id="todayWardrobeDialogTitle" class="dialog-title">Get recommendations from your own closet.</h2>
-      <p class="dialog-subtitle">Add 5 staples, let WearCast organize them automatically, and get better daily looks from the pieces you actually own.</p>
+      <span id="todayCtaKicker" class="today-cta-kicker">Next step</span>
+      <h2 id="todayWardrobeDialogTitle" class="dialog-title">Want the next recommendation to use clothes you actually own?</h2>
+      <p class="dialog-subtitle">Add 5 staples, let WearCast organize them automatically, and start getting daily recommendations grounded in your real wardrobe.</p>
       <div class="today-cta-preview">
         <div class="today-cta-step"><span>1</span><strong>Add 5 staples</strong></div>
         <div class="today-cta-step"><span>2</span><strong>Organize automatically</strong></div>
-        <div class="today-cta-step"><span>3</span><strong>Get better daily looks</strong></div>
+        <div class="today-cta-step"><span>3</span><strong>Get wardrobe-powered outfits</strong></div>
       </div>
       <div class="today-cta-dialog-actions">
-        <button id="todayWardrobeCtaBtn" class="btn-primary">Add wardrobe</button>
+        <button id="todayWardrobeCtaBtn" class="btn-primary">Start my wardrobe</button>
       </div>
     </div>
   </dialog>
@@ -450,9 +535,9 @@
   <dialog id="tuneLookDialog" class="dialog tune-look-dialog" aria-labelledby="tuneLookDialogTitle">
     <div class="dialog-inner tune-look-dialog-inner">
       <button id="tuneLookDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
-      <span class="today-cta-kicker">Change style</span>
+      <span id="tuneLookDialogKicker" class="today-cta-kicker">Change style</span>
       <h2 id="tuneLookDialogTitle" class="dialog-title">Adjust the outfit direction</h2>
-      <p class="dialog-subtitle">Refine the recommendation with a clearer style direction.</p>
+      <p id="tuneLookDialogSubtitle" class="dialog-subtitle">Refine the recommendation with a clearer style direction.</p>
       <div id="tuneLookDialogBody" class="tune-look-dialog-body"></div>
     </div>
   </dialog>
@@ -955,7 +1040,7 @@
     <div class="dialog-card auth-dialog-card">
       <span class="today-cta-kicker">Account</span>
       <h2 id="authDialogTitle" class="dialog-title">Sign in</h2>
-      <p class="auth-subtitle">Sign in when you want to save and sync your wardrobe across devices</p>
+      <p class="auth-subtitle">Sign in when you want your closet and recommendations to stay in sync across devices</p>
 
       <div id="authFormWrap">
         <!-- Email/Password form -->
@@ -990,6 +1075,8 @@
             <div id="authUserBadge" class="auth-profile-badge"></div>
           </div>
         </div>
+        <button id="authUpgradeBtn" class="btn-primary auth-submit">Upgrade to premium</button>
+        <button id="authRestorePurchasesBtn" class="btn-ghost auth-submit" style="margin-top:10px;">Restore purchases</button>
         <button id="authLogoutBtn" class="btn-primary auth-submit" style="background:#e53935;">Sign out</button>
         <button id="authDeleteBtn" class="btn-ghost auth-submit" style="margin-top:10px;">Delete account</button>
       </div>
@@ -1001,7 +1088,7 @@
   <dialog id="deleteAccountDialog" class="dialog">
     <div class="dialog-inner">
       <h2>Delete account</h2>
-      <p class="dialog-subtitle">This will permanently remove your account and wardrobe. Take a moment to reconsider.</p>
+      <p class="dialog-subtitle">This will permanently remove your account and synced wardrobe from WearCast. Saved looks and some preferences stored only on this device may still need to be cleared locally.</p>
       <div id="deleteAccountPrompt" class="status-text" style="margin-top:12px;">If you’re sure, confirm below.</div>
       <input id="deleteAccountPassword" type="password" class="text-input auth-input" placeholder="Current password" autocomplete="current-password" style="margin-top:12px;" />
       <input id="deleteAccountConfirmText" type="text" class="text-input auth-input" placeholder='Type DELETE if you signed in with Google' style="margin-top:10px;" />
@@ -1010,6 +1097,39 @@
         <button type="button" id="deleteAccountCancelBtn" class="btn-ghost">Keep account</button>
         <button type="button" id="deleteAccountConfirmBtn" class="btn-danger">Delete forever</button>
       </div>
+    </div>
+  </dialog>
+
+  <dialog id="paywallDialog" class="dialog paywall-dialog" aria-labelledby="paywallTitle">
+    <div class="dialog-inner paywall-dialog-inner">
+      <button id="paywallCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <span id="paywallKicker" class="today-cta-kicker">WearCast Premium</span>
+      <h2 id="paywallTitle" class="dialog-title">Unlock your full digital closet</h2>
+      <p id="paywallSubtitle" class="dialog-subtitle">Get more from your wardrobe with unlimited items, more saved looks, and more scans.</p>
+      <div class="paywall-plan-grid" aria-label="Subscription plans">
+        <button type="button" class="paywall-plan-card is-featured is-selected" data-paywall-plan="annual">
+          <span class="paywall-plan-badge">Best value</span>
+          <strong>Annual</strong>
+          <span id="paywallAnnualPrice">$49.99 / year</span>
+          <small id="paywallAnnualMeta">Includes a 7-day free trial</small>
+        </button>
+        <button type="button" class="paywall-plan-card" data-paywall-plan="monthly">
+          <strong>Monthly</strong>
+          <span id="paywallMonthlyPrice">$4.99 / month</span>
+          <small id="paywallMonthlyMeta">Flexible monthly billing</small>
+        </button>
+      </div>
+      <div id="paywallFeatureList" class="paywall-feature-list">
+        <div class="paywall-feature">Unlimited wardrobe items</div>
+        <div class="paywall-feature">Unlimited photo scans</div>
+        <div class="paywall-feature">Unlimited saved looks</div>
+        <div class="paywall-feature">Smarter recommendations from your closet</div>
+      </div>
+      <div class="dialog-actions paywall-actions">
+        <button type="button" id="paywallPrimaryBtn" class="btn-primary">Upgrade soon</button>
+        <button type="button" id="paywallSecondaryBtn" class="btn-ghost">Maybe later</button>
+      </div>
+      <button type="button" id="paywallRestoreBtn" class="paywall-text-btn">Restore purchases</button>
     </div>
   </dialog>
 
@@ -1025,6 +1145,17 @@
   </dialog>
 
   <!-- GoatCounter analytics -->
+  <script src="/app-config.js"></script>
+  <script>
+    (function loadSentry() {
+      var config = window.WEARCAST_RUNTIME_CONFIG || {};
+      if (!config.sentryBrowserDsn) return;
+      var script = document.createElement("script");
+      script.src = "https://browser.sentry-cdn.com/7.60.0/bundle.min.js";
+      script.crossOrigin = "anonymous";
+      document.head.appendChild(script);
+    })();
+  </script>
   <script data-goatcounter="https://wearcast.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <script src="app.js?v=12" type="module"></script>
 </body>

@@ -8,7 +8,8 @@ import { randomUUID } from "crypto";
 import express from "express";
 import cors from "cors";
 import { Jimp } from "jimp";
-import { initDB } from "./db.js";
+import * as Sentry from "@sentry/node";
+import dbPool, { initDB } from "./db.js";
 import authRoutes from "./routes/auth.js";
 import wardrobeRoutes from "./routes/wardrobe.js";
 
@@ -17,6 +18,11 @@ config({ path: join(__dirname, ".env") });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const SERVER_STARTED_AT = Date.now();
+const SENTRY_DSN = process.env.SENTRY_DSN || "";
+const SENTRY_ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV || "development";
+const SENTRY_RELEASE = process.env.SENTRY_RELEASE || process.env.RELEASE || "wearcast-local";
+const SENTRY_ENABLED = !!SENTRY_DSN;
 
 app.use(cors());
 // Keep the JSON limit tight. Wardrobe sync payloads can batch a handful of
@@ -63,6 +69,88 @@ if (process.env.NODE_ENV === "production") {
   }, 30_000).unref();
 }
 
+if (SENTRY_ENABLED) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    environment: SENTRY_ENVIRONMENT,
+    release: SENTRY_RELEASE,
+    sendDefaultPii: false,
+  });
+}
+
+function getRequestId(req) {
+  return req.headers["x-wearcast-request-id"]
+    || req.headers["x-request-id"]
+    || randomUUID();
+}
+
+function sanitizeLogValue(value) {
+  if (value == null) return value;
+  if (typeof value === "string") return value.slice(0, 300);
+  if (typeof value === "number" || typeof value === "boolean") return value;
+  if (Array.isArray(value)) return value.slice(0, 8).map((entry) => sanitizeLogValue(entry));
+  if (typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .slice(0, 20)
+        .map(([key, entry]) => [key, sanitizeLogValue(entry)])
+    );
+  }
+  return String(value).slice(0, 300);
+}
+
+function captureServerException(error, context = {}) {
+  if (!SENTRY_ENABLED || !error) return;
+  const normalized = error instanceof Error ? error : new Error(String(error));
+  Sentry.withScope((scope) => {
+    Object.entries(context || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) scope.setExtra(key, sanitizeLogValue(value));
+    });
+    Sentry.captureException(normalized);
+  });
+}
+
+function logApiEvent(level, event, metadata = {}) {
+  const payload = sanitizeLogValue({
+    event,
+    at: new Date().toISOString(),
+    ...metadata,
+  });
+  const line = `[api] ${JSON.stringify(payload)}`;
+  if (level === "error") console.error(line);
+  else if (level === "warn") console.warn(line);
+  else console.info(line);
+}
+
+app.use((req, res, next) => {
+  const requestId = getRequestId(req);
+  req.requestId = requestId;
+  res.set("X-WearCast-Request-Id", requestId);
+  const startedAt = Date.now();
+  res.on("finish", () => {
+    if (!req.path.startsWith("/api/")) return;
+    logApiEvent(res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info", "request_finished", {
+      requestId,
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      durationMs: Date.now() - startedAt,
+      ip: req.ip,
+      userAgent: req.headers["user-agent"] || "",
+    });
+  });
+  next();
+});
+
+app.get("/app-config.js", (req, res) => {
+  res.type("application/javascript");
+  res.send(`window.WEARCAST_RUNTIME_CONFIG=${JSON.stringify({
+    sentryBrowserDsn: process.env.SENTRY_BROWSER_DSN || "",
+    sentryEnvironment: SENTRY_ENVIRONMENT,
+    sentryRelease: SENTRY_RELEASE,
+  })};`);
+});
+
 // Serve the frontend static files from the 'www' directory
 app.use(express.static(join(__dirname, "..", "www")));
 
@@ -71,7 +159,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = "auto";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
-const RECOMMENDATION_COPY_VERSION = 14;
+const RECOMMENDATION_COPY_VERSION = 20;
 const DEBUG_LOGS = String(process.env.DEBUG || "").toLowerCase() === "true";
 const weatherCache = new Map();
 const recommendationCache = new Map();
@@ -100,6 +188,18 @@ const STOCK_IMAGE_CATALOG = {
     path: "assets/recommendation-stock/top-white-button-up-shirt.jpg",
     description: "white button-up shirt on hangers in soft studio light",
     keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "oxford shirt", "dress shirt", "collared shirt", "white shirt", "long-sleeve shirt", "polo shirt", "linen shirt"],
+  },
+  top_linen_shirt_warm: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-linen-shirt-warm.svg",
+    description: "warm ivory short-sleeve linen shirt illustrated for hot polished outfits",
+    keywords: ["linen shirt", "short-sleeve linen shirt", "short sleeve linen shirt", "camp shirt", "lightweight linen shirt", "breathable shirt", "hot weather shirt", "polished warm-weather shirt"],
+  },
+  top_lightweight_knit_tee: {
+    slot: "top",
+    path: "assets/recommendation-stock/top-lightweight-knit-tee.svg",
+    description: "lightweight knit tee in a soft neutral studio illustration",
+    keywords: ["knit tee", "lightweight knit tee", "clean knit tee", "cotton knit tee", "fine gauge tee", "lightweight knit", "minimal knit top"],
   },
   top_white_polo_studio: {
     slot: "top",
@@ -136,7 +236,13 @@ const STOCK_IMAGE_CATALOG = {
     slot: "bottom",
     path: "assets/recommendation-stock/bottom-blue-denim-shorts-studio.jpg",
     description: "blue denim shorts on a clean white background",
-    keywords: ["shorts", "denim shorts", "loose shorts", "chino shorts", "cotton shorts", "summer shorts"],
+    keywords: ["shorts", "denim shorts", "loose shorts", "summer shorts"],
+  },
+  bottom_cotton_shorts_warm: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-cotton-shorts-warm.svg",
+    description: "cotton chino shorts in a warm neutral illustration",
+    keywords: ["cotton shorts", "chino shorts", "tailored shorts", "linen shorts", "lightweight shorts", "summer shorts", "warm-weather shorts"],
   },
   bottom_athletic_running_shorts_studio: {
     slot: "bottom",
@@ -148,7 +254,19 @@ const STOCK_IMAGE_CATALOG = {
     slot: "bottom",
     path: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
     description: "black tailored trousers on a white studio background",
-    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "chinos", "tailored pants", "charcoal chinos", "warm trousers", "wool trousers", "tailored wool trousers", "lightweight chinos"],
+    keywords: ["tailored trousers", "trousers", "dress pants", "slacks", "tailored pants", "charcoal chinos", "warm trousers", "wool trousers", "tailored wool trousers"],
+  },
+  bottom_linen_trousers_warm: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-linen-trousers-warm.svg",
+    description: "lightweight linen trousers in a warm neutral illustration",
+    keywords: ["linen trousers", "lightweight linen trousers", "lightweight trousers", "tailored cotton trousers", "breathable trousers", "warm-weather trousers", "tropical trousers"],
+  },
+  bottom_navy_chinos_polished: {
+    slot: "bottom",
+    path: "assets/recommendation-stock/bottom-navy-chinos-polished.svg",
+    description: "navy tailored chinos in a clean polished illustration",
+    keywords: ["chinos", "navy chinos", "lightweight chinos", "slim chinos", "tailored chinos", "cotton chinos", "clean chinos", "chino trousers"],
   },
   bottom_black_tech_joggers_studio: {
     slot: "bottom",
@@ -277,6 +395,12 @@ const STOCK_IMAGE_CATALOG = {
     path: "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
     description: "black loafers in a studio product shot",
     keywords: ["loafers", "dress loafers", "smart loafers", "leather loafers"],
+  },
+  shoes_brown_loafers_polished: {
+    slot: "shoes",
+    path: "assets/recommendation-stock/shoes-brown-loafers-polished.svg",
+    description: "brown leather loafers in a polished warm-weather illustration",
+    keywords: ["brown loafers", "tan loafers", "brown leather loafers", "leather loafers", "soft loafers", "polished leather loafers"],
   },
   shoes_black_dress_loafers_studio: {
     slot: "shoes",
@@ -692,6 +816,27 @@ function setCachedRecommendation(key, data) {
     savedAt: Date.now(),
     data,
   });
+}
+
+function createTimingTracker() {
+  const startedAt = Date.now();
+  const spans = [];
+  return {
+    mark(label, extra = {}) {
+      spans.push({
+        label,
+        durationMs: Date.now() - startedAt,
+        ...extra,
+      });
+    },
+    summary(extra = {}) {
+      return {
+        totalMs: Date.now() - startedAt,
+        spans,
+        ...extra,
+      };
+    },
+  };
 }
 
 function normalizeMetNorwayWeather(data) {
@@ -1997,7 +2142,7 @@ function pickAlwaysOnAccessory(weather = {}) {
   return "Watch";
 }
 
-function ensureRecommendationShape(response, weather = {}) {
+function ensureRecommendationShape(response, weather = {}, preferences = {}, wardrobeAnalysis = null) {
   const outfit = response?.outfit && typeof response.outfit === "object" ? { ...response.outfit } : {};
   outfit.top = cleanInlineText(outfit.top) || "Comfortable Top";
   outfit.bottom = cleanInlineText(outfit.bottom) || "Everyday Trousers";
@@ -2022,7 +2167,14 @@ function ensureRecommendationShape(response, weather = {}) {
     outfit,
     slotReasons,
     itemDetails,
-    outfitImages: buildRecommendationImageMatches(outfit),
+    outfitImages: buildRecommendationImageMatches(outfit, null, {
+      weather,
+      preferences,
+      profileBand: deriveRecommendationProfileBand(preferences, weather),
+    }),
+    weatherProfile: classifyWeatherProfile(weather),
+    wardrobeAnalysis: wardrobeAnalysis || response?.wardrobeAnalysis || null,
+    quality: response?.quality || validateRecommendationQuality({ ...response, outfit, slotReasons, itemDetails }, weather, preferences),
   };
 }
 
@@ -2107,14 +2259,233 @@ function normalizePreferenceProfile(preferences = {}) {
   return { style, activity, setting };
 }
 
+function parseForecastNumber(value) {
+  if (value == null) return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  const match = String(value).match(/-?\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : null;
+}
+
+function toFiniteNumber(value, fallback = null) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+function getRecommendationWeatherEnvelope(weather = {}) {
+  const remaining = weather?.remainingForecast || {};
+  const currentFeels = toFiniteNumber(weather?.feelsLike, toFiniteNumber(weather?.temperature));
+  const currentTemp = toFiniteNumber(weather?.temperature, currentFeels);
+  const minFeelsLike = toFiniteNumber(
+    remaining.minFeelsLike,
+    parseForecastNumber(remaining.feelsLikeRange) ?? currentFeels,
+  );
+  const minTemp = toFiniteNumber(
+    remaining.minTemp,
+    parseForecastNumber(remaining.tempRange) ?? currentTemp,
+  );
+  const maxPrecipProb = Math.max(
+    toFiniteNumber(weather?.precipProb, 0) ?? 0,
+    toFiniteNumber(remaining.maxPrecipProbPct, parseForecastNumber(remaining.maxPrecipProb) ?? 0) ?? 0,
+  );
+  const maxWind = Math.max(
+    toFiniteNumber(weather?.wind, 0) ?? 0,
+    toFiniteNumber(weather?.gusts, 0) ?? 0,
+    toFiniteNumber(remaining.maxWindKmh, parseForecastNumber(remaining.maxWind) ?? 0) ?? 0,
+  );
+  const drop = Number.isFinite(currentFeels) && Number.isFinite(minFeelsLike)
+    ? +(currentFeels - minFeelsLike).toFixed(1)
+    : 0;
+  return {
+    currentFeels,
+    currentTemp,
+    minFeelsLike,
+    minTemp,
+    maxPrecipProb,
+    maxWind,
+    drop,
+    coldLater: Number.isFinite(minFeelsLike) && minFeelsLike <= 8,
+    chillyLater: Number.isFinite(minFeelsLike) && minFeelsLike <= 12,
+    moderateNow: Number.isFinite(currentFeels) && currentFeels >= 13 && currentFeels <= 21,
+    sharpDrop: drop >= 5,
+    wetLater: maxPrecipProb >= 45,
+    windyLater: maxWind >= 24,
+  };
+}
+
+function weatherForRecommendationScoring(weather = {}) {
+  const envelope = getRecommendationWeatherEnvelope(weather);
+  if (!Number.isFinite(envelope.minFeelsLike) || !Number.isFinite(envelope.currentFeels)) return weather;
+  return {
+    ...weather,
+    feelsLike: Math.min(envelope.currentFeels, envelope.minFeelsLike),
+    temperature: Math.min(envelope.currentTemp ?? envelope.currentFeels, envelope.minTemp ?? envelope.minFeelsLike),
+    precipProb: envelope.maxPrecipProb,
+    wind: Math.max(Number(weather?.wind ?? 0), envelope.maxWind),
+  };
+}
+
+function classifyWeatherProfile(weather = {}) {
+  const envelope = getRecommendationWeatherEnvelope(weather);
+  const feelsLike = Number.isFinite(envelope.currentFeels) ? envelope.currentFeels : Number(weather?.temperature);
+  const temperature = Number.isFinite(Number(weather?.temperature)) ? Number(weather.temperature) : feelsLike;
+  const precipProb = Number(weather?.precipProb ?? 0);
+  const precip = Number(weather?.precip ?? 0);
+  const gusts = Number(weather?.gusts ?? weather?.wind ?? 0);
+  const wind = Number(weather?.wind ?? 0);
+  const uv = Number(weather?.uv ?? 0);
+  const label = String(weather?.weatherLabel || "").toLowerCase();
+  const remaining = weather?.remainingForecast || {};
+  const laterRain = Math.max(precipProb, toFiniteNumber(remaining.maxPrecipProbPct, parseForecastNumber(remaining.maxPrecipProb) ?? 0) ?? 0);
+  const wetLabel = /rain|drizzle|storm|thunder|snow|sleet|freezing/.test(label);
+  const wet = precip > 0 || precipProb >= 45 || wetLabel;
+  const rainLikelyLater = laterRain >= 45 || wet;
+  return {
+    temperature,
+    feelsLike,
+    hot: Number.isFinite(feelsLike) && feelsLike >= 30,
+    veryHot: Number.isFinite(feelsLike) && feelsLike >= 35,
+    warm: Number.isFinite(feelsLike) && feelsLike >= 24,
+    cold: (Number.isFinite(feelsLike) && feelsLike <= 8) || envelope.coldLater,
+    veryCold: (Number.isFinite(feelsLike) && feelsLike <= 0) || (Number.isFinite(envelope.minFeelsLike) && envelope.minFeelsLike <= 2),
+    wet,
+    rainLikelyLater,
+    dry: !rainLikelyLater,
+    windy: Math.max(wind, gusts) >= 30,
+    highUv: uv >= 6,
+    precipProb,
+    precip,
+    wind,
+    gusts,
+    uv,
+    label,
+  };
+}
+
+function getOutfitText(response = {}) {
+  const outfit = response?.outfit || {};
+  const accessories = Array.isArray(outfit.accessories) ? outfit.accessories : [outfit.accessories];
+  const details = response?.itemDetails || {};
+  return [
+    outfit.top,
+    outfit.bottom,
+    outfit.outer,
+    outfit.shoes,
+    ...accessories,
+    details.top?.material,
+    details.bottom?.material,
+    details.outer?.material,
+    details.shoes?.material,
+    details.accessory?.material,
+    response?.reasoning,
+    response?.slotReasons?.top,
+    response?.slotReasons?.bottom,
+    response?.slotReasons?.outer,
+    response?.slotReasons?.shoes,
+    response?.slotReasons?.accessory,
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function validateRecommendationQuality(response = {}, weather = {}, preferences = {}) {
+  const profile = classifyWeatherProfile(weather);
+  const envelope = getRecommendationWeatherEnvelope(weather);
+  const outfit = response?.outfit || {};
+  const top = cleanInlineText(outfit.top).toLowerCase();
+  const bottom = cleanInlineText(outfit.bottom).toLowerCase();
+  const outer = cleanInlineText(outfit.outer).toLowerCase();
+  const shoes = cleanInlineText(outfit.shoes).toLowerCase();
+  const accessory = cleanInlineText(Array.isArray(outfit.accessories) ? outfit.accessories[0] : outfit.accessories).toLowerCase();
+  const details = response?.itemDetails || {};
+  const itemText = [
+    top,
+    bottom,
+    outer,
+    shoes,
+    accessory,
+    details.top?.material,
+    details.bottom?.material,
+    details.outer?.material,
+    details.shoes?.material,
+    details.accessory?.material,
+  ].filter(Boolean).join(" ").toLowerCase();
+  const text = getOutfitText(response);
+  const issues = [];
+  const add = (severity, code, message) => issues.push({ severity, code, message });
+  const realOuterPattern = /\b(coat|jacket|parka|puffer|insulated|shell|fleece|sherpa|windbreaker|raincoat|waterproof)\b/;
+  const lightOuterPattern = /\b(overshirt|shacket|cardigan|shirt jacket)\b/;
+  const warmTopPattern = /\b(sweater|jumper|hoodie|fleece|sherpa|thermal|heavy knit|chunky knit|wool|merino)\b/;
+
+  if (profile.hot && /\b(wool|merino|thermal|fleece|sherpa|insulated|winter|parka|overcoat|heavy coat|beanie|glove)\b/.test(itemText)) {
+    add("severe", "hot_heavy_material", "Hot weather outfit contains heavy cold-weather materials or accessories.");
+  }
+  if (profile.veryHot && /\b(sweater|jumper|crewneck|hoodie|overshirt|jacket|coat|blazer|shacket|long-sleeve|long sleeve)\b/.test(`${top} ${outer}`)) {
+    add("severe", "very_hot_layering", "Very hot weather outfit adds unnecessary upper-body layering.");
+  } else if (profile.hot && outer && !profile.wet && !profile.windy && !/carry|optional|air[- ]?condition|ac\b/.test(text)) {
+    add("warning", "hot_outer_layer", "Hot dry weather includes an outer layer without a clear reason.");
+  }
+  if (profile.dry && /\b(umbrella|rain jacket|raincoat|waterproof parka)\b/.test(`${outer} ${accessory}`)) {
+    add("severe", "dry_rain_gear", "Dry weather outfit includes rain gear without rain risk.");
+  }
+  if ((profile.wet || profile.rainLikelyLater) && !/\b(rain|waterproof|water-resistant|shell|umbrella|weatherproof)\b/.test(text)) {
+    add("warning", "wet_missing_protection", "Wet weather outfit lacks clear rain protection.");
+  }
+  if (profile.cold && /\b(shorts|tank|sleeveless|sandals)\b/.test(`${top} ${bottom} ${shoes}`)) {
+    add("severe", "cold_exposed", "Cold weather outfit exposes too much skin.");
+  }
+  if (profile.cold && !/\b(coat|jacket|parka|sweater|thermal|knit|hoodie|boot|beanie|scarf|glove)\b/.test(text)) {
+    add("warning", "cold_missing_warmth", "Cold weather outfit lacks obvious warmth.");
+  }
+  if ((envelope.coldLater || (envelope.chillyLater && envelope.sharpDrop)) && outer && !realOuterPattern.test(outer)) {
+    add("severe", "later_cold_outer_too_light", "The rest of today gets cold enough that an overshirt or styling layer is not enough outerwear.");
+  }
+  if ((envelope.coldLater || (envelope.chillyLater && envelope.sharpDrop)) && !outer) {
+    add("severe", "later_cold_missing_outer", "The rest of today gets cold enough to require a real outer layer.");
+  }
+  if (envelope.moderateNow && !envelope.wetLater && !envelope.windyLater && warmTopPattern.test(top) && lightOuterPattern.test(outer)) {
+    add("warning", "moderate_now_overlayered", "Moderate dry conditions do not need both a warm knit and an overshirt unless a colder later window is handled by real outerwear.");
+  }
+  if ((preferences?.activityContext === "office" || preferences?.styleFocus === "polished" || preferences?.formal) && /\b(running shorts|leggings|tank|graphic tee|hoodie|sandals)\b/.test(itemText)) {
+    add("severe", "office_too_casual", "Office/polished outfit is too casual or athletic.");
+  }
+  if ((preferences?.activityContext === "workout" || preferences?.styleFocus === "sporty" || preferences?.sporty) && /\b(loafer|dress shoe|blazer|wool trouser|slack)\b/.test(itemText)) {
+    add("warning", "workout_too_formal", "Sporty/workout outfit includes formal pieces.");
+  }
+  if (profile.highUv && (preferences?.locationContext === "outdoors" || preferences?.locationContext === "exposed") && !/\b(sunglasses|cap|hat|sun|uv|sunscreen)\b/.test(text)) {
+    add("warning", "uv_missing_guidance", "High-UV outdoor outfit lacks sun guidance.");
+  }
+
+  return {
+    ok: !issues.some((issue) => issue.severity === "severe"),
+    severeCount: issues.filter((issue) => issue.severity === "severe").length,
+    warningCount: issues.filter((issue) => issue.severity === "warning").length,
+    issues,
+    profile,
+  };
+}
+
+function buildRecommendationTrustSignals(response = {}, weather = {}, preferences = {}, wardrobeAnalysis = {}) {
+  const profile = classifyWeatherProfile(weather);
+  const signals = [];
+  if (profile.veryHot) signals.push("Very hot: skipped heavy layers");
+  else if (profile.hot) signals.push("Hot-weather lightness check");
+  if (profile.wet || profile.rainLikelyLater) signals.push("Rain protection considered");
+  else signals.push("Dry-weather gear check");
+  if (profile.windy) signals.push("Wind protection considered");
+  if (profile.highUv) signals.push("UV protection considered");
+  if (wardrobeAnalysis.usedCount > 0) signals.push(`${wardrobeAnalysis.usedCount} wardrobe piece${wardrobeAnalysis.usedCount === 1 ? "" : "s"} used`);
+  if (preferences?.hot) signals.push("Tuned lighter for you");
+  if (preferences?.cold) signals.push("Tuned warmer for you");
+  return Array.from(new Set(signals)).slice(0, 4);
+}
+
 function deriveRecommendationProfileBand(preferences = {}, weather = {}) {
   const { style, activity, setting } = normalizePreferenceProfile(preferences);
-  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
-    ? Number(weather.feelsLike)
-    : Number(weather?.temperature);
+  const scoringWeather = weatherForRecommendationScoring(weather);
+  const feelsLike = Number.isFinite(Number(scoringWeather?.feelsLike))
+    ? Number(scoringWeather.feelsLike)
+    : Number(scoringWeather?.temperature);
   const hot = preferences?.hot || feelsLike >= 26;
   const cold = preferences?.cold || feelsLike <= 10;
-  const wet = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const wet = Number(scoringWeather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
   if (activity === "office" || setting === "event" || style === "polished") return "office";
   if (activity === "workout" || style === "sporty") return "sporty";
   if (hot && (activity === "evening" || setting === "event")) return "hot-evening";
@@ -2653,17 +3024,18 @@ function buildStyleGuardrails(preferences = {}, weather = {}) {
 }
 
 function wardrobeItemFitScore(item, preferences = {}, weather = {}) {
+  const scoringWeather = weatherForRecommendationScoring(weather);
   const slot = normalizeWardrobeSlot(item?.type);
   const name = cleanInlineText(item?.name).toLowerCase();
   const color = cleanInlineText(item?.color).toLowerCase();
   const material = cleanInlineText(item?.material).toLowerCase();
   const text = `${name} ${color} ${material}`.trim();
-  const profileBand = deriveRecommendationProfileBand(preferences, weather);
-  const feelsLike = Number.isFinite(Number(weather?.feelsLike))
-    ? Number(weather.feelsLike)
-    : Number(weather?.temperature);
-  const wet = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
-  const windy = Number(weather?.wind ?? 0) >= 24;
+  const profileBand = deriveRecommendationProfileBand(preferences, scoringWeather);
+  const feelsLike = Number.isFinite(Number(scoringWeather?.feelsLike))
+    ? Number(scoringWeather.feelsLike)
+    : Number(scoringWeather?.temperature);
+  const wet = Number(scoringWeather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
+  const windy = Number(scoringWeather?.wind ?? 0) >= 24;
   let score = 0;
 
   if (!slot || !name) return -50;
@@ -2677,7 +3049,8 @@ function wardrobeItemFitScore(item, preferences = {}, weather = {}) {
     if (feelsLike >= 26) score += /\b(shorts|lightweight|linen)\b/.test(text) ? 4 : 0;
   }
   if (slot === "outer") {
-    if (wet || windy || feelsLike <= 14) score += /\b(shell|jacket|coat|parka|blazer|overshirt|hoodie)\b/.test(text) ? 4 : -4;
+    if (wet || windy || feelsLike <= 14) score += /\b(shell|jacket|coat|parka|blazer|overshirt|hoodie|fleece|sherpa|windbreaker)\b/.test(text) ? 4 : -4;
+    if (feelsLike <= 8) score += /\b(coat|jacket|parka|puffer|insulated|shell|fleece|sherpa|windbreaker|waterproof)\b/.test(text) ? 5 : /\b(overshirt|shacket|cardigan)\b/.test(text) ? -5 : 0;
     if (!wet && !windy && feelsLike >= 24) score += /\b(shell|jacket|coat|parka)\b/.test(text) ? -4 : 1;
   }
   if (slot === "shoes") {
@@ -2712,11 +3085,12 @@ function wardrobeItemFitScore(item, preferences = {}, weather = {}) {
 }
 
 function filterWardrobeItemsForRecommendation(wardrobeItems = [], preferences = {}, weather = {}) {
+  const scoringWeather = weatherForRecommendationScoring(weather);
   const scored = (Array.isArray(wardrobeItems) ? wardrobeItems : [])
     .map((item) => ({
       ...item,
       _slot: normalizeWardrobeSlot(item?.type),
-      _fitScore: wardrobeItemFitScore(item, preferences, weather),
+      _fitScore: wardrobeItemFitScore(item, preferences, scoringWeather),
     }))
     .filter((item) => item._slot && item._fitScore >= 3)
     .sort((a, b) => b._fitScore - a._fitScore);
@@ -2732,6 +3106,59 @@ function filterWardrobeItemsForRecommendation(wardrobeItems = [], preferences = 
     slotCounts.set(slot, count + 1);
   }
   return kept;
+}
+
+function analyzeWardrobeCandidates(wardrobeItems = [], eligibleWardrobeItems = [], preferences = {}, weather = {}) {
+  const eligibleIds = new Set((eligibleWardrobeItems || []).map((item) => String(item.id ?? item.name ?? "")));
+  const scored = (Array.isArray(wardrobeItems) ? wardrobeItems : [])
+    .map((item) => {
+      const slot = normalizeWardrobeSlot(item?.type);
+      const score = wardrobeItemFitScore(item, preferences, weather);
+      const id = String(item?.id ?? item?.name ?? "");
+      const status = eligibleIds.has(id) || score >= 3 ? "recommended" : "avoid_today";
+      const reason = status === "recommended"
+        ? "Fits today's weather, style direction, or useful outfit slot."
+        : "Skipped because it is weaker for today's weather or vibe.";
+      return {
+        id: item?.id ?? null,
+        name: cleanInlineText(item?.name),
+        type: cleanInlineText(item?.type),
+        slot,
+        color: cleanInlineText(item?.color),
+        material: cleanInlineText(item?.material),
+        score,
+        status,
+        reason,
+      };
+    })
+    .filter((item) => item.name);
+  return {
+    totalCount: scored.length,
+    recommendedCount: scored.filter((item) => item.status === "recommended").length,
+    avoidCount: scored.filter((item) => item.status === "avoid_today").length,
+    candidates: scored.sort((a, b) => b.score - a.score),
+  };
+}
+
+function detectWardrobeUsage(response = {}, wardrobeAnalysis = {}) {
+  const text = getOutfitText(response);
+  const used = (wardrobeAnalysis.candidates || [])
+    .filter((item) => item.name && text.includes(item.name.toLowerCase()))
+    .map((item) => ({
+      id: item.id,
+      name: item.name,
+      slot: item.slot,
+      score: item.score,
+      status: item.status,
+      reason: item.status === "recommended" ? "Used because it matched the outfit and today's context." : "Used despite a weaker fit; review recommended.",
+    }));
+  return {
+    usedCount: used.length,
+    used,
+    skippedRecommended: (wardrobeAnalysis.candidates || [])
+      .filter((item) => item.status === "recommended" && !used.some((match) => match.name === item.name))
+      .slice(0, 5),
+  };
 }
 
 function buildWardrobePenaltyRules(filteredWardrobe, originalWardrobe, preferences = {}, weather = {}) {
@@ -2818,6 +3245,7 @@ function buildPreferenceTuningRules(preferences = {}, weather = {}) {
 
 function recommendationNeedsPreferenceRevision(response, weather = {}, preferences = {}) {
   const profileBand = deriveRecommendationProfileBand(preferences, weather);
+  const envelope = getRecommendationWeatherEnvelope(weather);
   const top = cleanInlineText(response?.outfit?.top).toLowerCase();
   const bottom = cleanInlineText(response?.outfit?.bottom).toLowerCase();
   const outer = cleanInlineText(response?.outfit?.outer).toLowerCase();
@@ -2828,6 +3256,7 @@ function recommendationNeedsPreferenceRevision(response, weather = {}, preferenc
     : Number(weather?.temperature);
   const wetRisk = Number(weather?.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(weather?.weatherLabel || ""));
   const windy = Number(weather?.wind ?? 0) >= 24;
+  const realOuterPattern = /\b(coat|jacket|parka|puffer|insulated|shell|fleece|sherpa|windbreaker|raincoat|waterproof)\b/;
 
   if (preferences?.cold) {
     if (feelsLike < 22 && !outer && !/\b(hoodie|sweater|knit|fleece|jacket|coat|parka|overshirt)\b/.test(top)) return true;
@@ -2866,6 +3295,12 @@ function recommendationNeedsPreferenceRevision(response, weather = {}, preferenc
     return true;
   }
   if ((preferences?.locationContext === "outdoors" || preferences?.locationContext === "exposed" || preferences?.locationContext === "transit") && (wetRisk || windy || feelsLike <= 14) && !outer) {
+    return true;
+  }
+  if ((envelope.coldLater || (envelope.chillyLater && envelope.sharpDrop)) && !realOuterPattern.test(outer)) {
+    return true;
+  }
+  if (envelope.moderateNow && /\b(sweater|jumper|hoodie|thermal|heavy knit|chunky knit|wool|merino)\b/.test(top) && /\b(overshirt|shacket|cardigan)\b/.test(outer)) {
     return true;
   }
   if ((preferences?.locationContext === "outdoors" || preferences?.locationContext === "exposed") && Number(weather?.uv ?? 0) >= 7 && !/\b(sunglasses|cap|hat)\b/.test(accessory)) {
@@ -2980,7 +3415,198 @@ ${wardrobePenaltyRules.join("\n")}
   }
 }
 
-function scoreCatalogMatch(text, entry) {
+async function rewriteRecommendationForQuality(response, weather, preferences, location, wardrobeItems = [], validation = null) {
+  const quality = validation || validateRecommendationQuality(response, weather, preferences);
+  if (quality.ok) return response;
+  const profile = classifyWeatherProfile(weather);
+  const issueLines = quality.issues.map((issue) => `- ${issue.code}: ${issue.message}`).join("\n");
+  const wardrobeDesc = Array.isArray(wardrobeItems) && wardrobeItems.length
+    ? wardrobeItems.slice(0, 10).map((item) => `- ${item.type}: ${item.name}${item.material ? ` [${item.material}]` : ""}`).join("\n")
+    : "- No suitable wardrobe items";
+  const prompt = `Fix this WearCast outfit. It failed deterministic launch-quality checks.
+
+Weather:
+- Location: ${location?.name || "Unknown"}
+- Temperature: ${weather?.temperature}C
+- Feels like: ${weather?.feelsLike}C
+- Rain probability: ${weather?.precipProb ?? "unknown"}%
+- Wind/gusts: ${weather?.wind ?? 0}/${weather?.gusts ?? weather?.wind ?? 0} km/h
+- UV: ${weather?.uv ?? 0}
+- Label: ${weather?.weatherLabel || "Unknown"}
+
+Detected weather profile:
+- hot: ${profile.hot}
+- very hot: ${profile.veryHot}
+- cold: ${profile.cold}
+- wet or rain later: ${profile.wet || profile.rainLikelyLater}
+- dry: ${profile.dry}
+
+Failures to correct:
+${issueLines}
+
+Suitable wardrobe candidates:
+${wardrobeDesc}
+
+Current failed outfit:
+${JSON.stringify(response?.outfit || {}, null, 2)}
+
+Non-negotiable rules:
+- If feels-like is 30C or above: no wool, merino, thermal, fleece, parka, heavy coat, beanie, gloves, or unnecessary outer layer.
+- If feels-like is 35C or above: no sweater, hoodie, overshirt, jacket, blazer, coat, or long-sleeve layer unless explicitly described as carried for indoor AC.
+- If rain is not likely: no umbrella or rain gear.
+- If office/polished: stay sharp with breathable polish, not cold-weather formality.
+- Return exactly one accessory.
+- Return JSON only using the same schema.
+
+{
+  "outfit": {
+    "top": "short item name",
+    "bottom": "short item name",
+    "outer": "short item name or empty string",
+    "shoes": "short item name",
+    "accessories": ["one item"]
+  },
+  "slotReasons": {
+    "top": "one short reason",
+    "bottom": "one short reason",
+    "outer": "one short reason or empty string",
+    "shoes": "one short reason",
+    "accessory": "one short reason"
+  },
+  "itemDetails": {
+    "top": { "color": "short color", "material": "short material" },
+    "bottom": { "color": "short color", "material": "short material" },
+    "outer": { "color": "short color", "material": "short material" },
+    "shoes": { "color": "short color", "material": "short material" },
+    "accessory": { "color": "short color", "material": "short material" }
+  },
+  "reasoning": "One natural weather-overview subline",
+  "detailsOverview": {
+    "what": "One or two sentences",
+    "why": "One or two sentences",
+    "note": "One optional practical note"
+  },
+  "warnings": ["one short warning if needed"],
+  "missingItems": ["one short missing item if needed"]
+}`;
+
+  try {
+    const text = await chatCompletion([{ role: "user", content: prompt }], {
+      maxTokens: 560,
+      traceLabel: "recommendation-quality-revision",
+      timeoutMs: 16000,
+    });
+    return normalizeRecommendationResponse(parseModelJson(text));
+  } catch (err) {
+    console.warn("recommendation quality revision fallback:", err?.message || err);
+    return response;
+  }
+}
+
+async function finalizeRecommendation(response, weather, preferences, location, wardrobeAnalysis = null, eligibleWardrobeItems = [], { allowQualityRetry = true } = {}) {
+  let normalized = ensureRecommendationShape(response, weather, preferences, wardrobeAnalysis);
+  let quality = validateRecommendationQuality(normalized, weather, preferences);
+  const shouldUseImmediateFallback = !quality.ok && quality.profile?.veryHot && quality.issues.some((issue) =>
+    ["hot_heavy_material", "very_hot_layering", "dry_rain_gear"].includes(issue.code)
+  );
+  if (!quality.ok && allowQualityRetry && !shouldUseImmediateFallback) {
+    normalized = ensureRecommendationShape(
+      await rewriteRecommendationForQuality(normalized, weather, preferences, location, eligibleWardrobeItems, quality),
+      weather,
+      preferences,
+      wardrobeAnalysis
+    );
+    quality = validateRecommendationQuality(normalized, weather, preferences);
+  }
+  if (!quality.ok) {
+    normalized = ensureRecommendationShape(
+      buildFallbackRecommendation(weather, preferences, quality.issues[0]?.code || "quality gate"),
+      weather,
+      preferences,
+      wardrobeAnalysis
+    );
+    quality = validateRecommendationQuality(normalized, weather, preferences);
+  }
+
+  const wardrobeUsage = detectWardrobeUsage(normalized, wardrobeAnalysis || { candidates: [] });
+  const trustSignals = buildRecommendationTrustSignals(normalized, weather, preferences, wardrobeUsage);
+  normalized = {
+    ...normalized,
+    outfitImages: buildRecommendationImageMatches(normalized.outfit, null, {
+      weather,
+      preferences,
+      profileBand: deriveRecommendationProfileBand(preferences, weather),
+    }),
+    weatherProfile: classifyWeatherProfile(weather),
+    wardrobeAnalysis: wardrobeAnalysis ? { ...wardrobeAnalysis, usage: wardrobeUsage } : null,
+    quality,
+    trustSignals,
+  };
+  return normalized;
+}
+
+function inferCatalogAesthetic(entry = {}, key = "") {
+  const text = `${key} ${entry.description || ""} ${(entry.keywords || []).join(" ")}`.toLowerCase();
+  return {
+    warmth: /\b(winter|insulated|thermal|fleece|beanie|glove|parka|overcoat|coat|sweater|knit)\b/.test(text) ? "warm" : /\b(tank|shorts|linen|sun|tee|t-shirt|polo)\b/.test(text) ? "cool" : "neutral",
+    formality: /\b(blazer|tailored|dress|loafer|oxford|button-up|button up|trouser|slack|watch|polo)\b/.test(text) ? "polished" : /\b(running|athletic|sport|trail|performance|leggings)\b/.test(text) ? "sporty" : "casual",
+    weather: /\b(rain|waterproof|water-resistant|shell|umbrella|parka|windbreaker|weatherproof)\b/.test(text) ? "protective" : /\b(sunglasses|sun hat|cap)\b/.test(text) ? "sun" : "neutral",
+    materialCue: /\b(denim)\b/.test(text) ? "denim" : /\b(wool|merino)\b/.test(text) ? "wool" : /\b(linen)\b/.test(text) ? "linen" : /\b(cotton|chino|twill)\b/.test(text) ? "cotton" : "generic",
+    visualStyle: /\b(street|outdoor|city|outdoors)\b/.test(text) ? "lifestyle" : "studio",
+  };
+}
+
+function scoreAestheticContext(itemName = "", entry = {}, key = "", context = {}) {
+  const weatherProfile = classifyWeatherProfile(context.weather || {});
+  const preferences = context.preferences || {};
+  const profileBand = context.profileBand || deriveRecommendationProfileBand(preferences, context.weather || {});
+  const aesthetic = { ...inferCatalogAesthetic(entry, key), ...(entry.aesthetic || {}) };
+  const itemText = cleanInlineText(itemName).toLowerCase();
+  let score = 0;
+  const penalties = [];
+
+  if (weatherProfile.hot && aesthetic.warmth === "warm") {
+    score -= weatherProfile.veryHot ? 35 : 24;
+    penalties.push("too_warm_for_weather");
+  }
+  if (weatherProfile.cold && aesthetic.warmth === "cool") {
+    score -= 16;
+    penalties.push("too_light_for_cold");
+  }
+  if (weatherProfile.dry && aesthetic.weather === "protective" && /\b(umbrella|rain)\b/.test(`${itemText} ${key}`)) {
+    score -= 40;
+    penalties.push("rain_gear_for_dry_weather");
+  }
+  if ((weatherProfile.wet || weatherProfile.rainLikelyLater) && aesthetic.weather === "protective") score += 12;
+  if (weatherProfile.highUv && aesthetic.weather === "sun") score += 8;
+
+  if (profileBand === "office" && aesthetic.formality === "polished") score += 10;
+  if (profileBand === "office" && aesthetic.formality === "sporty") {
+    score -= 16;
+    penalties.push("too_sporty_for_office");
+  }
+  if (profileBand === "sporty" && aesthetic.formality === "sporty") score += 12;
+  if (profileBand === "sporty" && aesthetic.formality === "polished" && !/\b(watch)\b/.test(itemText)) {
+    score -= 12;
+    penalties.push("too_formal_for_sporty");
+  }
+  if (/\b(chino|cotton short|tailored short|linen short)\b/.test(itemText) && aesthetic.materialCue === "denim") {
+    score -= 18;
+    penalties.push("denim_visual_for_polished_short");
+  }
+  if (/\b(chino|linen trouser|lightweight trouser|tailored trouser)\b/.test(itemText) && key === "bottom_blue_jeans_stack") {
+    score -= 24;
+    penalties.push("jeans_visual_for_tailoring");
+  }
+  if (/\b(derby|oxford shoe)\b/.test(itemText) && !/\b(dress|loafer|formal)\b/.test(`${key} ${(entry.keywords || []).join(" ")}`)) {
+    score -= 12;
+    penalties.push("weak_formal_shoe_match");
+  }
+
+  return { score, penalties, aesthetic };
+}
+
+function scoreCatalogMatch(text, entry, key = "", context = {}) {
   const normalized = normalizeMatchText(text);
   if (!normalized) return 0;
   const textTokens = normalized.split(" ").filter((token) => token.length > 2);
@@ -3013,32 +3639,49 @@ function scoreCatalogMatch(text, entry) {
     if (descriptionOverlap > 0) score += Math.min(descriptionOverlap, 3);
   }
   if (entry.fallback) score -= 1;
+  score += scoreAestheticContext(text, entry, key, context).score;
   return score;
 }
 
-function findStockImageForSlot(slot, itemName, preferredKey = null) {
+function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}) {
   if (preferredKey && STOCK_IMAGE_CATALOG[preferredKey]?.slot === slot) {
     const entry = STOCK_IMAGE_CATALOG[preferredKey];
-    return { key: preferredKey, path: entry.path, description: entry.description };
+    const aestheticScore = scoreAestheticContext(itemName, entry, preferredKey, context);
+    return { key: preferredKey, path: entry.path, description: entry.description, confidence: Math.max(40, Math.min(100, 80 + aestheticScore.score)), aesthetic: aestheticScore.aesthetic, penalties: aestheticScore.penalties };
   }
 
   const entries = Object.entries(STOCK_IMAGE_CATALOG).filter(([, entry]) => entry.slot === slot);
   let best = null;
   let bestScore = -1;
   for (const [key, entry] of entries) {
-    const score = scoreCatalogMatch(itemName, entry);
+    const score = scoreCatalogMatch(itemName, entry, key, context);
     if (score > bestScore) {
-      best = { key, path: entry.path, description: entry.description };
+      const aestheticScore = scoreAestheticContext(itemName, entry, key, context);
+      best = {
+        key,
+        path: entry.path,
+        description: entry.description,
+        confidence: Math.max(0, Math.min(100, 55 + score + aestheticScore.score)),
+        aesthetic: aestheticScore.aesthetic,
+        penalties: aestheticScore.penalties,
+      };
       bestScore = score;
     }
   }
 
   if (best && bestScore > 0) return best;
   const fallback = entries.find(([, entry]) => entry.fallback);
-  return fallback ? { key: fallback[0], path: fallback[1].path, description: fallback[1].description } : null;
+  return fallback ? {
+    key: fallback[0],
+    path: fallback[1].path,
+    description: fallback[1].description,
+    confidence: 45,
+    aesthetic: inferCatalogAesthetic(fallback[1], fallback[0]),
+    penalties: ["fallback"],
+  } : null;
 }
 
-function buildRecommendationImageMatches(outfit, preferredKeys = null) {
+function buildRecommendationImageMatches(outfit, preferredKeys = null, context = {}) {
   const output = {};
   const preferred = preferredKeys && typeof preferredKeys === "object" ? preferredKeys : {};
   for (const slot of ["top", "bottom", "outer", "shoes"]) {
@@ -3047,7 +3690,7 @@ function buildRecommendationImageMatches(outfit, preferredKeys = null) {
       output[slot] = null;
       continue;
     }
-    output[slot] = findStockImageForSlot(slot, itemName, cleanInlineText(preferred?.[slot])) || null;
+    output[slot] = findStockImageForSlot(slot, itemName, cleanInlineText(preferred?.[slot]), context) || null;
   }
   const accessories = Array.isArray(outfit?.accessories)
     ? outfit.accessories
@@ -3057,7 +3700,7 @@ function buildRecommendationImageMatches(outfit, preferredKeys = null) {
     .filter(Boolean)
     .slice(0, 1)
     .forEach((itemName, index) => {
-      output[`accessory-${index}`] = findStockImageForSlot("accessory", itemName, cleanInlineText(preferred?.accessory)) || null;
+      output[`accessory-${index}`] = findStockImageForSlot("accessory", itemName, cleanInlineText(preferred?.accessory), context) || null;
     });
   return output;
 }
@@ -3347,6 +3990,13 @@ function summarizeRemainingForecast(weatherData) {
     feelsLikeRange: `${min(feelsLike)}°C – ${max(feelsLike)}°C`,
     maxWind: `${max(winds)} km/h`,
     maxPrecipProb: `${max(precipProbs)}%`,
+    minTemp: min(temps),
+    maxTemp: max(temps),
+    minFeelsLike: min(feelsLike),
+    maxFeelsLike: max(feelsLike),
+    maxWindKmh: max(winds),
+    maxPrecipProbPct: max(precipProbs),
+    totalPrecipMm: +(precips.reduce((sum, value) => sum + value, 0)).toFixed(1),
     totalPrecip: `${+(precips.reduce((sum, value) => sum + value, 0)).toFixed(1)} mm`,
     peakUV: max(uvs),
     avgHumidity: `${avg(humidities)}%`,
@@ -3400,12 +4050,21 @@ async function resolveRecommendationWeather(inputWeather, location) {
   };
 }
 
-function buildFallbackRecommendation(weather) {
+function buildFallbackRecommendation(weather, preferences = {}, reason = "weather rules fallback") {
   const temp = Number(weather?.temperature);
-  const feelsLike = Number(weather?.feelsLike ?? temp);
-  const precipProb = Number(weather?.precipProb ?? 0);
-  const wind = Number(weather?.wind ?? 0);
+  const envelope = getRecommendationWeatherEnvelope(weather);
+  const currentFeels = Number.isFinite(envelope.currentFeels)
+    ? envelope.currentFeels
+    : Number(weather?.feelsLike ?? temp);
+  const feelsLike = Number.isFinite(envelope.minFeelsLike)
+    ? Math.min(currentFeels, envelope.minFeelsLike)
+    : currentFeels;
+  const precipProb = envelope.maxPrecipProb;
+  const wind = envelope.maxWind;
   const weatherLabel = String(weather?.weatherLabel || "").toLowerCase();
+  const profile = classifyWeatherProfile(weather);
+  const polished = preferences?.activityContext === "office" || preferences?.styleFocus === "polished" || preferences?.formal;
+  const sporty = preferences?.activityContext === "workout" || preferences?.styleFocus === "sporty" || preferences?.sporty;
 
   const freezing = weatherLabel.includes("snow") || weatherLabel.includes("freezing");
   const stormy = weatherLabel.includes("thunder");
@@ -3415,7 +4074,15 @@ function buildFallbackRecommendation(weather) {
   const veryHot = feelsLike >= 32;
   const wet = precipProb >= 45 || weatherLabel.includes("rain") || weatherLabel.includes("drizzle") || stormy || freezing;
 
-  const top = veryCold
+  const top = profile.veryHot && polished
+    ? "Short-sleeve linen shirt"
+    : profile.veryHot
+      ? "Breathable cotton T-shirt"
+      : hot && polished
+        ? "Lightweight polo"
+        : sporty && hot
+          ? "Performance tank"
+          : veryCold
     ? "Thermal base layer"
     : coldish
       ? "Long-sleeve tee"
@@ -3424,7 +4091,15 @@ function buildFallbackRecommendation(weather) {
         : temp <= 20
           ? "Long-sleeve top"
           : "Breathable T-shirt";
-  const bottom = veryCold
+  const bottom = profile.veryHot && polished
+    ? "Lightweight linen trousers"
+    : profile.veryHot
+      ? "Cotton shorts"
+      : hot && polished
+        ? "Lightweight chinos"
+        : sporty && hot
+          ? "Running shorts"
+          : veryCold
     ? "Insulated pants"
     : hot
       ? "Linen shorts"
@@ -3433,16 +4108,22 @@ function buildFallbackRecommendation(weather) {
         : temp <= 12
           ? "Jeans"
           : "Comfortable pants";
-  const outer = veryCold
+  const outer = profile.veryHot || (hot && !wet && wind < 30)
+    ? ""
+    : veryCold
     ? "Waterproof parka"
     : wet
       ? "Waterproof jacket"
       : coldish || wind >= 25
-        ? "Light jacket"
+        ? (feelsLike <= 6 ? "Warm fleece jacket" : "Light jacket")
         : hot
           ? "Breathable overshirt"
           : "Light overshirt";
-  const shoes = veryCold || freezing
+  const shoes = polished && !wet && !veryCold
+    ? "Leather loafers"
+    : sporty
+      ? "Breathable running sneakers"
+      : veryCold || freezing
     ? "Waterproof boots"
     : wet
       ? "Waterproof sneakers"
@@ -3456,9 +4137,8 @@ function buildFallbackRecommendation(weather) {
   else if (coldish) accessories.push("Beanie");
   else accessories.push("Watch");
 
-  return {
+  const response = {
     outfit: { top, bottom, outer, shoes, accessories },
-    outfitImages: buildRecommendationImageMatches({ top, bottom, outer, shoes, accessories }),
     slotReasons: {
       top: veryCold ? "Builds a warmer base for the cold." : hot ? "Keeps the outfit light in the heat." : "Works as a comfortable base layer.",
       bottom: veryCold ? "Adds needed insulation for colder air." : hot ? "Keeps airflow and movement easy." : "Balances coverage and comfort.",
@@ -3477,11 +4157,12 @@ function buildFallbackRecommendation(weather) {
     detailsOverview: {
       what: `${top}, ${bottom}, and ${shoes}${outer ? ` with a ${outer}` : ""} make a practical outfit for the current conditions.`,
       why: buildContextReasoningFallback({ outfit: { top, bottom, outer, shoes, accessories } }, weather),
-      note: accessories[0] ? `${accessories[0]} adds a useful final layer of weather protection.` : "This was generated from weather rules while AI styling is unavailable.",
+      note: accessories[0] ? `${accessories[0]} adds a useful final layer of weather protection.` : `Generated from deterministic weather rules: ${reason}.`,
     },
     warnings: precipProb >= 40 ? ["Rain may be likely later, so bring a waterproof layer."] : [],
     missingItems: [],
   };
+  return ensureRecommendationShape(response, weather, preferences);
 }
 
 // ─── POST /api/scan-tag ───────────────────────────────────────
@@ -3652,6 +4333,7 @@ app.post("/api/analyze-item-photo", async (req, res) => {
     });
   } catch (err) {
     log.error("fatal", err);
+    captureServerException(err, { requestId, route: "/api/analyze-item-photo" });
     res.status(500).json({ error: "Failed to analyse clothing photo", requestId });
   }
 });
@@ -3701,6 +4383,7 @@ If the image is not a care tag or is unreadable, return:
     });
   } catch (err) {
     console.error("scan-tag error:", err);
+    captureServerException(err, { route: "/api/scan-tag" });
     res.status(500).json({ error: "Failed to analyse care tag" });
   }
 });
@@ -3712,11 +4395,18 @@ app.post("/api/recommend", async (req, res) => {
   try {
     const requestId = `rec_${randomUUID().slice(0, 8)}`;
     const startedAt = Date.now();
+    const timings = createTimingTracker();
     const { weather, wardrobe, preferences, location } = req.body;
     const resolvedWeather = await resolveRecommendationWeather(weather, location);
     if (!resolvedWeather) return res.status(400).json({ error: "No weather data or location provided" });
+    timings.mark("weather_resolved");
     const wardrobeItems = Array.isArray(wardrobe) ? wardrobe : [];
     const eligibleWardrobeItems = filterWardrobeItemsForRecommendation(wardrobeItems, preferences, resolvedWeather);
+    const wardrobeAnalysis = analyzeWardrobeCandidates(wardrobeItems, eligibleWardrobeItems, preferences, resolvedWeather);
+    timings.mark("wardrobe_scored", {
+      wardrobeCount: wardrobeItems.length,
+      eligibleWardrobeCount: eligibleWardrobeItems.length,
+    });
     const hasWardrobe = eligibleWardrobeItems.length > 0;
     const profileBand = deriveRecommendationProfileBand(preferences, resolvedWeather);
     const archetypeDirective = buildArchetypeDirective(profileBand, location, preferences, resolvedWeather);
@@ -3747,14 +4437,39 @@ app.post("/api/recommend", async (req, res) => {
         genericReasoning: isGenericRecommendationReasoning(cachedRecommendation.reasoning),
       });
       if (!isGenericRecommendationReasoning(cachedRecommendation.reasoning)) {
-        return res.json(cachedRecommendation);
+        return res.json({
+          ...cachedRecommendation,
+          performance: timings.summary({ cacheHit: true }),
+        });
       }
       const withReasoning = {
         ...cachedRecommendation,
         reasoning: buildContextReasoningFallback(cachedRecommendation, resolvedWeather),
       };
       setCachedRecommendation(cacheKey, withReasoning);
-      return res.json(withReasoning);
+      return res.json({
+        ...withReasoning,
+        performance: timings.summary({ cacheHit: true }),
+      });
+    }
+
+    const weatherProfile = classifyWeatherProfile(resolvedWeather);
+    const deterministicHotOffice = weatherProfile.veryHot && profileBand === "office";
+    if (deterministicHotOffice) {
+      const response = await finalizeRecommendation(
+        buildFallbackRecommendation(resolvedWeather, preferences, "very hot polished fast path"),
+        resolvedWeather,
+        preferences,
+        location,
+        wardrobeAnalysis,
+        eligibleWardrobeItems,
+        { allowQualityRetry: false }
+      );
+      setCachedRecommendation(cacheKey, response);
+      return res.json({
+        ...response,
+        performance: timings.summary({ cacheHit: false, deterministicFastPath: "very_hot_office" }),
+      });
     }
 
     const wardrobeDesc =
@@ -3790,20 +4505,27 @@ app.post("/api/recommend", async (req, res) => {
     const effectiveTemp = Number.isFinite(Number(resolvedWeather.feelsLike))
       ? Number(resolvedWeather.feelsLike)
       : Number(resolvedWeather.temperature);
+    const weatherEnvelope = getRecommendationWeatherEnvelope(resolvedWeather);
     const wetRisk = Number(resolvedWeather.precipProb ?? 0) >= 45 || /rain|drizzle|storm|snow|freezing/i.test(String(resolvedWeather.weatherLabel || ""));
     const weatherRules = [
       effectiveTemp <= 2
         ? "- It is very cold. Use a thermal or insulated top, insulated bottoms, a substantial winter outer layer, and boots. Avoid light sneakers."
         : effectiveTemp <= 8
           ? "- It is cold. Prefer long sleeves and a real outer layer. Do not suggest shorts."
-          : effectiveTemp >= 32
-            ? "- It is very hot. Keep the outfit very light. No outer layer unless absolutely necessary."
-            : effectiveTemp >= 28
-              ? "- It is hot. Prefer breathable, lightweight pieces and avoid heavy layers."
-              : "- Temperature is moderate. A light layer may be appropriate depending on wind and rain.",
+          : effectiveTemp >= 35
+            ? "- It is very hot. Use breathable single-layer pieces. Absolutely no wool, merino, thermal, fleece, sweater, hoodie, overshirt, jacket, blazer, coat, beanie, gloves, or umbrella unless rain is actually likely."
+            : effectiveTemp >= 30
+          ? "- It is hot. Prefer breathable lightweight pieces. Avoid wool, merino, fleece, thermal pieces, heavy layers, and unnecessary outerwear."
+          : "- Temperature is moderate. A light layer may be appropriate depending on wind and rain.",
+      (weatherEnvelope.coldLater || (weatherEnvelope.chillyLater && weatherEnvelope.sharpDrop))
+        ? `- The rest of today drops to about ${weatherEnvelope.minFeelsLike}C feels-like. Plan for the coldest part of the wear window, not just right now: include a real jacket/coat/shell/fleece outer layer. Do not rely on only an overshirt or shacket for the outer slot.`
+        : "- No major late-day temperature drop requires changing the outfit plan.",
+      weatherEnvelope.moderateNow && !weatherEnvelope.wetLater && !weatherEnvelope.windyLater
+        ? "- Right now is mild and dry. Avoid stacking a warm sweater with an overshirt unless a colder later window is handled by real outerwear."
+        : "- Layering can be justified if wind, rain, or the later forecast requires it.",
       wetRisk
         ? "- Wet conditions are likely. Use a waterproof or water-resistant outer layer and avoid delicate open footwear."
-        : "- Dry conditions are likely. Waterproof gear is optional unless wind or cold makes it useful.",
+        : "- Dry conditions are likely. Do not suggest an umbrella or rain gear.",
       Number(resolvedWeather.wind ?? 0) >= 25
         ? "- It is windy. Add a protective layer and avoid outfits that feel too exposed."
         : "- Wind is not a dominant factor right now.",
@@ -3917,10 +4639,14 @@ Return ONLY valid JSON (no markdown fences):
         errorName: aiErr?.name || "Error",
         errorMessage: aiErr?.message || String(aiErr),
       });
-      const response = buildFallbackRecommendation(resolvedWeather);
+      const response = buildFallbackRecommendation(resolvedWeather, preferences, "ai fallback");
       setCachedRecommendation(cacheKey, response);
-      return res.json(response);
+      return res.json({
+        ...response,
+        performance: timings.summary({ cacheHit: false, fallback: "ai_error" }),
+      });
     }
+    timings.mark("model_completed");
     console.info("[recommend] ai-response", {
       requestId,
       durationMs: Date.now() - startedAt,
@@ -3930,22 +4656,32 @@ Return ONLY valid JSON (no markdown fences):
 
     try {
       const parsed = parseModelJson(text);
-      let normalized = ensureRecommendationShape(normalizeRecommendationResponse(parsed), resolvedWeather);
+      let normalized = ensureRecommendationShape(normalizeRecommendationResponse(parsed), resolvedWeather, preferences, wardrobeAnalysis);
+      const initialQuality = validateRecommendationQuality(normalized, resolvedWeather, preferences);
       const needsPreferenceRevision = recommendationNeedsPreferenceRevision(normalized, resolvedWeather, preferences);
       const missesArchetype = recommendationMissesArchetype(normalized, archetypeDirective, resolvedWeather);
-      if (needsPreferenceRevision || missesArchetype) {
+      const shouldReviseForArchetype = missesArchetype && !initialQuality.ok;
+      if ((initialQuality.ok && needsPreferenceRevision) || shouldReviseForArchetype) {
         console.info("[recommend] preference-revision", {
           requestId,
           durationMs: Date.now() - startedAt,
           preferences: preferences || {},
-          missesArchetype,
+          missesArchetype: shouldReviseForArchetype,
           outfit: normalized?.outfit || null,
         });
-        normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather);
+        normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather, preferences, wardrobeAnalysis);
       }
-      normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather);
+      normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather, preferences, wardrobeAnalysis);
       const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-      const response = ensureRecommendationShape(await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+      const response = await finalizeRecommendation(
+        await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location),
+        resolvedWeather,
+        preferences,
+        location,
+        wardrobeAnalysis,
+        eligibleWardrobeItems
+      );
+      timings.mark("post_processing_completed", { qualitySevere: response.quality?.severeCount || 0 });
       console.info("[recommend] success", {
         requestId,
         durationMs: Date.now() - startedAt,
@@ -3954,7 +4690,10 @@ Return ONLY valid JSON (no markdown fences):
         missingItems: response?.missingItems?.length || 0,
       });
       setCachedRecommendation(cacheKey, response);
-      res.json(response);
+      res.json({
+        ...response,
+        performance: timings.summary({ cacheHit: false }),
+      });
     } catch (parseErr) {
       console.warn("[recommend] parse-fallback", {
         requestId,
@@ -3964,33 +4703,48 @@ Return ONLY valid JSON (no markdown fences):
       });
       const salvaged = salvageRecommendationFromText(text);
       if (salvaged) {
-        let normalized = ensureRecommendationShape(normalizeRecommendationResponse(salvaged), resolvedWeather);
+        let normalized = ensureRecommendationShape(normalizeRecommendationResponse(salvaged), resolvedWeather, preferences, wardrobeAnalysis);
+        const initialQuality = validateRecommendationQuality(normalized, resolvedWeather, preferences);
         const needsPreferenceRevision = recommendationNeedsPreferenceRevision(normalized, resolvedWeather, preferences);
         const missesArchetype = recommendationMissesArchetype(normalized, archetypeDirective, resolvedWeather);
-        if (needsPreferenceRevision || missesArchetype) {
+        const shouldReviseForArchetype = missesArchetype && !initialQuality.ok;
+        if ((initialQuality.ok && needsPreferenceRevision) || shouldReviseForArchetype) {
           console.info("[recommend] preference-revision-salvaged", {
             requestId,
             durationMs: Date.now() - startedAt,
             preferences: preferences || {},
-            missesArchetype,
+            missesArchetype: shouldReviseForArchetype,
             outfit: normalized?.outfit || null,
           });
-          normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather);
+          normalized = ensureRecommendationShape(await rewriteRecommendationForPreferences(normalized, resolvedWeather, preferences, location, eligibleWardrobeItems), resolvedWeather, preferences, wardrobeAnalysis);
         }
-        normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather);
+        normalized = ensureRecommendationShape(enforceArchetypeShape(normalized, archetypeDirective, resolvedWeather), resolvedWeather, preferences, wardrobeAnalysis);
         const withReasoning = await ensureAiRecommendationReasoning(normalized, resolvedWeather, preferences, location);
-        const response = ensureRecommendationShape(await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location), resolvedWeather);
+        const response = await finalizeRecommendation(
+          await ensureAiSlotContent(withReasoning, resolvedWeather, preferences, location),
+          resolvedWeather,
+          preferences,
+          location,
+          wardrobeAnalysis,
+          eligibleWardrobeItems
+        );
         console.info("[recommend] salvaged-success", {
           requestId,
           durationMs: Date.now() - startedAt,
           outfit: response?.outfit || null,
         });
         setCachedRecommendation(cacheKey, response);
-        return res.json(response);
+        return res.json({
+          ...response,
+          performance: timings.summary({ cacheHit: false, salvaged: true }),
+        });
       }
-      const response = buildFallbackRecommendation(resolvedWeather);
+      const response = buildFallbackRecommendation(resolvedWeather, preferences, "parse fallback");
       setCachedRecommendation(cacheKey, response);
-      res.json(response);
+      res.json({
+        ...response,
+        performance: timings.summary({ cacheHit: false, fallback: "parse_error" }),
+      });
     }
   } catch (err) {
     console.error("[recommend] fatal", {
@@ -3998,7 +4752,27 @@ Return ONLY valid JSON (no markdown fences):
       errorMessage: err?.message || String(err),
       stack: err?.stack || null,
     });
+    captureServerException(err, { route: "/api/recommend" });
     res.status(500).json({ error: "Failed to generate recommendation" });
+  }
+});
+
+app.post("/api/recommend/feedback", async (req, res) => {
+  try {
+    const feedback = cleanInlineText(req.body?.feedback).slice(0, 80);
+    const outfitText = getOutfitText({ outfit: req.body?.outfit || {} }).slice(0, 500);
+    const weatherProfile = classifyWeatherProfile(req.body?.weather || {});
+    logApiEvent("info", "recommendation_feedback", {
+      feedback,
+      weatherProfile,
+      outfitText,
+      wardrobeUsageCount: Number(req.body?.wardrobeUsageCount || 0),
+      imageConfidence: Number(req.body?.imageConfidence || 0),
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    captureServerException(err, { route: "/api/recommend/feedback" });
+    res.status(500).json({ error: "Failed to record feedback" });
   }
 });
 
@@ -4011,6 +4785,11 @@ app.get("/api/weather", async (req, res) => {
   }
 
   try {
+    const cachedWeather = getCachedWeather(lat, lon);
+    if (cachedWeather) {
+      return res.json({ ...cachedWeather, provider: cachedWeather.provider || "cache" });
+    }
+
     const data = await fetchOpenMeteoWeather(lat, lon);
     setCachedWeather(lat, lon, data);
     return res.json({ ...data, provider: "open-meteo" });
@@ -4022,9 +4801,80 @@ app.get("/api/weather", async (req, res) => {
       return res.json({ ...fallback, provider: "met-norway" });
     } catch (fallbackErr) {
       console.error("weather fetch error:", { openMeteoErr, fallbackErr });
+      captureServerException(fallbackErr, { route: "/api/weather", provider: "met-norway-fallback" });
       return res.status(502).json({ error: "All weather providers failed" });
     }
   }
+});
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    ok: true,
+    service: "wearcast-api",
+    uptimeSec: Math.round(process.uptime()),
+    requestId: req.requestId,
+    timestamp: new Date().toISOString(),
+    memory: {
+      rssMb: Math.round(process.memoryUsage().rss / 1024 / 1024),
+      heapUsedMb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+    },
+    heavyMl: {
+      concurrency: HEAVY_ML_CONCURRENCY,
+      inFlight: heavyMlInFlight,
+      queued: heavyMlQueue.length,
+    },
+  });
+});
+
+app.get("/api/ready", async (req, res) => {
+  try {
+    if (process.env.DATABASE_URL) {
+      await dbPool.query("SELECT 1");
+    }
+    res.json({
+      ok: true,
+      service: "wearcast-api",
+      requestId: req.requestId,
+      timestamp: new Date().toISOString(),
+      uptimeSec: Math.round((Date.now() - SERVER_STARTED_AT) / 1000),
+      databaseConfigured: !!process.env.DATABASE_URL,
+      heavyMl: {
+        concurrency: HEAVY_ML_CONCURRENCY,
+        inFlight: heavyMlInFlight,
+        queued: heavyMlQueue.length,
+      },
+    });
+  } catch (err) {
+    logApiEvent("error", "readiness_failed", {
+      requestId: req.requestId,
+      errorName: err?.name || "Error",
+      errorMessage: err?.message || String(err),
+    });
+    captureServerException(err, { requestId: req.requestId, route: "/api/ready" });
+    res.status(503).json({
+      ok: false,
+      error: "Service not ready",
+      requestId: req.requestId,
+    });
+  }
+});
+
+app.post("/api/client-log", (req, res) => {
+  const body = req.body || {};
+  logApiEvent("error", "client_error", {
+    requestId: req.requestId,
+    clientEvent: body.type || "client_log",
+    message: body.message || "",
+    stack: body.stack || "",
+    source: body.source || "",
+    line: body.line || null,
+    column: body.column || null,
+    url: body.url || "",
+    appVersion: body.appVersion || "",
+    native: !!body.native,
+    recentEvents: Array.isArray(body.recentEvents) ? body.recentEvents : [],
+  });
+  res.status(202).json({ ok: true, requestId: req.requestId });
 });
 
 // ─── Auth & Wardrobe routes ──────────────────────────────────
@@ -4101,7 +4951,27 @@ async function startServer() {
   }
 }
 
+process.on("unhandledRejection", (reason) => {
+  logApiEvent("error", "process_unhandled_rejection", {
+    errorMessage: reason?.message || String(reason),
+    stack: reason?.stack || null,
+  });
+  captureServerException(reason instanceof Error ? reason : new Error(String(reason)), {
+    lifecycle: "unhandledRejection",
+  });
+});
+
+process.on("uncaughtException", (err) => {
+  logApiEvent("error", "process_uncaught_exception", {
+    errorName: err?.name || "Error",
+    errorMessage: err?.message || String(err),
+    stack: err?.stack || null,
+  });
+  captureServerException(err, { lifecycle: "uncaughtException" });
+});
+
 startServer().catch((err) => {
   console.error("Failed to start:", err);
+  captureServerException(err, { lifecycle: "startServer" });
   process.exit(1);
 });

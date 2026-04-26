@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-label="lightweight linen trousers">
+  <rect width="900" height="900" fill="#f6f0e5"/>
+  <path d="M310 155h280l36 615H501l-51-420-51 420H274l36-615Z" fill="#d8c39f" stroke="#9f855d" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M310 155h280v98H310z" fill="#e5d4b7" stroke="#9f855d" stroke-width="18"/>
+  <path d="M450 253v514" stroke="#a78c62" stroke-width="12" stroke-linecap="round"/>
+  <path d="M365 193h170" stroke="#a78c62" stroke-width="12" stroke-linecap="round"/>
+</svg>
