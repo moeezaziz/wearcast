@@ -133,7 +133,7 @@ public class SubscriptionsPlugin: CAPPlugin, CAPBridgedPlugin {
             } else if plan == "free" && transaction.productID == monthlyProductId {
                 plan = "monthly"
             }
-            if let offer = transaction.offer {
+            if #available(iOS 17.2, *), let offer = transaction.offer {
                 switch offer.type {
                 case .introductory, .promotional:
                     trialActive = true

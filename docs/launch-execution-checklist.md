@@ -16,6 +16,7 @@ Before inviting a beta cohort:
 - first recommendation renders successfully
 - quick-tune flow reruns recommendation correctly
 - first wardrobe item add works from both empty state and Today CTA
+- signed-out local starter wardrobe allows up to five items and then prompts account sync
 - wardrobe photo scan works on-device
 - auth works for email and Google
 - premium paywall opens from the expected triggers
@@ -36,6 +37,7 @@ Before submitting to App Review:
 - subscription copy matches actual pricing and trial behavior
 - annual and monthly product ids exist in App Store Connect
 - subscription review notes explain premium limits and restore flow
+- subscription review notes explain the signed-out local wardrobe trial and account sync prompt
 - account deletion path works
 
 ## Soft Launch Gate
@@ -43,6 +45,7 @@ Before submitting to App Review:
 Before public release:
 
 - Sentry DSNs configured for backend and browser
+- Settings diagnostics surface shows backend health, recent local events, and subscription availability
 - Fly readiness check is green in production
 - recommendation endpoint returns a valid response in production
 - wardrobe scan path works in production

@@ -12,6 +12,8 @@
     "ios:dev:copy": "npm run ios:dev:enable && npx cap copy ios",
     "ios:dev:sync": "npm run ios:dev:enable && npx cap sync ios",
     "eval:recommendations": "WEARCAST_RECOMMEND_URL=https://wearcast.fly.dev WEARCAST_MATRIX_CONCURRENCY=6 node scripts/sample_recommendations.mjs && node scripts/evaluate_recommendation_value.mjs",
+    "audit:recommendations:launch": "node scripts/audit_recommendation_launch.mjs",
+    "report:stock-gaps": "node scripts/recommendation_stock_gap_report.mjs",
     "phone:codex": "hey codex",
     "phone:codex:new": "hey codex --new",
     "phone:status": "hey status",

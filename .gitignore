@@ -1,3 +1,10 @@
 server/.env
 server/node_modules/
+node_modules/
+build/
+.claude/
+tmp/
+!tmp/.gitkeep
 tmp/recommendation-stock-gaps.ndjson
+DerivedData/
+*.xcarchive

@@ -49,6 +49,7 @@ function getGoogleRedirectUri() {
 const $ = (id) => document.getElementById(id);
 
 const els = {
+  tabToday: $("tabToday"),
   placeInput: $("placeInput"),
   placeStatus: $("placeStatus"),
   geoBtn: $("geoBtn"),
@@ -270,6 +271,10 @@ const els = {
   settingsResetPrefsStatus: $("settingsResetPrefsStatus"),
   settingsSavedLooksStatus: $("settingsSavedLooksStatus"),
   settingsProfileValidationStatus: $("settingsProfileValidationStatus"),
+  settingsDiagnosticsStatus: $("settingsDiagnosticsStatus"),
+  settingsDiagnosticsEvents: $("settingsDiagnosticsEvents"),
+  settingsDiagnosticsRefreshBtn: $("settingsDiagnosticsRefreshBtn"),
+  settingsDiagnosticsCopyBtn: $("settingsDiagnosticsCopyBtn"),
   settingsFeedback: $("settingsFeedback"),
   userMenuDialog: $("userMenuDialog"),
   userMenuCloseBtn: $("userMenuCloseBtn"),
@@ -294,6 +299,7 @@ const els = {
   todayWardrobeInlineCta: $("todayWardrobeInlineCta"),
   todayWardrobeInlineProgress: $("todayWardrobeInlineProgress"),
   todayWardrobeInlineBtn: $("todayWardrobeInlineBtn"),
+  todayWardrobeInlineDismissBtn: $("todayWardrobeInlineDismissBtn"),
   wardrobeExplainerBtn: $("wardrobeExplainerBtn"),
   todayCtaKicker: $("todayCtaKicker"),
   todayCtaTitle: $("todayCtaTitle"),
@@ -393,6 +399,8 @@ const AUTH_REFRESH_TOKEN_KEY = "wearcast:refresh-token";
 const AUTH_USER_KEY = "wearcast:user";
 const API_BASE = "https://wearcast.fly.dev";
 const GOOGLE_CALLBACK_PATH = "/oauth2redirect/google";
+const SIGNED_OUT_WARDROBE_ITEM_LIMIT = 5;
+const WARDROBE_PROMPT_EARLY_USE_DAY_LIMIT = 7;
 const FREE_WARDROBE_ITEM_LIMIT = 15;
 const FREE_SAVED_LOOK_LIMIT = 3;
 const FREE_PHOTO_SCANS_PER_WINDOW = 5;
@@ -621,6 +629,10 @@ function bindNativeGoogleAuth() {
     await handleGoogleAuthRedirect(url, { closeBrowser: true });
   });
 
+  appPlugin.addListener?.("appStateChange", ({ isActive }) => {
+    if (isActive) resetWardrobePromptSessionDismissal();
+  });
+
   appPlugin.getLaunchUrl?.().then(async ({ url }) => {
     if (url) await handleGoogleAuthRedirect(url, { closeBrowser: true });
   }).catch(() => {});
@@ -642,12 +654,12 @@ function updateAuthUI() {
   syncAccountButton(els.userBtnAvatar, els.userBtnIcon);
   syncAccountButton(els.todayUserBtnAvatar, els.todayUserBtnIcon);
 
-  // Toggle wardrobe auth gate
+  // Signed-out users can build a small local trial wardrobe. The account prompt
+  // now lives inside the wardrobe surface instead of blocking the tab.
   const loggedIn = isLoggedIn();
-  if (els.wardrobeAuthGate) els.wardrobeAuthGate.style.display = loggedIn ? "none" : "flex";
-  if (els.wardrobeContent) els.wardrobeContent.style.display = loggedIn ? "" : "none";
-  if (els.addItemBtn && !loggedIn) els.addItemBtn.style.display = "none";
-  if (els.wardrobeSyncPrompt) els.wardrobeSyncPrompt.style.display = loggedIn ? "none" : "none";
+  if (els.wardrobeAuthGate) els.wardrobeAuthGate.style.display = "none";
+  if (els.wardrobeContent) els.wardrobeContent.style.display = "";
+  if (els.wardrobeSyncPrompt && loggedIn) els.wardrobeSyncPrompt.style.display = "none";
   renderSettingsUI();
 }
 
@@ -661,6 +673,7 @@ const DEFAULT_STATE = {
     signature: "",
     updatedAt: null,
   },
+  recommendationCache: [],
   productValidation: {
     tabs: {
       tabToday: { opens: 0, dwellMs: 0 },
@@ -757,9 +770,12 @@ let activeOnboardingSlide = 0;
 let activeItemStarterPreset = null;
 let activePaywallPlan = "annual";
 let subscriptionCatalog = {};
+let subscriptionProductsLoadAttempted = false;
 let subscriptionRefreshPromise = null;
 let latestWeatherSnapshot = null;
 let latestRecommendationSnapshot = null;
+let wardrobePromptDismissedThisSession = false;
+let pendingLocalWardrobeConsentPreset = null;
 let isWeatherExpanded = false;
 const TAB_ORDER = ["tabToday", "tabWardrobe"];
 const ANALYTICS_EVENT_HISTORY_LIMIT = 40;
@@ -832,6 +848,7 @@ function loadState() {
         photoScans: Array.isArray(parsed.usage?.photoScans) ? parsed.usage.photoScans : [],
         successfulUseDays: Array.isArray(parsed.usage?.successfulUseDays) ? parsed.usage.successfulUseDays : [],
       },
+      recommendationCache: Array.isArray(parsed.recommendationCache) ? parsed.recommendationCache : [],
       prefs: { ...DEFAULT_STATE.prefs, ...(parsed.prefs || {}) },
     };
   } catch {
@@ -872,6 +889,7 @@ function saveState(partial) {
       photoScans: Array.isArray(partial.usage?.photoScans) ? partial.usage.photoScans : prev.usage?.photoScans || [],
       successfulUseDays: Array.isArray(partial.usage?.successfulUseDays) ? partial.usage.successfulUseDays : prev.usage?.successfulUseDays || [],
     },
+    recommendationCache: Array.isArray(partial.recommendationCache) ? partial.recommendationCache : prev.recommendationCache || [],
     prefs: { ...prev.prefs, ...(partial.prefs || {}) },
   };
 
@@ -1054,6 +1072,7 @@ function getRecentPhotoScanTimestamps(state = loadState(), now = Date.now()) {
 }
 
 function getRemainingWardrobeSlots(items = loadWardrobe(), state = loadState()) {
+  if (!isLoggedIn()) return Math.max(0, SIGNED_OUT_WARDROBE_ITEM_LIMIT - (Array.isArray(items) ? items.length : 0));
   if (hasPremiumAccess(state)) return Number.POSITIVE_INFINITY;
   return Math.max(0, FREE_WARDROBE_ITEM_LIMIT - (Array.isArray(items) ? items.length : 0));
 }
@@ -1106,6 +1125,7 @@ function hasNativeSubscriptionsPlugin() {
 }
 
 function updateSubscriptionCatalog(products = []) {
+  subscriptionProductsLoadAttempted = true;
   const nextCatalog = {};
   for (const product of Array.isArray(products) ? products : []) {
     if (product?.id) nextCatalog[product.id] = product;
@@ -1125,6 +1145,7 @@ function updateSubscriptionCatalog(products = []) {
   if (els.paywallMonthlyMeta && nextCatalog[PRODUCT_ID_MONTHLY]?.subscriptionPeriod) {
     els.paywallMonthlyMeta.textContent = nextCatalog[PRODUCT_ID_MONTHLY].subscriptionPeriod;
   }
+  setActivePaywallPlan(activePaywallPlan);
 }
 
 function applySubscriptionSnapshot(snapshot = {}) {
@@ -1152,7 +1173,11 @@ function applySubscriptionSnapshot(snapshot = {}) {
 }
 
 async function loadSubscriptionProducts({ force = false } = {}) {
-  if (!hasNativeSubscriptionsPlugin()) return [];
+  if (!hasNativeSubscriptionsPlugin()) {
+    subscriptionProductsLoadAttempted = true;
+    setActivePaywallPlan(activePaywallPlan);
+    return [];
+  }
   if (!force && Object.keys(subscriptionCatalog).length) return Object.values(subscriptionCatalog);
   try {
     const plugin = getSubscriptionsPlugin();
@@ -1163,6 +1188,8 @@ async function loadSubscriptionProducts({ force = false } = {}) {
     updateSubscriptionCatalog(products);
     return products;
   } catch (err) {
+    subscriptionProductsLoadAttempted = true;
+    setActivePaywallPlan(activePaywallPlan);
     console.error("subscription products error:", err);
     return [];
   }
@@ -1211,10 +1238,20 @@ function planHasIntroductoryOffer(plan = activePaywallPlan) {
   return !!product?.introductoryOffer;
 }
 
+function isPaywallProductAvailable(plan = activePaywallPlan) {
+  if (!isLoggedIn()) return true;
+  if (isSelectedCurrentPremiumPlan(plan)) return true;
+  return !!(hasNativeSubscriptionsPlugin() && subscriptionCatalog[getProductIdForPlan(plan)]);
+}
+
 function getPaywallPrimaryLabel(plan = activePaywallPlan, state = loadState()) {
   if (isSelectedCurrentPremiumPlan(plan, state)) return "Current plan";
   if (hasPremiumAccess(state)) return `Switch to ${getPaywallPlanLabel(plan)}`;
   if (!isLoggedIn()) return "Create account";
+  if (!hasNativeSubscriptionsPlugin()) return "Subscription unavailable";
+  if (!subscriptionCatalog[getProductIdForPlan(plan)]) {
+    return subscriptionProductsLoadAttempted ? "Subscription unavailable" : "Loading products...";
+  }
   if (plan === "annual") return "Start 7-day free trial";
   return "Choose monthly";
 }
@@ -1226,6 +1263,9 @@ function setActivePaywallPlan(plan = "annual") {
   });
   if (els.paywallPrimaryBtn) {
     els.paywallPrimaryBtn.textContent = getPaywallPrimaryLabel(activePaywallPlan);
+    els.paywallPrimaryBtn.disabled = isLoggedIn()
+      && !hasPremiumAccess()
+      && !isPaywallProductAvailable(activePaywallPlan);
   }
 }
 
@@ -1362,7 +1402,9 @@ async function purchaseSelectedPlan() {
     return false;
   } finally {
     if (els.paywallPrimaryBtn) {
-      els.paywallPrimaryBtn.disabled = false;
+      els.paywallPrimaryBtn.disabled = isLoggedIn()
+        && !hasPremiumAccess()
+        && !isPaywallProductAvailable(activePaywallPlan);
       els.paywallPrimaryBtn.textContent = getPaywallPrimaryLabel(activePaywallPlan);
     }
   }
@@ -1555,6 +1597,86 @@ function renderSettingsDataUI() {
   }
   if (els.settingsProfileValidationStatus) {
     els.settingsProfileValidationStatus.textContent = summarizeProfileValidationStatus(state);
+  }
+  renderSettingsDiagnosticsUI();
+}
+
+function buildDiagnosticsPayload(extra = {}) {
+  const state = loadState();
+  const analytics = getAnalyticsState(state);
+  return {
+    generatedAt: new Date().toISOString(),
+    appVersion: APP_VERSION,
+    native: isNative,
+    backend: API_BASE,
+    sentryConfigured: sentryConfigured(),
+    subscriptionPluginAvailable: hasNativeSubscriptionsPlugin(),
+    subscriptionProductsLoaded: Object.keys(subscriptionCatalog).length,
+    plan: getPlanSummary(state),
+    signedIn: isLoggedIn(),
+    wardrobeItems: loadWardrobe().length,
+    savedLooks: Array.isArray(state.savedLooks) ? state.savedLooks.length : 0,
+    recentEvents: analytics.lastEvents.slice(-20),
+    ...extra,
+  };
+}
+
+function renderSettingsDiagnosticsUI(extra = {}) {
+  if (els.settingsDiagnosticsStatus) {
+    const productCount = Object.keys(subscriptionCatalog).length;
+    const pluginText = hasNativeSubscriptionsPlugin()
+      ? productCount
+        ? `${productCount} StoreKit product${productCount === 1 ? "" : "s"} loaded`
+        : "StoreKit plugin ready; products not loaded yet"
+      : "StoreKit plugin unavailable in this build";
+    const healthText = extra.backendOk === true
+      ? "Backend healthy"
+      : extra.backendOk === false
+        ? "Backend check failed"
+        : "Backend not checked";
+    els.settingsDiagnosticsStatus.textContent = `${healthText} • ${pluginText} • ${getPlanSummary()}`;
+  }
+  if (els.settingsDiagnosticsEvents) {
+    const recent = getAnalyticsState(loadState()).lastEvents.slice(-8).reverse();
+    els.settingsDiagnosticsEvents.innerHTML = recent.length
+      ? recent.map((event) => `
+        <div class="settings-diagnostics-event">
+          <strong>${escapeHtml(event.name || "event")}</strong>
+          <span>${escapeHtml(formatEventTimestamp(event.at))}</span>
+        </div>
+      `).join("")
+      : `<div class="settings-diagnostics-empty">Recent local app events will appear here.</div>`;
+  }
+}
+
+function formatEventTimestamp(value = "") {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "just now";
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
+async function refreshSettingsDiagnostics() {
+  setSettingsActionBusy(els.settingsDiagnosticsRefreshBtn, true);
+  try {
+    const res = await fetch(`${API_BASE}/api/health`, { cache: "no-store" });
+    renderSettingsDiagnosticsUI({ backendOk: res.ok });
+    setSettingsFeedback(res.ok ? "Diagnostics refreshed. Backend is healthy." : "Diagnostics refreshed. Backend health check failed.", res.ok ? "success" : "warning");
+  } catch (err) {
+    renderSettingsDiagnosticsUI({ backendOk: false });
+    setSettingsFeedback(`Diagnostics refresh failed: ${err.message}`, "warning");
+  } finally {
+    setSettingsActionBusy(els.settingsDiagnosticsRefreshBtn, false);
+  }
+}
+
+async function copySettingsDiagnostics() {
+  const payload = buildDiagnosticsPayload();
+  const text = JSON.stringify(payload, null, 2);
+  try {
+    await navigator.clipboard.writeText(text);
+    setSettingsFeedback("Diagnostics copied.", "success");
+  } catch {
+    setSettingsFeedback("Could not copy diagnostics in this browser.", "warning");
   }
 }
 
@@ -1781,6 +1903,7 @@ function trackTabOpen(tabId, { now = Date.now() } = {}) {
 function resetTodayLocationState() {
   pendingRecommendationPrefs = null;
   lastWeatherForAI = null;
+  els.tabToday?.classList.remove("has-results", "has-recommendation", "has-wardrobe-banner");
   if (els.weatherHero) els.weatherHero.style.display = "none";
   if (els.weatherDetailsCard) {
     els.weatherDetailsCard.style.display = "none";
@@ -1890,14 +2013,27 @@ function completeActivationTune(extra = {}) {
 }
 
 function shouldShowWardrobeUpgradePrompt(items = [], state = loadState()) {
-  const onboarding = getOnboardingState(state);
   const count = Array.isArray(items) ? items.length : 0;
+  const successfulUseDays = Array.isArray(state.usage?.successfulUseDays) ? state.usage.successfulUseDays.length : 0;
+  const isIncompleteStarterWardrobe = count < SIGNED_OUT_WARDROBE_ITEM_LIMIT;
+  const isEarlyUsageWindow = successfulUseDays <= WARDROBE_PROMPT_EARLY_USE_DAY_LIMIT;
   return !!(
-    onboarding.firstRecommendationSeen
-    && onboarding.tuningCompleted
-    && !onboarding.wardrobePromptCompleted
-    && count === 0
+    !wardrobePromptDismissedThisSession
+    && isIncompleteStarterWardrobe
+    && isEarlyUsageWindow
   );
+}
+
+function getPendingRecommendationPromptState(state = loadState()) {
+  const onboarding = getOnboardingState(state);
+  return {
+    ...state,
+    onboarding: {
+      ...onboarding,
+      completed: true,
+      firstRecommendationSeen: true,
+    },
+  };
 }
 
 function completeWardrobeUpgradePrompt(extra = {}) {
@@ -1912,6 +2048,19 @@ function completeWardrobeUpgradePrompt(extra = {}) {
   });
   syncTodayWardrobeDialog(loadWardrobe());
   return nextState;
+}
+
+function dismissWardrobeUpgradePromptForSession() {
+  wardrobePromptDismissedThisSession = true;
+  if (els.todayWardrobeInlineCta) els.todayWardrobeInlineCta.style.display = "none";
+  els.tabToday?.classList.remove("has-wardrobe-banner");
+  syncTodayWardrobeDialog(loadWardrobe());
+}
+
+function resetWardrobePromptSessionDismissal() {
+  if (!wardrobePromptDismissedThisSession) return;
+  wardrobePromptDismissedThisSession = false;
+  syncTodayWardrobeDialog(loadWardrobe());
 }
 
 function updateTodayOnboardingUI(state = loadState()) {
@@ -1932,6 +2081,8 @@ function updateTodayOnboardingUI(state = loadState()) {
   }
   if (showDeck) {
     setActiveOnboardingSlide(activeOnboardingSlide);
+  } else {
+    syncTodayWardrobeDialog(loadWardrobe(), state);
   }
 }
 
@@ -1940,10 +2091,12 @@ function markOnboardingRecommendationSeen() {
   const onboarding = getOnboardingState(state);
   if (onboarding.firstRecommendationSeen && onboarding.completed) {
     updateTodayOnboardingUI(state);
+    syncTodayWardrobeDialog(loadWardrobe());
     return;
   }
 
-  completeOnboarding({ firstRecommendationSeen: true });
+  const nextState = completeOnboarding({ firstRecommendationSeen: true });
+  syncTodayWardrobeDialog(loadWardrobe(), nextState);
 }
 
 function privacyPromptFallback({ source = null } = {}) {
@@ -2481,6 +2634,7 @@ function deriveRecommendation(current, ctx, prefs) {
 
 function renderWeather(current, derived, hourly) {
   // Show hero + hide empty state
+  els.tabToday?.classList.add("has-results");
   els.weatherHero.style.display = "";
   els.emptyState.style.display = "none";
 
@@ -2999,6 +3153,9 @@ function getRecommendationFallbackPhoto(label = "", value = "") {
     if (/\bbag|tote|backpack\b/.test(text)) return "assets/recommendation-stock/accessory-tote-bag-studio.jpg";
     return "assets/recommendation-stock/accessory-watch-studio.jpg";
   }
+  if (slotKey === "top" && /\b(thermal|base layer|baselayer|wool|merino|sweater|jumper|pullover|knit)\b/.test(text)) {
+    return "assets/recommendation-stock/top-knit-sweater-hanger-studio.jpg";
+  }
   return {
     top: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
     pants: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
@@ -3420,42 +3577,121 @@ function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
     : [];
   if (!photoItems.length) return {};
 
+  const inferClientRecommendationSubtype = (slotKey, text = "") => {
+    const slot = String(slotKey || "").toLowerCase();
+    const valueText = normalizeItemLabel(text).toLowerCase();
+    if (!valueText) return "";
+    if (slot === "top") {
+      if (/\b(sweater dress|knit dress|dress)\b/.test(valueText)) return "dress";
+      if (/\b(thermal|base layer|baselayer)\b/.test(valueText)) return "thermal";
+      if (/\bcardigan\b/.test(valueText)) return "cardigan";
+      if (/\bhoodie\b/.test(valueText)) return "hoodie";
+      if (/\bpolo\b/.test(valueText)) return "polo";
+      if (/\b(t-?shirt|tee)\b/.test(valueText)) return "tee";
+      if (/\b(sweater|jumper|pullover|crewneck|knit|merino)\b/.test(valueText)) return "sweater";
+      if (/\bshirt|button[-\s]?up|oxford|blouse\b/.test(valueText)) return "shirt";
+    }
+    if (slot === "bottom") {
+      if (/\bjeans?|denim\b/.test(valueText)) return "jeans";
+      if (/\bchinos?\b/.test(valueText)) return "chinos";
+      if (/\bshorts?\b/.test(valueText)) return "shorts";
+      if (/\bskirt\b/.test(valueText)) return "skirt";
+      if (/\btrousers?|pants|slacks?\b/.test(valueText)) return "trousers";
+    }
+    if (slot === "outer") {
+      if (/\bfleece|sherpa\b/.test(valueText)) return "fleece";
+      if (/\brain|waterproof|shell|weatherproof|windbreaker\b/.test(valueText)) return "shell";
+      if (/\bparka|puffer|down\b/.test(valueText)) return "parka";
+      if (/\bcoat|overcoat|trench\b/.test(valueText)) return "coat";
+      if (/\bhoodie\b/.test(valueText)) return "hoodie";
+      if (/\bovershirt|shacket|shirt jacket\b/.test(valueText)) return "overshirt";
+      if (/\bjacket\b/.test(valueText)) return "jacket";
+    }
+    if (slot === "shoes") {
+      if (/\bboot|chelsea\b/.test(valueText)) return "boots";
+      if (/\bsneakers?|trainers?|runners?\b/.test(valueText)) return "sneakers";
+      if (/\bloafer|oxford|derby|brogue\b/.test(valueText)) return "dress-shoes";
+      if (/\bsandal|slide\b/.test(valueText)) return "sandals";
+    }
+    if (slot === "accessory") {
+      if (/\bbaseball cap|dad cap|snapback|cap\b/.test(valueText)) return "baseball-cap";
+      if (/\bgloves?\b/.test(valueText)) return "gloves";
+      if (/\bbeanie|beret\b/.test(valueText)) return "beanie";
+      if (/\bsunglasses?\b/.test(valueText)) return "sunglasses";
+      if (/\bwatch\b/.test(valueText)) return "watch";
+      if (/\bbag|tote|backpack|clutch\b/.test(valueText)) return "bag";
+    }
+    return "";
+  };
+
   const scoredMatchFor = (slotKey, value) => {
     const normalizedValue = normalizeItemLabel(value).toLowerCase();
     if (!normalizedValue) return null;
     const wantedType = normalizeWardrobeType(slotKey);
     const wantedTokens = normalizedValue.split(/\s+/).filter((token) => token.length > 2);
+    const wantedSubtype = inferClientRecommendationSubtype(wantedType, normalizedValue);
 
     let best = null;
     let bestScore = 0;
+    let bestReasons = [];
 
     for (const item of photoItems) {
       const itemType = normalizeWardrobeType(item.type);
       if (wantedType && itemType && itemType !== wantedType) continue;
 
       const itemName = normalizeItemLabel(item.name).toLowerCase();
+      const itemText = normalizeItemLabel(`${item.name || ""} ${item.type || ""} ${item.color || ""} ${item.material || ""}`).toLowerCase();
       if (!itemName) continue;
+      const itemSubtype = inferClientRecommendationSubtype(wantedType, item.name)
+        || inferClientRecommendationSubtype(wantedType, item.type)
+        || inferClientRecommendationSubtype(wantedType, itemText);
 
       let score = 0;
-      if (itemName === normalizedValue) score += 10;
-      if (itemName.includes(normalizedValue) || normalizedValue.includes(itemName)) score += 6;
+      const reasons = [];
+      const exactName = itemName === normalizedValue;
+      const nameContains = itemName.includes(normalizedValue) || normalizedValue.includes(itemName);
+      if (exactName) {
+        score += 14;
+        reasons.push("exact_name");
+      }
+      if (nameContains) {
+        score += 10;
+        reasons.push("name_contains");
+      }
+      if (wantedSubtype && itemSubtype && wantedSubtype === itemSubtype) {
+        score += 8;
+        reasons.push("subtype_match");
+      } else if (wantedSubtype && itemSubtype && !nameContains) {
+        score -= 12;
+        reasons.push("subtype_mismatch");
+      }
 
-      const itemTokens = itemName.split(/\s+/).filter((token) => token.length > 2);
+      const itemTokens = itemText.split(/\s+/).filter((token) => token.length > 2);
       const overlap = wantedTokens.filter((token) => itemTokens.includes(token)).length;
-      score += overlap * 2;
+      if (overlap) {
+        score += overlap * 2;
+        reasons.push("token_overlap");
+      }
 
-      if (wantedTokens.length && overlap === wantedTokens.length) score += 2;
+      if (wantedTokens.length && overlap === wantedTokens.length) {
+        score += 3;
+        reasons.push("all_tokens_match");
+      }
 
       if (score > bestScore) {
         bestScore = score;
         best = item;
+        bestReasons = reasons;
       }
     }
 
-    if (!best || bestScore < 6) return null;
+    if (!best || bestScore < 12) return null;
     return {
       path: getItemDisplayPhoto(best),
       source: "wardrobe",
+      matchQuality: bestScore >= 22 ? "strong_local_wardrobe" : "local_wardrobe",
+      matchScore: bestScore,
+      matchReasons: bestReasons,
       itemId: best.id ?? null,
       itemName: best.name || "",
       color: best.color || "",
@@ -3479,7 +3715,8 @@ function mergeRecommendationImageMatches(serverMatches = {}, wardrobeMatches = {
   Object.entries(wardrobeMatches || {}).forEach(([key, match]) => {
     if (!match || match.source !== "wardrobe") return;
     const serverMatch = merged[key];
-    if (!serverMatch || serverMatch.source !== "wardrobe") {
+    if (serverMatch?.source === "wardrobe") return;
+    if (!serverMatch || Number(match.matchScore || 0) >= 18) {
       merged[key] = match;
     }
   });
@@ -3664,14 +3901,23 @@ function renderRecommendationWardrobeLoop(summary, data) {
   const missingItems = Array.isArray(data?.missingItems) ? data.missingItems.filter(Boolean) : [];
   const currentSignature = buildLookSignature(data?.outfit || {});
   const isAlreadySaved = savedLooks.some((entry) => entry.signature === currentSignature);
+  const matchedCount = Number(summary?.matchedCount || 0);
+  const totalCount = Number(summary?.totalCount || 0);
+  const missingCount = Number(summary?.missingCount || 0);
+  const matchHeadline = matchedCount
+    ? `${matchedCount} of ${totalCount || 0} pieces already match what you own`
+    : "Add your first pieces to make this look yours";
+  const matchCopy = matchedCount
+    ? (missingCount ? `${missingCount} piece${missingCount === 1 ? "" : "s"} still need a match, so this look is partly grounded in your closet already.` : "This look is fully grounded in your real wardrobe, so it should be easy to wear today.")
+    : "Add a few staples and WearCast can replace these suggestions with clothes you actually own.";
 
   return `
     <section class="today-wardrobe-loop">
       <div class="today-wardrobe-loop-summary">
         <div>
           <span class="today-cta-kicker">From your wardrobe</span>
-          <strong>${summary.matchedCount} of ${summary.totalCount || 0} pieces already match what you own</strong>
-          <p>${summary.missingCount ? `${summary.missingCount} piece${summary.missingCount === 1 ? "" : "s"} still need a match, so this look is partly grounded in your closet already.` : "This look is fully grounded in your real wardrobe, so it should be easy to wear today."}</p>
+          <strong>${matchHeadline}</strong>
+          <p>${matchCopy}</p>
         </div>
         <div class="today-wardrobe-loop-metrics">
           <span class="today-rec-meta-chip">${escapeHtml(describeRecommendationCoverage(summary))}</span>
@@ -4364,6 +4610,38 @@ function renderRecommendationFeedbackPanel() {
   `;
 }
 
+function renderActivationTunePrompt(state = loadState()) {
+  if (!shouldPromptActivationTune(state)) return "";
+  const analytics = getAnalyticsState(state);
+  if (!analytics.activationTunePromptSeen) {
+    window.setTimeout(() => {
+      const latest = loadState();
+      const latestAnalytics = getAnalyticsState(latest);
+      if (latestAnalytics.activationTunePromptSeen || !shouldPromptActivationTune(latest)) return;
+      trackAnalyticsEvent("activation_tune_prompt_viewed", { title: "activation_tune_prompt_viewed" });
+      saveState({
+        analytics: {
+          ...latestAnalytics,
+          activationTunePromptSeen: true,
+        },
+      });
+    }, 0);
+  }
+  return `
+    <section class="today-activation-tune-panel" aria-label="Recommendation tuning">
+      <div class="today-activation-tune-copy">
+        <span class="today-cta-kicker">Make it yours</span>
+        <strong>Want the next recommendation to fit your day better?</strong>
+        <p>Answer a few quick questions about warmth, plans, and style. WearCast will refresh today’s look without losing the weather logic.</p>
+      </div>
+      <div class="today-activation-tune-actions">
+        <button type="button" class="btn-primary-sm" data-rec-action="activation-tune">Adjust</button>
+        <button type="button" class="today-details-button" data-rec-action="skip-activation-tune">Maybe later</button>
+      </div>
+    </section>
+  `;
+}
+
 function buildAlternatives(outfit, weather) {
   const alternatives = [];
   const outer = normalizeItemLabel(outfit.outer);
@@ -4699,9 +4977,6 @@ async function runForLocation(loc) {
     renderWeather(current, ctx, data.hourly);
     setEmptyStateLoading(false);
 
-    // AI recommendation (non-blocking)
-    fetchAIRecommendation(data, current, ctx);
-
     const updated = new Date(data.current.time || Date.now());
     els.updatedAt.textContent = `Updated ${updated.toLocaleString()}`;
     latestWeatherSnapshot = {
@@ -4713,6 +4988,10 @@ async function runForLocation(loc) {
 
     setStatus(`Using: ${loc.name}`);
     saveState({ lastLocation: loc });
+
+    // AI recommendation (non-blocking). Save location first so the request
+    // and cache key are based on the just-fetched place.
+    fetchAIRecommendation(data, current, ctx, loc);
   } catch (err) {
     console.error(err);
     setEmptyStateLoading(false);
@@ -4722,6 +5001,8 @@ async function runForLocation(loc) {
 
 async function onSearch() {
   const query = (els.placeInput.value || "").trim();
+  hideAC();
+  els.placeInput?.blur?.();
   if (!query) {
     setStatus("Enter a location (e.g., \"Berlin\") or use \"Use my location\".");
     return;
@@ -4749,6 +5030,7 @@ async function onSearch() {
       source: shouldShowOnboardingDeck(loadState()) ? "onboarding" : "today",
       locationName: loc.name || "",
     });
+    hideAC();
     await runForLocation(loc);
   } catch (err) {
     trackAnalyticsEvent("location_search_failed", {
@@ -5107,6 +5389,8 @@ function bindSettingsUI() {
     setSettingsFeedback("");
     showConsentDialog({ forceModal: true, source: "settings" });
   });
+  els.settingsDiagnosticsRefreshBtn?.addEventListener("click", refreshSettingsDiagnostics);
+  els.settingsDiagnosticsCopyBtn?.addEventListener("click", copySettingsDiagnostics);
   els.settingsClearLocationBtn?.addEventListener("click", async () => {
     setSettingsActionBusy(els.settingsClearLocationBtn, true);
     try {
@@ -5330,6 +5614,10 @@ function bindConsentUI() {
     saveConsent({ seen: true, functionalStorage: false, deviceLocation: false });
     closeConsentDialog();
     renderWardrobe();
+    if (source === "local_wardrobe") {
+      pendingLocalWardrobeConsentPreset = null;
+      showAppToast("Local wardrobe storage is off, so staples cannot be saved on this device.", "warning");
+    }
     if (source === "settings") {
       setSettingsFeedback(`Privacy choices saved. ${summarizeConsentSettings()}`, "success");
     }
@@ -5351,6 +5639,17 @@ function bindConsentUI() {
 
     closeConsentDialog();
     renderWardrobe();
+
+    if (source === "local_wardrobe") {
+      if (canUseFunctionalStorage()) {
+        const preset = pendingLocalWardrobeConsentPreset;
+        pendingLocalWardrobeConsentPreset = null;
+        window.setTimeout(() => openItemDialog(null, preset), 160);
+      } else {
+        pendingLocalWardrobeConsentPreset = null;
+        showAppToast("Local wardrobe storage is off, so staples cannot be saved on this device.", "warning");
+      }
+    }
 
     if (source === "settings") {
       setSettingsFeedback(`Privacy choices saved. ${summarizeConsentSettings()}`, "success");
@@ -5557,17 +5856,65 @@ async function syncLocalWardrobeToServer() {
   // Upload localStorage items to server for first-time login migration
   const local = loadWardrobeLocal();
   if (!local.length) return;
+  trackAnalyticsEvent("local_wardrobe_sync_started", {
+    title: "local_wardrobe_sync_started",
+    localItemCount: local.length,
+  });
+  let syncedCount = 0;
+  let skippedCount = 0;
+  let failedCount = 0;
   for (const item of local) {
     try {
+      if (!_wardrobeCache) {
+        try {
+          _wardrobeCache = await fetchWardrobeFromServer();
+        } catch {
+          _wardrobeCache = [];
+        }
+      }
+      const signature = normalizeItemSignature(item);
+      const duplicate = (_wardrobeCache || []).some((serverItem) => normalizeItemSignature(serverItem) === signature);
+      if (duplicate) {
+        skippedCount += 1;
+        continue;
+      }
       await authFetch(`${API_BASE}/api/wardrobe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(item),
       });
-    } catch {}
+      syncedCount += 1;
+    } catch (err) {
+      failedCount += 1;
+      trackAnalyticsEvent("local_wardrobe_sync_failed", {
+        title: "local_wardrobe_sync_failed",
+        reason: err?.message || "error",
+      });
+    }
   }
-  // Clear local wardrobe after sync
-  localStorage.removeItem(WARDROBE_KEY);
+  if (failedCount === 0) {
+    // Clear local wardrobe after all local-only items are either synced or skipped as duplicates.
+    localStorage.removeItem(WARDROBE_KEY);
+    _wardrobeCache = null;
+  }
+  trackAnalyticsEvent("local_wardrobe_sync_completed", {
+    title: "local_wardrobe_sync_completed",
+    syncedCount,
+    skippedCount,
+    failedCount,
+  });
+  if (typeof showAppToast === "function") {
+    if (failedCount) {
+      showAppToast("Signed in, but a few local wardrobe items still need to sync. Try again from Wardrobe.", "warning");
+    } else {
+      showAppToast(
+        syncedCount
+          ? `Wardrobe synced. ${syncedCount} item${syncedCount === 1 ? "" : "s"} moved to your account.`
+          : "Wardrobe synced. No duplicate items were added.",
+        "success"
+      );
+    }
+  }
 }
 
 function typeEmoji(type) {
@@ -5869,7 +6216,7 @@ function buildWardrobeItemCard(item = {}) {
   const recommendationUsage = getItemRecommendationUsage(normalizedItem);
   const isHighlighted = highlightedWardrobeItemIds.includes(String(normalizedItem.id));
   const photoHtml = displayPhoto
-    ? `<img class="wardrobe-item-photo" src="${escapeHtml(displayPhoto)}" alt="" />`
+    ? `<img class="wardrobe-item-photo" src="${escapeHtml(displayPhoto)}" alt="" loading="lazy" decoding="async" draggable="false" />`
     : `<div class="wardrobe-item-placeholder" aria-hidden="true">${typeEmoji(normalizedItem.type)}</div>`;
   const meta = [
     getWardrobeSubtype(normalizedItem) || getWardrobeCategoryLabel(getWardrobeCategory(normalizedItem)),
@@ -6411,12 +6758,28 @@ async function toggleWardrobeFavorite(itemId) {
   showAppToast(nextItem.favorite ? "Added to favorites" : "Removed from favorites", "success");
 }
 
-function syncTodayWardrobeDialog(items) {
+function syncTodayWardrobeDialog(items, state = loadState()) {
+  const count = Array.isArray(items) ? items.length : 0;
+  const starterReady = isWardrobeStarterReady(items);
+  const showInlinePrompt = shouldShowWardrobeUpgradePrompt(items, state);
   if (els.todayWardrobeInlineCta) {
-    els.todayWardrobeInlineCta.style.display = "none";
+    els.todayWardrobeInlineCta.style.display = showInlinePrompt ? "" : "none";
   }
-  const showInlinePrompt = false;
-  const analytics = getAnalyticsState(loadState());
+  els.tabToday?.classList.toggle("has-wardrobe-banner", !!showInlinePrompt);
+  const title = els.todayWardrobeInlineCta?.querySelector("strong");
+  const copy = els.todayWardrobeInlineCta?.querySelector("p");
+  if (title) {
+    title.textContent = count > 0
+      ? `Add ${Math.max(1, 5 - count)} more staple${5 - count === 1 ? "" : "s"}`
+      : "Add 5 staples";
+  }
+  if (copy) {
+    copy.textContent = "Get outfit picks from your closet.";
+  }
+  if (els.todayWardrobeInlineBtn) {
+    els.todayWardrobeInlineBtn.textContent = count ? "Add items" : "Start";
+  }
+  const analytics = getAnalyticsState(state);
   if (showInlinePrompt && !analytics.wardrobePromptSeen) {
     trackAnalyticsEvent("wardrobe_prompt_viewed", { title: "wardrobe_prompt_viewed" });
     saveState({
@@ -7811,11 +8174,12 @@ function updateItemSaveState() {
     const showEditDetails = itemFlowStep === "confirm" && !itemBatchItems.length;
     els.itemEditDetailsBtn.style.display = showEditDetails ? "inline-flex" : "none";
     els.itemEditDetailsBtn.disabled = busy;
-    els.itemEditDetailsBtn.textContent = itemMoreDetailsOpen ? "Hide details" : "More details";
+    els.itemEditDetailsBtn.textContent = itemMoreDetailsOpen ? "Hide color, material, care" : "Color, material, care";
   }
   if (els.itemBackBtn) {
     els.itemBackBtn.style.display = (editingItemId || itemFlowStep === "review" || itemFlowStep === "confirm") ? "inline-flex" : "none";
     els.itemBackBtn.disabled = busy;
+    els.itemBackBtn.textContent = itemFlowStep === "confirm" && !editingItemId ? "Add/change photo" : "Back";
   }
 }
 
@@ -7863,6 +8227,7 @@ function setItemMoreDetailsOpen(open = false) {
 function setItemFlowStep(step, { focus = false } = {}) {
   itemFlowStep = step;
   els.itemDialog?.classList.toggle("is-review-mode", step === "review" && !editingItemId);
+  els.itemDialog?.classList.toggle("is-confirm-mode", step === "confirm" && !editingItemId);
   document.querySelectorAll("[data-item-step-panel]").forEach((panel) => {
     if (panel.id === "itemConfirmDetailsPanel") {
       panel.style.display = panel.dataset.itemStepPanel === step && itemMoreDetailsOpen ? "" : "none";
@@ -8209,16 +8574,28 @@ async function processSelectedItemPhotos(files, { reset = true } = {}) {
   const state = loadState();
   const remainingScans = getRemainingPhotoScans(state);
   if (!hasPremiumAccess(state) && remainingScans <= 0) {
-    openPaywall("scan_cap", { source: "wardrobe-scan" });
-    showAppToast("You have used this week’s free scans. Go premium for unlimited wardrobe scans.", "warning");
-    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap" });
+    if (!isLoggedIn()) {
+      showAuthDialog("scan_cap");
+      showAppToast("Create an account to sync your starter wardrobe and continue scanning.", "warning");
+      trackAnalyticsEvent("local_wardrobe_limit_hit", { title: "local_wardrobe_limit_hit:scan_cap" });
+    } else {
+      openPaywall("scan_cap", { source: "wardrobe-scan" });
+      showAppToast("You have used this week’s free scans. Go premium for unlimited wardrobe scans.", "warning");
+      trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap" });
+    }
     return false;
   }
   if (!hasPremiumAccess(state) && usableFiles.length > remainingScans) {
     usableFiles = usableFiles.slice(0, remainingScans);
-    openPaywall("scan_cap", { source: "wardrobe-scan-partial" });
-    showAppToast(`Free includes ${FREE_PHOTO_SCANS_PER_WINDOW} scans per week. Processing your next ${remainingScans} photo${remainingScans === 1 ? "" : "s"} now.`, "warning");
-    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap_partial" });
+    if (!isLoggedIn()) {
+      showAuthDialog("scan_cap_partial");
+      showAppToast(`Processing your next ${remainingScans} starter scan${remainingScans === 1 ? "" : "s"}. Create an account to continue after that.`, "warning");
+      trackAnalyticsEvent("local_wardrobe_limit_hit", { title: "local_wardrobe_limit_hit:scan_cap_partial" });
+    } else {
+      openPaywall("scan_cap", { source: "wardrobe-scan-partial" });
+      showAppToast(`Free includes ${FREE_PHOTO_SCANS_PER_WINDOW} scans per week. Processing your next ${remainingScans} photo${remainingScans === 1 ? "" : "s"} now.`, "warning");
+      trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:scan_cap_partial" });
+    }
   }
   const existingAcceptedPhotos = itemImportSession.acceptedPhotos || 0;
   const existingRejectedPhotos = itemImportSession.rejectedPhotos || 0;
@@ -8380,9 +8757,18 @@ async function persistNewWardrobeItems(itemsToSave) {
         body: JSON.stringify(normalized),
       });
       const data = await res.json().catch(() => ({}));
-      if (res.status === 401) return null;
-      if (!res.ok) throw new Error(data.error || "Could not save wardrobe item");
-      savedItems.unshift(data);
+      if (res.status === 401) {
+        if (isLoggedIn()) return null;
+        savedItems.unshift({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          ...normalized,
+          createdAt: new Date().toISOString(),
+        });
+      } else if (!res.ok) {
+        throw new Error(data.error || "Could not save wardrobe item");
+      } else {
+        savedItems.unshift(data);
+      }
     } else {
       savedItems.unshift({
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -8401,7 +8787,7 @@ async function persistNewWardrobeItems(itemsToSave) {
     skippedItems,
     limitHit: limitSkippedItems.length
       ? {
-          trigger: "wardrobe_cap",
+          trigger: isLoggedIn() ? "wardrobe_cap" : "local_wardrobe_cap",
           skippedCount: limitSkippedItems.length,
         }
       : null,
@@ -8487,6 +8873,18 @@ function handleItemBackAction() {
 }
 
 function openItemDialog(item = null, preset = null) {
+  if (!item && !isLoggedIn() && !canUseFunctionalStorage()) {
+    pendingLocalWardrobeConsentPreset = preset?.type ? preset : null;
+    showConsentDialog({ forceModal: true, source: "local_wardrobe" });
+    showAppToast("Enable functional storage to save a local starter wardrobe on this device.", "warning");
+    return;
+  }
+  if (!item && !isLoggedIn() && loadWardrobeLocal().length >= SIGNED_OUT_WARDROBE_ITEM_LIMIT) {
+    trackAnalyticsEvent("local_wardrobe_limit_hit", { title: "local_wardrobe_limit_hit:open_item" });
+    showAuthDialog("local_wardrobe_cap");
+    showAppToast(`Your local starter wardrobe is full at ${SIGNED_OUT_WARDROBE_ITEM_LIMIT} items. Create an account to sync and keep building.`, "warning");
+    return;
+  }
   activeItemStarterPreset = preset?.type ? preset : null;
   editingItemId = item?.id || null;
   isSavingItem = false;
@@ -8665,9 +9063,15 @@ async function saveItem() {
       const skippedCount = result.skippedItems.length;
       if (!savedCount) {
         if (result.limitHit) {
-          openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount });
-          showAppToast(`Your free closet is full at ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep building your wardrobe.`, "warning");
-          trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
+          if (result.limitHit.trigger === "local_wardrobe_cap") {
+            showAuthDialog("local_wardrobe_cap");
+            showAppToast(`Your local starter wardrobe is full at ${SIGNED_OUT_WARDROBE_ITEM_LIMIT} items. Create an account to sync and keep building.`, "warning");
+            trackAnalyticsEvent("local_wardrobe_limit_hit", { title: "local_wardrobe_limit_hit" });
+          } else {
+            openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount });
+            showAppToast(`Your free closet is full at ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep building your wardrobe.`, "warning");
+            trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
+          }
         }
         setItemFlowStep(itemBatchItems.length ? "review" : "confirm", { focus: !itemBatchItems.length });
         setItemFormError(skippedCount ? "Those items already exist in your wardrobe. Adjust the details or use a different photo." : "No items were saved.");
@@ -8709,10 +9113,21 @@ async function saveItem() {
             onClick: () => openItemDialog(null, getStarterTypePreset(getStarterTypeForLabel(momentum.nextLabel))),
           }
         : {});
+      if (!isLoggedIn() && savedCount) {
+        trackAnalyticsEvent("local_wardrobe_item_added", {
+          title: "local_wardrobe_item_added",
+          totalWardrobeItems: latestItems.length,
+        });
+      }
       if (result.limitHit) {
-        window.setTimeout(() => openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount }), 180);
-        trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
-      } else if (!hadPremiumBeforeSave && currentItemsBeforeSave.length < 5 && latestItems.length >= 5) {
+        if (result.limitHit.trigger === "local_wardrobe_cap") {
+          window.setTimeout(() => showAuthDialog("local_wardrobe_cap"), 180);
+          trackAnalyticsEvent("local_wardrobe_limit_hit", { title: "local_wardrobe_limit_hit" });
+        } else {
+          window.setTimeout(() => openPaywall(result.limitHit.trigger, { source: "wardrobe-save", skippedCount: result.limitHit.skippedCount }), 180);
+          trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
+        }
+      } else if (isLoggedIn() && !hadPremiumBeforeSave && currentItemsBeforeSave.length < 5 && latestItems.length >= 5) {
         window.setTimeout(() => openPaywall("starter_ready", { source: "starter-milestone" }), 180);
       }
       return true;
@@ -9688,9 +10103,124 @@ let lastWeatherForAI = null;
 const RECOMMENDATION_DECK_HINT_KEY = "wearcastRecommendationDeckHintSeen";
 let activeRecommendationRequestId = 0;
 let activeRecommendationController = null;
+const RECOMMENDATION_CLIENT_CACHE_LIMIT = 8;
+const RECOMMENDATION_CLIENT_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 function wait(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function recommendationCacheBucket(value, size, fallback = null) {
+  if (value === null || value === undefined || value === "") return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.round(n / size) * size : fallback;
+}
+
+function recommendationCacheWeatherFamily(label = "") {
+  const text = String(label || "").toLowerCase();
+  if (/thunder|storm/.test(text)) return "storm";
+  if (/snow|sleet|freezing/.test(text)) return "snow";
+  if (/rain|drizzle|shower/.test(text)) return "rain";
+  if (/fog|mist|haze/.test(text)) return "fog";
+  if (/clear|sun/.test(text)) return "clear";
+  if (/cloud|overcast/.test(text)) return "cloud";
+  return text.slice(0, 24);
+}
+
+function buildRecommendationClientCacheKey({ weather, wardrobe, preferences, location }) {
+  const remaining = weather?.remainingForecast || {};
+  return JSON.stringify({
+    v: 2,
+    location: {
+      name: String(location?.name || "").trim().toLowerCase(),
+      lat: recommendationCacheBucket(location?.lat, 0.05),
+      lon: recommendationCacheBucket(location?.lon, 0.05),
+    },
+    weather: {
+      temp: recommendationCacheBucket(weather?.temperature, 2, 0),
+      feelsLike: recommendationCacheBucket(weather?.feelsLike, 2, 0),
+      wind: recommendationCacheBucket(weather?.wind, 5, 0),
+      precipProb: recommendationCacheBucket(weather?.precipProb, 10, 0),
+      family: recommendationCacheWeatherFamily(weather?.weatherLabel),
+      day: weather?.isDay === false ? "night" : "day",
+      laterTemp: remaining.tempRange || "",
+      laterFeels: remaining.feelsLikeRange || "",
+      laterWind: remaining.maxWind || "",
+      laterRain: remaining.maxPrecipProb || "",
+    },
+    wardrobe: Array.isArray(wardrobe)
+      ? wardrobe.map((item) => ({
+          id: item.id || null,
+          type: String(item.type || "").toLowerCase(),
+          name: String(item.name || "").toLowerCase(),
+          color: String(item.color || "").toLowerCase(),
+          material: String(item.material || "").toLowerCase(),
+          favorite: !!item.favorite,
+        })).sort((a, b) => String(a.id || a.name || "").localeCompare(String(b.id || b.name || "")))
+      : [],
+    preferences: {
+      cold: !!preferences?.cold,
+      hot: !!preferences?.hot,
+      activityContext: preferences?.activityContext || "everyday",
+      locationContext: preferences?.locationContext || "mixed",
+      styleFocus: preferences?.styleFocus || "auto",
+      gender: preferences?.gender || "unspecified",
+      fashionNotes: String(preferences?.fashionNotes || "").trim().toLowerCase().slice(0, 120),
+    },
+  });
+}
+
+function sanitizeRecommendationImagesForCache(outfitImages = {}) {
+  if (!outfitImages || typeof outfitImages !== "object") return {};
+  return Object.fromEntries(Object.entries(outfitImages).filter(([, match]) => {
+    const path = String(match?.path || "");
+    return match && match.source !== "wardrobe" && !path.startsWith("data:");
+  }));
+}
+
+function trimRecommendationForClientCache(data = {}) {
+  return {
+    outlook: data.outlook || null,
+    outfit: data.outfit || null,
+    slotReasons: data.slotReasons || {},
+    itemDetails: data.itemDetails || {},
+    reasoning: data.reasoning || "",
+    detailsOverview: data.detailsOverview || null,
+    warnings: Array.isArray(data.warnings) ? data.warnings.slice(0, 1) : [],
+    missingItems: Array.isArray(data.missingItems) ? data.missingItems.slice(0, 1) : [],
+    trustSignals: data.trustSignals || null,
+    outfitImages: sanitizeRecommendationImagesForCache(data.outfitImages || {}),
+  };
+}
+
+function getCachedRecommendationForRequest(cacheKey) {
+  const now = Date.now();
+  const state = loadState();
+  const cache = Array.isArray(state.recommendationCache) ? state.recommendationCache : [];
+  return cache.find((entry) =>
+    entry?.cacheKey === cacheKey &&
+    entry?.data?.outfit &&
+    Number.isFinite(Number(entry.savedAt)) &&
+    now - Number(entry.savedAt) <= RECOMMENDATION_CLIENT_CACHE_TTL_MS
+  ) || null;
+}
+
+function saveRecommendationCacheEntry(cacheKey, data, context = {}) {
+  if (!cacheKey || !data?.outfit) return;
+  const state = loadState();
+  const cache = Array.isArray(state.recommendationCache) ? state.recommendationCache : [];
+  const nextEntry = {
+    cacheKey,
+    savedAt: Date.now(),
+    data: trimRecommendationForClientCache(data),
+    weather: context.weather || null,
+  };
+  saveState({
+    recommendationCache: [
+      nextEntry,
+      ...cache.filter((entry) => entry?.cacheKey !== cacheKey),
+    ].slice(0, RECOMMENDATION_CLIENT_CACHE_LIMIT),
+  });
 }
 
 function hasRecommendationCardContent() {
@@ -9747,7 +10277,7 @@ function animateRecommendationRefreshIn() {
   }, 360);
 }
 
-async function fetchAIRecommendation(weatherData, current, ctx) {
+async function fetchAIRecommendation(weatherData, current, ctx, locationOverride = null) {
   const wardrobe = loadWardrobe().map(({ id, type, name, color, material, careInstructions, photoDataUrl, sourcePhotoDataUrl, cropPhotoDataUrl, cropConfidence, favorite }) => ({
     id,
     type,
@@ -9762,11 +10292,12 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     favorite: !!favorite,
   }));
   const state = loadState();
-  const location = state.lastLocation
+  const sourceLocation = locationOverride || state.lastLocation;
+  const location = sourceLocation
     ? {
-        lat: Number(state.lastLocation.lat),
-        lon: Number(state.lastLocation.lon),
-        name: state.lastLocation.name || null,
+        lat: Number(sourceLocation.lat),
+        lon: Number(sourceLocation.lon),
+        name: sourceLocation.name || null,
       }
     : null;
 
@@ -9857,12 +10388,25 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     ...state.prefs,
     fashionNotes: state.prefs.fashionNotes || null,
   });
+  const clientCacheKey = buildRecommendationClientCacheKey({ weather, wardrobe, preferences, location });
+  const cachedRecommendation = getCachedRecommendationForRequest(clientCacheKey);
 
   const hasExistingRecommendation = hasRecommendationCardContent();
   els.aiRecSection.style.display = "";
   els.aiRecWarnings.innerHTML = "";
   els.aiRecMissing.innerHTML = "";
-  if (!hasExistingRecommendation) {
+  syncTodayWardrobeDialog(loadWardrobe(), getPendingRecommendationPromptState(state));
+  if (!hasExistingRecommendation && cachedRecommendation) {
+    console.info("[recommend-ui] client-cache-hit", {
+      location: location?.name || null,
+      savedAt: cachedRecommendation.savedAt,
+    });
+    renderAIRecommendation(cachedRecommendation.data, {
+      fromCache: true,
+      cacheKey: clientCacheKey,
+    });
+    if (els.aiRecLoading) els.aiRecLoading.style.display = "flex";
+  } else if (!hasExistingRecommendation) {
     els.aiRecSection.classList.add("is-loading-first");
     els.aiRecContent.innerHTML = `
       <div class="recommendation-first-load">
@@ -9890,7 +10434,9 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
       </div>
     `;
   }
-  await animateRecommendationRefreshOut();
+  if (!cachedRecommendation) {
+    await animateRecommendationRefreshOut();
+  }
   if (hasExistingRecommendation && els.aiRecLoading) els.aiRecLoading.style.display = "flex";
 
   const requestId = ++activeRecommendationRequestId;
@@ -9921,7 +10467,9 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
       return;
     }
     if (data.error) {
-      renderAIRecommendation(buildClientFallbackRecommendation(weather, data.error || "AI service returned an error"));
+      if (!cachedRecommendation) {
+        renderAIRecommendation(buildClientFallbackRecommendation(weather, data.error || "AI service returned an error"));
+      }
       return;
     }
     console.info("[recommend-ui] request-success", {
@@ -9929,7 +10477,10 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
       outfit: data?.outfit || null,
       prefs: preferences,
     });
-    renderAIRecommendation(data);
+    renderAIRecommendation(data, {
+      cacheKey: clientCacheKey,
+      cacheContext: { weather, location, preferences, wardrobe },
+    });
   } catch (err) {
     if (requestId !== activeRecommendationRequestId) {
       console.info("[recommend-ui] request-stale-error", {
@@ -9947,7 +10498,11 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     const reason = err?.name === "AbortError" || abortReason === "timeout"
       ? "AI took too long to respond"
       : "AI service could not be reached";
-    renderAIRecommendation(buildClientFallbackRecommendation(weather, reason));
+    if (!cachedRecommendation) {
+      renderAIRecommendation(buildClientFallbackRecommendation(weather, reason));
+    } else {
+      showAppToast("Refreshed weather, showing the last good outfit while AI catches up.", "info");
+    }
   } finally {
     window.clearTimeout(recommendationTimeoutId);
     if (requestId === activeRecommendationRequestId) {
@@ -9960,9 +10515,11 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
   }
 }
 
-function renderAIRecommendation(data) {
+function renderAIRecommendation(data, options = {}) {
   const stateBeforeSave = loadState();
+  const fromCache = !!options.fromCache;
   pendingRecommendationPrefs = null;
+  els.tabToday?.classList.add("has-results", "has-recommendation");
   els.aiRecSection?.classList.remove("is-loading-first");
   const outfit = data.outfit || {};
   const weather = lastWeatherForAI || {};
@@ -10030,10 +10587,8 @@ function renderAIRecommendation(data) {
       aiDetails: itemDetails?.[entry.key] || itemDetails?.[slotKey] || (slotKey.startsWith("accessory") ? itemDetails?.accessory : null),
     };
   });
-
   els.aiRecContent.innerHTML = `
     <div class="today-rec-body">
-      ${renderRecommendationTrustSignals(data, weather, wardrobeSummary)}
       ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, resolvedImageMatches, slotReasons) : ""}
     </div>
   `;
@@ -10053,6 +10608,16 @@ function renderAIRecommendation(data) {
   els.aiRecMissing.innerHTML = "";
   initializeRecommendationDeck();
   animateRecommendationRefreshIn();
+  if (!fromCache && options.cacheKey) {
+    saveRecommendationCacheEntry(options.cacheKey, data, options.cacheContext || { weather });
+  }
+  if (fromCache) {
+    trackAnalyticsEvent("recommendation_client_cache_rendered", {
+      title: "recommendation_client_cache_rendered",
+      signature: buildLookSignature(outfit),
+    });
+    return;
+  }
   recordSuccessfulUseDay();
   const analytics = getAnalyticsState(loadState());
   if (!getOnboardingState(stateBeforeSave).firstRecommendationSeen) {
@@ -10074,16 +10639,11 @@ function renderAIRecommendation(data) {
         firstWardrobeRecommendationTracked: true,
       },
     });
+    if (isLoggedIn() && !hasPremiumAccess()) {
+      window.setTimeout(() => openPaywall("starter_ready", { source: "first-wardrobe-powered-recommendation" }), 900);
+    }
   }
   markOnboardingRecommendationSeen();
-  const latestState = loadState();
-  if (shouldPromptActivationTune(latestState) && !els.tuneLookDialog?.open) {
-    window.setTimeout(() => {
-      if (shouldPromptActivationTune(loadState()) && !els.tuneLookDialog?.open) {
-        openTuneLookDialog({ mode: "activation" });
-      }
-    }, 280);
-  }
   maybePromptUsageMilestonePaywall();
 }
 
@@ -10212,7 +10772,15 @@ function bindRecommendationControls() {
       pendingRecommendationPrefs = null;
       trackAnalyticsEvent("activation_tune_skipped", { title: "activation_tune_skipped" });
       completeActivationTune();
+      skipActivationTuneButton.closest(".today-activation-tune-panel")?.remove();
       if (typeof els.tuneLookDialog?.close === "function") els.tuneLookDialog.close();
+      return;
+    }
+
+    const activationTuneButton = event.target.closest("[data-rec-action='activation-tune']");
+    if (activationTuneButton) {
+      trackAnalyticsEvent("activation_tune_started", { title: "activation_tune_started" });
+      openTuneLookDialog({ mode: "activation" });
       return;
     }
 
@@ -10559,6 +11127,31 @@ function bindIOSSwipeTabs() {
   let currentPage = null;
   let adjacentPage = null;
   let adjacentTabId = "";
+  let swipeFrameId = 0;
+  let pendingSwipeDirection = 0;
+  let pendingSwipeDeltaX = 0;
+
+  const applySwipeTransforms = () => {
+    swipeFrameId = 0;
+    if (!currentPage || !adjacentPage || !pendingSwipeDirection) return;
+    const width = container.clientWidth;
+    const clampedDeltaX = Math.max(-width, Math.min(width, pendingSwipeDeltaX));
+    currentPage.style.transform = `translate3d(${clampedDeltaX}px, 0, 0)`;
+    adjacentPage.style.transform = `translate3d(${pendingSwipeDirection * width + clampedDeltaX}px, 0, 0)`;
+  };
+
+  const scheduleSwipeTransforms = (direction, nextDeltaX) => {
+    pendingSwipeDirection = direction;
+    pendingSwipeDeltaX = nextDeltaX;
+    if (!swipeFrameId) swipeFrameId = window.requestAnimationFrame(applySwipeTransforms);
+  };
+
+  const cancelSwipeFrame = () => {
+    if (swipeFrameId) window.cancelAnimationFrame(swipeFrameId);
+    swipeFrameId = 0;
+    pendingSwipeDirection = 0;
+    pendingSwipeDeltaX = 0;
+  };
 
   const shouldIgnoreSwipe = (target) => {
     if (!(target instanceof Element)) return true;
@@ -10609,12 +11202,14 @@ function bindIOSSwipeTabs() {
     adjacentPage.classList.add("active", "tab-swipe-active");
     currentPage.style.transition = "none";
     adjacentPage.style.transition = "none";
-    adjacentPage.style.transform = `translateX(${direction * container.clientWidth}px)`;
+    currentPage.style.transform = "translate3d(0, 0, 0)";
+    adjacentPage.style.transform = `translate3d(${direction * container.clientWidth}px, 0, 0)`;
     return true;
   };
 
   const settleSwipe = (commit, direction) => {
     if (!currentPage) return;
+    cancelSwipeFrame();
 
     const width = container.clientWidth;
     const finalCurrent = commit ? -direction * width : 0;
@@ -10625,9 +11220,9 @@ function bindIOSSwipeTabs() {
       page.style.transition = "transform 240ms ease";
     });
 
-    currentPage.style.transform = `translateX(${finalCurrent}px)`;
+    currentPage.style.transform = `translate3d(${finalCurrent}px, 0, 0)`;
     if (adjacentPage) {
-      adjacentPage.style.transform = `translateX(${finalAdjacent}px)`;
+      adjacentPage.style.transform = `translate3d(${finalAdjacent}px, 0, 0)`;
     }
 
     window.setTimeout(() => {
@@ -10681,6 +11276,7 @@ function bindIOSSwipeTabs() {
     currentPage = null;
     adjacentPage = null;
     adjacentTabId = "";
+    cancelSwipeFrame();
   }, { passive: true });
 
   container.addEventListener("touchmove", (event) => {
@@ -10702,12 +11298,7 @@ function bindIOSSwipeTabs() {
       if (!adjacentPage && !prepareAdjacentPage(direction)) {
         return;
       }
-      const width = container.clientWidth;
-      const clampedDeltaX = Math.max(-width, Math.min(width, deltaX));
-      currentPage.style.transform = `translateX(${clampedDeltaX}px)`;
-      if (adjacentPage) {
-        adjacentPage.style.transform = `translateX(${direction * width + clampedDeltaX}px)`;
-      }
+      scheduleSwipeTransforms(direction, deltaX);
       event.preventDefault();
     }
   }, { passive: false });
@@ -10767,6 +11358,13 @@ function bindTabNav() {
     completeWardrobeUpgradePrompt();
     switchTab("tabWardrobe", { direction: 1 });
     window.setTimeout(() => openItemDialog(), 240);
+  });
+  els.todayWardrobeInlineDismissBtn?.addEventListener("click", () => {
+    trackAnalyticsEvent("wardrobe_prompt_dismissed", {
+      title: "wardrobe_prompt_dismissed:inline",
+      source: "inline",
+    });
+    dismissWardrobeUpgradePromptForSession();
   });
 
   els.whyWorksDialogCloseBtn?.addEventListener("click", () => {
@@ -10972,6 +11570,7 @@ function renderAC(results) {
       e.preventDefault();
       els.placeInput.value = short;
       hideAC();
+      els.placeInput?.blur?.();
       const loc = { name: short, lat: Number(r.lat), lon: Number(r.lon) };
       saveState({ lastQuery: "", lastLocation: loc });
       runForLocation(loc);
@@ -11302,12 +11901,13 @@ function init() {
       flushTabDwellMetrics(getActiveTabId(), { now: Date.now() });
     } else {
       activeTabTrackedAt = Date.now();
+      resetWardrobePromptSessionDismissal();
     }
   });
   window.addEventListener("beforeunload", () => flushTabDwellMetrics(getActiveTabId(), { now: Date.now() }));
 
-  // Also bind the empty-state add button
-  els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog(null, getStarterTypePreset("T-shirt")));
+  // Main empty-state CTA opens the normal add flow. Starter chips remain guided.
+  els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog(null));
 
   els.searchBtn.addEventListener("click", () => onSearch());
   els.geoBtn.addEventListener("click", () => onUseMyLocation("today"));

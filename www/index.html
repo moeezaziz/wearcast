@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>WearCast | Weather-Smart Outfits From Your Closet</title>
   <meta name="description" content="WearCast helps you decide what to wear today with weather-smart outfit picks that get better as you add your own wardrobe." />
-  <link rel="manifest" href="manifest.webmanifest?v=16" />
+  <link rel="manifest" href="manifest.webmanifest?v=19" />
   <meta name="theme-color" content="#2979ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="icon" href="icon.svg?v=16" type="image/svg+xml" />
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="icon" href="icon.svg?v=19" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css?v=20" />
 </head>
 <body>
 
@@ -126,6 +126,7 @@
             </div>
 
             <div id="todayWardrobeInlineCta" class="today-inline-upgrade-card" style="display:none;">
+              <button id="todayWardrobeInlineDismissBtn" class="today-inline-upgrade-dismiss" type="button" aria-label="Dismiss wardrobe reminder">&times;</button>
               <div class="today-inline-upgrade-copy">
                 <span class="today-inline-upgrade-kicker">Next step</span>
                 <strong>Want the next recommendation to use clothes you actually own?</strong>
@@ -161,8 +162,8 @@
         <div class="empty-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M12 14v2"/></svg>
         </div>
-        <h3>Sign in to save your wardrobe</h3>
-        <p>Keep your closet synced, scan pieces faster, and get recommendations built around what you actually own.</p>
+        <h3>Sync your wardrobe</h3>
+        <p>You can start locally first. Create an account when you want your closet to follow you across devices.</p>
         <button id="wardrobeAuthGateBtn" class="btn-primary" type="button">Create account or sign in</button>
       </div>
 
@@ -210,7 +211,7 @@
             <div id="wardrobeSyncPrompt" class="wardrobe-sync-prompt" style="display:none;">
               <div class="wardrobe-sync-copy">
                 <strong>Keep your closet synced</strong>
-                <span>Sign in when you want your wardrobe and recommendations to follow you across devices.</span>
+                <span>Your starter wardrobe is saved on this device. Create an account to sync it and keep building past five items.</span>
               </div>
               <button id="wardrobeSignInBtn" class="btn-primary-sm" type="button">Sign in to sync</button>
             </div>
@@ -305,6 +306,23 @@
               <strong>App insights</strong>
               <span id="settingsProfileValidationStatus">Tracking how often people use settings so we can simplify the experience over time.</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card settings-panel">
+        <div class="card-header"><h3>Diagnostics</h3></div>
+        <div class="settings-diagnostics">
+          <div class="settings-row settings-row-static">
+            <div class="settings-copy">
+              <strong>Launch checks</strong>
+              <span id="settingsDiagnosticsStatus">Backend and subscription status will appear here.</span>
+            </div>
+          </div>
+          <div id="settingsDiagnosticsEvents" class="settings-diagnostics-events" aria-label="Recent app events"></div>
+          <div class="settings-diagnostics-actions">
+            <button id="settingsDiagnosticsRefreshBtn" class="btn-ghost-sm" type="button">Refresh</button>
+            <button id="settingsDiagnosticsCopyBtn" class="btn-primary-sm" type="button">Copy diagnostics</button>
           </div>
         </div>
       </div>
@@ -1169,6 +1187,6 @@
     })();
   </script>
   <script data-goatcounter="https://wearcast.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <script src="app.js?v=16" type="module"></script>
+  <script src="app.js?v=20" type="module"></script>
 </body>
 </html>

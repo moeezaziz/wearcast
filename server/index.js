@@ -159,10 +159,12 @@ app.use(express.static(join(__dirname, "..", "www")));
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = process.env.OPENROUTER_MODEL || "auto";
+const RECOMMENDATION_FAST_MODEL = process.env.OPENROUTER_RECOMMENDATION_FAST_MODEL || process.env.OPENROUTER_FAST_MODEL || MODEL;
 const OPENROUTER_REASONING_EFFORT = process.env.OPENROUTER_REASONING_EFFORT || "";
+const STOCK_GAP_ADMIN_TOKEN = process.env.STOCK_GAP_ADMIN_TOKEN || "";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
-const RECOMMENDATION_COPY_VERSION = 27;
+const RECOMMENDATION_COPY_VERSION = 28;
 const DEBUG_LOGS = String(process.env.DEBUG || "").toLowerCase() === "true";
 const weatherCache = new Map();
 const recommendationCache = new Map();
@@ -5196,19 +5198,32 @@ async function chatCompletion(messages, {
   timeoutMs = 18000,
   allowEmptyRetry = true,
   compactJsonRetry = false,
+  model = MODEL,
 } = {}) {
   const startedAt = Date.now();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(new Error(`openrouter_timeout_${timeoutMs}ms`)), timeoutMs);
+  const makeFailure = (message, failureClass, extra = {}) => {
+    const err = new Error(message);
+    err.wearcastFailureClass = failureClass;
+    Object.entries(extra).forEach(([key, value]) => {
+      err[key] = value;
+    });
+    return err;
+  };
   try {
     if (!OPENROUTER_API_KEY) {
       console.error("[openrouter] missing api key", { requestId, traceLabel });
-      throw new Error("OPENROUTER_API_KEY is not configured");
+      throw makeFailure("OPENROUTER_API_KEY is not configured", "missing_api_key");
     }
     console.info("[openrouter] start", {
       requestId,
       traceLabel,
+      model,
+      reasoningEffort: OPENROUTER_REASONING_EFFORT || null,
       maxTokens,
+      timeoutMs,
+      retryMode: compactJsonRetry ? "compact_json" : "primary",
       messageCount: Array.isArray(messages) ? messages.length : 0,
       promptChars: Array.isArray(messages) ? messages.reduce((sum, msg) => sum + String(msg?.content || "").length, 0) : 0,
     });
@@ -5222,7 +5237,7 @@ async function chatCompletion(messages, {
         ]
       : messages;
     const body = {
-      model: MODEL,
+      model,
       messages: requestMessages,
       max_tokens: maxTokens,
       temperature: compactJsonRetry ? 0 : 0.2,
@@ -5260,9 +5275,10 @@ async function chatCompletion(messages, {
           timeoutMs: Math.min(timeoutMs, 18000),
           allowEmptyRetry: false,
           compactJsonRetry: true,
+          model,
         });
       }
-      throw new Error(`OpenRouter ${res.status}: ${err}`);
+      throw makeFailure(`OpenRouter ${res.status}: ${err}`, "provider_http_error", { statusCode: res.status });
     }
     const data = await res.json();
     const content = data?.choices?.[0]?.message?.content;
@@ -5292,9 +5308,10 @@ async function chatCompletion(messages, {
           timeoutMs: Math.min(timeoutMs, 16000),
           allowEmptyRetry: false,
           compactJsonRetry: true,
+          model,
         });
       }
-      throw new Error(`OpenRouter returned empty content${finishReason ? ` (${finishReason})` : ""}`);
+      throw makeFailure(`OpenRouter returned empty content${finishReason ? ` (${finishReason})` : ""}`, "empty_response", { finishReason });
     }
     console.info("[openrouter] success", {
       requestId,
@@ -5302,7 +5319,7 @@ async function chatCompletion(messages, {
       durationMs: Date.now() - startedAt,
       maxTokens,
       contentLength: content.length,
-      model: data?.model || MODEL,
+      model: data?.model || model,
       usage: data?.usage || null,
     });
     return content;
@@ -5315,15 +5332,32 @@ async function chatCompletion(messages, {
       traceLabel,
       durationMs: Date.now() - startedAt,
       maxTokens,
+      model,
       aborted: controller.signal.aborted,
       abortReason,
       errorName: err?.name || "Error",
       errorMessage: err?.message || String(err),
+      failureClass: classifyLlmFailure(err),
     });
     throw err;
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function classifyLlmFailure(err) {
+  if (err?.wearcastFailureClass) return err.wearcastFailureClass;
+  const message = String(err?.message || err || "").toLowerCase();
+  if (message.includes("openrouter_api_key")) return "missing_api_key";
+  if (message.includes("timeout") || err?.name === "AbortError") return "timeout";
+  if (message.includes("did not return valid json") || message.includes("json")) return "non_json_response";
+  if (message.includes("schema") || message.includes("shape")) return "schema_mismatch";
+  if (message.includes("empty content")) return "empty_response";
+  if (message.includes("openrouter 429")) return "rate_limited";
+  if (message.includes("openrouter 5")) return "provider_unavailable";
+  if (message.includes("fetch failed") || message.includes("network")) return "network_error";
+  if (message.includes("quality")) return "safety_weather_correction";
+  return "unknown";
 }
 
 function toNumber(value, fallback = null) {
@@ -5457,30 +5491,67 @@ function setCachedWeather(lat, lon, data) {
   });
 }
 
+function recommendationBucketNumber(value, size, fallback = null) {
+  if (value === null || value === undefined || value === "") return fallback;
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.round(n / size) * size;
+}
+
+function recommendationWeatherFamily(label = "") {
+  const text = String(label || "").toLowerCase();
+  if (/thunder|storm/.test(text)) return "storm";
+  if (/snow|sleet|freezing/.test(text)) return "snow";
+  if (/rain|drizzle|shower/.test(text)) return "rain";
+  if (/fog|mist|haze/.test(text)) return "fog";
+  if (/clear|sun/.test(text)) return "clear";
+  if (/cloud|overcast/.test(text)) return "cloud";
+  return cleanInlineText(label || "").toLowerCase().slice(0, 24);
+}
+
+function recommendationWardrobeCacheSignature(wardrobe) {
+  if (!Array.isArray(wardrobe) || !wardrobe.length) return [];
+  return wardrobe.map((item) => ({
+    id: item.id ?? null,
+    type: cleanInlineText(item.type || "").toLowerCase(),
+    name: cleanInlineText(item.name || "").toLowerCase(),
+    color: cleanInlineText(item.color || "").toLowerCase(),
+    material: cleanInlineText(item.material || "").toLowerCase(),
+    favorite: !!item.favorite,
+  })).sort((a, b) => String(a.id || a.name || "").localeCompare(String(b.id || b.name || "")));
+}
+
 function recommendationCacheKey(weather, wardrobe, preferences, location = {}) {
+  const remaining = weather?.remainingForecast || {};
   return JSON.stringify({
     copyVersion: RECOMMENDATION_COPY_VERSION,
     location: {
       name: cleanInlineText(location?.name || ""),
-      lat: Number.isFinite(Number(location?.lat)) ? Math.round(Number(location.lat) * 100) / 100 : null,
-      lon: Number.isFinite(Number(location?.lon)) ? Math.round(Number(location.lon) * 100) / 100 : null,
+      lat: recommendationBucketNumber(location?.lat, 0.05),
+      lon: recommendationBucketNumber(location?.lon, 0.05),
     },
-    temperature: Math.round(Number(weather?.temperature) || 0),
-    feelsLike: Math.round(Number(weather?.feelsLike) || 0),
-    wind: Math.round(Number(weather?.wind) || 0),
-    precipProb: Math.round(Number(weather?.precipProb) || 0),
-    weatherLabel: weather?.weatherLabel || "",
-    remainingForecast: weather?.remainingForecast || null,
-    wardrobe: Array.isArray(wardrobe)
-      ? wardrobe.map((item) => ({
-          id: item.id ?? null,
-          type: item.type ?? "",
-          name: item.name ?? "",
-          color: item.color ?? "",
-          material: item.material ?? "",
-        }))
-      : [],
-    preferences: preferences || {},
+    weather: {
+      temp: recommendationBucketNumber(weather?.temperature, 2, 0),
+      feelsLike: recommendationBucketNumber(weather?.feelsLike, 2, 0),
+      wind: recommendationBucketNumber(weather?.wind, 5, 0),
+      precipProb: recommendationBucketNumber(weather?.precipProb, 10, 0),
+      family: recommendationWeatherFamily(weather?.weatherLabel),
+      day: weather?.isDay === false ? "night" : "day",
+      laterTemp: cleanInlineText(remaining.tempRange || ""),
+      laterFeels: cleanInlineText(remaining.feelsLikeRange || ""),
+      laterWind: cleanInlineText(remaining.maxWind || ""),
+      laterRain: cleanInlineText(remaining.maxPrecipProb || ""),
+    },
+    wardrobe: recommendationWardrobeCacheSignature(wardrobe),
+    preferences: {
+      cold: !!preferences?.cold,
+      hot: !!preferences?.hot,
+      activityContext: preferences?.activityContext || "everyday",
+      locationContext: preferences?.locationContext || "mixed",
+      styleFocus: preferences?.styleFocus || "auto",
+      gender: preferences?.gender || "unspecified",
+      fashionNotes: cleanInlineText(preferences?.fashionNotes || "").toLowerCase().slice(0, 120),
+    },
   });
 }
 
@@ -7150,7 +7221,8 @@ function validateRecommendationQuality(response = {}, weather = {}, preferences 
   const realOuterPattern = /\b(coat|jacket|parka|puffer|insulated|shell|fleece|sherpa|windbreaker|raincoat|waterproof)\b/;
   const lightOuterPattern = /\b(overshirt|shacket|cardigan|shirt jacket)\b/;
   const warmTopPattern = /\b(sweater|jumper|hoodie|fleece|sherpa|thermal|heavy knit|chunky knit|wool|merino)\b/;
-  const extremeCold = Number.isFinite(profile.feelsLike) && profile.feelsLike <= -5;
+  const extremeCold = (Number.isFinite(profile.feelsLike) && profile.feelsLike <= -5)
+    || (Number.isFinite(envelope.minFeelsLike) && envelope.minFeelsLike <= -5);
   const arcticTopPattern = /\b(thermal|base layer|wool|merino|fleece|sherpa|insulated|down|sweater|jumper|hoodie|heavy knit|chunky knit)\b/;
   const arcticBottomPattern = /\b(thermal|insulated|fleece[-\s]?lined|lined|wool|snow pants?|ski pants?|shell pants?|waterproof pants?)\b/;
   const arcticOuterPattern = /\b(parka|puffer|down|insulated|winter coat|heavy coat|expedition|ski jacket|snow jacket|wool overcoat)\b/;
@@ -7667,13 +7739,8 @@ function buildArchetypeDirective(profileBand, location, preferences = {}, weathe
       preferred,
       options,
       safetyDominant: true,
-      text: `- Weather safety mode: ${safetyReason || "weather risk"} takes priority over styling variety.
-- Treat archetypes as soft styling hints only, never as garment-category requirements.
-- First satisfy the Weather Rules and quality gates. Required protective pieces may override every archetype slot.
-- Use tuning/style only after the weather-safe garment types are chosen, through color, fit, polish, or accessory tone.
-- Do not revise, reject, or reshape an outfit solely because it misses the preferred archetype in this weather.
-- Optional styling references, if they remain weather-safe:
-${lines.join("\n")}`,
+      text: `- Archetype guidance is disabled for this request because ${safetyReason || "weather risk"} is safety-dominant.
+- Choose weather-safe garment categories first. Use style tuning only through color, fit, and polish.`,
     };
   }
   return {
@@ -7683,17 +7750,17 @@ ${lines.join("\n")}`,
     options,
     safetyDominant: false,
     text: `- Profile band: ${profileBand}
-- Use one of these valid archetypes and avoid collapsing to the same default every time:
+- Archetypes are light variety hints, not hard garment requirements:
 ${lines.join("\n")}
 - Preferred archetype for this request: ${variantIndex + 1} (${preferred.name}).
-- Strong slot steer for this request:
+- Soft slot steer for this request:
   top: ${preferred.top}
   bottom: ${preferred.bottom}
   outer: ${preferred.outer}
   shoes: ${preferred.shoes}
   accessory: ${preferred.accessory}
   avoid: ${preferred.avoid}
-- Follow the preferred archetype unless weather or truly suitable wardrobe pieces make another listed archetype clearly better.`,
+- Follow the preferred archetype only when it does not reduce weather, wardrobe, color, or presentation accuracy.`,
   };
 }
 
@@ -8407,7 +8474,7 @@ Non-negotiable rules:
   }
 }
 
-async function finalizeRecommendation(response, weather, preferences, location, wardrobeAnalysis = null, eligibleWardrobeItems = [], { allowQualityRetry = true, assetWardrobeItems = null, recommendationSource = "unknown" } = {}) {
+async function finalizeRecommendation(response, weather, preferences, location, wardrobeAnalysis = null, eligibleWardrobeItems = [], { allowQualityRetry = true, assetWardrobeItems = null, recommendationSource = "unknown", fallbackReason: upstreamFallbackReason = "" } = {}) {
   let normalized = ensureRecommendationShape(response, weather, preferences, wardrobeAnalysis);
   // Preserve LLM-authored copy that the quality rewrite / fallback paths
   // don't regenerate (outfit-outlook windows, detailsOverview, reasoning).
@@ -8417,6 +8484,8 @@ async function finalizeRecommendation(response, weather, preferences, location, 
   const preservedDetailsOverview = normalized.detailsOverview || null;
   const preservedReasoning = typeof normalized.reasoning === "string" ? normalized.reasoning : "";
   let quality = validateRecommendationQuality(normalized, weather, preferences);
+  const initialQualityIssues = quality.issues || [];
+  let fallbackReason = upstreamFallbackReason;
   const shouldUseImmediateFallback = !quality.ok && quality.profile?.veryHot && quality.issues.some((issue) =>
     ["hot_heavy_material", "very_hot_layering", "dry_rain_gear"].includes(issue.code)
   );
@@ -8430,6 +8499,15 @@ async function finalizeRecommendation(response, weather, preferences, location, 
     quality = validateRecommendationQuality(normalized, weather, preferences);
   }
   if (!quality.ok) {
+    fallbackReason = quality.issues[0]?.code || "quality_gate";
+    logApiEvent("warn", "recommendation_quality_fallback", {
+      source: recommendationSource,
+      fallbackReason,
+      severeCount: quality.severeCount,
+      issues: quality.issues.map((issue) => issue.code),
+      gender: preferences?.gender || "unspecified",
+      feelsLike: weather?.feelsLike ?? weather?.temperature ?? null,
+    });
     normalized = ensureRecommendationShape(
       buildFallbackRecommendation(weather, preferences, quality.issues[0]?.code || "quality gate"),
       weather,
@@ -8454,14 +8532,18 @@ async function finalizeRecommendation(response, weather, preferences, location, 
   });
   normalized = {
     ...normalized,
+    recommendationSource,
+    fallbackReason,
     itemDetails: reconcileItemDetailsWithImageMatches(requestedItemDetails, outfitImages),
     outfitImages,
     weatherProfile: classifyWeatherProfile(weather),
     wardrobeAnalysis: wardrobeAnalysis ? { ...wardrobeAnalysis, usage: wardrobeUsage } : null,
     quality,
+    initialQualityIssues,
     trustSignals,
   };
-  await recordStockImageGaps({ ...normalized, itemDetails: requestedItemDetails }, weather, preferences, location, recommendationSource);
+  recordStockImageGaps({ ...normalized, itemDetails: requestedItemDetails }, weather, preferences, location, recommendationSource)
+    .catch((err) => console.warn("[recommend] stock gap logging failed", err?.message || err));
   return normalized;
 }
 
@@ -8686,6 +8768,7 @@ function inferItemSubtype(text = "", slot = "") {
     if (/\bpolo\b/.test(value)) return "polo";
     if (/\b(t-?shirt|tee)\b/.test(value)) return "tee";
     if (/\b(tank|sleeveless)\b/.test(value)) return "tank";
+    if (/\b(thermal|base layer|baselayer)\b/.test(value)) return "thermal";
     if (/\b(button[-\s]?up|button[-\s]?down|oxford|shirt|blouse|poplin|linen shirt|camp collar)\b/.test(value)) return "shirt";
     if (/\bcardigan\b/.test(value)) return "cardigan";
     if (/\bhoodie\b/.test(value)) return "hoodie";
@@ -8783,7 +8866,9 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
   if (!wanted || !itemText) return null;
 
   const wantedSubtype = inferItemSubtype(wanted, wantedSlot);
-  const itemSubtype = inferItemSubtype(itemText, wantedSlot);
+  const itemSubtype = inferItemSubtype(item?.name, wantedSlot)
+    || inferItemSubtype(item?.type, wantedSlot)
+    || inferItemSubtype(itemText, wantedSlot);
   const wantedTokens = tokenSetForAssetMatch(wanted);
   const itemTokens = tokenSetForAssetMatch(itemText);
   const overlap = wantedTokens.filter((token) => itemTokens.includes(token)).length;
@@ -8791,18 +8876,20 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
   let score = 0;
   const reasons = [];
 
-  if (normalizeMatchText(item?.name) === normalizeMatchText(wanted)) {
+  const exactName = normalizeMatchText(item?.name) === normalizeMatchText(wanted);
+  const nameContains = normalizeMatchText(wanted).includes(normalizeMatchText(item?.name)) || normalizeMatchText(item?.name).includes(normalizeMatchText(wanted));
+  if (exactName) {
     score += 52;
     reasons.push("exact_name");
   }
-  if (normalizeMatchText(wanted).includes(normalizeMatchText(item?.name)) || normalizeMatchText(item?.name).includes(normalizeMatchText(wanted))) {
-    score += 22;
+  if (nameContains) {
+    score += 32;
     reasons.push("name_contains");
   }
   if (wantedSubtype && itemSubtype && wantedSubtype === itemSubtype) {
     score += 26;
     reasons.push("subtype_match");
-  } else if (wantedSubtype && itemSubtype) {
+  } else if (wantedSubtype && itemSubtype && !nameContains) {
     score -= 28;
     reasons.push("subtype_mismatch");
   }
@@ -8836,9 +8923,15 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
 function buildWardrobeAssetMatch(candidate, { source = "wardrobe", adjudicated = false } = {}) {
   if (!candidate?.item) return null;
   const item = candidate.item;
+  const matchQuality = adjudicated
+    ? "llm_adjudicated_wardrobe"
+    : candidate.score >= 44
+      ? "strong_wardrobe"
+      : "wardrobe";
   return {
     path: getWardrobeDisplayPhoto(item),
     source,
+    matchQuality,
     itemId: item.id ?? null,
     itemName: cleanInlineText(item.name),
     type: cleanInlineText(item.type),
@@ -8966,10 +9059,11 @@ function areStockSubtypesCompatible(slot, wantedSubtype = "", entrySubtype = "")
   if (!wantedSubtype || !entrySubtype) return false;
   if (wantedSubtype === entrySubtype) return true;
   if (slot === "top") {
-    const knitFamily = new Set(["sweater", "turtleneck", "knit", "knit-tee"]);
+    const knitFamily = new Set(["sweater", "turtleneck", "knit", "knit-tee", "thermal"]);
     if ((wantedSubtype === "knit" && knitFamily.has(entrySubtype)) || (entrySubtype === "knit" && knitFamily.has(wantedSubtype))) {
       return true;
     }
+    if (wantedSubtype === "thermal" && ["sweater", "turtleneck", "knit"].includes(entrySubtype)) return true;
   }
   if (slot === "outer") {
     const softLayer = new Set(["fleece", "hoodie", "cardigan"]);
@@ -8984,6 +9078,31 @@ function stockImagePresentationCompatible(entry = {}, preferences = {}) {
   if (userGender === "male" && entryGender === "feminine") return false;
   if (userGender === "female" && entryGender === "masculine") return false;
   return true;
+}
+
+function stockImageVisualCompatibility(slot, itemName, key, entry, context = {}) {
+  const details = itemDetailsForAssetSlot(slot, context);
+  const entryDetails = inferVisualDetailFromText(`${key || ""} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}`);
+  const requestedColors = uniqueList(requestedColorTerms(itemName, details));
+  const requestedMaterials = uniqueList(requestedMaterialTerms(itemName, details));
+  const reasons = [];
+
+  if (requestedColors.length && entryDetails.color && !visualColorCovered(requestedColors, entryDetails.color)) {
+    reasons.push("color_conflict");
+  }
+  if (requestedMaterials.length && entryDetails.material && !visualMaterialCovered(requestedMaterials, entryDetails.material)) {
+    const looseMaterialOk = requestedMaterials.includes("nylon") && /\b(shell|rain|waterproof|weatherproof|tech|parka)\b/i.test(`${key} ${entry?.description || ""}`);
+    if (!looseMaterialOk) reasons.push("material_conflict");
+  }
+
+  return {
+    ok: reasons.length === 0,
+    reasons,
+    requestedColors,
+    requestedMaterials,
+    selectedColor: entryDetails.color || "",
+    selectedMaterial: entryDetails.material || "",
+  };
 }
 
 function stockImageSemanticallyCompatible(slot, itemName, key, entry, { allowGeneric = false, preferences = {} } = {}) {
@@ -9012,6 +9131,7 @@ function getCanonicalStockKeyForItem(slot, itemName = "") {
   const text = cleanInlineText(itemName).toLowerCase();
   if (!text) return null;
   if (slot === "top") {
+    if (/\b(thermal|base layer|baselayer|wool|merino|sweater|jumper|pullover|knit)\b/.test(text)) return "top_knit_sweater_hanger";
     if (/\blong[-\s]?sleeve|long sleeve top\b/.test(text)) return "top_white_long_sleeve_tshirt_studio";
     if (/\bbreathable|t-?shirt|tee\b/.test(text)) return "top_white_tshirt_studio";
   }
@@ -9048,49 +9168,62 @@ function getCanonicalStockKeyForItem(slot, itemName = "") {
 
 function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}) {
   const compatibilityContext = { allowGeneric: false, preferences: context.preferences || {} };
+  const stockOk = (key, entry, { allowGeneric = false } = {}) => {
+    if (!stockImageSemanticallyCompatible(slot, itemName, key, entry, { ...compatibilityContext, allowGeneric })) return false;
+    return stockImageVisualCompatibility(slot, itemName, key, entry, context).ok;
+  };
+  const buildStockMatch = (key, entry, { baseConfidence = 55, canonical = false, preferred = false, matchQuality = "stock" } = {}) => {
+    const aestheticScore = scoreAestheticContext(itemName, entry, key, context);
+    const visual = stockImageVisualCompatibility(slot, itemName, key, entry, context);
+    return {
+      key,
+      path: entry.path,
+      description: entry.description,
+      confidence: Math.max(0, Math.min(100, baseConfidence + aestheticScore.score)),
+      source: "stock",
+      matchQuality,
+      aesthetic: aestheticScore.aesthetic,
+      penalties: [...(aestheticScore.penalties || []), ...(visual.reasons || [])],
+      ...(canonical ? { canonical: true } : {}),
+      ...(preferred ? { preferred: true } : {}),
+    };
+  };
   if (
     preferredKey
-    && stockImageSemanticallyCompatible(slot, itemName, preferredKey, STOCK_IMAGE_CATALOG[preferredKey], compatibilityContext)
+    && stockOk(preferredKey, STOCK_IMAGE_CATALOG[preferredKey])
   ) {
     const entry = STOCK_IMAGE_CATALOG[preferredKey];
-    const aestheticScore = scoreAestheticContext(itemName, entry, preferredKey, context);
-    return { key: preferredKey, path: entry.path, description: entry.description, confidence: Math.max(40, Math.min(100, 80 + aestheticScore.score)), source: "stock", aesthetic: aestheticScore.aesthetic, penalties: aestheticScore.penalties };
+    return buildStockMatch(preferredKey, entry, { baseConfidence: 80, preferred: true, matchQuality: "preferred_stock" });
   }
   const canonicalKey = getCanonicalStockKeyForItem(slot, itemName);
   if (
     canonicalKey
-    && stockImageSemanticallyCompatible(slot, itemName, canonicalKey, STOCK_IMAGE_CATALOG[canonicalKey], compatibilityContext)
+    && stockOk(canonicalKey, STOCK_IMAGE_CATALOG[canonicalKey])
   ) {
     const entry = STOCK_IMAGE_CATALOG[canonicalKey];
-    const aestheticScore = scoreAestheticContext(itemName, entry, canonicalKey, context);
-    return { key: canonicalKey, path: entry.path, description: entry.description, confidence: Math.max(70, Math.min(100, 88 + aestheticScore.score)), source: "stock", aesthetic: aestheticScore.aesthetic, penalties: aestheticScore.penalties, canonical: true };
+    return buildStockMatch(canonicalKey, entry, { baseConfidence: 88, canonical: true, matchQuality: "canonical_stock" });
   }
 
   const entries = getUsableStockImageCatalogEntries().filter(([, entry]) => entry.slot === slot);
   let best = null;
   let bestScore = -1;
   for (const [key, entry] of entries) {
-    if (!stockImageSemanticallyCompatible(slot, itemName, key, entry, compatibilityContext)) continue;
+    if (!stockOk(key, entry)) continue;
     const score = scoreCatalogMatch(itemName, entry, key, context);
     if (score > bestScore) {
-      const aestheticScore = scoreAestheticContext(itemName, entry, key, context);
-      best = {
-        key,
-        path: entry.path,
-        description: entry.description,
-        confidence: Math.max(0, Math.min(100, 55 + score + aestheticScore.score)),
-        source: "stock",
-        aesthetic: aestheticScore.aesthetic,
-        penalties: aestheticScore.penalties,
-      };
+      best = buildStockMatch(key, entry, {
+        baseConfidence: 55 + score,
+        matchQuality: score >= 30 ? "strong_stock" : "acceptable_stock",
+      });
       bestScore = score;
     }
   }
 
-  if (best && bestScore > 0 && stockImageSemanticallyCompatible(slot, itemName, best.key, STOCK_IMAGE_CATALOG[best.key], compatibilityContext)) return best;
+  if (best && bestScore > 0 && stockOk(best.key, STOCK_IMAGE_CATALOG[best.key])) return best;
   const wantedSubtype = inferItemSubtype(itemName, slot);
   const fallback = entries.find(([key, entry]) => {
     if (!entry.fallback) return false;
+    if (!stockImagePresentationCompatible(entry, context.preferences || {})) return false;
     const fallbackSubtype = getStockItemSubtype(slot, key, entry);
     return !wantedSubtype || !fallbackSubtype || wantedSubtype === fallbackSubtype;
   });
@@ -9099,7 +9232,8 @@ function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}
     path: fallback[1].path,
     description: fallback[1].description,
     confidence: 45,
-    source: "stock",
+    source: "fallback",
+    matchQuality: "generic_fallback",
     aesthetic: inferCatalogAesthetic(fallback[1], fallback[0]),
     penalties: ["fallback"],
   } : null;
@@ -9108,6 +9242,26 @@ function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}
 async function buildRecommendationAssetMatches(outfit, wardrobeItems = [], preferredKeys = null, context = {}) {
   const output = {};
   const preferred = preferredKeys && typeof preferredKeys === "object" ? preferredKeys : {};
+  if (!Array.isArray(wardrobeItems) || wardrobeItems.length === 0) {
+    const stockTasks = ["top", "bottom", "outer", "shoes"]
+      .map((slot) => ({ slot, itemName: cleanInlineText(outfit?.[slot]) }))
+      .filter((entry) => entry.itemName)
+      .map(async ({ slot, itemName }) => {
+        const matchText = assetMatchTextForSlot(slot, itemName, context) || itemName;
+        output[slot] = findStockImageForSlot(slot, matchText, cleanInlineText(preferred?.[slot]), context) || null;
+      });
+    const accessories = Array.isArray(outfit?.accessories)
+      ? outfit.accessories
+      : [outfit?.accessories];
+    accessories.map((item) => cleanInlineText(item)).filter(Boolean).slice(0, 1).forEach((itemName, index) => {
+      stockTasks.push(Promise.resolve().then(() => {
+        const matchText = assetMatchTextForSlot("accessory", itemName, context) || itemName;
+        output[`accessory-${index}`] = findStockImageForSlot("accessory", matchText, cleanInlineText(preferred?.accessory), context) || null;
+      }));
+    });
+    await Promise.all(stockTasks);
+    return output;
+  }
   const usedItemIds = new Set();
   const resolveSlot = async (slot, itemName, outputKey = slot) => {
     const matchText = assetMatchTextForSlot(slot, itemName, context) || itemName;
@@ -9191,7 +9345,7 @@ function inferAssetDetailFromImageMatch(match = {}) {
       material: cleanInlineText(match.material),
     };
   }
-  if (match.source !== "stock") return {};
+  if (match.source !== "stock" && match.source !== "fallback") return {};
   const entry = STOCK_IMAGE_CATALOG[match.key] || {};
   return inferVisualDetailFromText(`${match.key || ""} ${entry.description || ""} ${(entry.keywords || []).join(" ")}`);
 }
@@ -9265,12 +9419,27 @@ function visualMaterialCovered(requested = [], selected = "") {
   if (!requested.length || !selectedMaterial) return true;
   if (requested.includes(selectedMaterial)) return true;
   if (requested.includes("knit") && ["wool", "cotton"].includes(selectedMaterial)) return true;
+  if (requested.includes("wool") && selectedMaterial === "knit") return true;
   if (requested.includes("wool") && selectedMaterial === "merino wool") return true;
   return false;
 }
 
 function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {}, location = {}, source = "unknown") {
   const records = [];
+  const profile = classifyWeatherProfile(weather);
+  const weatherBand = profile.veryHot
+    ? "very_hot"
+    : profile.hot
+      ? "hot"
+      : (Number.isFinite(profile.feelsLike) && profile.feelsLike <= -5)
+        ? "extreme_cold"
+        : profile.veryCold
+          ? "very_cold"
+          : profile.cold
+            ? "cold"
+            : profile.wet || profile.rainLikelyLater
+              ? "wet"
+              : "mild";
   const slots = [
     ["top", "top"],
     ["bottom", "bottom"],
@@ -9289,7 +9458,7 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
 
     const requestedText = assetMatchTextForSlot(slot, itemName, { itemDetails: recommendation?.itemDetails }) || itemName;
     const requestedSubtype = inferItemSubtype(requestedText, slot);
-    const selectedSubtype = imageMatch?.source === "stock"
+    const selectedSubtype = imageMatch?.source === "stock" || imageMatch?.source === "fallback"
       ? getStockItemSubtype(slot, imageMatch.key, STOCK_IMAGE_CATALOG[imageMatch.key])
       : "";
     const selectedDetails = inferAssetDetailFromImageMatch(imageMatch);
@@ -9298,8 +9467,8 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
     const reasons = [];
 
     if (!imageMatch) reasons.push("no_stock_image");
-    if (imageMatch?.source === "stock" && imageMatch.fallback) reasons.push("fallback_stock_image");
-    if (imageMatch?.source === "stock" && imageMatch.canonical && requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("canonical_approximation");
+    if (imageMatch?.source === "fallback" || imageMatch?.fallback) reasons.push("fallback_stock_image");
+    if ((imageMatch?.source === "stock" || imageMatch?.source === "fallback") && imageMatch.canonical && requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("canonical_approximation");
     if (requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("subtype_approximation");
     if (colors.length && !visualColorCovered(colors, selectedDetails.color)) reasons.push("color_gap");
     if (materials.length && !visualMaterialCovered(materials, selectedDetails.material)) reasons.push("material_gap");
@@ -9323,13 +9492,15 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
         colors,
         materials,
       },
-      selectedStock: imageMatch?.source === "stock" ? {
+      selectedStock: imageMatch?.source === "stock" || imageMatch?.source === "fallback" ? {
         key: imageMatch.key || "",
         path: imageMatch.path || "",
         subtype: selectedSubtype,
         color: selectedDetails.color || "",
         material: selectedDetails.material || "",
         confidence: Number(imageMatch.confidence || 0),
+        source: imageMatch.source || "",
+        matchQuality: imageMatch.matchQuality || "",
         penalties: Array.isArray(imageMatch.penalties) ? imageMatch.penalties : [],
       } : null,
       reasons: uniqueReasons,
@@ -9337,7 +9508,9 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
         temperature: Number.isFinite(Number(weather?.temperature)) ? Number(weather.temperature) : null,
         feelsLike: Number.isFinite(Number(weather?.feelsLike)) ? Number(weather.feelsLike) : null,
         weatherLabel: cleanInlineText(weather?.weatherLabel || ""),
+        weatherBand,
         gender: cleanInlineText(preferences?.gender || "unspecified"),
+        genderPresentation: presentationPreferenceLabel(preferences),
         styleFocus: cleanInlineText(preferences?.styleFocus || ""),
         activityContext: cleanInlineText(preferences?.activityContext || ""),
         locationContext: cleanInlineText(preferences?.locationContext || ""),
@@ -10445,24 +10618,44 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
   "missingItems": ["one short missing item if needed"]
 }`;
 
+    const compactNoWardrobePrompt = `You are WearCast. Return one weather-aware generic outfit for the rest of today. JSON only.
+
+WEATHER: ${location?.name || "Unknown"}; now ${resolvedWeather.temperature}C feels ${resolvedWeather.feelsLike}C; ${resolvedWeather.weatherLabel}; wind ${resolvedWeather.wind} km/h; rain ${resolvedWeather.precipProb ?? "unknown"}%; uv ${resolvedWeather.uv}; ${dayForecastDesc}
+OUTLOOK:
+${outlookDesc}
+PREFERENCES: ${prefsDesc.length ? prefsDesc.join("; ") : "none"}
+PRESENTATION: ${presentationDirective}
+WEATHER RULES:
+${weatherRules}
+STYLE: ${styleGuardrails.length ? styleGuardrails.slice(0, 4).join("\n") : "- keep it practical and natural"}
+
+Rules: short item names; at most one outer; exactly one accessory; one warning and one missing item max; no raw numbers in user-facing copy; strictly follow presentation preference.
+Return ONLY valid compact JSON with this shape:
+{"outlook":{"headline":"max 10 words","windows":{"now":{"copy":"specific sentence"},"later":{"copy":"specific sentence"},"evening":{"copy":"specific sentence"}}},"outfit":{"top":"","bottom":"","outer":"","shoes":"","accessories":[""]},"slotReasons":{"top":"","bottom":"","outer":"","shoes":"","accessory":""},"itemDetails":{"top":{"color":"","material":""},"bottom":{"color":"","material":""},"outer":{"color":"","material":""},"shoes":{"color":"","material":""},"accessory":{"color":"","material":""}},"reasoning":"one natural weather-overview subline","detailsOverview":{"what":"one sentence","why":"one sentence","note":"optional short note"},"warnings":[],"missingItems":[]}`;
+
+    const activePrompt = hasWardrobe ? prompt : compactNoWardrobePrompt;
+    const recommendationModel = hasWardrobe ? MODEL : RECOMMENDATION_FAST_MODEL;
+
     let text = "";
     try {
-      const recommendationMaxTokens = hasWardrobe ? 1800 : 1600;
-      const recommendationTimeoutMs = 30000;
+      const recommendationMaxTokens = hasWardrobe ? 1800 : 1050;
+      const recommendationTimeoutMs = hasWardrobe ? 30000 : 20000;
       console.info("[recommend] ai-request", {
         requestId,
         durationMs: Date.now() - startedAt,
-        promptChars: prompt.length,
+        promptChars: activePrompt.length,
         maxTokens: recommendationMaxTokens,
         timeoutMs: recommendationTimeoutMs,
+        model: recommendationModel,
       });
       text = await chatCompletion(
-        [{ role: "user", content: prompt }],
+        [{ role: "user", content: activePrompt }],
         {
           maxTokens: recommendationMaxTokens,
           requestId,
           traceLabel: "recommendation",
           timeoutMs: recommendationTimeoutMs,
+          model: recommendationModel,
         }
       );
     } catch (aiErr) {
@@ -10471,6 +10664,7 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
         durationMs: Date.now() - startedAt,
         errorName: aiErr?.name || "Error",
         errorMessage: aiErr?.message || String(aiErr),
+        failureClass: classifyLlmFailure(aiErr),
       });
       const response = await finalizeRecommendation(
         buildFallbackRecommendation(resolvedWeather, preferences, "ai fallback"),
@@ -10479,12 +10673,12 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
         location,
         wardrobeAnalysis,
         eligibleWardrobeItems,
-        { allowQualityRetry: false, assetWardrobeItems: wardrobeItems, recommendationSource: "ai_error_fallback" }
+        { allowQualityRetry: false, assetWardrobeItems: wardrobeItems, recommendationSource: "ai_error_fallback", fallbackReason: classifyLlmFailure(aiErr) }
       );
       setCachedRecommendation(cacheKey, response);
       return res.json({
         ...response,
-        performance: timings.summary({ cacheHit: false, fallback: "ai_error" }),
+        performance: timings.summary({ cacheHit: false, fallback: classifyLlmFailure(aiErr) }),
       });
     }
     timings.mark("model_completed");
@@ -10542,6 +10736,8 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
         durationMs: Date.now() - startedAt,
         errorName: parseErr?.name || "Error",
         errorMessage: parseErr?.message || String(parseErr),
+        failureClass: classifyLlmFailure(parseErr),
+        responseChars: text.length,
       });
       const salvaged = salvageRecommendationFromText(text);
       if (salvaged) {
@@ -10589,12 +10785,12 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
         location,
         wardrobeAnalysis,
         eligibleWardrobeItems,
-        { allowQualityRetry: false, assetWardrobeItems: wardrobeItems, recommendationSource: "parse_error_fallback" }
+        { allowQualityRetry: false, assetWardrobeItems: wardrobeItems, recommendationSource: "parse_error_fallback", fallbackReason: classifyLlmFailure(parseErr) }
       );
       setCachedRecommendation(cacheKey, response);
       res.json({
         ...response,
-        performance: timings.summary({ cacheHit: false, fallback: "parse_error" }),
+        performance: timings.summary({ cacheHit: false, fallback: classifyLlmFailure(parseErr) }),
       });
     }
   } catch (err) {
@@ -10707,6 +10903,63 @@ app.get("/api/ready", async (req, res) => {
       error: "Service not ready",
       requestId: req.requestId,
     });
+  }
+});
+
+app.get("/api/recommend/stock-gaps", async (req, res) => {
+  const token = req.headers["x-wearcast-admin-token"] || req.query.token || "";
+  const tokenRequired = process.env.NODE_ENV === "production" || STOCK_GAP_ADMIN_TOKEN;
+  if (tokenRequired && (!STOCK_GAP_ADMIN_TOKEN || token !== STOCK_GAP_ADMIN_TOKEN)) {
+    return res.status(404).json({ error: "Not found" });
+  }
+  if (!process.env.DATABASE_URL) {
+    return res.status(503).json({ error: "Database not configured" });
+  }
+  const limit = Math.max(1, Math.min(100, Number(req.query.limit || 50)));
+  try {
+    const result = await dbPool.query(
+      `
+        SELECT
+          backlog_key,
+          slot,
+          item_name,
+          item_color,
+          item_material,
+          requested,
+          selected_stock,
+          reasons,
+          context,
+          COUNT(*)::int AS request_count,
+          MAX(created_at) AS last_seen_at
+        FROM recommendation_stock_gaps
+        GROUP BY
+          backlog_key,
+          slot,
+          item_name,
+          item_color,
+          item_material,
+          requested,
+          selected_stock,
+          reasons,
+          context
+        ORDER BY request_count DESC, last_seen_at DESC
+        LIMIT $1
+      `,
+      [limit]
+    );
+    res.json({
+      ok: true,
+      count: result.rowCount,
+      rows: result.rows,
+    });
+  } catch (err) {
+    logApiEvent("error", "stock_gap_report_failed", {
+      requestId: req.requestId,
+      errorName: err?.name || "Error",
+      errorMessage: err?.message || String(err),
+    });
+    captureServerException(err, { requestId: req.requestId, route: "/api/recommend/stock-gaps" });
+    res.status(500).json({ error: "Could not load stock gap report" });
   }
 });
 

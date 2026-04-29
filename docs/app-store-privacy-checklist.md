@@ -189,11 +189,24 @@ Likely used for:
 
 Current recommendation:
 
-- `Do not disclose yet`, unless a crash/error reporting SDK is added
+- Disclose diagnostics if production Sentry/client error reporting is enabled.
 
 Why:
 
-- no Sentry or equivalent crash SDK is currently present
+- the current app can initialize browser Sentry from runtime config
+- the backend can initialize Sentry from environment configuration
+- `/api/client-log` can receive client-side error reports and recent local event context
+
+Likely data types:
+
+- `Crash Data`
+- `Performance Data` if Sentry performance monitoring or timing diagnostics are enabled
+- `Other Diagnostic Data` for client/server error reports
+
+Likely linked to user:
+
+- `No` for anonymous diagnostics where no account identifier is attached
+- `Yes` if diagnostics include account context for signed-in users
 
 ## Data Types Probably Not Needed Right Now
 
@@ -356,7 +369,6 @@ Before App Store submission, confirm each item:
 
 These upcoming changes will require updating this checklist:
 
-- adding crash reporting such as Sentry
 - adding a subscription SDK or StoreKit-backed purchase analytics
 - adding richer product analytics
 - adding push notifications

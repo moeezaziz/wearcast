@@ -1,7 +1,7 @@
 // WearCast Service Worker
 // Goal: when a newer version is available, update cached assets and reload clients.
 
-const VERSION = "v16";
+const VERSION = "v20";
 const CACHE = `wearcast-${VERSION}`;
 
 // Cache-busted asset URLs so clients don't get stuck on old JS/CSS.
