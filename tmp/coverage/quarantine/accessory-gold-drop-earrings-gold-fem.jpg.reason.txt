@@ -1,0 +1,4 @@
+bad_aspect_ratio (0.46)
+source: https://commons.wikimedia.org/wiki/File:Byzantine_-_Earring_-_Walters_571729.jpg
+license: Public domain
+title: File:Byzantine - Earring - Walters 571729.jpg

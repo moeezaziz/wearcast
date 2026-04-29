@@ -1,0 +1,14 @@
+[
+  {
+    "key": "outer_gray_jacket_studio",
+    "slot": "outer",
+    "gender": "unisex",
+    "path": "assets/recommendation-stock/outer-gray-jacket-studio.jpg"
+  },
+  {
+    "key": "accessory_white_beanie_studio",
+    "slot": "accessory",
+    "gender": "unisex",
+    "path": "assets/recommendation-stock/accessory-white-beanie-studio.jpg"
+  }
+]

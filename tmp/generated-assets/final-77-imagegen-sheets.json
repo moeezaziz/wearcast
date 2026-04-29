@@ -1,0 +1,1400 @@
+{
+  "createdAt": "2026-04-27T20:22:59.203Z",
+  "sources": [
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc436bb348191a79c061f9a8ca18d.png"
+  ],
+  "supplement": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc516fc6c8191be7b9067f9c74ecb.png",
+  "items": [
+    {
+      "ordinal": 1,
+      "key": "bottom_navy_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy capri pants",
+      "oldPath": "assets/recommendation-stock/bottom-navy-capri-pants-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-navy-capri-pants-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 6,
+        "top": 6,
+        "width": 343,
+        "height": 281
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-capri-pants-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 2,
+      "key": "bottom_black_culottes_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black culottes",
+      "oldPath": "assets/recommendation-stock/bottom-black-culottes-linen-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-culottes-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 361,
+        "top": 6,
+        "width": 343,
+        "height": 281
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-culottes-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 3,
+      "key": "bottom_cream_culottes_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "cream culottes",
+      "oldPath": "assets/recommendation-stock/bottom-cream-culottes-linen-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-cream-culottes-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 716,
+        "top": 6,
+        "width": 342,
+        "height": 281
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-culottes-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 4,
+      "key": "bottom_navy_culottes_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy culottes",
+      "oldPath": "assets/recommendation-stock/bottom-navy-culottes-linen-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-navy-culottes-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 1070,
+        "top": 6,
+        "width": 343,
+        "height": 281
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-culottes-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 5,
+      "key": "bottom_black_palazzo_pants_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black palazzo pants",
+      "oldPath": "assets/recommendation-stock/bottom-black-palazzo-pants-linen-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-black-palazzo-pants-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 1425,
+        "top": 6,
+        "width": 343,
+        "height": 281
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-palazzo-pants-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 6,
+      "key": "bottom_cream_palazzo_pants_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "cream palazzo pants",
+      "oldPath": "assets/recommendation-stock/bottom-cream-palazzo-pants-linen-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-cream-palazzo-pants-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc516fc6c8191be7b9067f9c74ecb.png",
+      "sourceRole": "supplement-cream-palazzo",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1024,
+        "height": 1536
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-palazzo-pants-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 7,
+      "key": "bottom_white_palazzo_pants_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white palazzo pants",
+      "oldPath": "assets/recommendation-stock/bottom-white-palazzo-pants-linen-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-white-palazzo-pants-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 6,
+        "top": 299,
+        "width": 343,
+        "height": 295
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-palazzo-pants-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 8,
+      "key": "bottom_black_bike_shorts_jersey_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black bike shorts",
+      "oldPath": "assets/recommendation-stock/bottom-black-bike-shorts-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-bike-shorts-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 361,
+        "top": 299,
+        "width": 343,
+        "height": 295
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-bike-shorts-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 9,
+      "key": "bottom_navy_bike_shorts_jersey_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy bike shorts",
+      "oldPath": "assets/recommendation-stock/bottom-navy-bike-shorts-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-navy-bike-shorts-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 716,
+        "top": 299,
+        "width": 342,
+        "height": 295
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-bike-shorts-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 10,
+      "key": "outer_camel_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "camel wrap coat",
+      "oldPath": "assets/recommendation-stock/outer-camel-wrap-coat-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-camel-wrap-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 1070,
+        "top": 299,
+        "width": 343,
+        "height": 295
+      },
+      "output": "www/assets/recommendation-stock/outer-camel-wrap-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 11,
+      "key": "outer_black_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black wrap coat",
+      "oldPath": "assets/recommendation-stock/outer-black-wrap-coat-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-black-wrap-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 1425,
+        "top": 299,
+        "width": 343,
+        "height": 295
+      },
+      "output": "www/assets/recommendation-stock/outer-black-wrap-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 12,
+      "key": "outer_beige_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "beige wrap coat",
+      "oldPath": "assets/recommendation-stock/outer-beige-wrap-coat-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-beige-wrap-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 6,
+        "top": 606,
+        "width": 432,
+        "height": 275
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-wrap-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 13,
+      "key": "outer_black_cropped_jacket_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black cropped jacket",
+      "oldPath": "assets/recommendation-stock/outer-black-cropped-jacket-wool-fem.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-cropped-jacket-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 450,
+        "top": 606,
+        "width": 431,
+        "height": 275
+      },
+      "output": "www/assets/recommendation-stock/outer-black-cropped-jacket-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 14,
+      "key": "outer_cream_cropped_jacket_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "cream cropped jacket",
+      "oldPath": "assets/recommendation-stock/outer-cream-cropped-jacket-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-cream-cropped-jacket-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 893,
+        "top": 606,
+        "width": 432,
+        "height": 275
+      },
+      "output": "www/assets/recommendation-stock/outer-cream-cropped-jacket-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 15,
+      "key": "outer_red_cropped_jacket_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "red cropped jacket",
+      "oldPath": "assets/recommendation-stock/outer-red-cropped-jacket-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-red-cropped-jacket-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc2fab34081918d040068f27e05e5.png",
+      "sourceRole": "sheet-1-custom",
+      "crop": {
+        "left": 1337,
+        "top": 606,
+        "width": 431,
+        "height": 275
+      },
+      "output": "www/assets/recommendation-stock/outer-red-cropped-jacket-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 16,
+      "key": "outer_camel_cape_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "camel cape",
+      "oldPath": "assets/recommendation-stock/outer-camel-cape-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-camel-cape-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-camel-cape-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 17,
+      "key": "outer_black_cape_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black cape",
+      "oldPath": "assets/recommendation-stock/outer-black-cape-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-black-cape-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-cape-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 18,
+      "key": "outer_navy_cape_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "navy cape",
+      "oldPath": "assets/recommendation-stock/outer-navy-cape-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-navy-cape-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-cape-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 19,
+      "key": "outer_beige_poncho_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "beige poncho",
+      "oldPath": "assets/recommendation-stock/outer-beige-poncho-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-beige-poncho-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-poncho-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 20,
+      "key": "outer_black_poncho_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black poncho",
+      "oldPath": "assets/recommendation-stock/outer-black-poncho-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-black-poncho-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-poncho-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 21,
+      "key": "outer_gray_poncho_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "gray poncho",
+      "oldPath": "assets/recommendation-stock/outer-gray-poncho-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-gray-poncho-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-poncho-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 22,
+      "key": "outer_black_kimono_silk_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black kimono",
+      "oldPath": "assets/recommendation-stock/outer-black-kimono-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-black-kimono-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-black-kimono-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 23,
+      "key": "outer_floral_kimono_silk_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "floral kimono",
+      "oldPath": "assets/recommendation-stock/outer-floral-kimono-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-floral-kimono-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-floral-kimono-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 24,
+      "key": "outer_cream_kimono_silk_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "cream kimono",
+      "oldPath": "assets/recommendation-stock/outer-cream-kimono-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-cream-kimono-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-cream-kimono-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 25,
+      "key": "outer_camel_duster_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "camel duster coat",
+      "oldPath": "assets/recommendation-stock/outer-camel-duster-coat-wool-fem.jpg",
+      "newPath": "assets/recommendation-stock/outer-camel-duster-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-camel-duster-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 26,
+      "key": "outer_black_duster_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "black duster coat",
+      "oldPath": "assets/recommendation-stock/outer-black-duster-coat-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/outer-black-duster-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-duster-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 27,
+      "key": "outer_navy_duster_coat_wool_fem_v1",
+      "slot": "outer",
+      "gender": "feminine",
+      "human": "navy duster coat",
+      "oldPath": "assets/recommendation-stock/outer-navy-duster-coat-wool-fem.jpg",
+      "newPath": "assets/recommendation-stock/outer-navy-duster-coat-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-duster-coat-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 28,
+      "key": "shoes_red_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "red heels",
+      "oldPath": "assets/recommendation-stock/shoes-red-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-red-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-red-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 29,
+      "key": "shoes_black_kitten_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "black kitten heels",
+      "oldPath": "assets/recommendation-stock/shoes-black-kitten-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-kitten-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-kitten-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 30,
+      "key": "shoes_nude_kitten_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "nude kitten heels",
+      "oldPath": "assets/recommendation-stock/shoes-nude-kitten-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-nude-kitten-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc33782fc8191a6ef073c617f7f44.png",
+      "sourceRole": "sheet-2",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-nude-kitten-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 31,
+      "key": "shoes_black_block_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "black block heels",
+      "oldPath": "assets/recommendation-stock/shoes-black-block-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-block-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-block-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 32,
+      "key": "shoes_tan_block_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "tan block heels",
+      "oldPath": "assets/recommendation-stock/shoes-tan-block-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-block-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 342,
+        "top": 8,
+        "width": 319,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-block-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 33,
+      "key": "shoes_white_block_heels_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "white block heels",
+      "oldPath": "assets/recommendation-stock/shoes-white-block-heels-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-white-block-heels-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 677,
+        "top": 8,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-white-block-heels-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 34,
+      "key": "shoes_red_pumps_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "red pumps",
+      "oldPath": "assets/recommendation-stock/shoes-red-pumps-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/shoes-red-pumps-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1011,
+        "top": 8,
+        "width": 319,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-red-pumps-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 35,
+      "key": "shoes_red_ballet_flats_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "red ballet flats",
+      "oldPath": "assets/recommendation-stock/shoes-red-ballet-flats-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-red-ballet-flats-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1346,
+        "top": 8,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-red-ballet-flats-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 36,
+      "key": "shoes_black_mary_janes_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "black mary janes",
+      "oldPath": "assets/recommendation-stock/shoes-black-mary-janes-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/shoes-black-mary-janes-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 8,
+        "top": 322,
+        "width": 318,
+        "height": 297
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-mary-janes-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 37,
+      "key": "shoes_red_mary_janes_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "red mary janes",
+      "oldPath": "assets/recommendation-stock/shoes-red-mary-janes-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/shoes-red-mary-janes-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 342,
+        "top": 322,
+        "width": 319,
+        "height": 297
+      },
+      "output": "www/assets/recommendation-stock/shoes-red-mary-janes-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 38,
+      "key": "shoes_gold_wedge_sandals_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "wedge sandals",
+      "oldPath": "assets/recommendation-stock/shoes-gold-wedge-sandals-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gold-wedge-sandals-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 677,
+        "top": 322,
+        "width": 318,
+        "height": 297
+      },
+      "output": "www/assets/recommendation-stock/shoes-gold-wedge-sandals-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 39,
+      "key": "shoes_gold_strappy_sandals_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "strappy sandals",
+      "oldPath": "assets/recommendation-stock/shoes-gold-strappy-sandals-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gold-strappy-sandals-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1011,
+        "top": 322,
+        "width": 319,
+        "height": 297
+      },
+      "output": "www/assets/recommendation-stock/shoes-gold-strappy-sandals-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 40,
+      "key": "shoes_silver_strappy_sandals_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "strappy sandals",
+      "oldPath": "assets/recommendation-stock/shoes-silver-strappy-sandals-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/shoes-silver-strappy-sandals-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1346,
+        "top": 322,
+        "width": 318,
+        "height": 297
+      },
+      "output": "www/assets/recommendation-stock/shoes-silver-strappy-sandals-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 41,
+      "key": "shoes_brown_knee_high_boots_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "brown knee high boots",
+      "oldPath": "assets/recommendation-stock/shoes-brown-knee-high-boots-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/shoes-brown-knee-high-boots-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 8,
+        "top": 635,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-knee-high-boots-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 42,
+      "key": "shoes_black_riding_boots_leather_fem_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "black riding boots",
+      "oldPath": "assets/recommendation-stock/shoes-black-riding-boots-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/shoes-black-riding-boots-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 342,
+        "top": 635,
+        "width": 319,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-riding-boots-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 43,
+      "key": "accessory_gold_clutch_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "clutch",
+      "oldPath": "assets/recommendation-stock/accessory-gold-clutch-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-gold-clutch-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 677,
+        "top": 635,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-clutch-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 44,
+      "key": "accessory_silver_clutch_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "clutch",
+      "oldPath": "assets/recommendation-stock/accessory-silver-clutch-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-clutch-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1011,
+        "top": 635,
+        "width": 319,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-clutch-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 45,
+      "key": "accessory_black_mini_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "black mini bag",
+      "oldPath": "assets/recommendation-stock/accessory-black-mini-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-mini-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc376695c81918832ddf8b0d3d7f3.png",
+      "sourceRole": "sheet-3",
+      "crop": {
+        "left": 1346,
+        "top": 635,
+        "width": 318,
+        "height": 298
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-mini-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 46,
+      "key": "accessory_red_mini_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "red mini bag",
+      "oldPath": "assets/recommendation-stock/accessory-red-mini-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-red-mini-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-red-mini-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 47,
+      "key": "accessory_black_hobo_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "black hobo bag",
+      "oldPath": "assets/recommendation-stock/accessory-black-hobo-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-hobo-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-hobo-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 48,
+      "key": "accessory_brown_hobo_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "brown hobo bag",
+      "oldPath": "assets/recommendation-stock/accessory-brown-hobo-bag-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-hobo-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-hobo-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 49,
+      "key": "accessory_tan_hobo_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "tan hobo bag",
+      "oldPath": "assets/recommendation-stock/accessory-tan-hobo-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-hobo-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-hobo-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 50,
+      "key": "accessory_black_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "black bucket bag",
+      "oldPath": "assets/recommendation-stock/accessory-black-bucket-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-bucket-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-bucket-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 51,
+      "key": "accessory_tan_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "tan bucket bag",
+      "oldPath": "assets/recommendation-stock/accessory-tan-bucket-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-bucket-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-bucket-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 52,
+      "key": "accessory_cream_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "cream bucket bag",
+      "oldPath": "assets/recommendation-stock/accessory-cream-bucket-bag-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-cream-bucket-bag-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-cream-bucket-bag-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 53,
+      "key": "accessory_gold_hair_clip_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "hair clip",
+      "oldPath": "assets/recommendation-stock/accessory-gold-hair-clip-metal-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-gold-hair-clip-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-hair-clip-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 54,
+      "key": "accessory_silver_hair_clip_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "hair clip",
+      "oldPath": "assets/recommendation-stock/accessory-silver-hair-clip-metal-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-hair-clip-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-hair-clip-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 55,
+      "key": "accessory_tortoiseshell_hair_clip_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "tortoiseshell hair clip",
+      "oldPath": "assets/recommendation-stock/accessory-tortoiseshell-hair-clip-metal-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-tortoiseshell-hair-clip-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-tortoiseshell-hair-clip-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 56,
+      "key": "accessory_black_headband_silk_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "black headband",
+      "oldPath": "assets/recommendation-stock/accessory-black-headband-silk-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-headband-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-headband-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 57,
+      "key": "accessory_red_headband_silk_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "red headband",
+      "oldPath": "assets/recommendation-stock/accessory-red-headband-silk-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-red-headband-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-red-headband-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 58,
+      "key": "accessory_gold_headband_silk_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "headband",
+      "oldPath": "assets/recommendation-stock/accessory-gold-headband-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-gold-headband-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-headband-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 59,
+      "key": "accessory_red_hair_scarf_silk_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "red hair scarf",
+      "oldPath": "assets/recommendation-stock/accessory-red-hair-scarf-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-red-hair-scarf-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-red-hair-scarf-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 60,
+      "key": "accessory_navy_hair_scarf_silk_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "navy hair scarf",
+      "oldPath": "assets/recommendation-stock/accessory-navy-hair-scarf-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-hair-scarf-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3b330a48191b1e3073de90f678a.png",
+      "sourceRole": "sheet-4",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-hair-scarf-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 61,
+      "key": "accessory_pearl_pearl_earrings_pearl_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "earrings",
+      "oldPath": "assets/recommendation-stock/accessory-pearl-pearl-earrings-pearl-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-pearl-pearl-earrings-pearl-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-pearl-pearl-earrings-pearl-fem-studio.jpg"
+    },
+    {
+      "ordinal": 62,
+      "key": "accessory_white_pearl_earrings_pearl_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "white earrings",
+      "oldPath": "assets/recommendation-stock/accessory-white-pearl-earrings-pearl-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-white-pearl-earrings-pearl-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-white-pearl-earrings-pearl-fem-studio.jpg"
+    },
+    {
+      "ordinal": 63,
+      "key": "accessory_silver_drop_earrings_gold_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "drop earrings",
+      "oldPath": "assets/recommendation-stock/accessory-silver-drop-earrings-gold-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-silver-drop-earrings-gold-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-drop-earrings-gold-fem-studio.jpg"
+    },
+    {
+      "ordinal": 64,
+      "key": "accessory_gold_statement_necklace_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "statement necklace",
+      "oldPath": "assets/recommendation-stock/accessory-gold-statement-necklace-metal-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gold-statement-necklace-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-statement-necklace-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 65,
+      "key": "accessory_silver_statement_necklace_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "statement necklace",
+      "oldPath": "assets/recommendation-stock/accessory-silver-statement-necklace-metal-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-statement-necklace-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-statement-necklace-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 66,
+      "key": "accessory_gold_pendant_necklace_gold_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "pendant necklace",
+      "oldPath": "assets/recommendation-stock/accessory-gold-pendant-necklace-gold-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-gold-pendant-necklace-gold-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-pendant-necklace-gold-fem-studio.jpg"
+    },
+    {
+      "ordinal": 67,
+      "key": "accessory_silver_pendant_necklace_gold_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "pendant necklace",
+      "oldPath": "assets/recommendation-stock/accessory-silver-pendant-necklace-gold-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-pendant-necklace-gold-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-pendant-necklace-gold-fem-studio.jpg"
+    },
+    {
+      "ordinal": 68,
+      "key": "accessory_gold_brooch_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "brooch",
+      "oldPath": "assets/recommendation-stock/accessory-gold-brooch-metal-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gold-brooch-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-brooch-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 69,
+      "key": "accessory_silver_brooch_metal_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "brooch",
+      "oldPath": "assets/recommendation-stock/accessory-silver-brooch-metal-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-silver-brooch-metal-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-brooch-metal-fem-studio.jpg"
+    },
+    {
+      "ordinal": 70,
+      "key": "accessory_gold_stacked_bracelets_gold_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "stacked bracelets",
+      "oldPath": "assets/recommendation-stock/accessory-gold-stacked-bracelets-gold-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-gold-stacked-bracelets-gold-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-stacked-bracelets-gold-fem-studio.jpg"
+    },
+    {
+      "ordinal": 71,
+      "key": "accessory_silver_stacked_bracelets_gold_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "stacked bracelets",
+      "oldPath": "assets/recommendation-stock/accessory-silver-stacked-bracelets-gold-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-stacked-bracelets-gold-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-stacked-bracelets-gold-fem-studio.jpg"
+    },
+    {
+      "ordinal": 72,
+      "key": "accessory_silver_charm_bracelet_silver_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "charm bracelet",
+      "oldPath": "assets/recommendation-stock/accessory-silver-charm-bracelet-silver-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-silver-charm-bracelet-silver-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-charm-bracelet-silver-fem-studio.jpg"
+    },
+    {
+      "ordinal": 73,
+      "key": "accessory_gold_charm_bracelet_silver_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "charm bracelet",
+      "oldPath": "assets/recommendation-stock/accessory-gold-charm-bracelet-silver-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gold-charm-bracelet-silver-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gold-charm-bracelet-silver-fem-studio.jpg"
+    },
+    {
+      "ordinal": 74,
+      "key": "accessory_black_beret_wool_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "black beret",
+      "oldPath": "assets/recommendation-stock/accessory-black-beret-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-beret-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-beret-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 75,
+      "key": "accessory_red_beret_wool_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "red beret",
+      "oldPath": "assets/recommendation-stock/accessory-red-beret-wool-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-red-beret-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc3f080208191be70426fe93bb10b.png",
+      "sourceRole": "sheet-5",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-red-beret-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 76,
+      "key": "accessory_navy_beret_wool_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "navy beret",
+      "oldPath": "assets/recommendation-stock/accessory-navy-beret-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-beret-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc436bb348191a79c061f9a8ca18d.png",
+      "sourceRole": "sheet-6",
+      "crop": {
+        "left": 22,
+        "top": 22,
+        "width": 843,
+        "height": 843
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-beret-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 77,
+      "key": "accessory_cream_beret_wool_fem_v1",
+      "slot": "accessory",
+      "gender": "feminine",
+      "human": "cream beret",
+      "oldPath": "assets/recommendation-stock/accessory-cream-beret-wool-fem.jpg",
+      "newPath": "assets/recommendation-stock/accessory-cream-beret-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc436bb348191a79c061f9a8ca18d.png",
+      "sourceRole": "sheet-6",
+      "crop": {
+        "left": 909,
+        "top": 22,
+        "width": 843,
+        "height": 843
+      },
+      "output": "www/assets/recommendation-stock/accessory-cream-beret-wool-fem-studio.jpg"
+    }
+  ]
+}

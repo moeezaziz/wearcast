@@ -1,0 +1,4 @@
+bad_aspect_ratio (0.46)
+source: https://commons.wikimedia.org/wiki/File:Afternoon_dress_MET_CI49.2.4_F.jpg
+license: CC0
+title: File:Afternoon dress MET CI49.2.4 F.jpg

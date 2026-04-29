@@ -707,6 +707,12 @@ const DEFAULT_STATE = {
     activityContext: "everyday",
     locationContext: "mixed",
     styleFocus: "auto",
+    // Gender presentation preference for outfit recommendations.
+    //   "unspecified" — no bias (legacy behaviour)
+    //   "male"        — bias toward menswear silhouettes
+    //   "female"      — bias toward womenswear silhouettes
+    //   "nonbinary"   — bias toward unisex / mixed
+    gender: "unspecified",
     fashionNotes: "",
   },
 };
@@ -1016,6 +1022,10 @@ function summarizeRecommendationTuning(prefs = loadState().prefs) {
   }
   if (resolved.styleFocus && resolved.styleFocus !== DEFAULT_STATE.prefs.styleFocus) {
     chips.push(styleMap[resolved.styleFocus] || "Custom style");
+  }
+  const genderMap = { male: "Men's", female: "Women's", nonbinary: "Mixed" };
+  if (resolved.gender && resolved.gender !== "unspecified" && genderMap[resolved.gender]) {
+    chips.push(genderMap[resolved.gender]);
   }
   if (resolved.cold) chips.push("Usually cold");
   if (resolved.hot) chips.push("Usually hot");
@@ -2698,7 +2708,34 @@ function renderOutfitDayOutlook(hours = [], recommendationSnapshot = latestRecom
       </section>
     `;
   }
-  const headline = buildOutlookHeading(outfitItems, recommendationSnapshot?.headline);
+  const llmOutlook = recommendationSnapshot?.outlook && typeof recommendationSnapshot.outlook === "object"
+    ? recommendationSnapshot.outlook
+    : null;
+  const llmWindows = llmOutlook?.windows && typeof llmOutlook.windows === "object" ? llmOutlook.windows : null;
+  // Accept either { copy: "..." }, { text/description/summary }, or a raw string
+  // so the model can return the natural shape `windows: { now: "..." }`.
+  const readWindowCopy = (entry) => {
+    if (entry == null) return "";
+    if (typeof entry === "string") return entry.trim();
+    if (typeof entry !== "object") return "";
+    for (const key of ["copy", "text", "description", "summary"]) {
+      const v = entry[key];
+      if (typeof v === "string" && v.trim()) return v.trim();
+    }
+    return "";
+  };
+  const fallbackHeadline = buildOutlookHeading(outfitItems, recommendationSnapshot?.headline);
+  const headline = (typeof llmOutlook?.headline === "string" && llmOutlook.headline.trim())
+    ? llmOutlook.headline.trim()
+    : fallbackHeadline;
+  if (typeof window !== "undefined" && window.__DEBUG_OUTLOOK) {
+    console.info("[outlook] render", {
+      hasOutlook: !!llmOutlook,
+      headline: llmOutlook?.headline || null,
+      windowKeys: llmWindows ? Object.keys(llmWindows) : [],
+      sample: llmWindows ? Object.fromEntries(Object.entries(llmWindows).map(([k, v]) => [k, readWindowCopy(v).slice(0, 60)])) : null,
+    });
+  }
   return `
     <section class="weather-expanded-outlook">
       <div class="weather-expanded-section-head">
@@ -2713,13 +2750,19 @@ function renderOutfitDayOutlook(hours = [], recommendationSnapshot = latestRecom
             ? `${fmt1(summary.minTemp, "°")}–${fmt1(summary.maxTemp, "°")}`
             : "—";
           const rainLabel = Number.isFinite(summary.maxRain) ? `${Math.round(summary.maxRain)}% rain` : "Rain —";
+          const llmCopy = llmWindows
+            ? readWindowCopy(llmWindows[window.period])
+              || readWindowCopy(llmWindows[window.label])
+              || readWindowCopy(llmWindows[window.label?.toLowerCase?.() || window.period])
+            : "";
+          const copy = llmCopy || buildOutlookGuidance(summary, outfitItems, window.period);
           return `
             <article class="weather-expanded-outlook-row">
               <div>
                 <span>${escapeHtml(window.label)}</span>
                 <strong>${escapeHtml(tempLabel)}</strong>
               </div>
-              <p>${escapeHtml(buildOutlookGuidance(summary, outfitItems, window.period))}</p>
+              <p>${escapeHtml(copy)}</p>
               <small>${escapeHtml(summary.label)} • ${escapeHtml(rainLabel)}</small>
             </article>
           `;
@@ -2919,12 +2962,50 @@ function renderInlineIcon(kind, extraClass = "") {
 
 function itemTypeIconKey(type = "") {
   const key = String(type).toLowerCase();
-  if (/(jacket|coat|hoodie|sweater|blazer|vest)/.test(key)) return "jacket";
-  if (/(jeans|chinos|shorts|pants|sweatpants|skirt)/.test(key)) return "pants";
+  if (/(jacket|coat|hoodie|sweater|blazer|vest|overshirt|shacket|shell|parka|windbreaker|outer)/.test(key)) return "jacket";
+  if (/(jeans|chinos|shorts|pants|trousers|trouser|slacks|sweatpants|skirt|bottom)/.test(key)) return "pants";
   if (/(dress)/.test(key)) return "dress";
   if (/(sneakers|boots|sandals|shoes)/.test(key)) return "shoes";
   if (/(scarf|hat|beanie|gloves|sunglasses|belt|bag|umbrella|watch|cap|socks|accessor)/.test(key)) return "accessory";
   return "top";
+}
+
+function getRecommendationSlotArtKey(label = "", value = "") {
+  const slot = String(label || "").toLowerCase();
+  if (slot === "top") return "top";
+  if (slot === "bottom") return "pants";
+  if (slot === "outer") return "jacket";
+  if (slot === "shoes") return "shoes";
+  if (slot === "accessory") return "accessory";
+  return itemTypeIconKey(`${label} ${value}`);
+}
+
+function getRecommendationFallbackPhoto(label = "", value = "") {
+  const slotKey = getRecommendationSlotArtKey(label, value);
+  const text = `${label} ${value}`.toLowerCase();
+  if (slotKey === "jacket") {
+    if (/\b(fleece|sherpa|hoodie|soft layer)\b/.test(text)) return "assets/recommendation-stock/outer-gray-hoodie-cotton-studio.jpg";
+    if (/\b(rain|waterproof|weatherproof|shell|windbreaker)\b/.test(text)) return "assets/recommendation-stock/outer-gray-shell-jacket-tech-studio.jpg";
+    if (/\bovershirt|shacket|shirt jacket\b/.test(text)) return "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg";
+    if (/\bblazer\b/.test(text)) return "assets/recommendation-stock/outer-black-blazer-studio.jpg";
+  }
+  if (slotKey === "accessory") {
+    if (/\bwatch|wristwatch\b/.test(text)) return "assets/recommendation-stock/accessory-watch-studio.jpg";
+    if (/\bbaseball cap|dad cap|snapback|sport cap|cap\b/.test(text)) return "assets/recommendation-stock/accessory-baseball-cap-studio.svg";
+    if (/\bumbrella\b/.test(text)) return "assets/recommendation-stock/accessory-white-umbrella-studio.jpg";
+    if (/\bbeanie\b/.test(text)) return "assets/recommendation-stock/accessory-white-beanie-studio.jpg";
+    if (/\bscarf\b/.test(text)) return "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg";
+    if (/\bgloves?\b/.test(text)) return "assets/recommendation-stock/accessory-white-gloves-studio.jpg";
+    if (/\bbag|tote|backpack\b/.test(text)) return "assets/recommendation-stock/accessory-tote-bag-studio.jpg";
+    return "assets/recommendation-stock/accessory-watch-studio.jpg";
+  }
+  return {
+    top: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
+    pants: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
+    jacket: "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
+    shoes: "assets/recommendation-stock/shoes-black-white-sneakers-studio.jpg",
+    dress: "assets/recommendation-stock/top-black-wrap-dress-jersey-studio-fem.jpg",
+  }[slotKey] || "assets/recommendation-stock/top-white-tshirt-studio.jpg";
 }
 
 function formatCityLevelLocation(displayName, address = null) {
@@ -3150,7 +3231,7 @@ function getRecommendationTileIcon(label) {
 }
 
 function getRecommendationCardArt(label, value, imageMatch = null) {
-  const key = itemTypeIconKey(`${label} ${value}`);
+  const key = getRecommendationSlotArtKey(label, value);
   const toneMap = {
     top: "top",
     pants: "bottom",
@@ -3163,13 +3244,7 @@ function getRecommendationCardArt(label, value, imageMatch = null) {
     key,
     tone: toneMap[key] || "top",
     icon: renderInlineIcon(key),
-    photo: imageMatch?.path || {
-      top: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
-      pants: "assets/recommendation-stock/bottom-blue-jeans-stack.jpg",
-      jacket: "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
-      shoes: "assets/recommendation-stock/shoes-white-sneakers-minimal.jpg",
-      accessory: "assets/recommendation-stock/accessory-black-sunglasses-studio.jpg",
-    }[key] || "",
+    photo: imageMatch?.path || getRecommendationFallbackPhoto(label, value),
   };
 }
 
@@ -3399,6 +3474,18 @@ function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
   }, {});
 }
 
+function mergeRecommendationImageMatches(serverMatches = {}, wardrobeMatches = {}) {
+  const merged = { ...(serverMatches || {}) };
+  Object.entries(wardrobeMatches || {}).forEach(([key, match]) => {
+    if (!match || match.source !== "wardrobe") return;
+    const serverMatch = merged[key];
+    if (!serverMatch || serverMatch.source !== "wardrobe") {
+      merged[key] = match;
+    }
+  });
+  return merged;
+}
+
 function buildWardrobeItemMatches(entries, wardrobeItems = []) {
   const items = Array.isArray(wardrobeItems)
     ? wardrobeItems.filter((item) => item?.name)
@@ -3459,8 +3546,25 @@ function getRecommendationCategoryPreset(label = "") {
   return "Other";
 }
 
-function getRecommendationWardrobeSummary(rowEntries = [], wardrobeItems = []) {
-  const directMatches = buildWardrobeItemMatches(rowEntries, wardrobeItems);
+function getRecommendationWardrobeSummary(rowEntries = [], wardrobeItems = [], imageMatches = {}) {
+  const serverMatches = rowEntries.reduce((acc, entry) => {
+    const normalizedEntry = normalizeRecommendationEntry(entry);
+    const slotKey = String(normalizedEntry.label || "").toLowerCase();
+    const match = imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null;
+    if (match?.source !== "wardrobe") return acc;
+    acc[normalizedEntry.key] = {
+      id: match.itemId ?? null,
+      type: match.type || normalizedEntry.label || "",
+      name: match.itemName || normalizedEntry.value || "",
+      color: match.color || "",
+      material: match.material || "",
+      careInstructions: Array.isArray(match.careInstructions) ? match.careInstructions : [],
+    };
+    return acc;
+  }, {});
+  const directMatches = Object.keys(serverMatches).length
+    ? serverMatches
+    : buildWardrobeItemMatches(rowEntries, wardrobeItems);
   const matchedCount = rowEntries.filter((entry) => directMatches[entry.key]).length;
   const totalCount = rowEntries.length;
   const missingCount = Math.max(0, totalCount - matchedCount);
@@ -3903,6 +4007,17 @@ function renderRecommendationControls({ mode = "default" } = {}) {
             ["minimalist", "Minimalist"],
           ],
         },
+        {
+          label: "Cut",
+          key: "gender",
+          activeValue: prefs.gender || DEFAULT_STATE.prefs.gender,
+          options: [
+            ["unspecified", "Auto"],
+            ["male", "Men's"],
+            ["female", "Women's"],
+            ["nonbinary", "Mixed"],
+          ],
+        },
       ]
     : [
         {
@@ -3954,6 +4069,17 @@ function renderRecommendationControls({ mode = "default" } = {}) {
             ["sporty", "Sporty"],
             ["streetwear", "Streetwear"],
             ["minimalist", "Minimal"],
+          ],
+        },
+        {
+          label: "Cut",
+          key: "gender",
+          activeValue: prefs.gender || DEFAULT_STATE.prefs.gender,
+          options: [
+            ["unspecified", "Auto"],
+            ["male", "Men's"],
+            ["female", "Women's"],
+            ["nonbinary", "Mixed"],
           ],
         },
       ];
@@ -4028,8 +4154,34 @@ function renderRecommendationControls({ mode = "default" } = {}) {
 }
 
 function normalizeRecommendationPrefs(prefs = {}) {
+  const genderAliases = {
+    men: "male",
+    mens: "male",
+    "men's": "male",
+    man: "male",
+    male: "male",
+    women: "female",
+    womens: "female",
+    "women's": "female",
+    woman: "female",
+    female: "female",
+    mixed: "nonbinary",
+    unisex: "nonbinary",
+    nonbinary: "nonbinary",
+    "non-binary": "nonbinary",
+    auto: "unspecified",
+    skip: "unspecified",
+    unspecified: "unspecified",
+  };
+  const allowedGender = new Set(["unspecified", "male", "female", "nonbinary"]);
+  const rawGender = String(prefs.gender || "").toLowerCase().trim();
+  const normalizedGender = genderAliases[rawGender] || rawGender;
+  const gender = allowedGender.has(normalizedGender)
+    ? normalizedGender
+    : DEFAULT_STATE.prefs.gender;
   const normalized = {
     ...prefs,
+    gender,
     bike: ["walking", "commute", "errands", "travel"].includes(prefs.activityContext),
   };
   delete normalized.comfortBias;
@@ -9596,8 +9748,18 @@ function animateRecommendationRefreshIn() {
 }
 
 async function fetchAIRecommendation(weatherData, current, ctx) {
-  const wardrobe = loadWardrobe().map(({ id, type, name, color, material, careInstructions }) => ({
-    id, type, name, color, material, careInstructions,
+  const wardrobe = loadWardrobe().map(({ id, type, name, color, material, careInstructions, photoDataUrl, sourcePhotoDataUrl, cropPhotoDataUrl, cropConfidence, favorite }) => ({
+    id,
+    type,
+    name,
+    color,
+    material,
+    careInstructions,
+    photoDataUrl,
+    sourcePhotoDataUrl,
+    cropPhotoDataUrl,
+    cropConfidence,
+    favorite: !!favorite,
   }));
   const state = loadState();
   const location = state.lastLocation
@@ -9659,12 +9821,42 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     remainingForecast,
   };
 
+  // Compact 3-window outlook summary (now / later / evening) for the LLM
+  // so it can write the outfit-outlook copy itself instead of us templating it.
+  let outlookWindows = null;
+  try {
+    const nextHours = getNextWeatherHours(current, hourly, 15);
+    if (nextHours.length) {
+      const fmtRange = (lo, hi) => Number.isFinite(lo) && Number.isFinite(hi)
+        ? `${Math.round(lo)}–${Math.round(hi)}°C`
+        : null;
+      const round = (v) => Number.isFinite(v) ? Math.round(v) : null;
+      const buildWindow = (label, slice) => {
+        if (!slice.length) return null;
+        const s = summarizeOutlookWindow(slice, label);
+        return {
+          label,
+          tempRange: fmtRange(s.minTemp, s.maxTemp),
+          maxRain: round(s.maxRain),
+          maxWind: round(s.maxWind),
+          condition: s.label || null,
+          hours: slice.length,
+        };
+      };
+      outlookWindows = [
+        buildWindow("Now", nextHours.slice(0, 4)),
+        buildWindow("Later", nextHours.slice(4, 10)),
+        buildWindow("Evening", nextHours.slice(10, 15)),
+      ].filter(Boolean);
+    }
+  } catch {}
+
   lastWeatherForAI = weather;
 
-  const preferences = {
+  const preferences = normalizeRecommendationPrefs({
     ...state.prefs,
     fashionNotes: state.prefs.fashionNotes || null,
-  };
+  });
 
   const hasExistingRecommendation = hasRecommendationCardContent();
   els.aiRecSection.style.display = "";
@@ -9714,14 +9906,14 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
     location: location?.name || null,
     prefs: preferences,
   });
-  const recommendationTimeoutId = window.setTimeout(() => recommendationController.abort("timeout"), 28000);
+  const recommendationTimeoutId = window.setTimeout(() => recommendationController.abort("timeout"), 70000);
 
   try {
     const res = await fetch(`${API_BASE}/api/recommend`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: recommendationController.signal,
-      body: JSON.stringify({ weather, wardrobe, preferences, location }),
+      body: JSON.stringify({ weather, wardrobe, preferences, location, outlookWindows }),
     });
     const data = await res.json();
     if (requestId !== activeRecommendationRequestId) {
@@ -9747,11 +9939,12 @@ async function fetchAIRecommendation(weatherData, current, ctx) {
       });
       return;
     }
-    if (err?.name === "AbortError" || err?.message === "superseded" || err === "superseded") {
+    const abortReason = recommendationController.signal.reason || err?.message || String(err);
+    if (abortReason === "superseded" || err?.message === "superseded" || err === "superseded") {
       console.info("[recommend-ui] request-aborted", { requestId, reason: err?.message || String(err) });
       return;
     }
-    const reason = err?.name === "AbortError"
+    const reason = err?.name === "AbortError" || abortReason === "timeout"
       ? "AI took too long to respond"
       : "AI service could not be reached";
     renderAIRecommendation(buildClientFallbackRecommendation(weather, reason));
@@ -9794,7 +9987,8 @@ function renderAIRecommendation(data) {
     })),
   ].filter((entry) => entry.value);
   const wardrobePhotoMatches = buildWardrobePhotoMatches(rowEntries, wardrobeItems);
-  const wardrobeSummary = getRecommendationWardrobeSummary(rowEntries, wardrobeItems);
+  const resolvedImageMatches = mergeRecommendationImageMatches(imageMatches, wardrobePhotoMatches);
+  const wardrobeSummary = getRecommendationWardrobeSummary(rowEntries, wardrobeItems, resolvedImageMatches);
   saveState({
     latestRecommendation: {
       matchedItemIds: Object.values(wardrobeSummary.directMatches || {}).map((item) => item?.id).filter(Boolean),
@@ -9812,11 +10006,18 @@ function renderAIRecommendation(data) {
     wardrobeSummary,
     missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
     reasoning: data.reasoning || "",
+    outlook: data.outlook || null,
   };
+  if (typeof window !== "undefined" && window.__DEBUG_OUTLOOK) {
+    console.info("[outlook] received", {
+      hasOutlook: !!data.outlook,
+      raw: data.outlook,
+    });
+  }
   renderWeatherExpandedPanel();
   const collageItems = rowEntries.map((entry, index) => {
     const slotKey = String(entry.label || "").toLowerCase();
-    const imageMatch = { ...imageMatches, ...wardrobePhotoMatches }[entry.key] || { ...imageMatches, ...wardrobePhotoMatches }[slotKey] || null;
+    const imageMatch = resolvedImageMatches[entry.key] || resolvedImageMatches[slotKey] || null;
     const art = getRecommendationCardArt(entry.label, entry.value, imageMatch);
     return {
       label: entry.label,
@@ -9833,7 +10034,7 @@ function renderAIRecommendation(data) {
   els.aiRecContent.innerHTML = `
     <div class="today-rec-body">
       ${renderRecommendationTrustSignals(data, weather, wardrobeSummary)}
-      ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, { ...imageMatches, ...wardrobePhotoMatches }, slotReasons) : ""}
+      ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, resolvedImageMatches, slotReasons) : ""}
     </div>
   `;
   els.aiRecContent.dataset.whyItems = JSON.stringify(detailsItems);
@@ -9973,7 +10174,8 @@ function bindRecommendationControls() {
       const latestState = loadState();
       const notesInput = els.tuneLookDialogBody?.querySelector("[data-rec-notes]");
       const draftPrefs = {
-        ...(pendingRecommendationPrefs || latestState.prefs),
+        ...DEFAULT_STATE.prefs,
+        ...(pendingRecommendationPrefs || latestState.prefs || {}),
         ...(notesInput ? { fashionNotes: notesInput.value.trim() } : {}),
       };
       const nextPrefs = normalizeRecommendationPrefs(draftPrefs);
@@ -10082,7 +10284,10 @@ function bindRecommendationControls() {
     const value = chipButton.dataset.recValue;
     if (!key || !value) return;
 
-    const basePrefs = pendingRecommendationPrefs || loadState().prefs;
+    const basePrefs = {
+      ...DEFAULT_STATE.prefs,
+      ...(pendingRecommendationPrefs || loadState().prefs || {}),
+    };
     if (key === "comfortBias") {
       pendingRecommendationPrefs = {
         ...basePrefs,
@@ -10604,6 +10809,25 @@ function bindOnboardingUI() {
   });
   els.onboardingNextBtn?.addEventListener("click", () => {
     setActiveOnboardingSlide(activeOnboardingSlide + 1);
+  });
+  // Onboarding gender pills (delegated). Save selection to prefs and move
+  // visual selection state across the four pills.
+  document.querySelectorAll(".onboarding-pill[data-onboarding-gender]").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const value = pill.getAttribute("data-onboarding-gender") || "unspecified";
+      const allowed = new Set(["unspecified", "male", "female", "nonbinary"]);
+      if (!allowed.has(value)) return;
+      saveState({ prefs: { ...loadState().prefs, gender: value } });
+      document.querySelectorAll(".onboarding-pill[data-onboarding-gender]").forEach((p) => {
+        const isSelf = p === pill;
+        p.classList.toggle("is-selected", isSelf);
+        p.setAttribute("aria-checked", isSelf ? "true" : "false");
+      });
+      trackAnalyticsEvent("onboarding_gender_set", {
+        title: `onboarding_gender_set:${value}`,
+        gender: value,
+      });
+    });
   });
   els.onboardingUseLocationBtn?.addEventListener("click", () => {
     trackAnalyticsEvent("onboarding_completed", {

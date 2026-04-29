@@ -1,0 +1,52 @@
+{
+  "male": {
+    "total": 460,
+    "sameGender": 51,
+    "crossGender": 0,
+    "unisexHit": 409,
+    "fallback": 0,
+    "examples": {
+      "sameGender": [
+        {
+          "name": "Cream T-shirt",
+          "key": "top_brown_long_sleeve_t_shirt_cotton_v1"
+        },
+        {
+          "name": "Beige T-shirt",
+          "key": "top_brown_long_sleeve_t_shirt_cotton_v1"
+        },
+        {
+          "name": "Tan T-shirt",
+          "key": "top_brown_long_sleeve_t_shirt_cotton_v1"
+        }
+      ],
+      "crossGender": [],
+      "fallback": []
+    }
+  },
+  "female": {
+    "total": 590,
+    "sameGender": 590,
+    "crossGender": 0,
+    "unisexHit": 0,
+    "fallback": 0,
+    "examples": {
+      "sameGender": [
+        {
+          "name": "Black Blouse",
+          "key": "top_black_blouse_silk_fem_v1"
+        },
+        {
+          "name": "White Blouse",
+          "key": "top_white_blouse_silk_fem_v1"
+        },
+        {
+          "name": "Navy Blouse",
+          "key": "top_navy_blouse_silk_fem_v1"
+        }
+      ],
+      "crossGender": [],
+      "fallback": []
+    }
+  }
+}

@@ -1,0 +1,4369 @@
+{
+  "generatedAt": "2026-04-26T19:32:52.988Z",
+  "totals": {
+    "noMatchCategories": 16,
+    "colorLockedCategories": 121,
+    "materialLockedCategories": 110,
+    "weakMatchCategories": 18
+  },
+  "noMatch": [
+    {
+      "slot": "accessory",
+      "item": "Backpack",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Backpack"
+    },
+    {
+      "slot": "accessory",
+      "item": "Bow tie",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Bow tie"
+    },
+    {
+      "slot": "accessory",
+      "item": "Bracelet",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Bracelet"
+    },
+    {
+      "slot": "accessory",
+      "item": "Fedora",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Fedora"
+    },
+    {
+      "slot": "accessory",
+      "item": "Necklace",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Necklace"
+    },
+    {
+      "slot": "accessory",
+      "item": "Pocket square",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Pocket square"
+    },
+    {
+      "slot": "accessory",
+      "item": "Tie",
+      "materials": [
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ],
+      "example": "Brown cotton Tie"
+    },
+    {
+      "slot": "outer",
+      "item": "Quilted vest",
+      "materials": [
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ],
+      "example": "Navy cotton Quilted vest"
+    },
+    {
+      "slot": "shoes",
+      "item": "Brogues",
+      "materials": [
+        "mesh",
+        "rubber",
+        "knit"
+      ],
+      "example": "Navy mesh Brogues"
+    },
+    {
+      "slot": "shoes",
+      "item": "Espadrilles",
+      "materials": [
+        "mesh",
+        "rubber",
+        "knit"
+      ],
+      "example": "Navy mesh Espadrilles"
+    },
+    {
+      "slot": "shoes",
+      "item": "Sandals",
+      "materials": [
+        "mesh",
+        "rubber",
+        "knit"
+      ],
+      "example": "Navy mesh Sandals"
+    },
+    {
+      "slot": "shoes",
+      "item": "Slides",
+      "materials": [
+        "mesh",
+        "rubber",
+        "knit"
+      ],
+      "example": "Navy mesh Slides"
+    },
+    {
+      "slot": "shoes",
+      "item": "Slip-ons",
+      "materials": [
+        "mesh",
+        "rubber",
+        "knit"
+      ],
+      "example": "Navy mesh Slip-ons"
+    },
+    {
+      "slot": "top",
+      "item": "Cardigan",
+      "materials": [
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ],
+      "example": "Navy wool Cardigan"
+    },
+    {
+      "slot": "top",
+      "item": "Henley",
+      "materials": [
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ],
+      "example": "Navy wool Henley"
+    },
+    {
+      "slot": "top",
+      "item": "Wool turtleneck",
+      "materials": [
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ],
+      "example": "Navy wool Wool turtleneck"
+    }
+  ],
+  "colorLocked": [
+    {
+      "slot": "accessory",
+      "item": "Backpack",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Baseball cap",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "brown",
+        "tan",
+        "navy",
+        "cream",
+        "white",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Belt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Belt bag",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Bow tie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Bracelet",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Bucket hat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Crossbody bag",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Fedora",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Gloves",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Leather belt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Leather gloves",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Necklace",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Pocket square",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Scarf",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Silk scarf",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Sports cap",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "brown",
+        "tan",
+        "navy",
+        "cream",
+        "white",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Sun hat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Sunglasses",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Tie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "yellow",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Tote bag",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Watch",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wide-brim hat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool gloves",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool scarf",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool socks",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "gray",
+        "red",
+        "yellow",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Athletic shorts",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Black jeans",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Cargo pants",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Chinos",
+      "imageColors": [
+        "navy"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Corduroy pants",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Denim shorts",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Jeans",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Joggers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Leggings",
+      "imageColors": [
+        "magenta"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Lightweight chinos",
+      "imageColors": [
+        "navy"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Linen shorts",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Linen trousers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "charcoal"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Pleated trousers",
+      "imageColors": [
+        "white",
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue",
+        "beige",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Relaxed jeans",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Running shorts",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Slim chinos",
+      "imageColors": [
+        "navy"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Slim jeans",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Tailored trousers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Tech joggers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white",
+        "blue"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Track pants",
+      "imageColors": [
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "beige",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Wide-leg trousers",
+      "imageColors": [
+        "white",
+        "blue"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue",
+        "beige",
+        "cream",
+        "white"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Wool trousers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "tan",
+        "khaki",
+        "olive",
+        "brown",
+        "blue"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Bomber jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Cardigan",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Chore coat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Denim jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Down jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Duffle coat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Field jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Fleece jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Hooded parka",
+      "imageColors": [
+        "rust"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Hoodie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Insulated parka",
+      "imageColors": [
+        "rust"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Leather jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Overshirt",
+      "imageColors": [
+        "charcoal"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Parka",
+      "imageColors": [
+        "rust"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Pea coat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Puffer jacket",
+      "imageColors": [
+        "black",
+        "white"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Rain jacket",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Shacket",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Shell jacket",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Tech shell",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Trench coat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Windbreaker",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "cream",
+        "green",
+        "beige",
+        "white",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Wool overcoat",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Zip hoodie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "charcoal",
+        "brown",
+        "tan",
+        "olive",
+        "green",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Ankle boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "brown"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Black sneakers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Boat shoes",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Brogues",
+      "imageColors": [
+        "white",
+        "brown"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "white",
+        "tan",
+        "cream"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Brown loafers",
+      "imageColors": [
+        "brown"
+      ],
+      "unsupportedColors": [
+        "white",
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "cream",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Canvas sneakers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Chelsea boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Chukka boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Combat boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Derby shoes",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Espadrilles",
+      "imageColors": [
+        "white",
+        "brown"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "white",
+        "tan",
+        "cream"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Hiking boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Leather sneakers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Loafers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "white",
+        "gray",
+        "navy",
+        "olive",
+        "cream",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Oxford shoes",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Penny loafers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "white",
+        "gray",
+        "navy",
+        "olive",
+        "cream",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Performance runners",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "brown"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Rain boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Running shoes",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Sandals",
+      "imageColors": [
+        "white",
+        "brown"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "white",
+        "tan",
+        "cream"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Slides",
+      "imageColors": [
+        "white",
+        "brown"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "white",
+        "tan",
+        "cream"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Slip-ons",
+      "imageColors": [
+        "white",
+        "brown"
+      ],
+      "unsupportedColors": [
+        "black",
+        "gray",
+        "navy",
+        "olive",
+        "red",
+        "white",
+        "tan",
+        "cream"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Sneakers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Suede loafers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "white",
+        "gray",
+        "navy",
+        "olive",
+        "cream",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Tassel loafers",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "white",
+        "gray",
+        "navy",
+        "olive",
+        "cream",
+        "red",
+        "brown",
+        "tan"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Trail runners",
+      "imageColors": [
+        "gray"
+      ],
+      "unsupportedColors": [
+        "white",
+        "black",
+        "brown",
+        "tan",
+        "navy",
+        "olive",
+        "cream",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "White sneakers",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Winter boots",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "brown",
+        "tan",
+        "gray",
+        "navy",
+        "olive",
+        "red"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Button-up shirt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Camp shirt",
+      "imageColors": [
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Cardigan",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "light blue",
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Chambray shirt",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Flannel shirt",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Graphic tee",
+      "imageColors": [
+        "black"
+      ],
+      "unsupportedColors": [
+        "white",
+        "navy",
+        "gray",
+        "cream",
+        "beige",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Henley",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "light blue",
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Hoodie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Linen shirt",
+      "imageColors": [
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Long-sleeve linen shirt",
+      "imageColors": [
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Long-sleeve t-shirt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Mock-neck top",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Oxford shirt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Performance tee",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Polo shirt",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Rugby shirt",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Sweatshirt",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "T-shirt",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Tank top",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Wool turtleneck",
+      "imageColors": [
+        "white",
+        "ivory"
+      ],
+      "unsupportedColors": [
+        "light blue",
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Zip hoodie",
+      "imageColors": [
+        "white"
+      ],
+      "unsupportedColors": [
+        "black",
+        "navy",
+        "gray",
+        "blue",
+        "light blue",
+        "olive",
+        "burgundy",
+        "red",
+        "pink",
+        "yellow",
+        "green",
+        "brown"
+      ]
+    }
+  ],
+  "materialLocked": [
+    {
+      "slot": "accessory",
+      "item": "Backpack",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Beanie",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Belt",
+      "imageMaterials": [
+        "waterproof",
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Belt bag",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Bow tie",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Bracelet",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Crossbody bag",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Fedora",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Gloves",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Leather belt",
+      "imageMaterials": [
+        "waterproof",
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Leather gloves",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Necklace",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Pocket square",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Scarf",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Silk scarf",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Tie",
+      "imageMaterials": [
+        "wool",
+        "silk"
+      ],
+      "unsupportedMaterials": [
+        "silk",
+        "leather",
+        "wool",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Tote bag",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool beanie",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool gloves",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "wool",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool scarf",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "accessory",
+      "item": "Wool socks",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "silk",
+        "cotton",
+        "metal",
+        "acetate",
+        "nylon"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Athletic shorts",
+      "imageMaterials": [
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Black jeans",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Cargo pants",
+      "imageMaterials": [
+        "fleece"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Chinos",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Corduroy pants",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Cotton shorts",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Denim shorts",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Jeans",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Joggers",
+      "imageMaterials": [
+        "fleece"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Lightweight chinos",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Linen shorts",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece",
+        "denim"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Linen trousers",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "corduroy",
+        "tech",
+        "fleece",
+        "wool"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Pleated trousers",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Relaxed jeans",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Running shorts",
+      "imageMaterials": [
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Slim chinos",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Slim jeans",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Tailored trousers",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "linen",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Tech joggers",
+      "imageMaterials": [
+        "fleece"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Track pants",
+      "imageMaterials": [
+        "denim"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "corduroy",
+        "tech"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Wide-leg trousers",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "bottom",
+      "item": "Wool trousers",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "denim",
+        "cotton",
+        "linen",
+        "corduroy",
+        "tech",
+        "fleece"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Bomber jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Cardigan",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Chore coat",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Denim jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Down jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Duffle coat",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Field jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Fleece jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Leather jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Overshirt",
+      "imageMaterials": [
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Pea coat",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Puffer jacket",
+      "imageMaterials": [
+        "waterproof",
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Quilted vest",
+      "imageMaterials": [
+        "waterproof",
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Rain jacket",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Shell jacket",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Tech shell",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Trench coat",
+      "imageMaterials": [
+        "shell"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Windbreaker",
+      "imageMaterials": [
+        "waterproof"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "outer",
+      "item": "Wool overcoat",
+      "imageMaterials": [
+        "wool"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "tech",
+        "leather",
+        "down",
+        "fleece",
+        "cashmere",
+        "nylon",
+        "gore-tex"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Ankle boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "leather"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Black sneakers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Boat shoes",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "leather"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Brogues",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "suede"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Brown loafers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Canvas sneakers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Chelsea boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Chukka boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Combat boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Derby shoes",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "leather"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Espadrilles",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "suede"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Hiking boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Leather sneakers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Loafers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Oxford shoes",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "leather"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Penny loafers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Performance runners",
+      "imageMaterials": [
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "leather"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Rain boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Running shoes",
+      "imageMaterials": [
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Sandals",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "suede"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Slides",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "suede"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Slip-ons",
+      "imageMaterials": [
+        "leather",
+        "performance"
+      ],
+      "unsupportedMaterials": [
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit",
+        "suede"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Sneakers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Suede loafers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Tassel loafers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "White sneakers",
+      "imageMaterials": [
+        "leather"
+      ],
+      "unsupportedMaterials": [
+        "suede",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "shoes",
+      "item": "Winter boots",
+      "imageMaterials": [
+        "suede"
+      ],
+      "unsupportedMaterials": [
+        "leather",
+        "canvas",
+        "mesh",
+        "rubber",
+        "knit"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Button-up shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Camp shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Cardigan",
+      "imageMaterials": [
+        "cotton",
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "performance",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Cashmere sweater",
+      "imageMaterials": [
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Chambray shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Flannel shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Henley",
+      "imageMaterials": [
+        "cotton",
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "performance",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Knit sweater",
+      "imageMaterials": [
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Knit tee",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Linen shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Long-sleeve linen shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Merino crewneck",
+      "imageMaterials": [
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Mock-neck top",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Oxford shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Performance tee",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Rugby shirt",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Sweatshirt",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "performance",
+        "linen"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "T-shirt",
+      "imageMaterials": [
+        "cotton"
+      ],
+      "unsupportedMaterials": [
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Tank top",
+      "imageMaterials": [
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Thermal base layer",
+      "imageMaterials": [
+        "knit"
+      ],
+      "unsupportedMaterials": [
+        "cotton",
+        "linen",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey",
+        "performance"
+      ]
+    },
+    {
+      "slot": "top",
+      "item": "Wool turtleneck",
+      "imageMaterials": [
+        "cotton",
+        "linen"
+      ],
+      "unsupportedMaterials": [
+        "performance",
+        "wool",
+        "merino",
+        "cashmere",
+        "silk",
+        "jersey"
+      ]
+    }
+  ],
+  "weakMatch": [
+    {
+      "slot": "accessory",
+      "item": "Backpack",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Backpack"
+    },
+    {
+      "slot": "accessory",
+      "item": "Belt",
+      "matchedKeys": [
+        "accessory_belt_bag_studio",
+        "accessory_pattern_scarf_studio",
+        "accessory_yellow_silk_scarf_studio"
+      ],
+      "example": "Brown leather Belt"
+    },
+    {
+      "slot": "accessory",
+      "item": "Bow tie",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Bow tie"
+    },
+    {
+      "slot": "accessory",
+      "item": "Bracelet",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Bracelet"
+    },
+    {
+      "slot": "accessory",
+      "item": "Fedora",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Fedora"
+    },
+    {
+      "slot": "accessory",
+      "item": "Leather belt",
+      "matchedKeys": [
+        "accessory_belt_bag_studio",
+        "accessory_pattern_scarf_studio",
+        "accessory_yellow_silk_scarf_studio"
+      ],
+      "example": "Brown leather Leather belt"
+    },
+    {
+      "slot": "accessory",
+      "item": "Necklace",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Necklace"
+    },
+    {
+      "slot": "accessory",
+      "item": "Pocket square",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Pocket square"
+    },
+    {
+      "slot": "accessory",
+      "item": "Tie",
+      "matchedKeys": [
+        "accessory_pattern_scarf_studio",
+        "accessory_tote_bag_studio",
+        "accessory_yellow_silk_scarf_studio",
+        "accessory_black_sunglasses_studio"
+      ],
+      "example": "Brown wool Tie"
+    },
+    {
+      "slot": "outer",
+      "item": "Quilted vest",
+      "matchedKeys": [
+        "outer_black_shell_jacket_city",
+        "outer_winter_coat_studio",
+        "outer_charcoal_overshirt_studio",
+        "outer_white_hoodie_studio",
+        "outer_white_overcoat_studio"
+      ],
+      "example": "Black wool Quilted vest"
+    },
+    {
+      "slot": "shoes",
+      "item": "Brogues",
+      "matchedKeys": [
+        "shoes_tan_winter_boots",
+        "shoes_black_white_sneakers_studio",
+        "shoes_white_sneakers_minimal",
+        "shoes_brown_loafers_polished",
+        "shoes_gray_trail_runners_studio"
+      ],
+      "example": "Tan suede Brogues"
+    },
+    {
+      "slot": "shoes",
+      "item": "Espadrilles",
+      "matchedKeys": [
+        "shoes_tan_winter_boots",
+        "shoes_black_white_sneakers_studio",
+        "shoes_white_sneakers_minimal",
+        "shoes_brown_loafers_polished",
+        "shoes_gray_trail_runners_studio"
+      ],
+      "example": "Tan suede Espadrilles"
+    },
+    {
+      "slot": "shoes",
+      "item": "Sandals",
+      "matchedKeys": [
+        "shoes_tan_winter_boots",
+        "shoes_black_white_sneakers_studio",
+        "shoes_white_sneakers_minimal",
+        "shoes_brown_loafers_polished",
+        "shoes_gray_trail_runners_studio"
+      ],
+      "example": "Tan suede Sandals"
+    },
+    {
+      "slot": "shoes",
+      "item": "Slides",
+      "matchedKeys": [
+        "shoes_tan_winter_boots",
+        "shoes_black_white_sneakers_studio",
+        "shoes_white_sneakers_minimal",
+        "shoes_brown_loafers_polished",
+        "shoes_gray_trail_runners_studio"
+      ],
+      "example": "Tan suede Slides"
+    },
+    {
+      "slot": "shoes",
+      "item": "Slip-ons",
+      "matchedKeys": [
+        "shoes_tan_winter_boots",
+        "shoes_black_white_sneakers_studio",
+        "shoes_white_sneakers_minimal",
+        "shoes_brown_loafers_polished",
+        "shoes_gray_trail_runners_studio"
+      ],
+      "example": "Tan suede Slip-ons"
+    },
+    {
+      "slot": "top",
+      "item": "Cardigan",
+      "matchedKeys": [
+        "top_lightweight_knit_tee",
+        "top_white_tshirt_studio",
+        "top_white_hoodie_studio",
+        "top_white_button_up_shirt",
+        "top_black_graphic_tee_studio"
+      ],
+      "example": "Black cotton Cardigan"
+    },
+    {
+      "slot": "top",
+      "item": "Henley",
+      "matchedKeys": [
+        "top_lightweight_knit_tee",
+        "top_white_tshirt_studio",
+        "top_white_hoodie_studio",
+        "top_white_button_up_shirt",
+        "top_black_graphic_tee_studio"
+      ],
+      "example": "Black cotton Henley"
+    },
+    {
+      "slot": "top",
+      "item": "Wool turtleneck",
+      "matchedKeys": [
+        "top_lightweight_knit_tee",
+        "top_white_tshirt_studio",
+        "top_white_hoodie_studio",
+        "top_white_button_up_shirt",
+        "top_black_graphic_tee_studio"
+      ],
+      "example": "Black cotton Wool turtleneck"
+    }
+  ]
+}

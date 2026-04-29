@@ -558,6 +558,38 @@ main {
   font-weight: 700;
 }
 
+/* Onboarding gender / cut pill grid */
+.onboarding-pill-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.onboarding-pill {
+  min-height: 52px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.20);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.onboarding-pill:hover {
+  background: rgba(255,255,255,.16);
+}
+.onboarding-pill:active {
+  transform: scale(0.98);
+}
+.onboarding-pill.is-selected {
+  background: linear-gradient(135deg, rgba(41,121,255,.96), rgba(0,176,255,.92), rgba(42,215,179,.9));
+  border-color: rgba(202,244,255,.34);
+  box-shadow: 0 12px 28px rgba(8,18,38,.36);
+}
+
 .onboarding-footer {
   position: relative;
   z-index: 1;

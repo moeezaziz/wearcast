@@ -1,0 +1,3421 @@
+{
+  "createdAt": "2026-04-27T19:59:46.497Z",
+  "sources": [
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png"
+  ],
+  "items": [
+    {
+      "ordinal": 1,
+      "key": "bottom_cotton_shorts_warm",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "cotton shorts",
+      "oldPath": "assets/recommendation-stock/bottom-cotton-shorts-warm.svg",
+      "newPath": "assets/recommendation-stock/bottom-cotton-shorts-warm-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-cotton-shorts-warm-studio.jpg"
+    },
+    {
+      "ordinal": 2,
+      "key": "bottom_plaid_trousers_street",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "plaid trousers",
+      "oldPath": "assets/recommendation-stock/bottom-plaid-trousers-street.jpg",
+      "newPath": "assets/recommendation-stock/bottom-plaid-trousers-street-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-plaid-trousers-street-studio.jpg"
+    },
+    {
+      "ordinal": 3,
+      "key": "outer_black_shell_jacket_city",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "shell jacket",
+      "oldPath": "assets/recommendation-stock/outer-black-shell-jacket-city.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-shell-jacket-city-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-shell-jacket-city-studio.jpg"
+    },
+    {
+      "ordinal": 4,
+      "key": "outer_black_light_overshirt_street",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "light overshirt",
+      "oldPath": "assets/recommendation-stock/outer-black-light-overshirt-street.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-light-overshirt-street-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-light-overshirt-street-studio.jpg"
+    },
+    {
+      "ordinal": 5,
+      "key": "shoes_white_running_sneakers",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "running sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-white-running-sneakers.jpg",
+      "newPath": "assets/recommendation-stock/shoes-white-running-sneakers-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-white-running-sneakers-studio.jpg"
+    },
+    {
+      "ordinal": 6,
+      "key": "shoes_tan_winter_boots",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "ankle boots",
+      "oldPath": "assets/recommendation-stock/shoes-tan-winter-boots.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-winter-boots-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-winter-boots-studio.jpg"
+    },
+    {
+      "ordinal": 7,
+      "key": "accessory_knit_beanies_outdoors",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "knit beanie",
+      "oldPath": "assets/recommendation-stock/accessory-knit-beanies-outdoors.jpg",
+      "newPath": "assets/recommendation-stock/accessory-knit-beanies-outdoors-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-knit-beanies-outdoors-studio.jpg"
+    },
+    {
+      "ordinal": 8,
+      "key": "accessory_black_baseball_cap_outdoors",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-black-baseball-cap-outdoors.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-baseball-cap-outdoors-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-baseball-cap-outdoors-studio.jpg"
+    },
+    {
+      "ordinal": 9,
+      "key": "accessory_black_sports_cap_outdoors",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "sports cap",
+      "oldPath": "assets/recommendation-stock/accessory-black-sports-cap-outdoors.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-sports-cap-outdoors-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-sports-cap-outdoors-studio.jpg"
+    },
+    {
+      "ordinal": 10,
+      "key": "accessory_baseball_cap_studio",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-baseball-cap-studio.svg",
+      "newPath": "assets/recommendation-stock/accessory-baseball-cap-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-baseball-cap-studio.jpg"
+    },
+    {
+      "ordinal": 11,
+      "key": "accessory_black_backpack_nylon_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black backpack",
+      "oldPath": "assets/recommendation-stock/accessory-black-backpack-nylon.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-backpack-nylon-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-backpack-nylon-studio.jpg"
+    },
+    {
+      "ordinal": 12,
+      "key": "accessory_navy_bow_tie_silk_v1",
+      "slot": "accessory",
+      "gender": "masculine",
+      "human": "navy bow tie",
+      "oldPath": "assets/recommendation-stock/accessory-navy-bow-tie-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-bow-tie-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-bow-tie-silk-studio.jpg"
+    },
+    {
+      "ordinal": 13,
+      "key": "accessory_silver_bracelet_metal_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "silver bracelet",
+      "oldPath": "assets/recommendation-stock/accessory-silver-bracelet-metal.svg",
+      "newPath": "assets/recommendation-stock/accessory-silver-bracelet-metal-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-bracelet-metal-studio.jpg"
+    },
+    {
+      "ordinal": 14,
+      "key": "accessory_navy_pocket_square_silk_v1",
+      "slot": "accessory",
+      "gender": "masculine",
+      "human": "navy pocket square",
+      "oldPath": "assets/recommendation-stock/accessory-navy-pocket-square-silk.jpg",
+      "newPath": "assets/recommendation-stock/accessory-navy-pocket-square-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-pocket-square-silk-studio.jpg"
+    },
+    {
+      "ordinal": 15,
+      "key": "accessory_navy_tie_silk_v1",
+      "slot": "accessory",
+      "gender": "masculine",
+      "human": "navy tie",
+      "oldPath": "assets/recommendation-stock/accessory-navy-tie-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-tie-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc5d814c8191bb844b7aea7782ca.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-tie-silk-studio.jpg"
+    },
+    {
+      "ordinal": 16,
+      "key": "shoes_brown_brogues_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "brown brogues",
+      "oldPath": "assets/recommendation-stock/shoes-brown-brogues-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-brown-brogues-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-brogues-leather-studio.jpg"
+    },
+    {
+      "ordinal": 17,
+      "key": "shoes_tan_espadrilles_canvas_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan espadrilles",
+      "oldPath": "assets/recommendation-stock/shoes-tan-espadrilles-canvas.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-espadrilles-canvas-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-espadrilles-canvas-studio.jpg"
+    },
+    {
+      "ordinal": 18,
+      "key": "top_white_henley_cotton_v1",
+      "slot": "top",
+      "gender": "unisex",
+      "human": "white henley",
+      "oldPath": "assets/recommendation-stock/top-white-henley-cotton.svg",
+      "newPath": "assets/recommendation-stock/top-white-henley-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-white-henley-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 19,
+      "key": "top_charcoal_wool_turtleneck_wool_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "charcoal wool turtleneck",
+      "oldPath": "assets/recommendation-stock/top-charcoal-wool-turtleneck-wool.svg",
+      "newPath": "assets/recommendation-stock/top-charcoal-wool-turtleneck-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-charcoal-wool-turtleneck-wool-studio.jpg"
+    },
+    {
+      "ordinal": 20,
+      "key": "accessory_brown_backpack_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown backpack",
+      "oldPath": "assets/recommendation-stock/accessory-brown-backpack-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-backpack-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-backpack-leather-studio.jpg"
+    },
+    {
+      "ordinal": 21,
+      "key": "accessory_gray_backpack_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray backpack",
+      "oldPath": "assets/recommendation-stock/accessory-gray-backpack-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-gray-backpack-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-backpack-leather-studio.jpg"
+    },
+    {
+      "ordinal": 22,
+      "key": "accessory_navy_backpack_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy backpack",
+      "oldPath": "assets/recommendation-stock/accessory-navy-backpack-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-backpack-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-backpack-leather-studio.jpg"
+    },
+    {
+      "ordinal": 23,
+      "key": "accessory_tan_backpack_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan backpack",
+      "oldPath": "assets/recommendation-stock/accessory-tan-backpack-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-tan-backpack-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-backpack-leather-studio.jpg"
+    },
+    {
+      "ordinal": 24,
+      "key": "accessory_brown_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-brown-baseball-cap-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 25,
+      "key": "accessory_cream_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "cream baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-cream-baseball-cap-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-cream-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-cream-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 26,
+      "key": "accessory_gray_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-gray-baseball-cap-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-gray-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 27,
+      "key": "accessory_navy_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-navy-baseball-cap-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-navy-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 28,
+      "key": "accessory_tan_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-tan-baseball-cap-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 29,
+      "key": "accessory_white_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "white baseball cap",
+      "oldPath": "assets/recommendation-stock/accessory-white-baseball-cap-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-white-baseball-cap-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-white-baseball-cap-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 30,
+      "key": "accessory_brown_belt_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown belt",
+      "oldPath": "assets/recommendation-stock/accessory-brown-belt-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-belt-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbc8e45588191a8f1df1b0e2cf8ce.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-belt-leather-studio.jpg"
+    },
+    {
+      "ordinal": 31,
+      "key": "accessory_gray_belt_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray belt",
+      "oldPath": "assets/recommendation-stock/accessory-gray-belt-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gray-belt-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-belt-leather-studio.jpg"
+    },
+    {
+      "ordinal": 32,
+      "key": "accessory_navy_belt_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy belt",
+      "oldPath": "assets/recommendation-stock/accessory-navy-belt-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-belt-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-belt-leather-studio.jpg"
+    },
+    {
+      "ordinal": 33,
+      "key": "accessory_tan_belt_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan belt",
+      "oldPath": "assets/recommendation-stock/accessory-tan-belt-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-belt-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-belt-leather-studio.jpg"
+    },
+    {
+      "ordinal": 34,
+      "key": "accessory_black_gloves_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black gloves",
+      "oldPath": "assets/recommendation-stock/accessory-black-gloves-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-gloves-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-gloves-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 35,
+      "key": "accessory_brown_gloves_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown gloves",
+      "oldPath": "assets/recommendation-stock/accessory-brown-gloves-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-brown-gloves-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-gloves-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 36,
+      "key": "accessory_gray_gloves_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray gloves",
+      "oldPath": "assets/recommendation-stock/accessory-gray-gloves-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gray-gloves-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-gloves-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 37,
+      "key": "accessory_navy_gloves_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy gloves",
+      "oldPath": "assets/recommendation-stock/accessory-navy-gloves-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-gloves-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-gloves-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 38,
+      "key": "accessory_tan_gloves_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan gloves",
+      "oldPath": "assets/recommendation-stock/accessory-tan-gloves-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-gloves-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-gloves-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 39,
+      "key": "accessory_black_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black scarf",
+      "oldPath": "assets/recommendation-stock/accessory-black-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 40,
+      "key": "accessory_brown_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown scarf",
+      "oldPath": "assets/recommendation-stock/accessory-brown-scarf-silk.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 41,
+      "key": "accessory_gray_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray scarf",
+      "oldPath": "assets/recommendation-stock/accessory-gray-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-gray-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 42,
+      "key": "accessory_navy_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy scarf",
+      "oldPath": "assets/recommendation-stock/accessory-navy-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 43,
+      "key": "accessory_tan_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan scarf",
+      "oldPath": "assets/recommendation-stock/accessory-tan-scarf-silk.jpg",
+      "newPath": "assets/recommendation-stock/accessory-tan-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 44,
+      "key": "accessory_black_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black sun hat",
+      "oldPath": "assets/recommendation-stock/accessory-black-sun-hat-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-sun-hat-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-sun-hat-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 45,
+      "key": "accessory_brown_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown sun hat",
+      "oldPath": "assets/recommendation-stock/accessory-brown-sun-hat-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-sun-hat-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbcc73df081918fe7d7992f27cba7.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-sun-hat-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 46,
+      "key": "accessory_gray_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray sun hat",
+      "oldPath": "assets/recommendation-stock/accessory-gray-sun-hat-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gray-sun-hat-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-sun-hat-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 47,
+      "key": "accessory_navy_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy sun hat",
+      "oldPath": "assets/recommendation-stock/accessory-navy-sun-hat-cotton.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-sun-hat-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-sun-hat-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 48,
+      "key": "accessory_tan_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan sun hat",
+      "oldPath": "assets/recommendation-stock/accessory-tan-sun-hat-cotton.jpg",
+      "newPath": "assets/recommendation-stock/accessory-tan-sun-hat-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-sun-hat-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 49,
+      "key": "accessory_black_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black sunglasses",
+      "oldPath": "assets/recommendation-stock/accessory-black-sunglasses-acetate.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-sunglasses-acetate-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-sunglasses-acetate-studio.jpg"
+    },
+    {
+      "ordinal": 50,
+      "key": "accessory_brown_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown sunglasses",
+      "oldPath": "assets/recommendation-stock/accessory-brown-sunglasses-acetate.svg",
+      "newPath": "assets/recommendation-stock/accessory-brown-sunglasses-acetate-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-sunglasses-acetate-studio.jpg"
+    },
+    {
+      "ordinal": 51,
+      "key": "accessory_gray_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray sunglasses",
+      "oldPath": "assets/recommendation-stock/accessory-gray-sunglasses-acetate.svg",
+      "newPath": "assets/recommendation-stock/accessory-gray-sunglasses-acetate-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-sunglasses-acetate-studio.jpg"
+    },
+    {
+      "ordinal": 52,
+      "key": "accessory_tan_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan sunglasses",
+      "oldPath": "assets/recommendation-stock/accessory-tan-sunglasses-acetate.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-sunglasses-acetate-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-sunglasses-acetate-studio.jpg"
+    },
+    {
+      "ordinal": 53,
+      "key": "accessory_black_tote_bag_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black tote bag",
+      "oldPath": "assets/recommendation-stock/accessory-black-tote-bag-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-tote-bag-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-tote-bag-leather-studio.jpg"
+    },
+    {
+      "ordinal": 54,
+      "key": "accessory_brown_tote_bag_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown tote bag",
+      "oldPath": "assets/recommendation-stock/accessory-brown-tote-bag-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-tote-bag-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-tote-bag-leather-studio.jpg"
+    },
+    {
+      "ordinal": 55,
+      "key": "accessory_gray_tote_bag_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray tote bag",
+      "oldPath": "assets/recommendation-stock/accessory-gray-tote-bag-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-gray-tote-bag-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-tote-bag-leather-studio.jpg"
+    },
+    {
+      "ordinal": 56,
+      "key": "accessory_navy_tote_bag_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy tote bag",
+      "oldPath": "assets/recommendation-stock/accessory-navy-tote-bag-leather.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-tote-bag-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-tote-bag-leather-studio.jpg"
+    },
+    {
+      "ordinal": 57,
+      "key": "accessory_tan_tote_bag_leather_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan tote bag",
+      "oldPath": "assets/recommendation-stock/accessory-tan-tote-bag-leather.jpg",
+      "newPath": "assets/recommendation-stock/accessory-tan-tote-bag-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-tote-bag-leather-studio.jpg"
+    },
+    {
+      "ordinal": 58,
+      "key": "accessory_black_watch_metal_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black watch",
+      "oldPath": "assets/recommendation-stock/accessory-black-watch-metal.svg",
+      "newPath": "assets/recommendation-stock/accessory-black-watch-metal-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-watch-metal-studio.jpg"
+    },
+    {
+      "ordinal": 59,
+      "key": "accessory_navy_watch_metal_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy watch",
+      "oldPath": "assets/recommendation-stock/accessory-navy-watch-metal.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-watch-metal-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-watch-metal-studio.jpg"
+    },
+    {
+      "ordinal": 60,
+      "key": "accessory_tan_watch_metal_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan watch",
+      "oldPath": "assets/recommendation-stock/accessory-tan-watch-metal.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-watch-metal-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd00bf8c81918b05bc56ea674769.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-watch-metal-studio.jpg"
+    },
+    {
+      "ordinal": 61,
+      "key": "accessory_black_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "black wool scarf",
+      "oldPath": "assets/recommendation-stock/accessory-black-wool-scarf-silk.jpg",
+      "newPath": "assets/recommendation-stock/accessory-black-wool-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-wool-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 62,
+      "key": "accessory_brown_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "brown wool scarf",
+      "oldPath": "assets/recommendation-stock/accessory-brown-wool-scarf-silk.jpg",
+      "newPath": "assets/recommendation-stock/accessory-brown-wool-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-brown-wool-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 63,
+      "key": "accessory_gray_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "gray wool scarf",
+      "oldPath": "assets/recommendation-stock/accessory-gray-wool-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-gray-wool-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-gray-wool-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 64,
+      "key": "accessory_navy_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "navy wool scarf",
+      "oldPath": "assets/recommendation-stock/accessory-navy-wool-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-navy-wool-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-navy-wool-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 65,
+      "key": "accessory_tan_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "gender": "unisex",
+      "human": "tan wool scarf",
+      "oldPath": "assets/recommendation-stock/accessory-tan-wool-scarf-silk.svg",
+      "newPath": "assets/recommendation-stock/accessory-tan-wool-scarf-silk-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-wool-scarf-silk-studio.jpg"
+    },
+    {
+      "ordinal": 66,
+      "key": "bottom_beige_chinos_cotton_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "beige chinos",
+      "oldPath": "assets/recommendation-stock/bottom-beige-chinos-cotton.jpg",
+      "newPath": "assets/recommendation-stock/bottom-beige-chinos-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-beige-chinos-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 67,
+      "key": "bottom_brown_chinos_cotton_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "brown chinos",
+      "oldPath": "assets/recommendation-stock/bottom-brown-chinos-cotton.jpg",
+      "newPath": "assets/recommendation-stock/bottom-brown-chinos-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-brown-chinos-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 68,
+      "key": "bottom_cream_chinos_cotton_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "cream chinos",
+      "oldPath": "assets/recommendation-stock/bottom-cream-chinos-cotton.jpg",
+      "newPath": "assets/recommendation-stock/bottom-cream-chinos-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-chinos-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 69,
+      "key": "bottom_olive_chinos_cotton_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "olive chinos",
+      "oldPath": "assets/recommendation-stock/bottom-olive-chinos-cotton.jpg",
+      "newPath": "assets/recommendation-stock/bottom-olive-chinos-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-olive-chinos-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 70,
+      "key": "bottom_white_chinos_cotton_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "white chinos",
+      "oldPath": "assets/recommendation-stock/bottom-white-chinos-cotton.jpg",
+      "newPath": "assets/recommendation-stock/bottom-white-chinos-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-chinos-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 71,
+      "key": "bottom_cream_jeans_denim_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "cream jeans",
+      "oldPath": "assets/recommendation-stock/bottom-cream-jeans-denim.jpg",
+      "newPath": "assets/recommendation-stock/bottom-cream-jeans-denim-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-jeans-denim-studio.jpg"
+    },
+    {
+      "ordinal": 72,
+      "key": "bottom_white_jeans_denim_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "white jeans",
+      "oldPath": "assets/recommendation-stock/bottom-white-jeans-denim.jpg",
+      "newPath": "assets/recommendation-stock/bottom-white-jeans-denim-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-jeans-denim-studio.jpg"
+    },
+    {
+      "ordinal": 73,
+      "key": "bottom_black_tailored_trousers_wool_v1",
+      "slot": "bottom",
+      "gender": "unisex",
+      "human": "black tailored trousers",
+      "oldPath": "assets/recommendation-stock/bottom-black-tailored-trousers-wool.jpg",
+      "newPath": "assets/recommendation-stock/bottom-black-tailored-trousers-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-tailored-trousers-wool-studio.jpg"
+    },
+    {
+      "ordinal": 74,
+      "key": "bottom_brown_tailored_trousers_wool_v1",
+      "slot": "bottom",
+      "gender": "masculine",
+      "human": "brown tailored trousers",
+      "oldPath": "assets/recommendation-stock/bottom-brown-tailored-trousers-wool.svg",
+      "newPath": "assets/recommendation-stock/bottom-brown-tailored-trousers-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-brown-tailored-trousers-wool-studio.jpg"
+    },
+    {
+      "ordinal": 75,
+      "key": "outer_beige_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "beige bomber jacket",
+      "oldPath": "assets/recommendation-stock/outer-beige-bomber-jacket-cotton.jpg",
+      "newPath": "assets/recommendation-stock/outer-beige-bomber-jacket-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd28e30c8191974b381315c6daab.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-bomber-jacket-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 76,
+      "key": "outer_beige_field_jacket_cotton_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "beige field jacket",
+      "oldPath": "assets/recommendation-stock/outer-beige-field-jacket-cotton.jpg",
+      "newPath": "assets/recommendation-stock/outer-beige-field-jacket-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-field-jacket-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 77,
+      "key": "outer_gray_field_jacket_cotton_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray field jacket",
+      "oldPath": "assets/recommendation-stock/outer-gray-field-jacket-cotton.jpg",
+      "newPath": "assets/recommendation-stock/outer-gray-field-jacket-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-field-jacket-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 78,
+      "key": "outer_beige_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "beige hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-beige-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-beige-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 79,
+      "key": "outer_black_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "black hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-black-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 80,
+      "key": "outer_brown_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-brown-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-brown-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 81,
+      "key": "outer_charcoal_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "charcoal hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-charcoal-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-charcoal-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-charcoal-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 82,
+      "key": "outer_cream_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "cream hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-cream-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-cream-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-cream-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 83,
+      "key": "outer_gray_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-gray-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-gray-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 84,
+      "key": "outer_navy_hooded_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "navy hooded parka",
+      "oldPath": "assets/recommendation-stock/outer-navy-hooded-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-navy-hooded-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-hooded-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 85,
+      "key": "outer_black_hoodie_cotton_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "black hoodie",
+      "oldPath": "assets/recommendation-stock/outer-black-hoodie-cotton.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-hoodie-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-black-hoodie-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 86,
+      "key": "outer_brown_parka_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown parka",
+      "oldPath": "assets/recommendation-stock/outer-brown-parka-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-brown-parka-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-parka-down-studio.jpg"
+    },
+    {
+      "ordinal": 87,
+      "key": "outer_black_pea_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "black pea coat",
+      "oldPath": "assets/recommendation-stock/outer-black-pea-coat-wool.jpg",
+      "newPath": "assets/recommendation-stock/outer-black-pea-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-pea-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 88,
+      "key": "outer_charcoal_pea_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "charcoal pea coat",
+      "oldPath": "assets/recommendation-stock/outer-charcoal-pea-coat-wool.jpg",
+      "newPath": "assets/recommendation-stock/outer-charcoal-pea-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-charcoal-pea-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 89,
+      "key": "outer_navy_pea_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "navy pea coat",
+      "oldPath": "assets/recommendation-stock/outer-navy-pea-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-navy-pea-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-pea-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 90,
+      "key": "outer_olive_pea_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "olive pea coat",
+      "oldPath": "assets/recommendation-stock/outer-olive-pea-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-olive-pea-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbd7c42d08191b89ae4ca9828241c.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-olive-pea-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 91,
+      "key": "outer_tan_pea_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "tan pea coat",
+      "oldPath": "assets/recommendation-stock/outer-tan-pea-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-tan-pea-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-tan-pea-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 92,
+      "key": "outer_beige_puffer_jacket_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "beige puffer jacket",
+      "oldPath": "assets/recommendation-stock/outer-beige-puffer-jacket-down.svg",
+      "newPath": "assets/recommendation-stock/outer-beige-puffer-jacket-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-puffer-jacket-down-studio.jpg"
+    },
+    {
+      "ordinal": 93,
+      "key": "outer_brown_puffer_jacket_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown puffer jacket",
+      "oldPath": "assets/recommendation-stock/outer-brown-puffer-jacket-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-brown-puffer-jacket-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-puffer-jacket-down-studio.jpg"
+    },
+    {
+      "ordinal": 94,
+      "key": "outer_navy_puffer_jacket_down_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "navy puffer jacket",
+      "oldPath": "assets/recommendation-stock/outer-navy-puffer-jacket-down.jpg",
+      "newPath": "assets/recommendation-stock/outer-navy-puffer-jacket-down-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-puffer-jacket-down-studio.jpg"
+    },
+    {
+      "ordinal": 95,
+      "key": "outer_beige_rain_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "beige rain jacket",
+      "oldPath": "assets/recommendation-stock/outer-beige-rain-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-beige-rain-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-beige-rain-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 96,
+      "key": "outer_brown_rain_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown rain jacket",
+      "oldPath": "assets/recommendation-stock/outer-brown-rain-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-brown-rain-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-rain-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 97,
+      "key": "outer_charcoal_rain_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "charcoal rain jacket",
+      "oldPath": "assets/recommendation-stock/outer-charcoal-rain-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-charcoal-rain-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-charcoal-rain-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 98,
+      "key": "outer_cream_rain_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "cream rain jacket",
+      "oldPath": "assets/recommendation-stock/outer-cream-rain-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-cream-rain-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-cream-rain-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 99,
+      "key": "outer_gray_rain_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray rain jacket",
+      "oldPath": "assets/recommendation-stock/outer-gray-rain-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-gray-rain-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-rain-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 100,
+      "key": "outer_gray_shell_jacket_tech_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray shell jacket",
+      "oldPath": "assets/recommendation-stock/outer-gray-shell-jacket-tech.jpg",
+      "newPath": "assets/recommendation-stock/outer-gray-shell-jacket-tech-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-shell-jacket-tech-studio.jpg"
+    },
+    {
+      "ordinal": 101,
+      "key": "outer_black_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "black trench coat",
+      "oldPath": "assets/recommendation-stock/outer-black-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-black-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 102,
+      "key": "outer_brown_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown trench coat",
+      "oldPath": "assets/recommendation-stock/outer-brown-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-brown-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 103,
+      "key": "outer_charcoal_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "charcoal trench coat",
+      "oldPath": "assets/recommendation-stock/outer-charcoal-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-charcoal-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-charcoal-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 104,
+      "key": "outer_gray_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray trench coat",
+      "oldPath": "assets/recommendation-stock/outer-gray-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-gray-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 105,
+      "key": "outer_navy_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "navy trench coat",
+      "oldPath": "assets/recommendation-stock/outer-navy-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-navy-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbdad1cf481918877f51f72bd7e2c.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 106,
+      "key": "outer_olive_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "olive trench coat",
+      "oldPath": "assets/recommendation-stock/outer-olive-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-olive-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-olive-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 107,
+      "key": "outer_tan_trench_coat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "tan trench coat",
+      "oldPath": "assets/recommendation-stock/outer-tan-trench-coat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-tan-trench-coat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-tan-trench-coat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 108,
+      "key": "outer_black_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "black wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-black-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-black-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-black-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 109,
+      "key": "outer_brown_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "brown wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-brown-wool-overcoat-wool.jpg",
+      "newPath": "assets/recommendation-stock/outer-brown-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-brown-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 110,
+      "key": "outer_charcoal_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "charcoal wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-charcoal-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-charcoal-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/outer-charcoal-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 111,
+      "key": "outer_gray_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "gray wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-gray-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-gray-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-gray-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 112,
+      "key": "outer_navy_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "navy wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-navy-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-navy-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-navy-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 113,
+      "key": "outer_olive_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "olive wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-olive-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-olive-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-olive-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 114,
+      "key": "outer_tan_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "gender": "unisex",
+      "human": "tan wool overcoat",
+      "oldPath": "assets/recommendation-stock/outer-tan-wool-overcoat-wool.svg",
+      "newPath": "assets/recommendation-stock/outer-tan-wool-overcoat-wool-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/outer-tan-wool-overcoat-wool-studio.jpg"
+    },
+    {
+      "ordinal": 115,
+      "key": "shoes_gray_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "feminine",
+      "human": "gray ankle boots",
+      "oldPath": "assets/recommendation-stock/shoes-gray-ankle-boots-leather.svg",
+      "newPath": "assets/recommendation-stock/shoes-gray-ankle-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-ankle-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 116,
+      "key": "shoes_gray_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray black sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-gray-black-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-black-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-black-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 117,
+      "key": "shoes_navy_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "navy black sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-navy-black-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-navy-black-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-navy-black-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 118,
+      "key": "shoes_tan_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan black sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-tan-black-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-black-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-black-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 119,
+      "key": "shoes_black_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-black-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 120,
+      "key": "shoes_cream_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "cream brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-cream-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-cream-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbde92a948191a54cb269ec34017e.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-cream-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 121,
+      "key": "shoes_gray_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-gray-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 122,
+      "key": "shoes_navy_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "navy brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-navy-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-navy-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-navy-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 123,
+      "key": "shoes_olive_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "olive brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-olive-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-olive-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-olive-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 124,
+      "key": "shoes_white_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "white brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-white-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-white-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-white-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 125,
+      "key": "shoes_black_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black chelsea boots",
+      "oldPath": "assets/recommendation-stock/shoes-black-chelsea-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-chelsea-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-chelsea-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 126,
+      "key": "shoes_gray_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray chelsea boots",
+      "oldPath": "assets/recommendation-stock/shoes-gray-chelsea-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-chelsea-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-chelsea-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 127,
+      "key": "shoes_navy_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "navy chelsea boots",
+      "oldPath": "assets/recommendation-stock/shoes-navy-chelsea-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-navy-chelsea-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-navy-chelsea-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 128,
+      "key": "shoes_olive_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "olive chelsea boots",
+      "oldPath": "assets/recommendation-stock/shoes-olive-chelsea-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-olive-chelsea-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-olive-chelsea-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 129,
+      "key": "shoes_tan_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan chelsea boots",
+      "oldPath": "assets/recommendation-stock/shoes-tan-chelsea-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-chelsea-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-chelsea-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 130,
+      "key": "shoes_black_hiking_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black hiking boots",
+      "oldPath": "assets/recommendation-stock/shoes-black-hiking-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-hiking-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-hiking-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 131,
+      "key": "shoes_brown_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "brown loafers",
+      "oldPath": "assets/recommendation-stock/shoes-brown-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-brown-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 132,
+      "key": "shoes_cream_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "cream loafers",
+      "oldPath": "assets/recommendation-stock/shoes-cream-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-cream-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-cream-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 133,
+      "key": "shoes_olive_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "olive loafers",
+      "oldPath": "assets/recommendation-stock/shoes-olive-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-olive-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-olive-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 134,
+      "key": "shoes_white_loafers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "white loafers",
+      "oldPath": "assets/recommendation-stock/shoes-white-loafers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-white-loafers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-white-loafers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 135,
+      "key": "shoes_black_running_shoes_mesh_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black running shoes",
+      "oldPath": "assets/recommendation-stock/shoes-black-running-shoes-mesh.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-running-shoes-mesh-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe24f4d081919609ba0042cf8afb.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-running-shoes-mesh-studio.jpg"
+    },
+    {
+      "ordinal": 136,
+      "key": "shoes_gray_running_shoes_mesh_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray running shoes",
+      "oldPath": "assets/recommendation-stock/shoes-gray-running-shoes-mesh.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-running-shoes-mesh-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-running-shoes-mesh-studio.jpg"
+    },
+    {
+      "ordinal": 137,
+      "key": "shoes_brown_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "brown sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-brown-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-brown-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 138,
+      "key": "shoes_tan_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-tan-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 139,
+      "key": "shoes_black_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-black-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 140,
+      "key": "shoes_brown_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "brown white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-brown-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-brown-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 141,
+      "key": "shoes_gray_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-gray-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 142,
+      "key": "shoes_navy_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "navy white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-navy-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-navy-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-navy-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 143,
+      "key": "shoes_olive_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "olive white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-olive-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-olive-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-olive-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 144,
+      "key": "shoes_tan_white_sneakers_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan white sneakers",
+      "oldPath": "assets/recommendation-stock/shoes-tan-white-sneakers-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-white-sneakers-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-white-sneakers-leather-studio.jpg"
+    },
+    {
+      "ordinal": 145,
+      "key": "shoes_black_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "black winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-black-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-black-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 146,
+      "key": "shoes_brown_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "brown winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-brown-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-brown-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 147,
+      "key": "shoes_gray_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "gray winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-gray-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-gray-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-gray-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 148,
+      "key": "shoes_navy_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "navy winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-navy-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-navy-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-navy-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 149,
+      "key": "shoes_olive_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "olive winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-olive-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-olive-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-olive-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 150,
+      "key": "shoes_tan_winter_boots_leather_v1",
+      "slot": "shoes",
+      "gender": "unisex",
+      "human": "tan winter boots",
+      "oldPath": "assets/recommendation-stock/shoes-tan-winter-boots-leather.jpg",
+      "newPath": "assets/recommendation-stock/shoes-tan-winter-boots-leather-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe5c9d248191b07efdf9d23a8d45.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-winter-boots-leather-studio.jpg"
+    },
+    {
+      "ordinal": 151,
+      "key": "top_black_hoodie_cotton_v1",
+      "slot": "top",
+      "gender": "unisex",
+      "human": "black hoodie",
+      "oldPath": "assets/recommendation-stock/top-black-hoodie-cotton.jpg",
+      "newPath": "assets/recommendation-stock/top-black-hoodie-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-hoodie-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 152,
+      "key": "top_brown_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "gender": "masculine",
+      "human": "brown long-sleeve t-shirt",
+      "oldPath": "assets/recommendation-stock/top-brown-long-sleeve-t-shirt-cotton.jpg",
+      "newPath": "assets/recommendation-stock/top-brown-long-sleeve-t-shirt-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-brown-long-sleeve-t-shirt-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 153,
+      "key": "top_gray_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "gender": "masculine",
+      "human": "gray long-sleeve t-shirt",
+      "oldPath": "assets/recommendation-stock/top-gray-long-sleeve-t-shirt-cotton.svg",
+      "newPath": "assets/recommendation-stock/top-gray-long-sleeve-t-shirt-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-gray-long-sleeve-t-shirt-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 154,
+      "key": "top_navy_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "gender": "masculine",
+      "human": "navy long-sleeve t-shirt",
+      "oldPath": "assets/recommendation-stock/top-navy-long-sleeve-t-shirt-cotton.svg",
+      "newPath": "assets/recommendation-stock/top-navy-long-sleeve-t-shirt-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-navy-long-sleeve-t-shirt-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 155,
+      "key": "top_olive_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "gender": "masculine",
+      "human": "olive long-sleeve t-shirt",
+      "oldPath": "assets/recommendation-stock/top-olive-long-sleeve-t-shirt-cotton.svg",
+      "newPath": "assets/recommendation-stock/top-olive-long-sleeve-t-shirt-cotton-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-olive-long-sleeve-t-shirt-cotton-studio.jpg"
+    },
+    {
+      "ordinal": 156,
+      "key": "top_white_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "white silk blouse",
+      "oldPath": "assets/recommendation-stock/top-white-silk-blouse-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-white-silk-blouse-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-white-silk-blouse-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 157,
+      "key": "top_black_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "black silk blouse",
+      "oldPath": "assets/recommendation-stock/top-black-silk-blouse-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-black-silk-blouse-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-black-silk-blouse-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 158,
+      "key": "top_cream_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "cream silk blouse",
+      "oldPath": "assets/recommendation-stock/top-cream-silk-blouse-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-cream-silk-blouse-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-cream-silk-blouse-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 159,
+      "key": "top_red_halter_top_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red halter top",
+      "oldPath": "assets/recommendation-stock/top-red-halter-top-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-halter-top-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-red-halter-top-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 160,
+      "key": "top_cream_off_shoulder_top_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "cream off-shoulder top",
+      "oldPath": "assets/recommendation-stock/top-cream-off-shoulder-top-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-cream-off-shoulder-top-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-cream-off-shoulder-top-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 161,
+      "key": "top_beige_crop_top_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "beige crop top",
+      "oldPath": "assets/recommendation-stock/top-beige-crop-top-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-beige-crop-top-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-beige-crop-top-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 162,
+      "key": "top_beige_knit_cardigan_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "beige knit cardigan",
+      "oldPath": "assets/recommendation-stock/top-beige-knit-cardigan-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-beige-knit-cardigan-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-beige-knit-cardigan-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 163,
+      "key": "top_cream_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "cream long cardigan",
+      "oldPath": "assets/recommendation-stock/top-cream-long-cardigan-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-cream-long-cardigan-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-cream-long-cardigan-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 164,
+      "key": "top_black_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "black long cardigan",
+      "oldPath": "assets/recommendation-stock/top-black-long-cardigan-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-black-long-cardigan-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-long-cardigan-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 165,
+      "key": "top_beige_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "beige long cardigan",
+      "oldPath": "assets/recommendation-stock/top-beige-long-cardigan-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-beige-long-cardigan-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbe95871c819187205d062d45b6a1.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-beige-long-cardigan-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 166,
+      "key": "top_red_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red wrap dress",
+      "oldPath": "assets/recommendation-stock/top-red-wrap-dress-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-wrap-dress-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-red-wrap-dress-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 167,
+      "key": "top_green_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "green wrap dress",
+      "oldPath": "assets/recommendation-stock/top-green-wrap-dress-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/top-green-wrap-dress-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-green-wrap-dress-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 168,
+      "key": "top_yellow_sundress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "yellow sundress",
+      "oldPath": "assets/recommendation-stock/top-yellow-sundress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-yellow-sundress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-yellow-sundress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 169,
+      "key": "top_cream_maxi_dress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "cream maxi dress",
+      "oldPath": "assets/recommendation-stock/top-cream-maxi-dress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-cream-maxi-dress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-cream-maxi-dress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 170,
+      "key": "top_red_mini_dress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red mini dress",
+      "oldPath": "assets/recommendation-stock/top-red-mini-dress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-mini-dress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-red-mini-dress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 171,
+      "key": "top_white_mini_dress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "white mini dress",
+      "oldPath": "assets/recommendation-stock/top-white-mini-dress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-white-mini-dress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-white-mini-dress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 172,
+      "key": "top_red_sheath_dress_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red sheath dress",
+      "oldPath": "assets/recommendation-stock/top-red-sheath-dress-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-sheath-dress-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-red-sheath-dress-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 173,
+      "key": "top_khaki_shirtdress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "khaki shirtdress",
+      "oldPath": "assets/recommendation-stock/top-khaki-shirtdress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-khaki-shirtdress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-khaki-shirtdress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 174,
+      "key": "top_black_cocktail_dress_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "black cocktail dress",
+      "oldPath": "assets/recommendation-stock/top-black-cocktail-dress-silk-fem.jpg",
+      "newPath": "assets/recommendation-stock/top-black-cocktail-dress-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-black-cocktail-dress-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 175,
+      "key": "top_navy_cocktail_dress_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "navy cocktail dress",
+      "oldPath": "assets/recommendation-stock/top-navy-cocktail-dress-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-navy-cocktail-dress-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-navy-cocktail-dress-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 176,
+      "key": "top_red_cocktail_dress_silk_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red cocktail dress",
+      "oldPath": "assets/recommendation-stock/top-red-cocktail-dress-silk-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-cocktail-dress-silk-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-red-cocktail-dress-silk-fem-studio.jpg"
+    },
+    {
+      "ordinal": 177,
+      "key": "top_cream_sweater_dress_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "cream sweater dress",
+      "oldPath": "assets/recommendation-stock/top-cream-sweater-dress-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-cream-sweater-dress-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-cream-sweater-dress-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 178,
+      "key": "top_camel_sweater_dress_wool_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "camel sweater dress",
+      "oldPath": "assets/recommendation-stock/top-camel-sweater-dress-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/top-camel-sweater-dress-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-camel-sweater-dress-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 179,
+      "key": "top_white_t_shirt_dress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "white t-shirt dress",
+      "oldPath": "assets/recommendation-stock/top-white-t-shirt-dress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-white-t-shirt-dress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-white-t-shirt-dress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 180,
+      "key": "top_gray_t_shirt_dress_cotton_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "gray t-shirt dress",
+      "oldPath": "assets/recommendation-stock/top-gray-t-shirt-dress-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/top-gray-t-shirt-dress-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbed42d6c81918a8a0de9483f6275.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-gray-t-shirt-dress-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 181,
+      "key": "top_red_bodycon_dress_jersey_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "red bodycon dress",
+      "oldPath": "assets/recommendation-stock/top-red-bodycon-dress-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/top-red-bodycon-dress-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-red-bodycon-dress-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 182,
+      "key": "top_white_bodycon_dress_jersey_fem_v1",
+      "slot": "top",
+      "gender": "feminine",
+      "human": "white bodycon dress",
+      "oldPath": "assets/recommendation-stock/top-white-bodycon-dress-jersey-fem.svg",
+      "newPath": "assets/recommendation-stock/top-white-bodycon-dress-jersey-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-white-bodycon-dress-jersey-fem-studio.jpg"
+    },
+    {
+      "ordinal": 183,
+      "key": "bottom_white_mini_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white mini skirt",
+      "oldPath": "assets/recommendation-stock/bottom-white-mini-skirt-denim-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-white-mini-skirt-denim-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-mini-skirt-denim-fem-studio.jpg"
+    },
+    {
+      "ordinal": 184,
+      "key": "bottom_cream_maxi_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "cream maxi skirt",
+      "oldPath": "assets/recommendation-stock/bottom-cream-maxi-skirt-linen-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-cream-maxi-skirt-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-maxi-skirt-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 185,
+      "key": "bottom_black_wrap_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black wrap skirt",
+      "oldPath": "assets/recommendation-stock/bottom-black-wrap-skirt-linen-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-wrap-skirt-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-wrap-skirt-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 186,
+      "key": "bottom_cream_wrap_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "cream wrap skirt",
+      "oldPath": "assets/recommendation-stock/bottom-cream-wrap-skirt-linen-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-cream-wrap-skirt-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-wrap-skirt-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 187,
+      "key": "bottom_navy_wrap_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy wrap skirt",
+      "oldPath": "assets/recommendation-stock/bottom-navy-wrap-skirt-linen-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-navy-wrap-skirt-linen-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-wrap-skirt-linen-fem-studio.jpg"
+    },
+    {
+      "ordinal": 188,
+      "key": "bottom_blue_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "blue denim skirt",
+      "oldPath": "assets/recommendation-stock/bottom-blue-denim-skirt-denim-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-blue-denim-skirt-denim-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-blue-denim-skirt-denim-fem-studio.jpg"
+    },
+    {
+      "ordinal": 189,
+      "key": "bottom_black_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black denim skirt",
+      "oldPath": "assets/recommendation-stock/bottom-black-denim-skirt-denim-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-denim-skirt-denim-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-denim-skirt-denim-fem-studio.jpg"
+    },
+    {
+      "ordinal": 190,
+      "key": "bottom_white_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white denim skirt",
+      "oldPath": "assets/recommendation-stock/bottom-white-denim-skirt-denim-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-white-denim-skirt-denim-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-denim-skirt-denim-fem-studio.jpg"
+    },
+    {
+      "ordinal": 191,
+      "key": "bottom_black_leather_skirt_leather_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black leather skirt",
+      "oldPath": "assets/recommendation-stock/bottom-black-leather-skirt-leather-fem.jpg",
+      "newPath": "assets/recommendation-stock/bottom-black-leather-skirt-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-leather-skirt-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 192,
+      "key": "bottom_brown_leather_skirt_leather_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "brown leather skirt",
+      "oldPath": "assets/recommendation-stock/bottom-brown-leather-skirt-leather-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-brown-leather-skirt-leather-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-brown-leather-skirt-leather-fem-studio.jpg"
+    },
+    {
+      "ordinal": 193,
+      "key": "bottom_white_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white tennis skirt",
+      "oldPath": "assets/recommendation-stock/bottom-white-tennis-skirt-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-white-tennis-skirt-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-tennis-skirt-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 194,
+      "key": "bottom_navy_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy tennis skirt",
+      "oldPath": "assets/recommendation-stock/bottom-navy-tennis-skirt-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-navy-tennis-skirt-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-tennis-skirt-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 195,
+      "key": "bottom_black_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black tennis skirt",
+      "oldPath": "assets/recommendation-stock/bottom-black-tennis-skirt-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-tennis-skirt-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf0bce9c819188798942db3b67d0.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-tennis-skirt-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 196,
+      "key": "bottom_white_high_waist_jeans_denim_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white high-waist jeans",
+      "oldPath": "assets/recommendation-stock/bottom-white-high-waist-jeans-denim-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-white-high-waist-jeans-denim-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png",
+      "crop": {
+        "left": 10,
+        "top": 20,
+        "width": 364,
+        "height": 779
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-high-waist-jeans-denim-fem-studio.jpg"
+    },
+    {
+      "ordinal": 197,
+      "key": "bottom_navy_wide_leg_trousers_wool_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "navy wide-leg trousers",
+      "oldPath": "assets/recommendation-stock/bottom-navy-wide-leg-trousers-wool-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-navy-wide-leg-trousers-wool-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png",
+      "crop": {
+        "left": 394,
+        "top": 20,
+        "width": 364,
+        "height": 779
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-wide-leg-trousers-wool-fem-studio.jpg"
+    },
+    {
+      "ordinal": 198,
+      "key": "bottom_black_cigarette_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black cigarette pants",
+      "oldPath": "assets/recommendation-stock/bottom-black-cigarette-pants-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-cigarette-pants-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png",
+      "crop": {
+        "left": 778,
+        "top": 20,
+        "width": 365,
+        "height": 779
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-cigarette-pants-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 199,
+      "key": "bottom_black_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "black capri pants",
+      "oldPath": "assets/recommendation-stock/bottom-black-capri-pants-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-black-capri-pants-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png",
+      "crop": {
+        "left": 1163,
+        "top": 20,
+        "width": 364,
+        "height": 779
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-capri-pants-cotton-fem-studio.jpg"
+    },
+    {
+      "ordinal": 200,
+      "key": "bottom_white_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "gender": "feminine",
+      "human": "white capri pants",
+      "oldPath": "assets/recommendation-stock/bottom-white-capri-pants-cotton-fem.svg",
+      "newPath": "assets/recommendation-stock/bottom-white-capri-pants-cotton-fem-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efbf4dd7108191ad615fbc9271c801.png",
+      "crop": {
+        "left": 1547,
+        "top": 20,
+        "width": 364,
+        "height": 779
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-capri-pants-cotton-fem-studio.jpg"
+    }
+  ]
+}

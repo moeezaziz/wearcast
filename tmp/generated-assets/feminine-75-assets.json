@@ -1,0 +1,602 @@
+[
+  {
+    "key": "top_white_blouse_silk_fem_v1",
+    "filename": "top-white-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "blouse",
+    "color": "white",
+    "label": "silk blouse"
+  },
+  {
+    "key": "top_black_blouse_silk_fem_v1",
+    "filename": "top-black-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "blouse",
+    "color": "black",
+    "label": "silk blouse"
+  },
+  {
+    "key": "top_cream_blouse_silk_fem_v1",
+    "filename": "top-cream-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "blouse",
+    "color": "cream",
+    "label": "silk blouse"
+  },
+  {
+    "key": "top_navy_blouse_silk_fem_v1",
+    "filename": "top-navy-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "blouse",
+    "color": "navy",
+    "label": "silk blouse"
+  },
+  {
+    "key": "top_cream_camisole_silk_fem_v1",
+    "filename": "top-cream-camisole-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "camisole",
+    "color": "cream",
+    "label": "silk camisole"
+  },
+  {
+    "key": "top_black_halter_top_silk_fem_v1",
+    "filename": "top-black-halter-top-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "halter",
+    "color": "black",
+    "label": "silk halter top"
+  },
+  {
+    "key": "top_white_halter_top_silk_fem_v1",
+    "filename": "top-white-halter-top-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "halter",
+    "color": "white",
+    "label": "silk halter top"
+  },
+  {
+    "key": "top_white_off_shoulder_top_cotton_fem_v1",
+    "filename": "top-white-off-shoulder-top-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "offshoulder",
+    "color": "white",
+    "label": "off-shoulder top"
+  },
+  {
+    "key": "top_black_off_shoulder_top_cotton_fem_v1",
+    "filename": "top-black-off-shoulder-top-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "offshoulder",
+    "color": "black",
+    "label": "off-shoulder top"
+  },
+  {
+    "key": "top_white_crop_top_cotton_fem_v1",
+    "filename": "top-white-crop-top-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "croptop",
+    "color": "white",
+    "label": "crop top"
+  },
+  {
+    "key": "top_black_crop_top_cotton_fem_v1",
+    "filename": "top-black-crop-top-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "croptop",
+    "color": "black",
+    "label": "crop top"
+  },
+  {
+    "key": "top_white_bodysuit_jersey_fem_v1",
+    "filename": "top-white-bodysuit-jersey-studio-fem.jpg",
+    "slot": "top",
+    "kind": "bodysuit",
+    "color": "white",
+    "label": "jersey bodysuit"
+  },
+  {
+    "key": "top_black_tunic_linen_fem_v1",
+    "filename": "top-black-tunic-linen-studio-fem.jpg",
+    "slot": "top",
+    "kind": "tunic",
+    "color": "black",
+    "label": "linen tunic"
+  },
+  {
+    "key": "top_cream_tunic_linen_fem_v1",
+    "filename": "top-cream-tunic-linen-studio-fem.jpg",
+    "slot": "top",
+    "kind": "tunic",
+    "color": "cream",
+    "label": "linen tunic"
+  },
+  {
+    "key": "top_cream_knit_cardigan_wool_fem_v1",
+    "filename": "top-cream-knit-cardigan-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "cardigan",
+    "color": "cream",
+    "label": "knit cardigan"
+  },
+  {
+    "key": "top_black_knit_cardigan_wool_fem_v1",
+    "filename": "top-black-knit-cardigan-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "cardigan",
+    "color": "black",
+    "label": "knit cardigan"
+  },
+  {
+    "key": "top_navy_knit_cardigan_wool_fem_v1",
+    "filename": "top-navy-knit-cardigan-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "cardigan",
+    "color": "navy",
+    "label": "knit cardigan"
+  },
+  {
+    "key": "top_white_ruffled_blouse_silk_fem_v1",
+    "filename": "top-white-ruffled-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "ruffled",
+    "color": "white",
+    "label": "ruffled blouse"
+  },
+  {
+    "key": "top_black_ruffled_blouse_silk_fem_v1",
+    "filename": "top-black-ruffled-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "ruffled",
+    "color": "black",
+    "label": "ruffled blouse"
+  },
+  {
+    "key": "top_navy_ruffled_blouse_silk_fem_v1",
+    "filename": "top-navy-ruffled-blouse-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "ruffled",
+    "color": "navy",
+    "label": "ruffled blouse"
+  },
+  {
+    "key": "top_black_wrap_dress_jersey_fem_v1",
+    "filename": "top-black-wrap-dress-jersey-studio-fem.jpg",
+    "slot": "top",
+    "kind": "wrapdress",
+    "color": "black",
+    "label": "wrap dress"
+  },
+  {
+    "key": "top_navy_wrap_dress_jersey_fem_v1",
+    "filename": "top-navy-wrap-dress-jersey-studio-fem.jpg",
+    "slot": "top",
+    "kind": "wrapdress",
+    "color": "navy",
+    "label": "wrap dress"
+  },
+  {
+    "key": "top_black_slip_dress_silk_fem_v1",
+    "filename": "top-black-slip-dress-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "slipdress",
+    "color": "black",
+    "label": "slip dress"
+  },
+  {
+    "key": "top_cream_slip_dress_silk_fem_v1",
+    "filename": "top-cream-slip-dress-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "slipdress",
+    "color": "cream",
+    "label": "slip dress"
+  },
+  {
+    "key": "top_navy_slip_dress_silk_fem_v1",
+    "filename": "top-navy-slip-dress-silk-studio-fem.jpg",
+    "slot": "top",
+    "kind": "slipdress",
+    "color": "navy",
+    "label": "slip dress"
+  },
+  {
+    "key": "top_white_sundress_cotton_fem_v1",
+    "filename": "top-white-sundress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sundress",
+    "color": "white",
+    "label": "sundress"
+  },
+  {
+    "key": "top_blue_sundress_cotton_fem_v1",
+    "filename": "top-blue-sundress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sundress",
+    "color": "blue",
+    "label": "sundress"
+  },
+  {
+    "key": "top_floral_sundress_cotton_fem_v1",
+    "filename": "top-floral-sundress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sundress",
+    "color": "floral",
+    "label": "floral sundress"
+  },
+  {
+    "key": "top_black_maxi_dress_cotton_fem_v1",
+    "filename": "top-black-maxi-dress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "maxidress",
+    "color": "black",
+    "label": "maxi dress"
+  },
+  {
+    "key": "top_white_maxi_dress_cotton_fem_v1",
+    "filename": "top-white-maxi-dress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "maxidress",
+    "color": "white",
+    "label": "maxi dress"
+  },
+  {
+    "key": "top_black_mini_dress_cotton_fem_v1",
+    "filename": "top-black-mini-dress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "minidress",
+    "color": "black",
+    "label": "mini dress"
+  },
+  {
+    "key": "top_black_sheath_dress_wool_fem_v1",
+    "filename": "top-black-sheath-dress-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sheathdress",
+    "color": "black",
+    "label": "sheath dress"
+  },
+  {
+    "key": "top_navy_sheath_dress_wool_fem_v1",
+    "filename": "top-navy-sheath-dress-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sheathdress",
+    "color": "navy",
+    "label": "sheath dress"
+  },
+  {
+    "key": "top_white_shirtdress_cotton_fem_v1",
+    "filename": "top-white-shirtdress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "shirtdress",
+    "color": "white",
+    "label": "shirtdress"
+  },
+  {
+    "key": "top_blue_shirtdress_cotton_fem_v1",
+    "filename": "top-blue-shirtdress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "shirtdress",
+    "color": "blue",
+    "label": "shirtdress"
+  },
+  {
+    "key": "top_black_sweater_dress_wool_fem_v1",
+    "filename": "top-black-sweater-dress-wool-studio-fem.jpg",
+    "slot": "top",
+    "kind": "sweaterdress",
+    "color": "black",
+    "label": "sweater dress"
+  },
+  {
+    "key": "top_black_t_shirt_dress_cotton_fem_v1",
+    "filename": "top-black-t-shirt-dress-cotton-studio-fem.jpg",
+    "slot": "top",
+    "kind": "tshirtdress",
+    "color": "black",
+    "label": "t-shirt dress"
+  },
+  {
+    "key": "top_black_bodycon_dress_jersey_fem_v1",
+    "filename": "top-black-bodycon-dress-jersey-studio-fem.jpg",
+    "slot": "top",
+    "kind": "bodycondress",
+    "color": "black",
+    "label": "bodycon dress"
+  },
+  {
+    "key": "bottom_black_a_line_skirt_cotton_fem_v1",
+    "filename": "bottom-black-a-line-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "aline",
+    "color": "black",
+    "label": "a-line skirt"
+  },
+  {
+    "key": "bottom_navy_a_line_skirt_cotton_fem_v1",
+    "filename": "bottom-navy-a-line-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "aline",
+    "color": "navy",
+    "label": "a-line skirt"
+  },
+  {
+    "key": "bottom_beige_a_line_skirt_cotton_fem_v1",
+    "filename": "bottom-beige-a-line-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "aline",
+    "color": "beige",
+    "label": "a-line skirt"
+  },
+  {
+    "key": "bottom_black_pencil_skirt_wool_fem_v1",
+    "filename": "bottom-black-pencil-skirt-wool-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pencil",
+    "color": "black",
+    "label": "pencil skirt"
+  },
+  {
+    "key": "bottom_navy_pencil_skirt_wool_fem_v1",
+    "filename": "bottom-navy-pencil-skirt-wool-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pencil",
+    "color": "navy",
+    "label": "pencil skirt"
+  },
+  {
+    "key": "bottom_beige_pencil_skirt_wool_fem_v1",
+    "filename": "bottom-beige-pencil-skirt-wool-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pencil",
+    "color": "beige",
+    "label": "pencil skirt"
+  },
+  {
+    "key": "bottom_black_midi_skirt_cotton_fem_v1",
+    "filename": "bottom-black-midi-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "midi",
+    "color": "black",
+    "label": "midi skirt"
+  },
+  {
+    "key": "bottom_white_midi_skirt_cotton_fem_v1",
+    "filename": "bottom-white-midi-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "midi",
+    "color": "white",
+    "label": "midi skirt"
+  },
+  {
+    "key": "bottom_beige_midi_skirt_cotton_fem_v1",
+    "filename": "bottom-beige-midi-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "midi",
+    "color": "beige",
+    "label": "midi skirt"
+  },
+  {
+    "key": "bottom_blue_mini_skirt_denim_fem_v1",
+    "filename": "bottom-blue-mini-skirt-denim-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "miniskirt",
+    "color": "blue",
+    "label": "denim mini skirt"
+  },
+  {
+    "key": "bottom_black_mini_skirt_denim_fem_v1",
+    "filename": "bottom-black-mini-skirt-denim-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "miniskirt",
+    "color": "black",
+    "label": "denim mini skirt"
+  },
+  {
+    "key": "bottom_black_maxi_skirt_linen_fem_v1",
+    "filename": "bottom-black-maxi-skirt-linen-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "maxiskirt",
+    "color": "black",
+    "label": "maxi skirt"
+  },
+  {
+    "key": "bottom_beige_maxi_skirt_linen_fem_v1",
+    "filename": "bottom-beige-maxi-skirt-linen-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "maxiskirt",
+    "color": "beige",
+    "label": "maxi skirt"
+  },
+  {
+    "key": "bottom_black_pleated_skirt_cotton_fem_v1",
+    "filename": "bottom-black-pleated-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pleated",
+    "color": "black",
+    "label": "pleated skirt"
+  },
+  {
+    "key": "bottom_navy_pleated_skirt_cotton_fem_v1",
+    "filename": "bottom-navy-pleated-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pleated",
+    "color": "navy",
+    "label": "pleated skirt"
+  },
+  {
+    "key": "bottom_cream_pleated_skirt_cotton_fem_v1",
+    "filename": "bottom-cream-pleated-skirt-cotton-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "pleated",
+    "color": "cream",
+    "label": "pleated skirt"
+  },
+  {
+    "key": "bottom_blue_high_waist_jeans_denim_fem_v1",
+    "filename": "bottom-blue-high-waist-jeans-denim-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "jeans",
+    "color": "blue",
+    "label": "high-waist jeans"
+  },
+  {
+    "key": "bottom_black_high_waist_jeans_denim_fem_v1",
+    "filename": "bottom-black-high-waist-jeans-denim-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "jeans",
+    "color": "black",
+    "label": "high-waist jeans"
+  },
+  {
+    "key": "bottom_black_wide_leg_trousers_wool_fem_v1",
+    "filename": "bottom-black-wide-leg-trousers-wool-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "wideleg",
+    "color": "black",
+    "label": "wide-leg trousers"
+  },
+  {
+    "key": "bottom_cream_wide_leg_trousers_wool_fem_v1",
+    "filename": "bottom-cream-wide-leg-trousers-wool-studio-fem.jpg",
+    "slot": "bottom",
+    "kind": "wideleg",
+    "color": "cream",
+    "label": "wide-leg trousers"
+  },
+  {
+    "key": "shoes_black_heels_leather_fem_v1",
+    "filename": "shoes-black-heels-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "heels",
+    "color": "black",
+    "label": "heels"
+  },
+  {
+    "key": "shoes_nude_heels_leather_fem_v1",
+    "filename": "shoes-nude-heels-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "heels",
+    "color": "nude",
+    "label": "heels"
+  },
+  {
+    "key": "shoes_black_stiletto_heels_leather_fem_v1",
+    "filename": "shoes-black-stiletto-heels-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "stiletto",
+    "color": "black",
+    "label": "stiletto heels"
+  },
+  {
+    "key": "shoes_nude_stiletto_heels_leather_fem_v1",
+    "filename": "shoes-nude-stiletto-heels-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "stiletto",
+    "color": "nude",
+    "label": "stiletto heels"
+  },
+  {
+    "key": "shoes_black_pumps_leather_fem_v1",
+    "filename": "shoes-black-pumps-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "pumps",
+    "color": "black",
+    "label": "pumps"
+  },
+  {
+    "key": "shoes_nude_pumps_leather_fem_v1",
+    "filename": "shoes-nude-pumps-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "pumps",
+    "color": "nude",
+    "label": "pumps"
+  },
+  {
+    "key": "shoes_black_ballet_flats_leather_fem_v1",
+    "filename": "shoes-black-ballet-flats-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "flats",
+    "color": "black",
+    "label": "ballet flats"
+  },
+  {
+    "key": "shoes_nude_ballet_flats_leather_fem_v1",
+    "filename": "shoes-nude-ballet-flats-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "flats",
+    "color": "nude",
+    "label": "ballet flats"
+  },
+  {
+    "key": "shoes_black_mules_leather_fem_v1",
+    "filename": "shoes-black-mules-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "mules",
+    "color": "black",
+    "label": "mules"
+  },
+  {
+    "key": "shoes_tan_mules_leather_fem_v1",
+    "filename": "shoes-tan-mules-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "mules",
+    "color": "tan",
+    "label": "mules"
+  },
+  {
+    "key": "shoes_black_wedge_sandals_leather_fem_v1",
+    "filename": "shoes-black-wedge-sandals-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "wedges",
+    "color": "black",
+    "label": "wedge sandals"
+  },
+  {
+    "key": "shoes_black_strappy_sandals_leather_fem_v1",
+    "filename": "shoes-black-strappy-sandals-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "strappysandals",
+    "color": "black",
+    "label": "strappy sandals"
+  },
+  {
+    "key": "shoes_black_knee_high_boots_leather_fem_v1",
+    "filename": "shoes-black-knee-high-boots-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "kneeboots",
+    "color": "black",
+    "label": "knee-high boots"
+  },
+  {
+    "key": "shoes_brown_riding_boots_leather_fem_v1",
+    "filename": "shoes-brown-riding-boots-leather-studio-fem.jpg",
+    "slot": "shoes",
+    "kind": "kneeboots",
+    "color": "brown",
+    "label": "riding boots"
+  },
+  {
+    "key": "accessory_black_clutch_leather_fem_v1",
+    "filename": "accessory-black-clutch-leather-studio-fem.jpg",
+    "slot": "accessory",
+    "kind": "clutch",
+    "color": "black",
+    "label": "clutch"
+  },
+  {
+    "key": "accessory_tan_mini_bag_leather_fem_v1",
+    "filename": "accessory-tan-mini-bag-leather-studio-fem.jpg",
+    "slot": "accessory",
+    "kind": "minibag",
+    "color": "tan",
+    "label": "mini bag"
+  },
+  {
+    "key": "accessory_silver_hoop_earrings_gold_fem_v1",
+    "filename": "accessory-silver-hoop-earrings-gold-studio-fem.jpg",
+    "slot": "accessory",
+    "kind": "earrings",
+    "color": "silver",
+    "label": "hoop earrings"
+  }
+]

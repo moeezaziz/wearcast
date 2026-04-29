@@ -1,0 +1,4 @@
+suspicious_title (Museum)
+source: https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_X1054a-b_Pair_of_Sandals.jpg
+license: CC BY 3.0
+title: File:Brooklyn Museum X1054a-b Pair of Sandals.jpg

@@ -47,8 +47,26 @@ export async function initDB() {
       created_at        TIMESTAMPTZ DEFAULT NOW()
     );
 
+    CREATE TABLE IF NOT EXISTS recommendation_stock_gaps (
+      id                SERIAL PRIMARY KEY,
+      created_at        TIMESTAMPTZ DEFAULT NOW(),
+      source            TEXT,
+      slot              TEXT NOT NULL,
+      item_name         TEXT NOT NULL,
+      item_color        TEXT,
+      item_material     TEXT,
+      requested         JSONB DEFAULT '{}',
+      selected_stock    JSONB,
+      reasons           TEXT[] DEFAULT '{}',
+      context           JSONB DEFAULT '{}',
+      backlog_key       TEXT NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS idx_wardrobe_user ON wardrobe_items(user_id);
     CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user ON refresh_tokens(user_id);
+    CREATE INDEX IF NOT EXISTS idx_recommendation_stock_gaps_created ON recommendation_stock_gaps(created_at);
+    CREATE INDEX IF NOT EXISTS idx_recommendation_stock_gaps_backlog_key ON recommendation_stock_gaps(backlog_key);
+    CREATE INDEX IF NOT EXISTS idx_recommendation_stock_gaps_slot ON recommendation_stock_gaps(slot);
   `);
 
   await pool.query(`

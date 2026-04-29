@@ -1,0 +1,702 @@
+[
+  {
+    "key": "top_knit_sweater_hanger",
+    "path": "assets/recommendation-stock/top-knit-sweater-hanger-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9bb7c29481918ed9a8c25b2f2f2d.png",
+    "position": "top-left",
+    "human": "knit sweater"
+  },
+  {
+    "key": "top_navy_cardigan_wool_v1",
+    "path": "assets/recommendation-stock/top-navy-cardigan-wool-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9bb7c29481918ed9a8c25b2f2f2d.png",
+    "position": "top-right",
+    "human": "navy cardigan wool"
+  },
+  {
+    "key": "shoes_black_ankle_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-black-ankle-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9bb7c29481918ed9a8c25b2f2f2d.png",
+    "position": "bottom-left",
+    "human": "black ankle boots leather"
+  },
+  {
+    "key": "shoes_brown_ankle_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-brown-ankle-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9bb7c29481918ed9a8c25b2f2f2d.png",
+    "position": "bottom-right",
+    "human": "brown ankle boots leather"
+  },
+  {
+    "key": "shoes_navy_ankle_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-navy-ankle-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c2791c481918b560c59751a75a9.png",
+    "position": "top-left",
+    "human": "navy ankle boots leather"
+  },
+  {
+    "key": "shoes_olive_ankle_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-olive-ankle-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c2791c481918b560c59751a75a9.png",
+    "position": "top-right",
+    "human": "olive ankle boots leather"
+  },
+  {
+    "key": "shoes_tan_ankle_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-tan-ankle-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c2791c481918b560c59751a75a9.png",
+    "position": "bottom-left",
+    "human": "tan ankle boots leather"
+  },
+  {
+    "key": "shoes_brown_chelsea_boots_leather_v1",
+    "path": "assets/recommendation-stock/shoes-brown-chelsea-boots-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c2791c481918b560c59751a75a9.png",
+    "position": "bottom-right",
+    "human": "brown chelsea boots leather"
+  },
+  {
+    "key": "top_black_button_up_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-black-button-up-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c7e2aa881919dc54a208a9dfbfa.png",
+    "position": "top-left",
+    "human": "black button up shirt cotton"
+  },
+  {
+    "key": "top_brown_button_up_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-brown-button-up-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c7e2aa881919dc54a208a9dfbfa.png",
+    "position": "top-right",
+    "human": "brown button up shirt cotton"
+  },
+  {
+    "key": "top_gray_button_up_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-gray-button-up-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c7e2aa881919dc54a208a9dfbfa.png",
+    "position": "bottom-left",
+    "human": "gray button up shirt cotton"
+  },
+  {
+    "key": "top_navy_button_up_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-navy-button-up-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9c7e2aa881919dc54a208a9dfbfa.png",
+    "position": "bottom-right",
+    "human": "navy button up shirt cotton"
+  },
+  {
+    "key": "top_olive_button_up_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-olive-button-up-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9ced1f9881919c28ad5ec3d3e692.png",
+    "position": "top-left",
+    "human": "olive button up shirt cotton"
+  },
+  {
+    "key": "top_brown_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/top-brown-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9ced1f9881919c28ad5ec3d3e692.png",
+    "position": "top-right",
+    "human": "brown hoodie cotton"
+  },
+  {
+    "key": "top_gray_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/top-gray-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9ced1f9881919c28ad5ec3d3e692.png",
+    "position": "bottom-left",
+    "human": "gray hoodie cotton"
+  },
+  {
+    "key": "top_navy_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/top-navy-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9ced1f9881919c28ad5ec3d3e692.png",
+    "position": "bottom-right",
+    "human": "navy hoodie cotton"
+  },
+  {
+    "key": "top_olive_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/top-olive-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9d6599e88191b0952327206ffac1.png",
+    "position": "top-left",
+    "human": "olive hoodie cotton"
+  },
+  {
+    "key": "top_black_linen_shirt_linen_v1",
+    "path": "assets/recommendation-stock/top-black-linen-shirt-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9d6599e88191b0952327206ffac1.png",
+    "position": "top-right",
+    "human": "black linen shirt linen"
+  },
+  {
+    "key": "top_brown_linen_shirt_linen_v1",
+    "path": "assets/recommendation-stock/top-brown-linen-shirt-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9d6599e88191b0952327206ffac1.png",
+    "position": "bottom-left",
+    "human": "brown linen shirt linen"
+  },
+  {
+    "key": "top_gray_linen_shirt_linen_v1",
+    "path": "assets/recommendation-stock/top-gray-linen-shirt-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9d6599e88191b0952327206ffac1.png",
+    "position": "bottom-right",
+    "human": "gray linen shirt linen"
+  },
+  {
+    "key": "top_navy_linen_shirt_linen_v1",
+    "path": "assets/recommendation-stock/top-navy-linen-shirt-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9df6433481919b4621f6685a0acc.png",
+    "position": "top-left",
+    "human": "navy linen shirt linen"
+  },
+  {
+    "key": "top_olive_linen_shirt_linen_v1",
+    "path": "assets/recommendation-stock/top-olive-linen-shirt-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9df6433481919b4621f6685a0acc.png",
+    "position": "top-right",
+    "human": "olive linen shirt linen"
+  },
+  {
+    "key": "top_black_long_sleeve_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-black-long-sleeve-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9df6433481919b4621f6685a0acc.png",
+    "position": "bottom-left",
+    "human": "black long sleeve T-shirt cotton"
+  },
+  {
+    "key": "top_black_polo_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-black-polo-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9df6433481919b4621f6685a0acc.png",
+    "position": "bottom-right",
+    "human": "black polo shirt cotton"
+  },
+  {
+    "key": "top_brown_polo_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-brown-polo-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9e717368819188b1f3a1ae704ae9.png",
+    "position": "top-left",
+    "human": "brown polo shirt cotton"
+  },
+  {
+    "key": "top_gray_polo_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-gray-polo-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9e717368819188b1f3a1ae704ae9.png",
+    "position": "top-right",
+    "human": "gray polo shirt cotton"
+  },
+  {
+    "key": "top_navy_polo_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-navy-polo-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9e717368819188b1f3a1ae704ae9.png",
+    "position": "bottom-left",
+    "human": "navy polo shirt cotton"
+  },
+  {
+    "key": "top_olive_polo_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-olive-polo-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9e717368819188b1f3a1ae704ae9.png",
+    "position": "bottom-right",
+    "human": "olive polo shirt cotton"
+  },
+  {
+    "key": "top_black_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-black-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f4661e481919b36287060760a84.png",
+    "position": "top-left",
+    "human": "black T-shirt cotton"
+  },
+  {
+    "key": "top_brown_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-brown-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f4661e481919b36287060760a84.png",
+    "position": "top-right",
+    "human": "brown T-shirt cotton"
+  },
+  {
+    "key": "top_gray_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-gray-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f4661e481919b36287060760a84.png",
+    "position": "bottom-left",
+    "human": "gray T-shirt cotton"
+  },
+  {
+    "key": "top_navy_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-navy-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f4661e481919b36287060760a84.png",
+    "position": "bottom-right",
+    "human": "navy T-shirt cotton"
+  },
+  {
+    "key": "top_olive_t_shirt_cotton_v1",
+    "path": "assets/recommendation-stock/top-olive-t-shirt-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f9623348191802c2042dbb5520f.png",
+    "position": "top-left",
+    "human": "olive T-shirt cotton"
+  },
+  {
+    "key": "bottom_charcoal_chinos_cotton_v1",
+    "path": "assets/recommendation-stock/bottom-charcoal-chinos-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f9623348191802c2042dbb5520f.png",
+    "position": "top-right",
+    "human": "charcoal chinos cotton"
+  },
+  {
+    "key": "bottom_gray_chinos_cotton_v1",
+    "path": "assets/recommendation-stock/bottom-gray-chinos-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f9623348191802c2042dbb5520f.png",
+    "position": "bottom-left",
+    "human": "gray chinos cotton"
+  },
+  {
+    "key": "bottom_beige_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-beige-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169ef9f9623348191802c2042dbb5520f.png",
+    "position": "bottom-right",
+    "human": "beige jeans denim"
+  },
+  {
+    "key": "bottom_black_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-black-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa005118881919692a5fd39e44396.png",
+    "position": "top-left",
+    "human": "black jeans denim"
+  },
+  {
+    "key": "bottom_brown_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-brown-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa005118881919692a5fd39e44396.png",
+    "position": "top-right",
+    "human": "brown jeans denim"
+  },
+  {
+    "key": "bottom_charcoal_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-charcoal-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa005118881919692a5fd39e44396.png",
+    "position": "bottom-left",
+    "human": "charcoal jeans denim"
+  },
+  {
+    "key": "bottom_gray_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-gray-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa005118881919692a5fd39e44396.png",
+    "position": "bottom-right",
+    "human": "gray jeans denim"
+  },
+  {
+    "key": "bottom_olive_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-olive-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa079591481919ee3cc9125f4f484.png",
+    "position": "top-left",
+    "human": "olive jeans denim"
+  },
+  {
+    "key": "bottom_tan_jeans_denim_v1",
+    "path": "assets/recommendation-stock/bottom-tan-jeans-denim-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa079591481919ee3cc9125f4f484.png",
+    "position": "top-right",
+    "human": "tan jeans denim"
+  },
+  {
+    "key": "bottom_gray_joggers_tech_v1",
+    "path": "assets/recommendation-stock/bottom-gray-joggers-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa079591481919ee3cc9125f4f484.png",
+    "position": "bottom-left",
+    "human": "gray joggers tech"
+  },
+  {
+    "key": "bottom_white_joggers_tech_v1",
+    "path": "assets/recommendation-stock/bottom-white-joggers-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa079591481919ee3cc9125f4f484.png",
+    "position": "bottom-right",
+    "human": "white joggers tech"
+  },
+  {
+    "key": "bottom_black_linen_trousers_linen_v1",
+    "path": "assets/recommendation-stock/bottom-black-linen-trousers-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa0efdd288191a065da1d58fd16be.png",
+    "position": "top-left",
+    "human": "black linen trousers linen"
+  },
+  {
+    "key": "bottom_charcoal_linen_trousers_linen_v1",
+    "path": "assets/recommendation-stock/bottom-charcoal-linen-trousers-linen-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa0efdd288191a065da1d58fd16be.png",
+    "position": "top-right",
+    "human": "charcoal linen trousers linen"
+  },
+  {
+    "key": "outer_tan_hooded_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-tan-hooded-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa0efdd288191a065da1d58fd16be.png",
+    "position": "bottom-left",
+    "human": "tan hooded parka down"
+  },
+  {
+    "key": "outer_white_hooded_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-white-hooded-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa0efdd288191a065da1d58fd16be.png",
+    "position": "bottom-right",
+    "human": "white hooded parka down"
+  },
+  {
+    "key": "outer_beige_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-beige-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa167195c819192af4b4adfb147e4.png",
+    "position": "top-left",
+    "human": "beige parka down"
+  },
+  {
+    "key": "outer_black_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-black-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa167195c819192af4b4adfb147e4.png",
+    "position": "top-right",
+    "human": "black parka down"
+  },
+  {
+    "key": "outer_charcoal_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-charcoal-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa167195c819192af4b4adfb147e4.png",
+    "position": "bottom-left",
+    "human": "charcoal parka down"
+  },
+  {
+    "key": "outer_cream_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-cream-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa167195c819192af4b4adfb147e4.png",
+    "position": "bottom-right",
+    "human": "cream parka down"
+  },
+  {
+    "key": "outer_gray_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-gray-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa1d961108191b6748197c52cdfbd.png",
+    "position": "top-left",
+    "human": "gray parka down"
+  },
+  {
+    "key": "outer_navy_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-navy-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa1d961108191b6748197c52cdfbd.png",
+    "position": "top-right",
+    "human": "navy parka down"
+  },
+  {
+    "key": "outer_olive_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-olive-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa1d961108191b6748197c52cdfbd.png",
+    "position": "bottom-left",
+    "human": "olive parka down"
+  },
+  {
+    "key": "outer_tan_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-tan-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa1d961108191b6748197c52cdfbd.png",
+    "position": "bottom-right",
+    "human": "tan parka down"
+  },
+  {
+    "key": "outer_white_parka_down_v1",
+    "path": "assets/recommendation-stock/outer-white-parka-down-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa2cec3448191a93c5eb384c8baee.png",
+    "position": "top-left",
+    "human": "white parka down"
+  },
+  {
+    "key": "outer_navy_rain_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-navy-rain-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa2cec3448191a93c5eb384c8baee.png",
+    "position": "top-right",
+    "human": "navy rain jacket tech"
+  },
+  {
+    "key": "outer_olive_rain_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-olive-rain-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa2cec3448191a93c5eb384c8baee.png",
+    "position": "bottom-left",
+    "human": "olive rain jacket tech"
+  },
+  {
+    "key": "outer_tan_rain_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-tan-rain-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa2cec3448191a93c5eb384c8baee.png",
+    "position": "bottom-right",
+    "human": "tan rain jacket tech"
+  },
+  {
+    "key": "outer_white_rain_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-white-rain-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa3903d9c8191abc701ba02023850.png",
+    "position": "top-left",
+    "human": "white rain jacket tech"
+  },
+  {
+    "key": "outer_beige_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-beige-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa3903d9c8191abc701ba02023850.png",
+    "position": "top-right",
+    "human": "beige shell jacket tech"
+  },
+  {
+    "key": "outer_brown_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-brown-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa3903d9c8191abc701ba02023850.png",
+    "position": "bottom-left",
+    "human": "brown shell jacket tech"
+  },
+  {
+    "key": "outer_charcoal_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-charcoal-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa3903d9c8191abc701ba02023850.png",
+    "position": "bottom-right",
+    "human": "charcoal shell jacket tech"
+  },
+  {
+    "key": "outer_cream_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-cream-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4053cbc8191aefd76b8f60eb18d.png",
+    "position": "top-left",
+    "human": "cream shell jacket tech"
+  },
+  {
+    "key": "outer_navy_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-navy-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4053cbc8191aefd76b8f60eb18d.png",
+    "position": "top-right",
+    "human": "navy shell jacket tech"
+  },
+  {
+    "key": "outer_olive_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-olive-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4053cbc8191aefd76b8f60eb18d.png",
+    "position": "bottom-left",
+    "human": "olive shell jacket tech"
+  },
+  {
+    "key": "outer_tan_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-tan-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4053cbc8191aefd76b8f60eb18d.png",
+    "position": "bottom-right",
+    "human": "tan shell jacket tech"
+  },
+  {
+    "key": "outer_white_shell_jacket_tech_v1",
+    "path": "assets/recommendation-stock/outer-white-shell-jacket-tech-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa477e93c8191a9c80a12eb6342dd.png",
+    "position": "top-left",
+    "human": "white shell jacket tech"
+  },
+  {
+    "key": "shoes_black_black_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-black-black-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa477e93c8191a9c80a12eb6342dd.png",
+    "position": "top-right",
+    "human": "black black sneakers leather"
+  },
+  {
+    "key": "shoes_brown_black_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-brown-black-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa477e93c8191a9c80a12eb6342dd.png",
+    "position": "bottom-left",
+    "human": "brown black sneakers leather"
+  },
+  {
+    "key": "shoes_olive_black_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-olive-black-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa477e93c8191a9c80a12eb6342dd.png",
+    "position": "bottom-right",
+    "human": "olive black sneakers leather"
+  },
+  {
+    "key": "shoes_gray_loafers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-gray-loafers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4e4e1dc8191be0cc552b735a8a6.png",
+    "position": "top-left",
+    "human": "gray loafers leather"
+  },
+  {
+    "key": "shoes_navy_loafers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-navy-loafers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4e4e1dc8191be0cc552b735a8a6.png",
+    "position": "top-right",
+    "human": "navy loafers leather"
+  },
+  {
+    "key": "shoes_tan_loafers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-tan-loafers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4e4e1dc8191be0cc552b735a8a6.png",
+    "position": "bottom-left",
+    "human": "tan loafers leather"
+  },
+  {
+    "key": "shoes_brown_running_shoes_mesh_v1",
+    "path": "assets/recommendation-stock/shoes-brown-running-shoes-mesh-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa4e4e1dc8191be0cc552b735a8a6.png",
+    "position": "bottom-right",
+    "human": "brown running shoes mesh"
+  },
+  {
+    "key": "shoes_navy_running_shoes_mesh_v1",
+    "path": "assets/recommendation-stock/shoes-navy-running-shoes-mesh-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa559712481919ef4175004c0a416.png",
+    "position": "top-left",
+    "human": "navy running shoes mesh"
+  },
+  {
+    "key": "shoes_black_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-black-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa559712481919ef4175004c0a416.png",
+    "position": "top-right",
+    "human": "black sneakers leather"
+  },
+  {
+    "key": "shoes_gray_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-gray-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa559712481919ef4175004c0a416.png",
+    "position": "bottom-left",
+    "human": "gray sneakers leather"
+  },
+  {
+    "key": "shoes_navy_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-navy-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa559712481919ef4175004c0a416.png",
+    "position": "bottom-right",
+    "human": "navy sneakers leather"
+  },
+  {
+    "key": "shoes_olive_sneakers_leather_v1",
+    "path": "assets/recommendation-stock/shoes-olive-sneakers-leather-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa5b411b08191925daaae40dd6926.png",
+    "position": "top-left",
+    "human": "olive sneakers leather"
+  },
+  {
+    "key": "outer_brown_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-brown-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa5b411b08191925daaae40dd6926.png",
+    "position": "top-right",
+    "human": "brown bomber jacket cotton"
+  },
+  {
+    "key": "outer_charcoal_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-charcoal-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa5b411b08191925daaae40dd6926.png",
+    "position": "bottom-left",
+    "human": "charcoal bomber jacket cotton"
+  },
+  {
+    "key": "outer_cream_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-cream-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa5b411b08191925daaae40dd6926.png",
+    "position": "bottom-right",
+    "human": "cream bomber jacket cotton"
+  },
+  {
+    "key": "outer_gray_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-gray-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa614971881918592194e85eba4ad.png",
+    "position": "top-left",
+    "human": "gray bomber jacket cotton"
+  },
+  {
+    "key": "outer_navy_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-navy-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa614971881918592194e85eba4ad.png",
+    "position": "top-right",
+    "human": "navy bomber jacket cotton"
+  },
+  {
+    "key": "outer_olive_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-olive-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa614971881918592194e85eba4ad.png",
+    "position": "bottom-left",
+    "human": "olive bomber jacket cotton"
+  },
+  {
+    "key": "outer_tan_bomber_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-tan-bomber-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa614971881918592194e85eba4ad.png",
+    "position": "bottom-right",
+    "human": "tan bomber jacket cotton"
+  },
+  {
+    "key": "outer_brown_field_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-brown-field-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7232b908191b855800e2c428d62.png",
+    "position": "top-left",
+    "human": "brown field jacket cotton"
+  },
+  {
+    "key": "outer_charcoal_field_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-charcoal-field-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7232b908191b855800e2c428d62.png",
+    "position": "top-right",
+    "human": "charcoal field jacket cotton"
+  },
+  {
+    "key": "outer_cream_field_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-cream-field-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7232b908191b855800e2c428d62.png",
+    "position": "bottom-left",
+    "human": "cream field jacket cotton"
+  },
+  {
+    "key": "outer_olive_field_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-olive-field-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7232b908191b855800e2c428d62.png",
+    "position": "bottom-right",
+    "human": "olive field jacket cotton"
+  },
+  {
+    "key": "outer_tan_field_jacket_cotton_v1",
+    "path": "assets/recommendation-stock/outer-tan-field-jacket-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7914e448191a9e82b8a1fc0d42b.png",
+    "position": "top-left",
+    "human": "tan field jacket cotton"
+  },
+  {
+    "key": "outer_brown_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/outer-brown-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7914e448191a9e82b8a1fc0d42b.png",
+    "position": "top-right",
+    "human": "brown hoodie cotton"
+  },
+  {
+    "key": "outer_charcoal_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/outer-charcoal-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7914e448191a9e82b8a1fc0d42b.png",
+    "position": "bottom-left",
+    "human": "charcoal hoodie cotton"
+  },
+  {
+    "key": "outer_navy_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/outer-navy-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa7914e448191a9e82b8a1fc0d42b.png",
+    "position": "bottom-right",
+    "human": "navy hoodie cotton"
+  },
+  {
+    "key": "outer_olive_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/outer-olive-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa803308c8191b4560fa922fc9539.png",
+    "position": "top-left",
+    "human": "olive hoodie cotton"
+  },
+  {
+    "key": "outer_tan_hoodie_cotton_v1",
+    "path": "assets/recommendation-stock/outer-tan-hoodie-cotton-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa803308c8191b4560fa922fc9539.png",
+    "position": "top-right",
+    "human": "tan hoodie cotton"
+  },
+  {
+    "key": "outer_brown_pea_coat_wool_v1",
+    "path": "assets/recommendation-stock/outer-brown-pea-coat-wool-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa803308c8191b4560fa922fc9539.png",
+    "position": "bottom-left",
+    "human": "brown pea coat wool"
+  },
+  {
+    "key": "outer_gray_pea_coat_wool_v1",
+    "path": "assets/recommendation-stock/outer-gray-pea-coat-wool-studio.jpg",
+    "sheet": "ig_0fef72a67f8933c40169efa803308c8191b4560fa922fc9539.png",
+    "position": "bottom-right",
+    "human": "gray pea coat wool"
+  }
+]

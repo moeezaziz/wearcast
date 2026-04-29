@@ -1,0 +1,1227 @@
+[
+  {
+    "batch": 1,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_knit_sweater_hanger",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-knit-sweater-hanger.jpg",
+        "index": 6,
+        "newPath": "assets/recommendation-stock/top-knit-sweater-hanger-studio.jpg",
+        "score": 148,
+        "human": "knit sweater"
+      },
+      {
+        "position": "top-right",
+        "key": "top_navy_cardigan_wool_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-cardigan-wool.jpg",
+        "index": 16,
+        "newPath": "assets/recommendation-stock/top-navy-cardigan-wool-studio.jpg",
+        "score": 148,
+        "human": "navy cardigan wool"
+      },
+      {
+        "position": "bottom-left",
+        "key": "shoes_black_ankle_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-black-ankle-boots-leather.jpg",
+        "index": 126,
+        "newPath": "assets/recommendation-stock/shoes-black-ankle-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "black ankle boots leather"
+      },
+      {
+        "position": "bottom-right",
+        "key": "shoes_brown_ankle_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-brown-ankle-boots-leather.jpg",
+        "index": 127,
+        "newPath": "assets/recommendation-stock/shoes-brown-ankle-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "brown ankle boots leather"
+      }
+    ]
+  },
+  {
+    "batch": 2,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "shoes_navy_ankle_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-navy-ankle-boots-leather.jpg",
+        "index": 129,
+        "newPath": "assets/recommendation-stock/shoes-navy-ankle-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "navy ankle boots leather"
+      },
+      {
+        "position": "top-right",
+        "key": "shoes_olive_ankle_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-olive-ankle-boots-leather.jpg",
+        "index": 130,
+        "newPath": "assets/recommendation-stock/shoes-olive-ankle-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "olive ankle boots leather"
+      },
+      {
+        "position": "bottom-left",
+        "key": "shoes_tan_ankle_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-tan-ankle-boots-leather.jpg",
+        "index": 131,
+        "newPath": "assets/recommendation-stock/shoes-tan-ankle-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "tan ankle boots leather"
+      },
+      {
+        "position": "bottom-right",
+        "key": "shoes_brown_chelsea_boots_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-brown-chelsea-boots-leather.jpg",
+        "index": 135,
+        "newPath": "assets/recommendation-stock/shoes-brown-chelsea-boots-leather-studio.jpg",
+        "score": 145,
+        "human": "brown chelsea boots leather"
+      }
+    ]
+  },
+  {
+    "batch": 3,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_black_button_up_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-black-button-up-shirt-cotton.jpg",
+        "index": 145,
+        "newPath": "assets/recommendation-stock/top-black-button-up-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "black button up shirt cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "top_brown_button_up_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-brown-button-up-shirt-cotton.jpg",
+        "index": 146,
+        "newPath": "assets/recommendation-stock/top-brown-button-up-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "brown button up shirt cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_gray_button_up_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-gray-button-up-shirt-cotton.jpg",
+        "index": 147,
+        "newPath": "assets/recommendation-stock/top-gray-button-up-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "gray button up shirt cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_navy_button_up_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-button-up-shirt-cotton.jpg",
+        "index": 148,
+        "newPath": "assets/recommendation-stock/top-navy-button-up-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "navy button up shirt cotton"
+      }
+    ]
+  },
+  {
+    "batch": 4,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_olive_button_up_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-olive-button-up-shirt-cotton.jpg",
+        "index": 149,
+        "newPath": "assets/recommendation-stock/top-olive-button-up-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "olive button up shirt cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "top_brown_hoodie_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-brown-hoodie-cotton.jpg",
+        "index": 150,
+        "newPath": "assets/recommendation-stock/top-brown-hoodie-cotton-studio.jpg",
+        "score": 144,
+        "human": "brown hoodie cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_gray_hoodie_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-gray-hoodie-cotton.jpg",
+        "index": 151,
+        "newPath": "assets/recommendation-stock/top-gray-hoodie-cotton-studio.jpg",
+        "score": 144,
+        "human": "gray hoodie cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_navy_hoodie_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-hoodie-cotton.jpg",
+        "index": 152,
+        "newPath": "assets/recommendation-stock/top-navy-hoodie-cotton-studio.jpg",
+        "score": 144,
+        "human": "navy hoodie cotton"
+      }
+    ]
+  },
+  {
+    "batch": 5,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_olive_hoodie_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-olive-hoodie-cotton.jpg",
+        "index": 153,
+        "newPath": "assets/recommendation-stock/top-olive-hoodie-cotton-studio.jpg",
+        "score": 144,
+        "human": "olive hoodie cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "top_black_linen_shirt_linen_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-black-linen-shirt-linen.jpg",
+        "index": 154,
+        "newPath": "assets/recommendation-stock/top-black-linen-shirt-linen-studio.jpg",
+        "score": 144,
+        "human": "black linen shirt linen"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_brown_linen_shirt_linen_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-brown-linen-shirt-linen.jpg",
+        "index": 155,
+        "newPath": "assets/recommendation-stock/top-brown-linen-shirt-linen-studio.jpg",
+        "score": 144,
+        "human": "brown linen shirt linen"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_gray_linen_shirt_linen_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-gray-linen-shirt-linen.jpg",
+        "index": 156,
+        "newPath": "assets/recommendation-stock/top-gray-linen-shirt-linen-studio.jpg",
+        "score": 144,
+        "human": "gray linen shirt linen"
+      }
+    ]
+  },
+  {
+    "batch": 6,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_navy_linen_shirt_linen_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-linen-shirt-linen.jpg",
+        "index": 157,
+        "newPath": "assets/recommendation-stock/top-navy-linen-shirt-linen-studio.jpg",
+        "score": 144,
+        "human": "navy linen shirt linen"
+      },
+      {
+        "position": "top-right",
+        "key": "top_olive_linen_shirt_linen_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-olive-linen-shirt-linen.jpg",
+        "index": 158,
+        "newPath": "assets/recommendation-stock/top-olive-linen-shirt-linen-studio.jpg",
+        "score": 144,
+        "human": "olive linen shirt linen"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_black_long_sleeve_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-black-long-sleeve-t-shirt-cotton.jpg",
+        "index": 159,
+        "newPath": "assets/recommendation-stock/top-black-long-sleeve-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "black long sleeve T-shirt cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_black_polo_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-black-polo-shirt-cotton.jpg",
+        "index": 163,
+        "newPath": "assets/recommendation-stock/top-black-polo-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "black polo shirt cotton"
+      }
+    ]
+  },
+  {
+    "batch": 7,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_brown_polo_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-brown-polo-shirt-cotton.jpg",
+        "index": 164,
+        "newPath": "assets/recommendation-stock/top-brown-polo-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "brown polo shirt cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "top_gray_polo_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-gray-polo-shirt-cotton.jpg",
+        "index": 165,
+        "newPath": "assets/recommendation-stock/top-gray-polo-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "gray polo shirt cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_navy_polo_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-polo-shirt-cotton.jpg",
+        "index": 166,
+        "newPath": "assets/recommendation-stock/top-navy-polo-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "navy polo shirt cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_olive_polo_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-olive-polo-shirt-cotton.jpg",
+        "index": 167,
+        "newPath": "assets/recommendation-stock/top-olive-polo-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "olive polo shirt cotton"
+      }
+    ]
+  },
+  {
+    "batch": 8,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_black_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-black-t-shirt-cotton.jpg",
+        "index": 168,
+        "newPath": "assets/recommendation-stock/top-black-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "black T-shirt cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "top_brown_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-brown-t-shirt-cotton.jpg",
+        "index": 169,
+        "newPath": "assets/recommendation-stock/top-brown-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "brown T-shirt cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "top_gray_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-gray-t-shirt-cotton.jpg",
+        "index": 170,
+        "newPath": "assets/recommendation-stock/top-gray-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "gray T-shirt cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "top_navy_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-navy-t-shirt-cotton.jpg",
+        "index": 171,
+        "newPath": "assets/recommendation-stock/top-navy-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "navy T-shirt cotton"
+      }
+    ]
+  },
+  {
+    "batch": 9,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "top_olive_t_shirt_cotton_v1",
+        "slot": "top",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/top-olive-t-shirt-cotton.jpg",
+        "index": 172,
+        "newPath": "assets/recommendation-stock/top-olive-t-shirt-cotton-studio.jpg",
+        "score": 144,
+        "human": "olive T-shirt cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "bottom_charcoal_chinos_cotton_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-charcoal-chinos-cotton.jpg",
+        "index": 48,
+        "newPath": "assets/recommendation-stock/bottom-charcoal-chinos-cotton-studio.jpg",
+        "score": 142,
+        "human": "charcoal chinos cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "bottom_gray_chinos_cotton_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-gray-chinos-cotton.jpg",
+        "index": 49,
+        "newPath": "assets/recommendation-stock/bottom-gray-chinos-cotton-studio.jpg",
+        "score": 142,
+        "human": "gray chinos cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "bottom_beige_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-beige-jeans-denim.jpg",
+        "index": 51,
+        "newPath": "assets/recommendation-stock/bottom-beige-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "beige jeans denim"
+      }
+    ]
+  },
+  {
+    "batch": 10,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "bottom_black_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-black-jeans-denim.jpg",
+        "index": 52,
+        "newPath": "assets/recommendation-stock/bottom-black-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "black jeans denim"
+      },
+      {
+        "position": "top-right",
+        "key": "bottom_brown_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-brown-jeans-denim.jpg",
+        "index": 53,
+        "newPath": "assets/recommendation-stock/bottom-brown-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "brown jeans denim"
+      },
+      {
+        "position": "bottom-left",
+        "key": "bottom_charcoal_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-charcoal-jeans-denim.jpg",
+        "index": 54,
+        "newPath": "assets/recommendation-stock/bottom-charcoal-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "charcoal jeans denim"
+      },
+      {
+        "position": "bottom-right",
+        "key": "bottom_gray_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-gray-jeans-denim.jpg",
+        "index": 55,
+        "newPath": "assets/recommendation-stock/bottom-gray-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "gray jeans denim"
+      }
+    ]
+  },
+  {
+    "batch": 11,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "bottom_olive_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-olive-jeans-denim.jpg",
+        "index": 57,
+        "newPath": "assets/recommendation-stock/bottom-olive-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "olive jeans denim"
+      },
+      {
+        "position": "top-right",
+        "key": "bottom_tan_jeans_denim_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-tan-jeans-denim.jpg",
+        "index": 58,
+        "newPath": "assets/recommendation-stock/bottom-tan-jeans-denim-studio.jpg",
+        "score": 142,
+        "human": "tan jeans denim"
+      },
+      {
+        "position": "bottom-left",
+        "key": "bottom_gray_joggers_tech_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-gray-joggers-tech.jpg",
+        "index": 59,
+        "newPath": "assets/recommendation-stock/bottom-gray-joggers-tech-studio.jpg",
+        "score": 142,
+        "human": "gray joggers tech"
+      },
+      {
+        "position": "bottom-right",
+        "key": "bottom_white_joggers_tech_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-white-joggers-tech.jpg",
+        "index": 60,
+        "newPath": "assets/recommendation-stock/bottom-white-joggers-tech-studio.jpg",
+        "score": 142,
+        "human": "white joggers tech"
+      }
+    ]
+  },
+  {
+    "batch": 12,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "bottom_black_linen_trousers_linen_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-black-linen-trousers-linen.jpg",
+        "index": 61,
+        "newPath": "assets/recommendation-stock/bottom-black-linen-trousers-linen-studio.jpg",
+        "score": 142,
+        "human": "black linen trousers linen"
+      },
+      {
+        "position": "top-right",
+        "key": "bottom_charcoal_linen_trousers_linen_v1",
+        "slot": "bottom",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/bottom-charcoal-linen-trousers-linen.jpg",
+        "index": 62,
+        "newPath": "assets/recommendation-stock/bottom-charcoal-linen-trousers-linen-studio.jpg",
+        "score": 142,
+        "human": "charcoal linen trousers linen"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_tan_hooded_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-hooded-parka-down.jpg",
+        "index": 78,
+        "newPath": "assets/recommendation-stock/outer-tan-hooded-parka-down-studio.jpg",
+        "score": 141,
+        "human": "tan hooded parka down"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_white_hooded_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-white-hooded-parka-down.jpg",
+        "index": 79,
+        "newPath": "assets/recommendation-stock/outer-white-hooded-parka-down-studio.jpg",
+        "score": 141,
+        "human": "white hooded parka down"
+      }
+    ]
+  },
+  {
+    "batch": 13,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_beige_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-beige-parka-down.jpg",
+        "index": 86,
+        "newPath": "assets/recommendation-stock/outer-beige-parka-down-studio.jpg",
+        "score": 141,
+        "human": "beige parka down"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_black_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-black-parka-down.jpg",
+        "index": 87,
+        "newPath": "assets/recommendation-stock/outer-black-parka-down-studio.jpg",
+        "score": 141,
+        "human": "black parka down"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_charcoal_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-charcoal-parka-down.jpg",
+        "index": 88,
+        "newPath": "assets/recommendation-stock/outer-charcoal-parka-down-studio.jpg",
+        "score": 141,
+        "human": "charcoal parka down"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_cream_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-cream-parka-down.jpg",
+        "index": 89,
+        "newPath": "assets/recommendation-stock/outer-cream-parka-down-studio.jpg",
+        "score": 141,
+        "human": "cream parka down"
+      }
+    ]
+  },
+  {
+    "batch": 14,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_gray_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-gray-parka-down.jpg",
+        "index": 90,
+        "newPath": "assets/recommendation-stock/outer-gray-parka-down-studio.jpg",
+        "score": 141,
+        "human": "gray parka down"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_navy_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-navy-parka-down.jpg",
+        "index": 91,
+        "newPath": "assets/recommendation-stock/outer-navy-parka-down-studio.jpg",
+        "score": 141,
+        "human": "navy parka down"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_olive_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-parka-down.jpg",
+        "index": 92,
+        "newPath": "assets/recommendation-stock/outer-olive-parka-down-studio.jpg",
+        "score": 141,
+        "human": "olive parka down"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_tan_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-parka-down.jpg",
+        "index": 93,
+        "newPath": "assets/recommendation-stock/outer-tan-parka-down-studio.jpg",
+        "score": 141,
+        "human": "tan parka down"
+      }
+    ]
+  },
+  {
+    "batch": 15,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_white_parka_down_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-white-parka-down.jpg",
+        "index": 94,
+        "newPath": "assets/recommendation-stock/outer-white-parka-down-studio.jpg",
+        "score": 141,
+        "human": "white parka down"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_navy_rain_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-navy-rain-jacket-tech.jpg",
+        "index": 101,
+        "newPath": "assets/recommendation-stock/outer-navy-rain-jacket-tech-studio.jpg",
+        "score": 141,
+        "human": "navy rain jacket tech"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_olive_rain_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-rain-jacket-tech.jpg",
+        "index": 102,
+        "newPath": "assets/recommendation-stock/outer-olive-rain-jacket-tech-studio.jpg",
+        "score": 141,
+        "human": "olive rain jacket tech"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_tan_rain_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-rain-jacket-tech.jpg",
+        "index": 103,
+        "newPath": "assets/recommendation-stock/outer-tan-rain-jacket-tech-studio.jpg",
+        "score": 141,
+        "human": "tan rain jacket tech"
+      }
+    ]
+  },
+  {
+    "batch": 16,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_white_rain_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-white-rain-jacket-tech.jpg",
+        "index": 104,
+        "newPath": "assets/recommendation-stock/outer-white-rain-jacket-tech-studio.jpg",
+        "score": 141,
+        "human": "white rain jacket tech"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_beige_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-beige-shell-jacket-tech.jpg",
+        "index": 105,
+        "newPath": "assets/recommendation-stock/outer-beige-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "beige shell jacket tech"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_brown_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-brown-shell-jacket-tech.jpg",
+        "index": 106,
+        "newPath": "assets/recommendation-stock/outer-brown-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "brown shell jacket tech"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_charcoal_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-charcoal-shell-jacket-tech.jpg",
+        "index": 107,
+        "newPath": "assets/recommendation-stock/outer-charcoal-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "charcoal shell jacket tech"
+      }
+    ]
+  },
+  {
+    "batch": 17,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_cream_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-cream-shell-jacket-tech.jpg",
+        "index": 108,
+        "newPath": "assets/recommendation-stock/outer-cream-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "cream shell jacket tech"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_navy_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-navy-shell-jacket-tech.jpg",
+        "index": 109,
+        "newPath": "assets/recommendation-stock/outer-navy-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "navy shell jacket tech"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_olive_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-shell-jacket-tech.jpg",
+        "index": 110,
+        "newPath": "assets/recommendation-stock/outer-olive-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "olive shell jacket tech"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_tan_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-shell-jacket-tech.jpg",
+        "index": 111,
+        "newPath": "assets/recommendation-stock/outer-tan-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "tan shell jacket tech"
+      }
+    ]
+  },
+  {
+    "batch": 18,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_white_shell_jacket_tech_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-white-shell-jacket-tech.jpg",
+        "index": 112,
+        "newPath": "assets/recommendation-stock/outer-white-shell-jacket-tech-studio.jpg",
+        "score": 140,
+        "human": "white shell jacket tech"
+      },
+      {
+        "position": "top-right",
+        "key": "shoes_black_black_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-black-black-sneakers-leather.jpg",
+        "index": 132,
+        "newPath": "assets/recommendation-stock/shoes-black-black-sneakers-leather-studio.jpg",
+        "score": 135,
+        "human": "black black sneakers leather"
+      },
+      {
+        "position": "bottom-left",
+        "key": "shoes_brown_black_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-brown-black-sneakers-leather.jpg",
+        "index": 133,
+        "newPath": "assets/recommendation-stock/shoes-brown-black-sneakers-leather-studio.jpg",
+        "score": 135,
+        "human": "brown black sneakers leather"
+      },
+      {
+        "position": "bottom-right",
+        "key": "shoes_olive_black_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-olive-black-sneakers-leather.jpg",
+        "index": 134,
+        "newPath": "assets/recommendation-stock/shoes-olive-black-sneakers-leather-studio.jpg",
+        "score": 135,
+        "human": "olive black sneakers leather"
+      }
+    ]
+  },
+  {
+    "batch": 19,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "shoes_gray_loafers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-gray-loafers-leather.jpg",
+        "index": 136,
+        "newPath": "assets/recommendation-stock/shoes-gray-loafers-leather-studio.jpg",
+        "score": 135,
+        "human": "gray loafers leather"
+      },
+      {
+        "position": "top-right",
+        "key": "shoes_navy_loafers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-navy-loafers-leather.jpg",
+        "index": 137,
+        "newPath": "assets/recommendation-stock/shoes-navy-loafers-leather-studio.jpg",
+        "score": 135,
+        "human": "navy loafers leather"
+      },
+      {
+        "position": "bottom-left",
+        "key": "shoes_tan_loafers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-tan-loafers-leather.jpg",
+        "index": 138,
+        "newPath": "assets/recommendation-stock/shoes-tan-loafers-leather-studio.jpg",
+        "score": 135,
+        "human": "tan loafers leather"
+      },
+      {
+        "position": "bottom-right",
+        "key": "shoes_brown_running_shoes_mesh_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-brown-running-shoes-mesh.jpg",
+        "index": 139,
+        "newPath": "assets/recommendation-stock/shoes-brown-running-shoes-mesh-studio.jpg",
+        "score": 135,
+        "human": "brown running shoes mesh"
+      }
+    ]
+  },
+  {
+    "batch": 20,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "shoes_navy_running_shoes_mesh_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-navy-running-shoes-mesh.jpg",
+        "index": 140,
+        "newPath": "assets/recommendation-stock/shoes-navy-running-shoes-mesh-studio.jpg",
+        "score": 134,
+        "human": "navy running shoes mesh"
+      },
+      {
+        "position": "top-right",
+        "key": "shoes_black_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-black-sneakers-leather.jpg",
+        "index": 141,
+        "newPath": "assets/recommendation-stock/shoes-black-sneakers-leather-studio.jpg",
+        "score": 134,
+        "human": "black sneakers leather"
+      },
+      {
+        "position": "bottom-left",
+        "key": "shoes_gray_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-gray-sneakers-leather.jpg",
+        "index": 142,
+        "newPath": "assets/recommendation-stock/shoes-gray-sneakers-leather-studio.jpg",
+        "score": 134,
+        "human": "gray sneakers leather"
+      },
+      {
+        "position": "bottom-right",
+        "key": "shoes_navy_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-navy-sneakers-leather.jpg",
+        "index": 143,
+        "newPath": "assets/recommendation-stock/shoes-navy-sneakers-leather-studio.jpg",
+        "score": 134,
+        "human": "navy sneakers leather"
+      }
+    ]
+  },
+  {
+    "batch": 21,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "shoes_olive_sneakers_leather_v1",
+        "slot": "shoes",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/shoes-olive-sneakers-leather.jpg",
+        "index": 144,
+        "newPath": "assets/recommendation-stock/shoes-olive-sneakers-leather-studio.jpg",
+        "score": 134,
+        "human": "olive sneakers leather"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_brown_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-brown-bomber-jacket-cotton.jpg",
+        "index": 64,
+        "newPath": "assets/recommendation-stock/outer-brown-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "brown bomber jacket cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_charcoal_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-charcoal-bomber-jacket-cotton.jpg",
+        "index": 65,
+        "newPath": "assets/recommendation-stock/outer-charcoal-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "charcoal bomber jacket cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_cream_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-cream-bomber-jacket-cotton.jpg",
+        "index": 66,
+        "newPath": "assets/recommendation-stock/outer-cream-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "cream bomber jacket cotton"
+      }
+    ]
+  },
+  {
+    "batch": 22,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_gray_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-gray-bomber-jacket-cotton.jpg",
+        "index": 67,
+        "newPath": "assets/recommendation-stock/outer-gray-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "gray bomber jacket cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_navy_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-navy-bomber-jacket-cotton.jpg",
+        "index": 68,
+        "newPath": "assets/recommendation-stock/outer-navy-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "navy bomber jacket cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_olive_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-bomber-jacket-cotton.jpg",
+        "index": 69,
+        "newPath": "assets/recommendation-stock/outer-olive-bomber-jacket-cotton-studio.jpg",
+        "score": 132,
+        "human": "olive bomber jacket cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_tan_bomber_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-bomber-jacket-cotton.jpg",
+        "index": 70,
+        "newPath": "assets/recommendation-stock/outer-tan-bomber-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "tan bomber jacket cotton"
+      }
+    ]
+  },
+  {
+    "batch": 23,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_brown_field_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-brown-field-jacket-cotton.jpg",
+        "index": 71,
+        "newPath": "assets/recommendation-stock/outer-brown-field-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "brown field jacket cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_charcoal_field_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-charcoal-field-jacket-cotton.jpg",
+        "index": 72,
+        "newPath": "assets/recommendation-stock/outer-charcoal-field-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "charcoal field jacket cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_cream_field_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-cream-field-jacket-cotton.jpg",
+        "index": 73,
+        "newPath": "assets/recommendation-stock/outer-cream-field-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "cream field jacket cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_olive_field_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-field-jacket-cotton.jpg",
+        "index": 75,
+        "newPath": "assets/recommendation-stock/outer-olive-field-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "olive field jacket cotton"
+      }
+    ]
+  },
+  {
+    "batch": 24,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_tan_field_jacket_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-field-jacket-cotton.jpg",
+        "index": 76,
+        "newPath": "assets/recommendation-stock/outer-tan-field-jacket-cotton-studio.jpg",
+        "score": 131,
+        "human": "tan field jacket cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_brown_hoodie_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-brown-hoodie-cotton.jpg",
+        "index": 80,
+        "newPath": "assets/recommendation-stock/outer-brown-hoodie-cotton-studio.jpg",
+        "score": 131,
+        "human": "brown hoodie cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_charcoal_hoodie_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-charcoal-hoodie-cotton.jpg",
+        "index": 81,
+        "newPath": "assets/recommendation-stock/outer-charcoal-hoodie-cotton-studio.jpg",
+        "score": 131,
+        "human": "charcoal hoodie cotton"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_navy_hoodie_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-navy-hoodie-cotton.jpg",
+        "index": 83,
+        "newPath": "assets/recommendation-stock/outer-navy-hoodie-cotton-studio.jpg",
+        "score": 131,
+        "human": "navy hoodie cotton"
+      }
+    ]
+  },
+  {
+    "batch": 25,
+    "items": [
+      {
+        "position": "top-left",
+        "key": "outer_olive_hoodie_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-olive-hoodie-cotton.jpg",
+        "index": 84,
+        "newPath": "assets/recommendation-stock/outer-olive-hoodie-cotton-studio.jpg",
+        "score": 131,
+        "human": "olive hoodie cotton"
+      },
+      {
+        "position": "top-right",
+        "key": "outer_tan_hoodie_cotton_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-tan-hoodie-cotton.jpg",
+        "index": 85,
+        "newPath": "assets/recommendation-stock/outer-tan-hoodie-cotton-studio.jpg",
+        "score": 131,
+        "human": "tan hoodie cotton"
+      },
+      {
+        "position": "bottom-left",
+        "key": "outer_brown_pea_coat_wool_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-brown-pea-coat-wool.jpg",
+        "index": 95,
+        "newPath": "assets/recommendation-stock/outer-brown-pea-coat-wool-studio.jpg",
+        "score": 131,
+        "human": "brown pea coat wool"
+      },
+      {
+        "position": "bottom-right",
+        "key": "outer_gray_pea_coat_wool_v1",
+        "slot": "outer",
+        "gender": "unisex",
+        "path": "assets/recommendation-stock/outer-gray-pea-coat-wool.jpg",
+        "index": 96,
+        "newPath": "assets/recommendation-stock/outer-gray-pea-coat-wool-studio.jpg",
+        "score": 131,
+        "human": "gray pea coat wool"
+      }
+    ]
+  }
+]

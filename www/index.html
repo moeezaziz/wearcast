@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>WearCast | Weather-Smart Outfits From Your Closet</title>
   <meta name="description" content="WearCast helps you decide what to wear today with weather-smart outfit picks that get better as you add your own wardrobe." />
-  <link rel="manifest" href="manifest.webmanifest?v=12" />
+  <link rel="manifest" href="manifest.webmanifest?v=16" />
   <meta name="theme-color" content="#2979ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="icon" href="icon.svg?v=12" type="image/svg+xml" />
-  <link rel="stylesheet" href="styles.css?v=12" />
+  <link rel="icon" href="icon.svg?v=16" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css?v=16" />
 </head>
 <body>
 
@@ -327,7 +327,7 @@
         <div class="about-content">
           <p><strong>WearCast</strong> helps you decide what to wear today using live weather and, when you add it, your own wardrobe.</p>
           <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. Recommendations powered by large language models via the WearCast backend.</p>
-          <p><a href="./privacy.html">Privacy Policy</a> • <a href="./terms.html">Terms of Use</a> • <a href="./support.html">Support</a></p>
+          <p><a href="./privacy.html">Privacy Policy</a> • <a href="./terms.html">Terms of Use</a> • <a href="./support.html">Support</a> • <a href="./credits.html">Image Credits</a></p>
         </div>
       </div>
 
@@ -422,7 +422,18 @@
           <h1>Add your wardrobe later for better picks.</h1>
           <p>Add a few staples and WearCast starts building recommendations from what you already own.</p>
         </section>
-        <section class="onboarding-slide onboarding-slide-actions" data-onboarding-slide="3">
+        <section class="onboarding-slide" data-onboarding-slide="3">
+          <span class="onboarding-kicker">Cut & Style</span>
+          <h1>Whose closet should we shop from?</h1>
+          <p>Pick a default cut so the first recommendations feel right. You can change this any time in Settings.</p>
+          <div class="onboarding-pill-grid" role="radiogroup" aria-label="Default cut">
+            <button type="button" class="onboarding-pill" data-onboarding-gender="male" role="radio" aria-checked="false">Men's</button>
+            <button type="button" class="onboarding-pill" data-onboarding-gender="female" role="radio" aria-checked="false">Women's</button>
+            <button type="button" class="onboarding-pill" data-onboarding-gender="nonbinary" role="radio" aria-checked="false">Mixed</button>
+            <button type="button" class="onboarding-pill is-selected" data-onboarding-gender="unspecified" role="radio" aria-checked="true">Skip</button>
+          </div>
+        </section>
+        <section class="onboarding-slide onboarding-slide-actions" data-onboarding-slide="4">
           <span class="onboarding-kicker">Start Now</span>
           <h1>Ready for today’s recommendation?</h1>
           <p>Use your location for the fastest start, or search for a city manually.</p>
@@ -437,6 +448,7 @@
         <button id="onboardingPrevBtn" class="onboarding-nav-btn" type="button">Back</button>
         <div class="onboarding-dots" aria-hidden="true">
           <span class="onboarding-dot is-active"></span>
+          <span class="onboarding-dot"></span>
           <span class="onboarding-dot"></span>
           <span class="onboarding-dot"></span>
           <span class="onboarding-dot"></span>
@@ -1157,6 +1169,6 @@
     })();
   </script>
   <script data-goatcounter="https://wearcast.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <script src="app.js?v=12" type="module"></script>
+  <script src="app.js?v=16" type="module"></script>
 </body>
 </html>

@@ -1,0 +1,987 @@
+{
+  "createdAt": "2026-04-27T19:26:47.689Z",
+  "sources": [
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+    "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png"
+  ],
+  "items": [
+    {
+      "index": 1,
+      "key": "top_white_blouse_silk_fem_v1",
+      "filename": "top-white-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-white-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 2,
+      "key": "top_black_blouse_silk_fem_v1",
+      "filename": "top-black-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 3,
+      "key": "top_cream_blouse_silk_fem_v1",
+      "filename": "top-cream-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-cream-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 4,
+      "key": "top_navy_blouse_silk_fem_v1",
+      "filename": "top-navy-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-navy-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 5,
+      "key": "top_cream_camisole_silk_fem_v1",
+      "filename": "top-cream-camisole-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-cream-camisole-silk-studio-fem.jpg"
+    },
+    {
+      "index": 6,
+      "key": "top_black_halter_top_silk_fem_v1",
+      "filename": "top-black-halter-top-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-black-halter-top-silk-studio-fem.jpg"
+    },
+    {
+      "index": 7,
+      "key": "top_white_halter_top_silk_fem_v1",
+      "filename": "top-white-halter-top-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-white-halter-top-silk-studio-fem.jpg"
+    },
+    {
+      "index": 8,
+      "key": "top_white_off_shoulder_top_cotton_fem_v1",
+      "filename": "top-white-off-shoulder-top-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-white-off-shoulder-top-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 9,
+      "key": "top_black_off_shoulder_top_cotton_fem_v1",
+      "filename": "top-black-off-shoulder-top-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-black-off-shoulder-top-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 10,
+      "key": "top_white_crop_top_cotton_fem_v1",
+      "filename": "top-white-crop-top-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-white-crop-top-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 11,
+      "key": "top_black_crop_top_cotton_fem_v1",
+      "filename": "top-black-crop-top-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-crop-top-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 12,
+      "key": "top_white_bodysuit_jersey_fem_v1",
+      "filename": "top-white-bodysuit-jersey-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-white-bodysuit-jersey-studio-fem.jpg"
+    },
+    {
+      "index": 13,
+      "key": "top_black_tunic_linen_fem_v1",
+      "filename": "top-black-tunic-linen-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-tunic-linen-studio-fem.jpg"
+    },
+    {
+      "index": 14,
+      "key": "top_cream_tunic_linen_fem_v1",
+      "filename": "top-cream-tunic-linen-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-cream-tunic-linen-studio-fem.jpg"
+    },
+    {
+      "index": 15,
+      "key": "top_cream_knit_cardigan_wool_fem_v1",
+      "filename": "top-cream-knit-cardigan-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb70e5a888191b06ebc89a572d76c.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-cream-knit-cardigan-wool-studio-fem.jpg"
+    },
+    {
+      "index": 16,
+      "key": "top_black_knit_cardigan_wool_fem_v1",
+      "filename": "top-black-knit-cardigan-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-knit-cardigan-wool-studio-fem.jpg"
+    },
+    {
+      "index": 17,
+      "key": "top_navy_knit_cardigan_wool_fem_v1",
+      "filename": "top-navy-knit-cardigan-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-navy-knit-cardigan-wool-studio-fem.jpg"
+    },
+    {
+      "index": 18,
+      "key": "top_white_ruffled_blouse_silk_fem_v1",
+      "filename": "top-white-ruffled-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-white-ruffled-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 19,
+      "key": "top_black_ruffled_blouse_silk_fem_v1",
+      "filename": "top-black-ruffled-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-ruffled-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 20,
+      "key": "top_navy_ruffled_blouse_silk_fem_v1",
+      "filename": "top-navy-ruffled-blouse-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-navy-ruffled-blouse-silk-studio-fem.jpg"
+    },
+    {
+      "index": 21,
+      "key": "top_black_wrap_dress_jersey_fem_v1",
+      "filename": "top-black-wrap-dress-jersey-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-black-wrap-dress-jersey-studio-fem.jpg"
+    },
+    {
+      "index": 22,
+      "key": "top_navy_wrap_dress_jersey_fem_v1",
+      "filename": "top-navy-wrap-dress-jersey-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-navy-wrap-dress-jersey-studio-fem.jpg"
+    },
+    {
+      "index": 23,
+      "key": "top_black_slip_dress_silk_fem_v1",
+      "filename": "top-black-slip-dress-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-black-slip-dress-silk-studio-fem.jpg"
+    },
+    {
+      "index": 24,
+      "key": "top_cream_slip_dress_silk_fem_v1",
+      "filename": "top-cream-slip-dress-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-cream-slip-dress-silk-studio-fem.jpg"
+    },
+    {
+      "index": 25,
+      "key": "top_navy_slip_dress_silk_fem_v1",
+      "filename": "top-navy-slip-dress-silk-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/top-navy-slip-dress-silk-studio-fem.jpg"
+    },
+    {
+      "index": 26,
+      "key": "top_white_sundress_cotton_fem_v1",
+      "filename": "top-white-sundress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-white-sundress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 27,
+      "key": "top_blue_sundress_cotton_fem_v1",
+      "filename": "top-blue-sundress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-blue-sundress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 28,
+      "key": "top_floral_sundress_cotton_fem_v1",
+      "filename": "top-floral-sundress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-floral-sundress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 29,
+      "key": "top_black_maxi_dress_cotton_fem_v1",
+      "filename": "top-black-maxi-dress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-black-maxi-dress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 30,
+      "key": "top_white_maxi_dress_cotton_fem_v1",
+      "filename": "top-white-maxi-dress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb73e7afc8191ab338fb254e820e8.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/top-white-maxi-dress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 31,
+      "key": "top_black_mini_dress_cotton_fem_v1",
+      "filename": "top-black-mini-dress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 8,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-black-mini-dress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 32,
+      "key": "top_black_sheath_dress_wool_fem_v1",
+      "filename": "top-black-sheath-dress-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 315,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-black-sheath-dress-wool-studio-fem.jpg"
+    },
+    {
+      "index": 33,
+      "key": "top_navy_sheath_dress_wool_fem_v1",
+      "filename": "top-navy-sheath-dress-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 622,
+        "top": 9,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-navy-sheath-dress-wool-studio-fem.jpg"
+    },
+    {
+      "index": 34,
+      "key": "top_white_shirtdress_cotton_fem_v1",
+      "filename": "top-white-shirtdress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 930,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-white-shirtdress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 35,
+      "key": "top_blue_shirtdress_cotton_fem_v1",
+      "filename": "top-blue-shirtdress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 1237,
+        "top": 9,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/top-blue-shirtdress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 36,
+      "key": "top_black_sweater_dress_wool_fem_v1",
+      "filename": "top-black-sweater-dress-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 8,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-black-sweater-dress-wool-studio-fem.jpg"
+    },
+    {
+      "index": 37,
+      "key": "top_black_t_shirt_dress_cotton_fem_v1",
+      "filename": "top-black-t-shirt-dress-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 315,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-black-t-shirt-dress-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 38,
+      "key": "top_black_bodycon_dress_jersey_fem_v1",
+      "filename": "top-black-bodycon-dress-jersey-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 622,
+        "top": 350,
+        "width": 292,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/top-black-bodycon-dress-jersey-studio-fem.jpg"
+    },
+    {
+      "index": 39,
+      "key": "bottom_black_a_line_skirt_cotton_fem_v1",
+      "filename": "bottom-black-a-line-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 930,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-a-line-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 40,
+      "key": "bottom_navy_a_line_skirt_cotton_fem_v1",
+      "filename": "bottom-navy-a-line-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 1237,
+        "top": 350,
+        "width": 291,
+        "height": 324
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-a-line-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 41,
+      "key": "bottom_beige_a_line_skirt_cotton_fem_v1",
+      "filename": "bottom-beige-a-line-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 8,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-beige-a-line-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 42,
+      "key": "bottom_black_pencil_skirt_wool_fem_v1",
+      "filename": "bottom-black-pencil-skirt-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 315,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-pencil-skirt-wool-studio-fem.jpg"
+    },
+    {
+      "index": 43,
+      "key": "bottom_navy_pencil_skirt_wool_fem_v1",
+      "filename": "bottom-navy-pencil-skirt-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 622,
+        "top": 692,
+        "width": 292,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-pencil-skirt-wool-studio-fem.jpg"
+    },
+    {
+      "index": 44,
+      "key": "bottom_beige_pencil_skirt_wool_fem_v1",
+      "filename": "bottom-beige-pencil-skirt-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 930,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-beige-pencil-skirt-wool-studio-fem.jpg"
+    },
+    {
+      "index": 45,
+      "key": "bottom_black_midi_skirt_cotton_fem_v1",
+      "filename": "bottom-black-midi-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb76c8f8c8191b8ae06c02d0290d3.png",
+      "crop": {
+        "left": 1237,
+        "top": 692,
+        "width": 291,
+        "height": 323
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-midi-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 46,
+      "key": "bottom_white_midi_skirt_cotton_fem_v1",
+      "filename": "bottom-white-midi-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-white-midi-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 47,
+      "key": "bottom_beige_midi_skirt_cotton_fem_v1",
+      "filename": "bottom-beige-midi-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-beige-midi-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 48,
+      "key": "bottom_blue_mini_skirt_denim_fem_v1",
+      "filename": "bottom-blue-mini-skirt-denim-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-blue-mini-skirt-denim-studio-fem.jpg"
+    },
+    {
+      "index": 49,
+      "key": "bottom_black_mini_skirt_denim_fem_v1",
+      "filename": "bottom-black-mini-skirt-denim-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-mini-skirt-denim-studio-fem.jpg"
+    },
+    {
+      "index": 50,
+      "key": "bottom_black_maxi_skirt_linen_fem_v1",
+      "filename": "bottom-black-maxi-skirt-linen-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-maxi-skirt-linen-studio-fem.jpg"
+    },
+    {
+      "index": 51,
+      "key": "bottom_beige_maxi_skirt_linen_fem_v1",
+      "filename": "bottom-beige-maxi-skirt-linen-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-beige-maxi-skirt-linen-studio-fem.jpg"
+    },
+    {
+      "index": 52,
+      "key": "bottom_black_pleated_skirt_cotton_fem_v1",
+      "filename": "bottom-black-pleated-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-pleated-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 53,
+      "key": "bottom_navy_pleated_skirt_cotton_fem_v1",
+      "filename": "bottom-navy-pleated-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-navy-pleated-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 54,
+      "key": "bottom_cream_pleated_skirt_cotton_fem_v1",
+      "filename": "bottom-cream-pleated-skirt-cotton-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-pleated-skirt-cotton-studio-fem.jpg"
+    },
+    {
+      "index": 55,
+      "key": "bottom_blue_high_waist_jeans_denim_fem_v1",
+      "filename": "bottom-blue-high-waist-jeans-denim-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-blue-high-waist-jeans-denim-studio-fem.jpg"
+    },
+    {
+      "index": 56,
+      "key": "bottom_black_high_waist_jeans_denim_fem_v1",
+      "filename": "bottom-black-high-waist-jeans-denim-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 8,
+        "top": 656,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-high-waist-jeans-denim-studio-fem.jpg"
+    },
+    {
+      "index": 57,
+      "key": "bottom_black_wide_leg_trousers_wool_fem_v1",
+      "filename": "bottom-black-wide-leg-trousers-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 332,
+        "top": 656,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-black-wide-leg-trousers-wool-studio-fem.jpg"
+    },
+    {
+      "index": 58,
+      "key": "bottom_cream_wide_leg_trousers_wool_fem_v1",
+      "filename": "bottom-cream-wide-leg-trousers-wool-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 656,
+        "top": 656,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/bottom-cream-wide-leg-trousers-wool-studio-fem.jpg"
+    },
+    {
+      "index": 59,
+      "key": "shoes_black_heels_leather_fem_v1",
+      "filename": "shoes-black-heels-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 979,
+        "top": 656,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-heels-leather-studio-fem.jpg"
+    },
+    {
+      "index": 60,
+      "key": "shoes_nude_heels_leather_fem_v1",
+      "filename": "shoes-nude-heels-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb79e19248191aeaa420969ae8b44.png",
+      "crop": {
+        "left": 1303,
+        "top": 656,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-nude-heels-leather-studio-fem.jpg"
+    },
+    {
+      "index": 61,
+      "key": "shoes_black_stiletto_heels_leather_fem_v1",
+      "filename": "shoes-black-stiletto-heels-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 8,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-stiletto-heels-leather-studio-fem.jpg"
+    },
+    {
+      "index": 62,
+      "key": "shoes_nude_stiletto_heels_leather_fem_v1",
+      "filename": "shoes-nude-stiletto-heels-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 332,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-nude-stiletto-heels-leather-studio-fem.jpg"
+    },
+    {
+      "index": 63,
+      "key": "shoes_black_pumps_leather_fem_v1",
+      "filename": "shoes-black-pumps-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 656,
+        "top": 8,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-pumps-leather-studio-fem.jpg"
+    },
+    {
+      "index": 64,
+      "key": "shoes_nude_pumps_leather_fem_v1",
+      "filename": "shoes-nude-pumps-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 979,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-nude-pumps-leather-studio-fem.jpg"
+    },
+    {
+      "index": 65,
+      "key": "shoes_black_ballet_flats_leather_fem_v1",
+      "filename": "shoes-black-ballet-flats-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 1303,
+        "top": 8,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-ballet-flats-leather-studio-fem.jpg"
+    },
+    {
+      "index": 66,
+      "key": "shoes_nude_ballet_flats_leather_fem_v1",
+      "filename": "shoes-nude-ballet-flats-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 8,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-nude-ballet-flats-leather-studio-fem.jpg"
+    },
+    {
+      "index": 67,
+      "key": "shoes_black_mules_leather_fem_v1",
+      "filename": "shoes-black-mules-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 332,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-mules-leather-studio-fem.jpg"
+    },
+    {
+      "index": 68,
+      "key": "shoes_tan_mules_leather_fem_v1",
+      "filename": "shoes-tan-mules-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 656,
+        "top": 332,
+        "width": 307,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-tan-mules-leather-studio-fem.jpg"
+    },
+    {
+      "index": 69,
+      "key": "shoes_black_wedge_sandals_leather_fem_v1",
+      "filename": "shoes-black-wedge-sandals-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 979,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-wedge-sandals-leather-studio-fem.jpg"
+    },
+    {
+      "index": 70,
+      "key": "shoes_black_strappy_sandals_leather_fem_v1",
+      "filename": "shoes-black-strappy-sandals-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 1303,
+        "top": 332,
+        "width": 308,
+        "height": 307
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-strappy-sandals-leather-studio-fem.jpg"
+    },
+    {
+      "index": 71,
+      "key": "shoes_black_knee_high_boots_leather_fem_v1",
+      "filename": "shoes-black-knee-high-boots-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 8,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-black-knee-high-boots-leather-studio-fem.jpg"
+    },
+    {
+      "index": 72,
+      "key": "shoes_brown_riding_boots_leather_fem_v1",
+      "filename": "shoes-brown-riding-boots-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 332,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/shoes-brown-riding-boots-leather-studio-fem.jpg"
+    },
+    {
+      "index": 73,
+      "key": "accessory_black_clutch_leather_fem_v1",
+      "filename": "accessory-black-clutch-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 656,
+        "top": 655,
+        "width": 307,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-black-clutch-leather-studio-fem.jpg"
+    },
+    {
+      "index": 74,
+      "key": "accessory_tan_mini_bag_leather_fem_v1",
+      "filename": "accessory-tan-mini-bag-leather-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 979,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-tan-mini-bag-leather-studio-fem.jpg"
+    },
+    {
+      "index": 75,
+      "key": "accessory_silver_hoop_earrings_gold_fem_v1",
+      "filename": "accessory-silver-hoop-earrings-gold-studio-fem.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_0a11aac27513f5450169efb7cdad2c8191b710fdb4d714bafd.png",
+      "crop": {
+        "left": 1303,
+        "top": 655,
+        "width": 308,
+        "height": 308
+      },
+      "output": "www/assets/recommendation-stock/accessory-silver-hoop-earrings-gold-studio-fem.jpg"
+    }
+  ]
+}

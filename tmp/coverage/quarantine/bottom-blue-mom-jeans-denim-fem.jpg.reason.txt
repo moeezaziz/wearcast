@@ -1,0 +1,4 @@
+bad_aspect_ratio (2.11)
+source: https://commons.wikimedia.org/wiki/File:Mom_Jeans_2023_(cropped).jpg
+license: CC BY-SA 4.0
+title: File:Mom Jeans 2023 (cropped).jpg

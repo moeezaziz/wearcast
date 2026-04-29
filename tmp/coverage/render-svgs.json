@@ -1,0 +1,2542 @@
+{
+  "kept": 191,
+  "regenerated": 317,
+  "generated": [
+    {
+      "key": "top_white_long_sleeve_tshirt_studio",
+      "slot": "top",
+      "item": "long sleeve tshirt",
+      "color": "white",
+      "material": "studio",
+      "newPath": "assets/recommendation-stock/top-white-long-sleeve-tshirt-studio.svg"
+    },
+    {
+      "key": "top_white_button_up_shirt",
+      "slot": "top",
+      "item": "button up",
+      "color": "white",
+      "material": "shirt",
+      "newPath": "assets/recommendation-stock/top-white-button-up-shirt.svg"
+    },
+    {
+      "key": "top_linen_shirt_warm",
+      "slot": "top",
+      "item": "shirt",
+      "color": "linen",
+      "material": "warm",
+      "newPath": "assets/recommendation-stock/top-linen-shirt-warm.svg"
+    },
+    {
+      "key": "top_lightweight_knit_tee",
+      "slot": "top",
+      "item": "knit",
+      "color": "lightweight",
+      "material": "tee",
+      "newPath": "assets/recommendation-stock/top-lightweight-knit-tee.svg"
+    },
+    {
+      "key": "top_white_polo_studio",
+      "slot": "top",
+      "item": "polo",
+      "color": "white",
+      "material": "studio",
+      "newPath": "assets/recommendation-stock/top-white-polo-studio.svg"
+    },
+    {
+      "key": "top_black_graphic_tee_studio",
+      "slot": "top",
+      "item": "graphic tee",
+      "color": "black",
+      "material": "studio",
+      "newPath": "assets/recommendation-stock/top-black-graphic-tee-studio.svg"
+    },
+    {
+      "key": "top_knit_sweater_hanger",
+      "slot": "top",
+      "item": "sweater",
+      "color": "knit",
+      "material": "hanger",
+      "newPath": "assets/recommendation-stock/top-knit-sweater-hanger.svg"
+    },
+    {
+      "key": "outer_rust_parka_outdoors",
+      "slot": "outer",
+      "item": "parka",
+      "color": "rust",
+      "material": "outdoors",
+      "newPath": "assets/recommendation-stock/outer-rust-parka-outdoors.svg"
+    },
+    {
+      "key": "shoes_brown_loafers_polished",
+      "slot": "shoes",
+      "item": "loafers",
+      "color": "brown",
+      "material": "polished",
+      "newPath": "assets/recommendation-stock/shoes-brown-loafers-polished.svg"
+    },
+    {
+      "key": "accessory_navy_bow_tie_silk_v1",
+      "slot": "accessory",
+      "item": "bow tie",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-navy-bow-tie-silk.svg"
+    },
+    {
+      "key": "accessory_silver_bracelet_metal_v1",
+      "slot": "accessory",
+      "item": "bracelet",
+      "color": "silver",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-silver-bracelet-metal.svg"
+    },
+    {
+      "key": "accessory_tan_fedora_wool_v1",
+      "slot": "accessory",
+      "item": "fedora",
+      "color": "tan",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/accessory-tan-fedora-wool.svg"
+    },
+    {
+      "key": "accessory_silver_necklace_metal_v1",
+      "slot": "accessory",
+      "item": "necklace",
+      "color": "silver",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-silver-necklace-metal.svg"
+    },
+    {
+      "key": "accessory_navy_tie_silk_v1",
+      "slot": "accessory",
+      "item": "tie",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-navy-tie-silk.svg"
+    },
+    {
+      "key": "shoes_brown_sandals_leather_v1",
+      "slot": "shoes",
+      "item": "sandals",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-brown-sandals-leather.svg"
+    },
+    {
+      "key": "shoes_black_slides_rubber_v1",
+      "slot": "shoes",
+      "item": "slides",
+      "color": "black",
+      "material": "rubber",
+      "newPath": "assets/recommendation-stock/shoes-black-slides-rubber.svg"
+    },
+    {
+      "key": "top_navy_cardigan_wool_v1",
+      "slot": "top",
+      "item": "cardigan",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-navy-cardigan-wool.svg"
+    },
+    {
+      "key": "top_white_henley_cotton_v1",
+      "slot": "top",
+      "item": "henley",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-henley-cotton.svg"
+    },
+    {
+      "key": "top_charcoal_wool_turtleneck_wool_v1",
+      "slot": "top",
+      "item": "wool turtleneck",
+      "color": "charcoal",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-charcoal-wool-turtleneck-wool.svg"
+    },
+    {
+      "key": "accessory_gray_backpack_leather_v1",
+      "slot": "accessory",
+      "item": "backpack",
+      "color": "gray",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-gray-backpack-leather.svg"
+    },
+    {
+      "key": "accessory_navy_backpack_leather_v1",
+      "slot": "accessory",
+      "item": "backpack",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-navy-backpack-leather.svg"
+    },
+    {
+      "key": "accessory_gray_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "item": "baseball cap",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-gray-baseball-cap-cotton.svg"
+    },
+    {
+      "key": "accessory_tan_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "item": "baseball cap",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-tan-baseball-cap-cotton.svg"
+    },
+    {
+      "key": "accessory_white_baseball_cap_cotton_v1",
+      "slot": "accessory",
+      "item": "baseball cap",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-white-baseball-cap-cotton.svg"
+    },
+    {
+      "key": "accessory_navy_belt_leather_v1",
+      "slot": "accessory",
+      "item": "belt",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-navy-belt-leather.svg"
+    },
+    {
+      "key": "accessory_tan_belt_leather_v1",
+      "slot": "accessory",
+      "item": "belt",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-tan-belt-leather.svg"
+    },
+    {
+      "key": "accessory_black_gloves_cotton_v1",
+      "slot": "accessory",
+      "item": "gloves",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-black-gloves-cotton.svg"
+    },
+    {
+      "key": "accessory_brown_gloves_cotton_v1",
+      "slot": "accessory",
+      "item": "gloves",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-brown-gloves-cotton.svg"
+    },
+    {
+      "key": "accessory_navy_gloves_cotton_v1",
+      "slot": "accessory",
+      "item": "gloves",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-navy-gloves-cotton.svg"
+    },
+    {
+      "key": "accessory_tan_gloves_cotton_v1",
+      "slot": "accessory",
+      "item": "gloves",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-tan-gloves-cotton.svg"
+    },
+    {
+      "key": "accessory_black_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "scarf",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-black-scarf-silk.svg"
+    },
+    {
+      "key": "accessory_gray_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "scarf",
+      "color": "gray",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-gray-scarf-silk.svg"
+    },
+    {
+      "key": "accessory_navy_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "scarf",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-navy-scarf-silk.svg"
+    },
+    {
+      "key": "accessory_navy_sun_hat_cotton_v1",
+      "slot": "accessory",
+      "item": "sun hat",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/accessory-navy-sun-hat-cotton.svg"
+    },
+    {
+      "key": "accessory_black_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "item": "sunglasses",
+      "color": "black",
+      "material": "acetate",
+      "newPath": "assets/recommendation-stock/accessory-black-sunglasses-acetate.svg"
+    },
+    {
+      "key": "accessory_brown_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "item": "sunglasses",
+      "color": "brown",
+      "material": "acetate",
+      "newPath": "assets/recommendation-stock/accessory-brown-sunglasses-acetate.svg"
+    },
+    {
+      "key": "accessory_gray_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "item": "sunglasses",
+      "color": "gray",
+      "material": "acetate",
+      "newPath": "assets/recommendation-stock/accessory-gray-sunglasses-acetate.svg"
+    },
+    {
+      "key": "accessory_tan_sunglasses_acetate_v1",
+      "slot": "accessory",
+      "item": "sunglasses",
+      "color": "tan",
+      "material": "acetate",
+      "newPath": "assets/recommendation-stock/accessory-tan-sunglasses-acetate.svg"
+    },
+    {
+      "key": "accessory_black_tote_bag_leather_v1",
+      "slot": "accessory",
+      "item": "tote bag",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-black-tote-bag-leather.svg"
+    },
+    {
+      "key": "accessory_navy_tote_bag_leather_v1",
+      "slot": "accessory",
+      "item": "tote bag",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-navy-tote-bag-leather.svg"
+    },
+    {
+      "key": "accessory_black_watch_metal_v1",
+      "slot": "accessory",
+      "item": "watch",
+      "color": "black",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-black-watch-metal.svg"
+    },
+    {
+      "key": "accessory_gray_watch_metal_v1",
+      "slot": "accessory",
+      "item": "watch",
+      "color": "gray",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-gray-watch-metal.svg"
+    },
+    {
+      "key": "accessory_navy_watch_metal_v1",
+      "slot": "accessory",
+      "item": "watch",
+      "color": "navy",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-navy-watch-metal.svg"
+    },
+    {
+      "key": "accessory_tan_watch_metal_v1",
+      "slot": "accessory",
+      "item": "watch",
+      "color": "tan",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-tan-watch-metal.svg"
+    },
+    {
+      "key": "accessory_gray_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "wool scarf",
+      "color": "gray",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-gray-wool-scarf-silk.svg"
+    },
+    {
+      "key": "accessory_navy_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "wool scarf",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-navy-wool-scarf-silk.svg"
+    },
+    {
+      "key": "accessory_tan_wool_scarf_silk_v1",
+      "slot": "accessory",
+      "item": "wool scarf",
+      "color": "tan",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-tan-wool-scarf-silk.svg"
+    },
+    {
+      "key": "bottom_black_chinos_cotton_v1",
+      "slot": "bottom",
+      "item": "chinos",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-chinos-cotton.svg"
+    },
+    {
+      "key": "bottom_charcoal_chinos_cotton_v1",
+      "slot": "bottom",
+      "item": "chinos",
+      "color": "charcoal",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-charcoal-chinos-cotton.svg"
+    },
+    {
+      "key": "bottom_gray_chinos_cotton_v1",
+      "slot": "bottom",
+      "item": "chinos",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-gray-chinos-cotton.svg"
+    },
+    {
+      "key": "bottom_tan_chinos_cotton_v1",
+      "slot": "bottom",
+      "item": "chinos",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-tan-chinos-cotton.svg"
+    },
+    {
+      "key": "bottom_beige_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "beige",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-beige-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_black_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "black",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-black-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_brown_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "brown",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-brown-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_charcoal_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "charcoal",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-charcoal-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_gray_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "gray",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-gray-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_navy_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "navy",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-navy-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_olive_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "olive",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-olive-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_tan_jeans_denim_v1",
+      "slot": "bottom",
+      "item": "jeans",
+      "color": "tan",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-tan-jeans-denim.svg"
+    },
+    {
+      "key": "bottom_gray_joggers_tech_v1",
+      "slot": "bottom",
+      "item": "joggers",
+      "color": "gray",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/bottom-gray-joggers-tech.svg"
+    },
+    {
+      "key": "bottom_white_joggers_tech_v1",
+      "slot": "bottom",
+      "item": "joggers",
+      "color": "white",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/bottom-white-joggers-tech.svg"
+    },
+    {
+      "key": "bottom_black_linen_trousers_linen_v1",
+      "slot": "bottom",
+      "item": "linen trousers",
+      "color": "black",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-black-linen-trousers-linen.svg"
+    },
+    {
+      "key": "bottom_charcoal_linen_trousers_linen_v1",
+      "slot": "bottom",
+      "item": "linen trousers",
+      "color": "charcoal",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-charcoal-linen-trousers-linen.svg"
+    },
+    {
+      "key": "bottom_brown_tailored_trousers_wool_v1",
+      "slot": "bottom",
+      "item": "tailored trousers",
+      "color": "brown",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-brown-tailored-trousers-wool.svg"
+    },
+    {
+      "key": "outer_brown_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-brown-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_charcoal_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "charcoal",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-charcoal-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_cream_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "cream",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-cream-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_gray_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-gray-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_navy_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-navy-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_olive_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-olive-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_tan_bomber_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "bomber jacket",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-tan-bomber-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_brown_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-brown-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_charcoal_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "charcoal",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-charcoal-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_cream_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "cream",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-cream-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_navy_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-navy-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_olive_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-olive-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_tan_field_jacket_cotton_v1",
+      "slot": "outer",
+      "item": "field jacket",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-tan-field-jacket-cotton.svg"
+    },
+    {
+      "key": "outer_olive_hooded_parka_down_v1",
+      "slot": "outer",
+      "item": "hooded parka",
+      "color": "olive",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-olive-hooded-parka-down.svg"
+    },
+    {
+      "key": "outer_tan_hooded_parka_down_v1",
+      "slot": "outer",
+      "item": "hooded parka",
+      "color": "tan",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-tan-hooded-parka-down.svg"
+    },
+    {
+      "key": "outer_white_hooded_parka_down_v1",
+      "slot": "outer",
+      "item": "hooded parka",
+      "color": "white",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-white-hooded-parka-down.svg"
+    },
+    {
+      "key": "outer_brown_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-brown-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_charcoal_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "charcoal",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-charcoal-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_gray_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-gray-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_navy_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-navy-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_olive_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-olive-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_tan_hoodie_cotton_v1",
+      "slot": "outer",
+      "item": "hoodie",
+      "color": "tan",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/outer-tan-hoodie-cotton.svg"
+    },
+    {
+      "key": "outer_beige_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "beige",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-beige-parka-down.svg"
+    },
+    {
+      "key": "outer_black_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "black",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-black-parka-down.svg"
+    },
+    {
+      "key": "outer_charcoal_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "charcoal",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-charcoal-parka-down.svg"
+    },
+    {
+      "key": "outer_cream_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "cream",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-cream-parka-down.svg"
+    },
+    {
+      "key": "outer_gray_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "gray",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-gray-parka-down.svg"
+    },
+    {
+      "key": "outer_navy_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "navy",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-navy-parka-down.svg"
+    },
+    {
+      "key": "outer_olive_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "olive",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-olive-parka-down.svg"
+    },
+    {
+      "key": "outer_tan_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "tan",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-tan-parka-down.svg"
+    },
+    {
+      "key": "outer_white_parka_down_v1",
+      "slot": "outer",
+      "item": "parka",
+      "color": "white",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-white-parka-down.svg"
+    },
+    {
+      "key": "outer_brown_pea_coat_wool_v1",
+      "slot": "outer",
+      "item": "pea coat",
+      "color": "brown",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-brown-pea-coat-wool.svg"
+    },
+    {
+      "key": "outer_gray_pea_coat_wool_v1",
+      "slot": "outer",
+      "item": "pea coat",
+      "color": "gray",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-gray-pea-coat-wool.svg"
+    },
+    {
+      "key": "outer_navy_pea_coat_wool_v1",
+      "slot": "outer",
+      "item": "pea coat",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-navy-pea-coat-wool.svg"
+    },
+    {
+      "key": "outer_olive_pea_coat_wool_v1",
+      "slot": "outer",
+      "item": "pea coat",
+      "color": "olive",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-olive-pea-coat-wool.svg"
+    },
+    {
+      "key": "outer_tan_pea_coat_wool_v1",
+      "slot": "outer",
+      "item": "pea coat",
+      "color": "tan",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-tan-pea-coat-wool.svg"
+    },
+    {
+      "key": "outer_beige_puffer_jacket_down_v1",
+      "slot": "outer",
+      "item": "puffer jacket",
+      "color": "beige",
+      "material": "down",
+      "newPath": "assets/recommendation-stock/outer-beige-puffer-jacket-down.svg"
+    },
+    {
+      "key": "outer_navy_rain_jacket_tech_v1",
+      "slot": "outer",
+      "item": "rain jacket",
+      "color": "navy",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-navy-rain-jacket-tech.svg"
+    },
+    {
+      "key": "outer_olive_rain_jacket_tech_v1",
+      "slot": "outer",
+      "item": "rain jacket",
+      "color": "olive",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-olive-rain-jacket-tech.svg"
+    },
+    {
+      "key": "outer_tan_rain_jacket_tech_v1",
+      "slot": "outer",
+      "item": "rain jacket",
+      "color": "tan",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-tan-rain-jacket-tech.svg"
+    },
+    {
+      "key": "outer_white_rain_jacket_tech_v1",
+      "slot": "outer",
+      "item": "rain jacket",
+      "color": "white",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-white-rain-jacket-tech.svg"
+    },
+    {
+      "key": "outer_beige_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "beige",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-beige-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_brown_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "brown",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-brown-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_charcoal_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "charcoal",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-charcoal-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_cream_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "cream",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-cream-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_navy_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "navy",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-navy-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_olive_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "olive",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-olive-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_tan_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "tan",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-tan-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_white_shell_jacket_tech_v1",
+      "slot": "outer",
+      "item": "shell jacket",
+      "color": "white",
+      "material": "tech",
+      "newPath": "assets/recommendation-stock/outer-white-shell-jacket-tech.svg"
+    },
+    {
+      "key": "outer_black_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_brown_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "brown",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-brown-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_charcoal_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "charcoal",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-charcoal-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_gray_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "gray",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-gray-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_navy_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-navy-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_olive_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "olive",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-olive-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_tan_trench_coat_wool_v1",
+      "slot": "outer",
+      "item": "trench coat",
+      "color": "tan",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-tan-trench-coat-wool.svg"
+    },
+    {
+      "key": "outer_black_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "outer_charcoal_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "charcoal",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-charcoal-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "outer_gray_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "gray",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-gray-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "outer_navy_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-navy-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "outer_olive_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "olive",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-olive-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "outer_tan_wool_overcoat_wool_v1",
+      "slot": "outer",
+      "item": "wool overcoat",
+      "color": "tan",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-tan-wool-overcoat-wool.svg"
+    },
+    {
+      "key": "shoes_black_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_brown_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-brown-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_gray_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "gray",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-gray-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_navy_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-navy-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_olive_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "olive",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-olive-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_tan_ankle_boots_leather_v1",
+      "slot": "shoes",
+      "item": "ankle boots",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-tan-ankle-boots-leather.svg"
+    },
+    {
+      "key": "shoes_black_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "black sneakers",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-black-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_brown_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "black sneakers",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-brown-black-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_olive_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "black sneakers",
+      "color": "olive",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-olive-black-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_brown_chelsea_boots_leather_v1",
+      "slot": "shoes",
+      "item": "chelsea boots",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-brown-chelsea-boots-leather.svg"
+    },
+    {
+      "key": "shoes_gray_loafers_leather_v1",
+      "slot": "shoes",
+      "item": "loafers",
+      "color": "gray",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-gray-loafers-leather.svg"
+    },
+    {
+      "key": "shoes_navy_loafers_leather_v1",
+      "slot": "shoes",
+      "item": "loafers",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-navy-loafers-leather.svg"
+    },
+    {
+      "key": "shoes_tan_loafers_leather_v1",
+      "slot": "shoes",
+      "item": "loafers",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-tan-loafers-leather.svg"
+    },
+    {
+      "key": "shoes_brown_running_shoes_mesh_v1",
+      "slot": "shoes",
+      "item": "running shoes",
+      "color": "brown",
+      "material": "mesh",
+      "newPath": "assets/recommendation-stock/shoes-brown-running-shoes-mesh.svg"
+    },
+    {
+      "key": "shoes_navy_running_shoes_mesh_v1",
+      "slot": "shoes",
+      "item": "running shoes",
+      "color": "navy",
+      "material": "mesh",
+      "newPath": "assets/recommendation-stock/shoes-navy-running-shoes-mesh.svg"
+    },
+    {
+      "key": "shoes_black_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "sneakers",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_gray_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "sneakers",
+      "color": "gray",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-gray-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_navy_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "sneakers",
+      "color": "navy",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-navy-sneakers-leather.svg"
+    },
+    {
+      "key": "shoes_olive_sneakers_leather_v1",
+      "slot": "shoes",
+      "item": "sneakers",
+      "color": "olive",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-olive-sneakers-leather.svg"
+    },
+    {
+      "key": "top_black_button_up_shirt_cotton_v1",
+      "slot": "top",
+      "item": "button up shirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-button-up-shirt-cotton.svg"
+    },
+    {
+      "key": "top_brown_button_up_shirt_cotton_v1",
+      "slot": "top",
+      "item": "button up shirt",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-brown-button-up-shirt-cotton.svg"
+    },
+    {
+      "key": "top_gray_button_up_shirt_cotton_v1",
+      "slot": "top",
+      "item": "button up shirt",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-button-up-shirt-cotton.svg"
+    },
+    {
+      "key": "top_navy_button_up_shirt_cotton_v1",
+      "slot": "top",
+      "item": "button up shirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-navy-button-up-shirt-cotton.svg"
+    },
+    {
+      "key": "top_olive_button_up_shirt_cotton_v1",
+      "slot": "top",
+      "item": "button up shirt",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-olive-button-up-shirt-cotton.svg"
+    },
+    {
+      "key": "top_brown_hoodie_cotton_v1",
+      "slot": "top",
+      "item": "hoodie",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-brown-hoodie-cotton.svg"
+    },
+    {
+      "key": "top_gray_hoodie_cotton_v1",
+      "slot": "top",
+      "item": "hoodie",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-hoodie-cotton.svg"
+    },
+    {
+      "key": "top_navy_hoodie_cotton_v1",
+      "slot": "top",
+      "item": "hoodie",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-navy-hoodie-cotton.svg"
+    },
+    {
+      "key": "top_olive_hoodie_cotton_v1",
+      "slot": "top",
+      "item": "hoodie",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-olive-hoodie-cotton.svg"
+    },
+    {
+      "key": "top_black_linen_shirt_linen_v1",
+      "slot": "top",
+      "item": "linen shirt",
+      "color": "black",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-black-linen-shirt-linen.svg"
+    },
+    {
+      "key": "top_brown_linen_shirt_linen_v1",
+      "slot": "top",
+      "item": "linen shirt",
+      "color": "brown",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-brown-linen-shirt-linen.svg"
+    },
+    {
+      "key": "top_gray_linen_shirt_linen_v1",
+      "slot": "top",
+      "item": "linen shirt",
+      "color": "gray",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-gray-linen-shirt-linen.svg"
+    },
+    {
+      "key": "top_navy_linen_shirt_linen_v1",
+      "slot": "top",
+      "item": "linen shirt",
+      "color": "navy",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-navy-linen-shirt-linen.svg"
+    },
+    {
+      "key": "top_olive_linen_shirt_linen_v1",
+      "slot": "top",
+      "item": "linen shirt",
+      "color": "olive",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-olive-linen-shirt-linen.svg"
+    },
+    {
+      "key": "top_black_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "long sleeve t shirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-long-sleeve-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_gray_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "long sleeve t shirt",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-long-sleeve-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_navy_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "long sleeve t shirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-navy-long-sleeve-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_olive_long_sleeve_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "long sleeve t shirt",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-olive-long-sleeve-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_black_polo_shirt_cotton_v1",
+      "slot": "top",
+      "item": "polo shirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-polo-shirt-cotton.svg"
+    },
+    {
+      "key": "top_brown_polo_shirt_cotton_v1",
+      "slot": "top",
+      "item": "polo shirt",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-brown-polo-shirt-cotton.svg"
+    },
+    {
+      "key": "top_gray_polo_shirt_cotton_v1",
+      "slot": "top",
+      "item": "polo shirt",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-polo-shirt-cotton.svg"
+    },
+    {
+      "key": "top_navy_polo_shirt_cotton_v1",
+      "slot": "top",
+      "item": "polo shirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-navy-polo-shirt-cotton.svg"
+    },
+    {
+      "key": "top_olive_polo_shirt_cotton_v1",
+      "slot": "top",
+      "item": "polo shirt",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-olive-polo-shirt-cotton.svg"
+    },
+    {
+      "key": "top_black_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "t shirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_brown_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "t shirt",
+      "color": "brown",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-brown-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_gray_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "t shirt",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_navy_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "t shirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-navy-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_olive_t_shirt_cotton_v1",
+      "slot": "top",
+      "item": "t shirt",
+      "color": "olive",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-olive-t-shirt-cotton.svg"
+    },
+    {
+      "key": "top_white_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "blouse",
+      "color": "white",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-white-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_black_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "blouse",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-black-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_cream_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "blouse",
+      "color": "cream",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-cream-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_navy_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "blouse",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-navy-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_white_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "silk blouse",
+      "color": "white",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-white-silk-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_black_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "silk blouse",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-black-silk-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_cream_silk_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "silk blouse",
+      "color": "cream",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-cream-silk-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_cream_camisole_silk_fem_v1",
+      "slot": "top",
+      "item": "camisole",
+      "color": "cream",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-cream-camisole-silk-fem.svg"
+    },
+    {
+      "key": "top_black_halter_top_silk_fem_v1",
+      "slot": "top",
+      "item": "halter top",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-black-halter-top-silk-fem.svg"
+    },
+    {
+      "key": "top_white_halter_top_silk_fem_v1",
+      "slot": "top",
+      "item": "halter top",
+      "color": "white",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-white-halter-top-silk-fem.svg"
+    },
+    {
+      "key": "top_red_halter_top_silk_fem_v1",
+      "slot": "top",
+      "item": "halter top",
+      "color": "red",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-red-halter-top-silk-fem.svg"
+    },
+    {
+      "key": "top_white_off_shoulder_top_cotton_fem_v1",
+      "slot": "top",
+      "item": "off shoulder top",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-off-shoulder-top-cotton-fem.svg"
+    },
+    {
+      "key": "top_black_off_shoulder_top_cotton_fem_v1",
+      "slot": "top",
+      "item": "off shoulder top",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-off-shoulder-top-cotton-fem.svg"
+    },
+    {
+      "key": "top_cream_off_shoulder_top_cotton_fem_v1",
+      "slot": "top",
+      "item": "off shoulder top",
+      "color": "cream",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-cream-off-shoulder-top-cotton-fem.svg"
+    },
+    {
+      "key": "top_white_crop_top_cotton_fem_v1",
+      "slot": "top",
+      "item": "crop top",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-crop-top-cotton-fem.svg"
+    },
+    {
+      "key": "top_beige_crop_top_cotton_fem_v1",
+      "slot": "top",
+      "item": "crop top",
+      "color": "beige",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-beige-crop-top-cotton-fem.svg"
+    },
+    {
+      "key": "top_white_bodysuit_jersey_fem_v1",
+      "slot": "top",
+      "item": "bodysuit",
+      "color": "white",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-white-bodysuit-jersey-fem.svg"
+    },
+    {
+      "key": "top_black_tunic_linen_fem_v1",
+      "slot": "top",
+      "item": "tunic",
+      "color": "black",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-black-tunic-linen-fem.svg"
+    },
+    {
+      "key": "top_cream_tunic_linen_fem_v1",
+      "slot": "top",
+      "item": "tunic",
+      "color": "cream",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/top-cream-tunic-linen-fem.svg"
+    },
+    {
+      "key": "top_cream_knit_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "knit cardigan",
+      "color": "cream",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-cream-knit-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_black_knit_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "knit cardigan",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-black-knit-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_navy_knit_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "knit cardigan",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-navy-knit-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_beige_knit_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "knit cardigan",
+      "color": "beige",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-beige-knit-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_cream_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "long cardigan",
+      "color": "cream",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-cream-long-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_black_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "long cardigan",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-black-long-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_beige_long_cardigan_wool_fem_v1",
+      "slot": "top",
+      "item": "long cardigan",
+      "color": "beige",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-beige-long-cardigan-wool-fem.svg"
+    },
+    {
+      "key": "top_white_ruffled_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "ruffled blouse",
+      "color": "white",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-white-ruffled-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_black_ruffled_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "ruffled blouse",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-black-ruffled-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_navy_ruffled_blouse_silk_fem_v1",
+      "slot": "top",
+      "item": "ruffled blouse",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-navy-ruffled-blouse-silk-fem.svg"
+    },
+    {
+      "key": "top_black_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "wrap dress",
+      "color": "black",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-black-wrap-dress-jersey-fem.svg"
+    },
+    {
+      "key": "top_navy_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "wrap dress",
+      "color": "navy",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-navy-wrap-dress-jersey-fem.svg"
+    },
+    {
+      "key": "top_red_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "wrap dress",
+      "color": "red",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-red-wrap-dress-jersey-fem.svg"
+    },
+    {
+      "key": "top_green_wrap_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "wrap dress",
+      "color": "green",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-green-wrap-dress-jersey-fem.svg"
+    },
+    {
+      "key": "top_black_slip_dress_silk_fem_v1",
+      "slot": "top",
+      "item": "slip dress",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-black-slip-dress-silk-fem.svg"
+    },
+    {
+      "key": "top_cream_slip_dress_silk_fem_v1",
+      "slot": "top",
+      "item": "slip dress",
+      "color": "cream",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-cream-slip-dress-silk-fem.svg"
+    },
+    {
+      "key": "top_navy_slip_dress_silk_fem_v1",
+      "slot": "top",
+      "item": "slip dress",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-navy-slip-dress-silk-fem.svg"
+    },
+    {
+      "key": "top_white_sundress_cotton_fem_v1",
+      "slot": "top",
+      "item": "sundress",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-sundress-cotton-fem.svg"
+    },
+    {
+      "key": "top_blue_sundress_cotton_fem_v1",
+      "slot": "top",
+      "item": "sundress",
+      "color": "blue",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-blue-sundress-cotton-fem.svg"
+    },
+    {
+      "key": "top_yellow_sundress_cotton_fem_v1",
+      "slot": "top",
+      "item": "sundress",
+      "color": "yellow",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-yellow-sundress-cotton-fem.svg"
+    },
+    {
+      "key": "top_floral_sundress_cotton_fem_v1",
+      "slot": "top",
+      "item": "sundress",
+      "color": "floral",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-floral-sundress-cotton-fem.svg"
+    },
+    {
+      "key": "top_black_maxi_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "maxi dress",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-maxi-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_white_maxi_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "maxi dress",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-maxi-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_cream_maxi_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "maxi dress",
+      "color": "cream",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-cream-maxi-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_black_mini_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "mini dress",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-black-mini-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_red_mini_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "mini dress",
+      "color": "red",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-red-mini-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_white_mini_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "mini dress",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-mini-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_black_sheath_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sheath dress",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-black-sheath-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_navy_sheath_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sheath dress",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-navy-sheath-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_red_sheath_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sheath dress",
+      "color": "red",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-red-sheath-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_white_shirtdress_cotton_fem_v1",
+      "slot": "top",
+      "item": "shirtdress",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-shirtdress-cotton-fem.svg"
+    },
+    {
+      "key": "top_khaki_shirtdress_cotton_fem_v1",
+      "slot": "top",
+      "item": "shirtdress",
+      "color": "khaki",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-khaki-shirtdress-cotton-fem.svg"
+    },
+    {
+      "key": "top_navy_cocktail_dress_silk_fem_v1",
+      "slot": "top",
+      "item": "cocktail dress",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-navy-cocktail-dress-silk-fem.svg"
+    },
+    {
+      "key": "top_red_cocktail_dress_silk_fem_v1",
+      "slot": "top",
+      "item": "cocktail dress",
+      "color": "red",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/top-red-cocktail-dress-silk-fem.svg"
+    },
+    {
+      "key": "top_black_sweater_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sweater dress",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-black-sweater-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_cream_sweater_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sweater dress",
+      "color": "cream",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-cream-sweater-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_camel_sweater_dress_wool_fem_v1",
+      "slot": "top",
+      "item": "sweater dress",
+      "color": "camel",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/top-camel-sweater-dress-wool-fem.svg"
+    },
+    {
+      "key": "top_white_t_shirt_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "t shirt dress",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-white-t-shirt-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_gray_t_shirt_dress_cotton_fem_v1",
+      "slot": "top",
+      "item": "t shirt dress",
+      "color": "gray",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/top-gray-t-shirt-dress-cotton-fem.svg"
+    },
+    {
+      "key": "top_red_bodycon_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "bodycon dress",
+      "color": "red",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-red-bodycon-dress-jersey-fem.svg"
+    },
+    {
+      "key": "top_white_bodycon_dress_jersey_fem_v1",
+      "slot": "top",
+      "item": "bodycon dress",
+      "color": "white",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/top-white-bodycon-dress-jersey-fem.svg"
+    },
+    {
+      "key": "bottom_black_a_line_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "a line skirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-a-line-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_navy_a_line_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "a line skirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-navy-a-line-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_beige_a_line_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "a line skirt",
+      "color": "beige",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-beige-a-line-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_pencil_skirt_wool_fem_v1",
+      "slot": "bottom",
+      "item": "pencil skirt",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-black-pencil-skirt-wool-fem.svg"
+    },
+    {
+      "key": "bottom_beige_pencil_skirt_wool_fem_v1",
+      "slot": "bottom",
+      "item": "pencil skirt",
+      "color": "beige",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-beige-pencil-skirt-wool-fem.svg"
+    },
+    {
+      "key": "bottom_black_midi_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "midi skirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-midi-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_white_midi_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "midi skirt",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-white-midi-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_mini_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "item": "mini skirt",
+      "color": "black",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-black-mini-skirt-denim-fem.svg"
+    },
+    {
+      "key": "bottom_white_mini_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "item": "mini skirt",
+      "color": "white",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-white-mini-skirt-denim-fem.svg"
+    },
+    {
+      "key": "bottom_cream_maxi_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "item": "maxi skirt",
+      "color": "cream",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-cream-maxi-skirt-linen-fem.svg"
+    },
+    {
+      "key": "bottom_black_pleated_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "pleated skirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-pleated-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_wrap_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "item": "wrap skirt",
+      "color": "black",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-black-wrap-skirt-linen-fem.svg"
+    },
+    {
+      "key": "bottom_navy_wrap_skirt_linen_fem_v1",
+      "slot": "bottom",
+      "item": "wrap skirt",
+      "color": "navy",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-navy-wrap-skirt-linen-fem.svg"
+    },
+    {
+      "key": "bottom_blue_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "item": "denim skirt",
+      "color": "blue",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-blue-denim-skirt-denim-fem.svg"
+    },
+    {
+      "key": "bottom_black_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "item": "denim skirt",
+      "color": "black",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-black-denim-skirt-denim-fem.svg"
+    },
+    {
+      "key": "bottom_white_denim_skirt_denim_fem_v1",
+      "slot": "bottom",
+      "item": "denim skirt",
+      "color": "white",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-white-denim-skirt-denim-fem.svg"
+    },
+    {
+      "key": "bottom_brown_leather_skirt_leather_fem_v1",
+      "slot": "bottom",
+      "item": "leather skirt",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/bottom-brown-leather-skirt-leather-fem.svg"
+    },
+    {
+      "key": "bottom_white_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "tennis skirt",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-white-tennis-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_navy_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "tennis skirt",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-navy-tennis-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_tennis_skirt_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "tennis skirt",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-tennis-skirt-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_blue_high_waist_jeans_denim_fem_v1",
+      "slot": "bottom",
+      "item": "high waist jeans",
+      "color": "blue",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-blue-high-waist-jeans-denim-fem.svg"
+    },
+    {
+      "key": "bottom_black_high_waist_jeans_denim_fem_v1",
+      "slot": "bottom",
+      "item": "high waist jeans",
+      "color": "black",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-black-high-waist-jeans-denim-fem.svg"
+    },
+    {
+      "key": "bottom_white_high_waist_jeans_denim_fem_v1",
+      "slot": "bottom",
+      "item": "high waist jeans",
+      "color": "white",
+      "material": "denim",
+      "newPath": "assets/recommendation-stock/bottom-white-high-waist-jeans-denim-fem.svg"
+    },
+    {
+      "key": "bottom_black_wide_leg_trousers_wool_fem_v1",
+      "slot": "bottom",
+      "item": "wide leg trousers",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-black-wide-leg-trousers-wool-fem.svg"
+    },
+    {
+      "key": "bottom_cream_wide_leg_trousers_wool_fem_v1",
+      "slot": "bottom",
+      "item": "wide leg trousers",
+      "color": "cream",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-cream-wide-leg-trousers-wool-fem.svg"
+    },
+    {
+      "key": "bottom_navy_wide_leg_trousers_wool_fem_v1",
+      "slot": "bottom",
+      "item": "wide leg trousers",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/bottom-navy-wide-leg-trousers-wool-fem.svg"
+    },
+    {
+      "key": "bottom_black_cigarette_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "cigarette pants",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-cigarette-pants-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "capri pants",
+      "color": "black",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-black-capri-pants-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_white_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "capri pants",
+      "color": "white",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-white-capri-pants-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_navy_capri_pants_cotton_fem_v1",
+      "slot": "bottom",
+      "item": "capri pants",
+      "color": "navy",
+      "material": "cotton",
+      "newPath": "assets/recommendation-stock/bottom-navy-capri-pants-cotton-fem.svg"
+    },
+    {
+      "key": "bottom_black_culottes_linen_fem_v1",
+      "slot": "bottom",
+      "item": "culottes",
+      "color": "black",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-black-culottes-linen-fem.svg"
+    },
+    {
+      "key": "bottom_cream_palazzo_pants_linen_fem_v1",
+      "slot": "bottom",
+      "item": "palazzo pants",
+      "color": "cream",
+      "material": "linen",
+      "newPath": "assets/recommendation-stock/bottom-cream-palazzo-pants-linen-fem.svg"
+    },
+    {
+      "key": "bottom_black_bike_shorts_jersey_fem_v1",
+      "slot": "bottom",
+      "item": "bike shorts",
+      "color": "black",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/bottom-black-bike-shorts-jersey-fem.svg"
+    },
+    {
+      "key": "bottom_navy_bike_shorts_jersey_fem_v1",
+      "slot": "bottom",
+      "item": "bike shorts",
+      "color": "navy",
+      "material": "jersey",
+      "newPath": "assets/recommendation-stock/bottom-navy-bike-shorts-jersey-fem.svg"
+    },
+    {
+      "key": "outer_camel_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "item": "wrap coat",
+      "color": "camel",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-camel-wrap-coat-wool-fem.svg"
+    },
+    {
+      "key": "outer_black_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "item": "wrap coat",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-wrap-coat-wool-fem.svg"
+    },
+    {
+      "key": "outer_beige_wrap_coat_wool_fem_v1",
+      "slot": "outer",
+      "item": "wrap coat",
+      "color": "beige",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-beige-wrap-coat-wool-fem.svg"
+    },
+    {
+      "key": "outer_cream_cropped_jacket_wool_fem_v1",
+      "slot": "outer",
+      "item": "cropped jacket",
+      "color": "cream",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-cream-cropped-jacket-wool-fem.svg"
+    },
+    {
+      "key": "outer_red_cropped_jacket_wool_fem_v1",
+      "slot": "outer",
+      "item": "cropped jacket",
+      "color": "red",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-red-cropped-jacket-wool-fem.svg"
+    },
+    {
+      "key": "outer_camel_cape_wool_fem_v1",
+      "slot": "outer",
+      "item": "cape",
+      "color": "camel",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-camel-cape-wool-fem.svg"
+    },
+    {
+      "key": "outer_black_cape_wool_fem_v1",
+      "slot": "outer",
+      "item": "cape",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-cape-wool-fem.svg"
+    },
+    {
+      "key": "outer_navy_cape_wool_fem_v1",
+      "slot": "outer",
+      "item": "cape",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-navy-cape-wool-fem.svg"
+    },
+    {
+      "key": "outer_beige_poncho_wool_fem_v1",
+      "slot": "outer",
+      "item": "poncho",
+      "color": "beige",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-beige-poncho-wool-fem.svg"
+    },
+    {
+      "key": "outer_black_poncho_wool_fem_v1",
+      "slot": "outer",
+      "item": "poncho",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-poncho-wool-fem.svg"
+    },
+    {
+      "key": "outer_gray_poncho_wool_fem_v1",
+      "slot": "outer",
+      "item": "poncho",
+      "color": "gray",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-gray-poncho-wool-fem.svg"
+    },
+    {
+      "key": "outer_black_kimono_silk_fem_v1",
+      "slot": "outer",
+      "item": "kimono",
+      "color": "black",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/outer-black-kimono-silk-fem.svg"
+    },
+    {
+      "key": "outer_floral_kimono_silk_fem_v1",
+      "slot": "outer",
+      "item": "kimono",
+      "color": "floral",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/outer-floral-kimono-silk-fem.svg"
+    },
+    {
+      "key": "outer_cream_kimono_silk_fem_v1",
+      "slot": "outer",
+      "item": "kimono",
+      "color": "cream",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/outer-cream-kimono-silk-fem.svg"
+    },
+    {
+      "key": "outer_black_duster_coat_wool_fem_v1",
+      "slot": "outer",
+      "item": "duster coat",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/outer-black-duster-coat-wool-fem.svg"
+    },
+    {
+      "key": "shoes_nude_heels_leather_fem_v1",
+      "slot": "shoes",
+      "item": "heels",
+      "color": "nude",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-nude-heels-leather-fem.svg"
+    },
+    {
+      "key": "shoes_nude_stiletto_heels_leather_fem_v1",
+      "slot": "shoes",
+      "item": "stiletto heels",
+      "color": "nude",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-nude-stiletto-heels-leather-fem.svg"
+    },
+    {
+      "key": "shoes_red_pumps_leather_fem_v1",
+      "slot": "shoes",
+      "item": "pumps",
+      "color": "red",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-red-pumps-leather-fem.svg"
+    },
+    {
+      "key": "shoes_black_mary_janes_leather_fem_v1",
+      "slot": "shoes",
+      "item": "mary janes",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-mary-janes-leather-fem.svg"
+    },
+    {
+      "key": "shoes_red_mary_janes_leather_fem_v1",
+      "slot": "shoes",
+      "item": "mary janes",
+      "color": "red",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-red-mary-janes-leather-fem.svg"
+    },
+    {
+      "key": "shoes_black_mules_leather_fem_v1",
+      "slot": "shoes",
+      "item": "mules",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-mules-leather-fem.svg"
+    },
+    {
+      "key": "shoes_tan_mules_leather_fem_v1",
+      "slot": "shoes",
+      "item": "mules",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-tan-mules-leather-fem.svg"
+    },
+    {
+      "key": "shoes_brown_knee_high_boots_leather_fem_v1",
+      "slot": "shoes",
+      "item": "knee high boots",
+      "color": "brown",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-brown-knee-high-boots-leather-fem.svg"
+    },
+    {
+      "key": "shoes_black_riding_boots_leather_fem_v1",
+      "slot": "shoes",
+      "item": "riding boots",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/shoes-black-riding-boots-leather-fem.svg"
+    },
+    {
+      "key": "accessory_black_clutch_leather_fem_v1",
+      "slot": "accessory",
+      "item": "clutch",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-black-clutch-leather-fem.svg"
+    },
+    {
+      "key": "accessory_gold_clutch_leather_fem_v1",
+      "slot": "accessory",
+      "item": "clutch",
+      "color": "gold",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-gold-clutch-leather-fem.svg"
+    },
+    {
+      "key": "accessory_silver_clutch_leather_fem_v1",
+      "slot": "accessory",
+      "item": "clutch",
+      "color": "silver",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-silver-clutch-leather-fem.svg"
+    },
+    {
+      "key": "accessory_black_mini_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "mini bag",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-black-mini-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_tan_mini_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "mini bag",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-tan-mini-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_red_mini_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "mini bag",
+      "color": "red",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-red-mini-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_black_hobo_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "hobo bag",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-black-hobo-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_tan_hobo_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "hobo bag",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-tan-hobo-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_black_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "bucket bag",
+      "color": "black",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-black-bucket-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_tan_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "bucket bag",
+      "color": "tan",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-tan-bucket-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_cream_bucket_bag_leather_fem_v1",
+      "slot": "accessory",
+      "item": "bucket bag",
+      "color": "cream",
+      "material": "leather",
+      "newPath": "assets/recommendation-stock/accessory-cream-bucket-bag-leather-fem.svg"
+    },
+    {
+      "key": "accessory_gold_hair_clip_metal_fem_v1",
+      "slot": "accessory",
+      "item": "hair clip",
+      "color": "gold",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-gold-hair-clip-metal-fem.svg"
+    },
+    {
+      "key": "accessory_silver_hair_clip_metal_fem_v1",
+      "slot": "accessory",
+      "item": "hair clip",
+      "color": "silver",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-silver-hair-clip-metal-fem.svg"
+    },
+    {
+      "key": "accessory_gold_headband_silk_fem_v1",
+      "slot": "accessory",
+      "item": "headband",
+      "color": "gold",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-gold-headband-silk-fem.svg"
+    },
+    {
+      "key": "accessory_red_hair_scarf_silk_fem_v1",
+      "slot": "accessory",
+      "item": "hair scarf",
+      "color": "red",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-red-hair-scarf-silk-fem.svg"
+    },
+    {
+      "key": "accessory_navy_hair_scarf_silk_fem_v1",
+      "slot": "accessory",
+      "item": "hair scarf",
+      "color": "navy",
+      "material": "silk",
+      "newPath": "assets/recommendation-stock/accessory-navy-hair-scarf-silk-fem.svg"
+    },
+    {
+      "key": "accessory_pearl_pearl_earrings_pearl_fem_v1",
+      "slot": "accessory",
+      "item": "pearl earrings",
+      "color": "pearl",
+      "material": "pearl",
+      "newPath": "assets/recommendation-stock/accessory-pearl-pearl-earrings-pearl-fem.svg"
+    },
+    {
+      "key": "accessory_white_pearl_earrings_pearl_fem_v1",
+      "slot": "accessory",
+      "item": "pearl earrings",
+      "color": "white",
+      "material": "pearl",
+      "newPath": "assets/recommendation-stock/accessory-white-pearl-earrings-pearl-fem.svg"
+    },
+    {
+      "key": "accessory_silver_hoop_earrings_gold_fem_v1",
+      "slot": "accessory",
+      "item": "hoop earrings",
+      "color": "silver",
+      "material": "gold",
+      "newPath": "assets/recommendation-stock/accessory-silver-hoop-earrings-gold-fem.svg"
+    },
+    {
+      "key": "accessory_silver_statement_necklace_metal_fem_v1",
+      "slot": "accessory",
+      "item": "statement necklace",
+      "color": "silver",
+      "material": "metal",
+      "newPath": "assets/recommendation-stock/accessory-silver-statement-necklace-metal-fem.svg"
+    },
+    {
+      "key": "accessory_gold_pendant_necklace_gold_fem_v1",
+      "slot": "accessory",
+      "item": "pendant necklace",
+      "color": "gold",
+      "material": "gold",
+      "newPath": "assets/recommendation-stock/accessory-gold-pendant-necklace-gold-fem.svg"
+    },
+    {
+      "key": "accessory_silver_pendant_necklace_gold_fem_v1",
+      "slot": "accessory",
+      "item": "pendant necklace",
+      "color": "silver",
+      "material": "gold",
+      "newPath": "assets/recommendation-stock/accessory-silver-pendant-necklace-gold-fem.svg"
+    },
+    {
+      "key": "accessory_gold_stacked_bracelets_gold_fem_v1",
+      "slot": "accessory",
+      "item": "stacked bracelets",
+      "color": "gold",
+      "material": "gold",
+      "newPath": "assets/recommendation-stock/accessory-gold-stacked-bracelets-gold-fem.svg"
+    },
+    {
+      "key": "accessory_silver_stacked_bracelets_gold_fem_v1",
+      "slot": "accessory",
+      "item": "stacked bracelets",
+      "color": "silver",
+      "material": "gold",
+      "newPath": "assets/recommendation-stock/accessory-silver-stacked-bracelets-gold-fem.svg"
+    },
+    {
+      "key": "accessory_black_beret_wool_fem_v1",
+      "slot": "accessory",
+      "item": "beret",
+      "color": "black",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/accessory-black-beret-wool-fem.svg"
+    },
+    {
+      "key": "accessory_navy_beret_wool_fem_v1",
+      "slot": "accessory",
+      "item": "beret",
+      "color": "navy",
+      "material": "wool",
+      "newPath": "assets/recommendation-stock/accessory-navy-beret-wool-fem.svg"
+    }
+  ]
+}

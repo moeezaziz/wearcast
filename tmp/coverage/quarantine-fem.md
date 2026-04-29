@@ -1,0 +1,38 @@
+# Quarantined feminine images
+
+- **top-white-tunic-linen-fem.jpg** (jpeg, 2106kb, 2893x4341) — suspicious_title (WW2)
+  - title: File:WW2 Norway. Uniform tunic (jacket) and visor cap for Norwegian Untersturmführer in Waffen-SS. Nasjonal Samling Kvinnehirden NSKH uniform tunic skirt Armed Forces Museum (Forsvarsmuseet) Oslo 2019 1652.jpg
+  - source: https://commons.wikimedia.org/wiki/File:WW2_Norway._Uniform_tunic_(jacket)_and_visor_cap_for_Norwegian_Untersturmf%C3%BChrer_in_Waffen-SS._Nasjonal_Samling_Kvinnehirden_NSKH_uniform_tunic_skirt_Armed_Forces_Museum_(Forsvarsmuseet)_Oslo_2019_1652.jpg
+- **top-black-midi-dress-linen-fem.jpg** (jpeg, 371kb, 1250x2732) — bad_aspect_ratio (0.46)
+  - title: File:Afternoon dress MET CI49.2.4 F.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Afternoon_dress_MET_CI49.2.4_F.jpg
+- **top-white-midi-dress-linen-fem.jpg** (jpeg, 371kb, 1250x2732) — bad_aspect_ratio (0.46)
+  - title: File:Afternoon dress MET CI49.2.4 F.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Afternoon_dress_MET_CI49.2.4_F.jpg
+- **top-cream-midi-dress-linen-fem.jpg** (jpeg, 371kb, 1250x2732) — bad_aspect_ratio (0.46)
+  - title: File:Afternoon dress MET CI49.2.4 F.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Afternoon_dress_MET_CI49.2.4_F.jpg
+- **top-navy-midi-dress-linen-fem.jpg** (jpeg, 371kb, 1250x2732) — bad_aspect_ratio (0.46)
+  - title: File:Afternoon dress MET CI49.2.4 F.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Afternoon_dress_MET_CI49.2.4_F.jpg
+- **bottom-blue-mom-jeans-denim-fem.jpg** (jpeg, 1531kb, 4032x1915) — bad_aspect_ratio (2.11)
+  - title: File:Mom Jeans 2023 (cropped).jpg
+  - source: https://commons.wikimedia.org/wiki/File:Mom_Jeans_2023_(cropped).jpg
+- **bottom-black-mom-jeans-denim-fem.jpg** (jpeg, 1531kb, 4032x1915) — bad_aspect_ratio (2.11)
+  - title: File:Mom Jeans 2023 (cropped).jpg
+  - source: https://commons.wikimedia.org/wiki/File:Mom_Jeans_2023_(cropped).jpg
+- **shoes-white-mules-leather-fem.jpg** (jpeg, 799kb, 1711x1427) — suspicious_title (Bridge)
+  - title: File:White Mules on a Bridge MET ap45.158.1.jpg
+  - source: https://commons.wikimedia.org/wiki/File:White_Mules_on_a_Bridge_MET_ap45.158.1.jpg
+- **shoes-tan-wedge-sandals-leather-fem.jpg** (jpeg, 191kb, 1536x1053) — suspicious_title (Museum)
+  - title: File:Brooklyn Museum X1054a-b Pair of Sandals.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Brooklyn_Museum_X1054a-b_Pair_of_Sandals.jpg
+- **accessory-black-hair-scarf-silk-fem.jpg** (jpeg, 1922kb, 2148x4483) — bad_aspect_ratio (0.48)
+  - title: File:Robert Henri - Lady in Black with Spanish Scarf (O in Black with a Scarf) - Google Art Project.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Robert_Henri_-_Lady_in_Black_with_Spanish_Scarf_(O_in_Black_with_a_Scarf)_-_Google_Art_Project.jpg
+- **accessory-gold-hoop-earrings-gold-fem.jpg** (jpeg, 1538kb, 821x1799) — bad_aspect_ratio (0.46)
+  - title: File:Byzantine - Earring - Walters 571729.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Byzantine_-_Earring_-_Walters_571729.jpg
+- **accessory-gold-drop-earrings-gold-fem.jpg** (jpeg, 1538kb, 821x1799) — bad_aspect_ratio (0.46)
+  - title: File:Byzantine - Earring - Walters 571729.jpg
+  - source: https://commons.wikimedia.org/wiki/File:Byzantine_-_Earring_-_Walters_571729.jpg

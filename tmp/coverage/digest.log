@@ -1,0 +1,279 @@
+
+## NO-MATCH  (16 categories)
+
+- [accessory] **Backpack** — falls back to generic. e.g. "Brown cotton Backpack"
+- [accessory] **Bow tie** — falls back to generic. e.g. "Brown cotton Bow tie"
+- [accessory] **Bracelet** — falls back to generic. e.g. "Brown cotton Bracelet"
+- [accessory] **Fedora** — falls back to generic. e.g. "Brown cotton Fedora"
+- [accessory] **Necklace** — falls back to generic. e.g. "Brown cotton Necklace"
+- [accessory] **Pocket square** — falls back to generic. e.g. "Brown cotton Pocket square"
+- [accessory] **Tie** — falls back to generic. e.g. "Brown cotton Tie"
+- [outer] **Quilted vest** — falls back to generic. e.g. "Navy cotton Quilted vest"
+- [shoes] **Brogues** — falls back to generic. e.g. "Navy mesh Brogues"
+- [shoes] **Espadrilles** — falls back to generic. e.g. "Navy mesh Espadrilles"
+- [shoes] **Sandals** — falls back to generic. e.g. "Navy mesh Sandals"
+- [shoes] **Slides** — falls back to generic. e.g. "Navy mesh Slides"
+- [shoes] **Slip-ons** — falls back to generic. e.g. "Navy mesh Slip-ons"
+- [top] **Cardigan** — falls back to generic. e.g. "Navy wool Cardigan"
+- [top] **Henley** — falls back to generic. e.g. "Navy wool Henley"
+- [top] **Wool turtleneck** — falls back to generic. e.g. "Navy wool Wool turtleneck"
+
+## COLOR-LOCKED  (121 categories)
+
+- [accessory] **Backpack** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Baseball cap** — only black image; bad for: blue, brown, cream, gray, navy, red, tan, white, yellow
+- [accessory] **Belt** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Belt bag** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Bow tie** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Bracelet** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Bucket hat** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Crossbody bag** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Fedora** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Gloves** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Leather belt** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Leather gloves** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Necklace** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Pocket square** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Scarf** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Silk scarf** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Sports cap** — only black image; bad for: blue, brown, cream, gray, navy, red, tan, white, yellow
+- [accessory] **Sun hat** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Sunglasses** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Tie** — only white image; bad for: blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Tote bag** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Watch** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Wide-brim hat** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Wool gloves** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Wool scarf** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [accessory] **Wool socks** — only white image; bad for: black, blue, brown, gray, navy, red, tan, yellow
+- [bottom] **Athletic shorts** — only white image; bad for: black, blue, brown, charcoal, gray, khaki, navy, olive, tan
+- [bottom] **Black jeans** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Cargo pants** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Chinos** — only navy image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, olive, tan, white
+- [bottom] **Corduroy pants** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Denim shorts** — only white image; bad for: black, blue, brown, charcoal, gray, khaki, navy, olive, tan
+- [bottom] **Jeans** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Joggers** — only black image; bad for: beige, blue, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Leggings** — only magenta image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Lightweight chinos** — only navy image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, olive, tan, white
+- [bottom] **Linen shorts** — only white image; bad for: blue
+- [bottom] **Linen trousers** — only white image; bad for: black, charcoal
+- [bottom] **Pleated trousers** — only blue, white image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Relaxed jeans** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Running shorts** — only white image; bad for: black, blue, brown, charcoal, gray, khaki, navy, olive, tan
+- [bottom] **Slim chinos** — only navy image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, olive, tan, white
+- [bottom] **Slim jeans** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Tailored trousers** — only white image; bad for: black, blue, brown, charcoal, gray, khaki, navy, olive, tan
+- [bottom] **Tech joggers** — only black image; bad for: beige, blue, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Track pants** — only blue image; bad for: beige, black, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Wide-leg trousers** — only blue, white image; bad for: beige, black, blue, brown, charcoal, cream, gray, khaki, navy, olive, tan, white
+- [bottom] **Wool trousers** — only white image; bad for: black, blue, brown, charcoal, gray, khaki, navy, olive, tan
+- [outer] **Bomber jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Cardigan** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Chore coat** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Denim jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Down jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Duffle coat** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Field jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Fleece jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Hooded parka** — only rust image; bad for: beige, black, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Hoodie** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Insulated parka** — only rust image; bad for: beige, black, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Leather jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Overshirt** — only charcoal image; bad for: beige, black, brown, cream, green, navy, olive, red, tan, white
+- [outer] **Parka** — only rust image; bad for: beige, black, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Pea coat** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Puffer jacket** — only black, white image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan
+- [outer] **Rain jacket** — only black image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Shacket** — only black image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Shell jacket** — only black image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Tech shell** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Trench coat** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Windbreaker** — only black image; bad for: beige, brown, charcoal, cream, gray, green, navy, olive, red, tan, white
+- [outer] **Wool overcoat** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [outer] **Zip hoodie** — only white image; bad for: black, brown, charcoal, gray, green, navy, olive, red, tan
+- [shoes] **Ankle boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Black sneakers** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Boat shoes** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Brogues** — only brown, white image; bad for: black, cream, gray, navy, olive, red, tan, white
+- [shoes] **Brown loafers** — only brown image; bad for: black, cream, gray, navy, olive, red, white
+- [shoes] **Canvas sneakers** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Chelsea boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Chukka boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Combat boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Derby shoes** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Espadrilles** — only brown, white image; bad for: black, cream, gray, navy, olive, red, tan, white
+- [shoes] **Hiking boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Leather sneakers** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Loafers** — only black image; bad for: brown, cream, gray, navy, olive, red, tan, white
+- [shoes] **Oxford shoes** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Penny loafers** — only black image; bad for: brown, cream, gray, navy, olive, red, tan, white
+- [shoes] **Performance runners** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Rain boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Running shoes** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Sandals** — only brown, white image; bad for: black, cream, gray, navy, olive, red, tan, white
+- [shoes] **Slides** — only brown, white image; bad for: black, cream, gray, navy, olive, red, tan, white
+- [shoes] **Slip-ons** — only brown, white image; bad for: black, cream, gray, navy, olive, red, tan, white
+- [shoes] **Sneakers** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Suede loafers** — only black image; bad for: brown, cream, gray, navy, olive, red, tan, white
+- [shoes] **Tassel loafers** — only black image; bad for: brown, cream, gray, navy, olive, red, tan, white
+- [shoes] **Trail runners** — only gray image; bad for: black, brown, cream, navy, olive, red, tan, white
+- [shoes] **White sneakers** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [shoes] **Winter boots** — only white image; bad for: black, brown, gray, navy, olive, red, tan
+- [top] **Button-up shirt** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Camp shirt** — only ivory image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Cardigan** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Chambray shirt** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Flannel shirt** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Graphic tee** — only black image; bad for: beige, blue, brown, burgundy, cream, gray, green, light blue, navy, olive, pink, red, white, yellow
+- [top] **Henley** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Hoodie** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Linen shirt** — only ivory image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Long-sleeve linen shirt** — only ivory image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Long-sleeve t-shirt** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Mock-neck top** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Oxford shirt** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Performance tee** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Polo shirt** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Rugby shirt** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Sweatshirt** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **T-shirt** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Tank top** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Wool turtleneck** — only ivory, white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+- [top] **Zip hoodie** — only white image; bad for: black, blue, brown, burgundy, gray, green, light blue, navy, olive, pink, red, yellow
+
+## MATERIAL-LOCKED  (110 categories)
+
+- [accessory] **Backpack** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Beanie** — only wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [accessory] **Belt** — only silk, waterproof, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Belt bag** — only waterproof image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Bow tie** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Bracelet** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Crossbody bag** — only waterproof image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Fedora** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Gloves** — only waterproof image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Leather belt** — only silk, waterproof, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Leather gloves** — only waterproof image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Necklace** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Pocket square** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Scarf** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [accessory] **Silk scarf** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [accessory] **Tie** — only silk, wool image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Tote bag** — only leather image; bad for: acetate, cotton, metal, nylon, silk, wool
+- [accessory] **Wool beanie** — only wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [accessory] **Wool gloves** — only waterproof image; bad for: acetate, cotton, leather, metal, nylon, silk, wool
+- [accessory] **Wool scarf** — only wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [accessory] **Wool socks** — only wool image; bad for: acetate, cotton, leather, metal, nylon, silk
+- [bottom] **Athletic shorts** — only performance image; bad for: corduroy, cotton, fleece, linen, wool
+- [bottom] **Black jeans** — only denim image; bad for: corduroy, cotton, fleece, linen, tech, wool
+- [bottom] **Cargo pants** — only fleece image; bad for: corduroy, cotton, linen, tech, wool
+- [bottom] **Chinos** — only cotton image; bad for: corduroy, denim, fleece, linen, tech, wool
+- [bottom] **Corduroy pants** — only denim image; bad for: corduroy, cotton, linen, tech, wool
+- [bottom] **Cotton shorts** — only linen image; bad for: corduroy, cotton, denim, fleece, tech, wool
+- [bottom] **Denim shorts** — only denim image; bad for: corduroy, cotton, fleece, linen, tech, wool
+- [bottom] **Jeans** — only denim image; bad for: corduroy, cotton, fleece, linen, tech, wool
+- [bottom] **Joggers** — only fleece image; bad for: corduroy, cotton, denim, linen, tech, wool
+- [bottom] **Lightweight chinos** — only cotton image; bad for: corduroy, denim, fleece, linen, tech, wool
+- [bottom] **Linen shorts** — only linen image; bad for: corduroy, cotton, denim, fleece, tech, wool
+- [bottom] **Linen trousers** — only linen image; bad for: corduroy, cotton, denim, fleece, tech, wool
+- [bottom] **Pleated trousers** — only wool image; bad for: corduroy, cotton, fleece, linen, tech
+- [bottom] **Relaxed jeans** — only denim image; bad for: corduroy, cotton, fleece, linen, tech, wool
+- [bottom] **Running shorts** — only performance image; bad for: corduroy, cotton, fleece, linen, wool
+- [bottom] **Slim chinos** — only cotton image; bad for: corduroy, denim, fleece, linen, tech, wool
+- [bottom] **Slim jeans** — only denim image; bad for: corduroy, cotton, fleece, linen, tech, wool
+- [bottom] **Tailored trousers** — only wool image; bad for: corduroy, cotton, denim, fleece, linen, tech
+- [bottom] **Tech joggers** — only fleece image; bad for: corduroy, cotton, denim, linen, tech, wool
+- [bottom] **Track pants** — only denim image; bad for: corduroy, cotton, linen, tech, wool
+- [bottom] **Wide-leg trousers** — only wool image; bad for: corduroy, cotton, fleece, linen, tech
+- [bottom] **Wool trousers** — only wool image; bad for: corduroy, cotton, denim, fleece, linen, tech
+- [outer] **Bomber jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Cardigan** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Chore coat** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Denim jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Down jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Duffle coat** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Field jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Fleece jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Leather jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Overshirt** — only knit image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Pea coat** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Puffer jacket** — only shell, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Quilted vest** — only knit, waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Rain jacket** — only waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Shell jacket** — only waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Tech shell** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Trench coat** — only shell image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Windbreaker** — only waterproof image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech, wool
+- [outer] **Wool overcoat** — only wool image; bad for: cashmere, cotton, down, fleece, gore-tex, leather, nylon, tech
+- [shoes] **Ankle boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Black sneakers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Boat shoes** — only leather, performance image; bad for: canvas, knit, leather, mesh, rubber, suede
+- [shoes] **Brogues** — only leather, performance image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Brown loafers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Canvas sneakers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Chelsea boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Chukka boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Combat boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Derby shoes** — only leather, performance image; bad for: canvas, knit, leather, mesh, rubber, suede
+- [shoes] **Espadrilles** — only leather, performance image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Hiking boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Leather sneakers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Loafers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Oxford shoes** — only leather, performance image; bad for: canvas, knit, leather, mesh, rubber, suede
+- [shoes] **Penny loafers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Performance runners** — only performance image; bad for: canvas, knit, leather, mesh, rubber, suede
+- [shoes] **Rain boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [shoes] **Running shoes** — only performance image; bad for: canvas, knit, leather, mesh, rubber, suede
+- [shoes] **Sandals** — only leather, performance image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Slides** — only leather, performance image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Slip-ons** — only leather, performance image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Sneakers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Suede loafers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Tassel loafers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **White sneakers** — only leather image; bad for: canvas, knit, mesh, rubber, suede
+- [shoes] **Winter boots** — only suede image; bad for: canvas, knit, leather, mesh, rubber
+- [top] **Button-up shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Camp shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Cardigan** — only cotton, linen image; bad for: cashmere, jersey, merino, performance, silk, wool
+- [top] **Cashmere sweater** — only knit image; bad for: cashmere, cotton, jersey, linen, merino, performance, silk, wool
+- [top] **Chambray shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Flannel shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Henley** — only cotton, linen image; bad for: cashmere, jersey, merino, performance, silk, wool
+- [top] **Knit sweater** — only knit image; bad for: cashmere, cotton, jersey, linen, merino, performance, silk, wool
+- [top] **Knit tee** — only cotton image; bad for: cashmere, linen, merino, performance, silk, wool
+- [top] **Linen shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Long-sleeve linen shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Merino crewneck** — only knit image; bad for: cashmere, cotton, jersey, linen, merino, performance, silk, wool
+- [top] **Mock-neck top** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Oxford shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Performance tee** — only cotton image; bad for: cashmere, linen, merino, performance, silk, wool
+- [top] **Rugby shirt** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Sweatshirt** — only cotton image; bad for: cashmere, linen, merino, performance, silk, wool
+- [top] **T-shirt** — only cotton image; bad for: cashmere, merino, performance, silk, wool
+- [top] **Tank top** — only linen image; bad for: cashmere, cotton, jersey, merino, performance, silk, wool
+- [top] **Thermal base layer** — only knit image; bad for: cashmere, cotton, jersey, linen, merino, performance, silk, wool
+- [top] **Wool turtleneck** — only cotton, linen image; bad for: cashmere, jersey, merino, performance, silk, wool
+
+## WEAK-MATCH  (18 categories)
+
+- [accessory] **Backpack** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Backpack"
+- [accessory] **Belt** — score ≤ 3 mapping to: accessory_belt_bag_studio, accessory_pattern_scarf_studio, accessory_yellow_silk_scarf_studio. e.g. "Brown leather Belt"
+- [accessory] **Bow tie** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Bow tie"
+- [accessory] **Bracelet** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Bracelet"
+- [accessory] **Fedora** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Fedora"
+- [accessory] **Leather belt** — score ≤ 3 mapping to: accessory_belt_bag_studio, accessory_pattern_scarf_studio, accessory_yellow_silk_scarf_studio. e.g. "Brown leather Leather belt"
+- [accessory] **Necklace** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Necklace"
+- [accessory] **Pocket square** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Pocket square"
+- [accessory] **Tie** — score ≤ 3 mapping to: accessory_pattern_scarf_studio, accessory_tote_bag_studio, accessory_yellow_silk_scarf_studio, accessory_black_sunglasses_studio. e.g. "Brown wool Tie"
+- [outer] **Quilted vest** — score ≤ 3 mapping to: outer_black_shell_jacket_city, outer_winter_coat_studio, outer_charcoal_overshirt_studio, outer_white_hoodie_studio, outer_white_overcoat_studio. e.g. "Black wool Quilted vest"
+- [shoes] **Brogues** — score ≤ 3 mapping to: shoes_tan_winter_boots, shoes_black_white_sneakers_studio, shoes_white_sneakers_minimal, shoes_brown_loafers_polished, shoes_gray_trail_runners_studio. e.g. "Tan suede Brogues"
+- [shoes] **Espadrilles** — score ≤ 3 mapping to: shoes_tan_winter_boots, shoes_black_white_sneakers_studio, shoes_white_sneakers_minimal, shoes_brown_loafers_polished, shoes_gray_trail_runners_studio. e.g. "Tan suede Espadrilles"
+- [shoes] **Sandals** — score ≤ 3 mapping to: shoes_tan_winter_boots, shoes_black_white_sneakers_studio, shoes_white_sneakers_minimal, shoes_brown_loafers_polished, shoes_gray_trail_runners_studio. e.g. "Tan suede Sandals"
+- [shoes] **Slides** — score ≤ 3 mapping to: shoes_tan_winter_boots, shoes_black_white_sneakers_studio, shoes_white_sneakers_minimal, shoes_brown_loafers_polished, shoes_gray_trail_runners_studio. e.g. "Tan suede Slides"
+- [shoes] **Slip-ons** — score ≤ 3 mapping to: shoes_tan_winter_boots, shoes_black_white_sneakers_studio, shoes_white_sneakers_minimal, shoes_brown_loafers_polished, shoes_gray_trail_runners_studio. e.g. "Tan suede Slip-ons"
+- [top] **Cardigan** — score ≤ 3 mapping to: top_lightweight_knit_tee, top_white_tshirt_studio, top_white_hoodie_studio, top_white_button_up_shirt, top_black_graphic_tee_studio. e.g. "Black cotton Cardigan"
+- [top] **Henley** — score ≤ 3 mapping to: top_lightweight_knit_tee, top_white_tshirt_studio, top_white_hoodie_studio, top_white_button_up_shirt, top_black_graphic_tee_studio. e.g. "Black cotton Henley"
+- [top] **Wool turtleneck** — score ≤ 3 mapping to: top_lightweight_knit_tee, top_white_tshirt_studio, top_white_hoodie_studio, top_white_button_up_shirt, top_black_graphic_tee_studio. e.g. "Black cotton Wool turtleneck"
+
+[digest] wrote /Users/moeezaziz/Downloads/wearcast/wearcast/tmp/coverage/digest.json

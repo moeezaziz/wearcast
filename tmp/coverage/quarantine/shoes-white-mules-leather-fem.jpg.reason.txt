@@ -1,0 +1,4 @@
+suspicious_title (Bridge)
+source: https://commons.wikimedia.org/wiki/File:White_Mules_on_a_Bridge_MET_ap45.158.1.jpg
+license: CC0
+title: File:White Mules on a Bridge MET ap45.158.1.jpg

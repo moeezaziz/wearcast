@@ -1,0 +1,464 @@
+[
+  {
+    "key": "bottom_navy_capri_pants_cotton_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-navy-capri-pants-cotton-fem.svg"
+  },
+  {
+    "key": "bottom_black_culottes_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-black-culottes-linen-fem.svg"
+  },
+  {
+    "key": "bottom_cream_culottes_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-cream-culottes-linen-fem.jpg"
+  },
+  {
+    "key": "bottom_navy_culottes_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-navy-culottes-linen-fem.jpg"
+  },
+  {
+    "key": "bottom_black_palazzo_pants_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-black-palazzo-pants-linen-fem.jpg"
+  },
+  {
+    "key": "bottom_cream_palazzo_pants_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-cream-palazzo-pants-linen-fem.svg"
+  },
+  {
+    "key": "bottom_white_palazzo_pants_linen_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-white-palazzo-pants-linen-fem.jpg"
+  },
+  {
+    "key": "bottom_black_bike_shorts_jersey_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-black-bike-shorts-jersey-fem.svg"
+  },
+  {
+    "key": "bottom_navy_bike_shorts_jersey_fem_v1",
+    "slot": "bottom",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/bottom-navy-bike-shorts-jersey-fem.svg"
+  },
+  {
+    "key": "outer_camel_wrap_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-camel-wrap-coat-wool-fem.svg"
+  },
+  {
+    "key": "outer_black_wrap_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-wrap-coat-wool-fem.svg"
+  },
+  {
+    "key": "outer_beige_wrap_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-beige-wrap-coat-wool-fem.svg"
+  },
+  {
+    "key": "outer_black_cropped_jacket_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-cropped-jacket-wool-fem.jpg"
+  },
+  {
+    "key": "outer_cream_cropped_jacket_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-cream-cropped-jacket-wool-fem.svg"
+  },
+  {
+    "key": "outer_red_cropped_jacket_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-red-cropped-jacket-wool-fem.svg"
+  },
+  {
+    "key": "outer_camel_cape_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-camel-cape-wool-fem.svg"
+  },
+  {
+    "key": "outer_black_cape_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-cape-wool-fem.svg"
+  },
+  {
+    "key": "outer_navy_cape_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-navy-cape-wool-fem.svg"
+  },
+  {
+    "key": "outer_beige_poncho_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-beige-poncho-wool-fem.svg"
+  },
+  {
+    "key": "outer_black_poncho_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-poncho-wool-fem.svg"
+  },
+  {
+    "key": "outer_gray_poncho_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-gray-poncho-wool-fem.svg"
+  },
+  {
+    "key": "outer_black_kimono_silk_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-kimono-silk-fem.svg"
+  },
+  {
+    "key": "outer_floral_kimono_silk_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-floral-kimono-silk-fem.svg"
+  },
+  {
+    "key": "outer_cream_kimono_silk_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-cream-kimono-silk-fem.svg"
+  },
+  {
+    "key": "outer_camel_duster_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-camel-duster-coat-wool-fem.jpg"
+  },
+  {
+    "key": "outer_black_duster_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-black-duster-coat-wool-fem.svg"
+  },
+  {
+    "key": "outer_navy_duster_coat_wool_fem_v1",
+    "slot": "outer",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/outer-navy-duster-coat-wool-fem.jpg"
+  },
+  {
+    "key": "shoes_red_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-red-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_black_kitten_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-black-kitten-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_nude_kitten_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-nude-kitten-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_black_block_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-black-block-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_tan_block_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-tan-block-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_white_block_heels_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-white-block-heels-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_red_pumps_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-red-pumps-leather-fem.svg"
+  },
+  {
+    "key": "shoes_red_ballet_flats_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-red-ballet-flats-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_black_mary_janes_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-black-mary-janes-leather-fem.svg"
+  },
+  {
+    "key": "shoes_red_mary_janes_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-red-mary-janes-leather-fem.svg"
+  },
+  {
+    "key": "shoes_gold_wedge_sandals_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-gold-wedge-sandals-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_gold_strappy_sandals_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-gold-strappy-sandals-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_silver_strappy_sandals_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-silver-strappy-sandals-leather-fem.jpg"
+  },
+  {
+    "key": "shoes_brown_knee_high_boots_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-brown-knee-high-boots-leather-fem.svg"
+  },
+  {
+    "key": "shoes_black_riding_boots_leather_fem_v1",
+    "slot": "shoes",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/shoes-black-riding-boots-leather-fem.svg"
+  },
+  {
+    "key": "accessory_gold_clutch_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-clutch-leather-fem.svg"
+  },
+  {
+    "key": "accessory_silver_clutch_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-clutch-leather-fem.svg"
+  },
+  {
+    "key": "accessory_black_mini_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-black-mini-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_red_mini_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-red-mini-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_black_hobo_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-black-hobo-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_brown_hobo_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-brown-hobo-bag-leather-fem.jpg"
+  },
+  {
+    "key": "accessory_tan_hobo_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-tan-hobo-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_black_bucket_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-black-bucket-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_tan_bucket_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-tan-bucket-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_cream_bucket_bag_leather_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-cream-bucket-bag-leather-fem.svg"
+  },
+  {
+    "key": "accessory_gold_hair_clip_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-hair-clip-metal-fem.svg"
+  },
+  {
+    "key": "accessory_silver_hair_clip_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-hair-clip-metal-fem.svg"
+  },
+  {
+    "key": "accessory_tortoiseshell_hair_clip_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-tortoiseshell-hair-clip-metal-fem.jpg"
+  },
+  {
+    "key": "accessory_black_headband_silk_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-black-headband-silk-fem.jpg"
+  },
+  {
+    "key": "accessory_red_headband_silk_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-red-headband-silk-fem.jpg"
+  },
+  {
+    "key": "accessory_gold_headband_silk_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-headband-silk-fem.svg"
+  },
+  {
+    "key": "accessory_red_hair_scarf_silk_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-red-hair-scarf-silk-fem.svg"
+  },
+  {
+    "key": "accessory_navy_hair_scarf_silk_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-navy-hair-scarf-silk-fem.svg"
+  },
+  {
+    "key": "accessory_pearl_pearl_earrings_pearl_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-pearl-pearl-earrings-pearl-fem.svg"
+  },
+  {
+    "key": "accessory_white_pearl_earrings_pearl_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-white-pearl-earrings-pearl-fem.svg"
+  },
+  {
+    "key": "accessory_silver_drop_earrings_gold_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-drop-earrings-gold-fem.jpg"
+  },
+  {
+    "key": "accessory_gold_statement_necklace_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-statement-necklace-metal-fem.jpg"
+  },
+  {
+    "key": "accessory_silver_statement_necklace_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-statement-necklace-metal-fem.svg"
+  },
+  {
+    "key": "accessory_gold_pendant_necklace_gold_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-pendant-necklace-gold-fem.svg"
+  },
+  {
+    "key": "accessory_silver_pendant_necklace_gold_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-pendant-necklace-gold-fem.svg"
+  },
+  {
+    "key": "accessory_gold_brooch_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-brooch-metal-fem.jpg"
+  },
+  {
+    "key": "accessory_silver_brooch_metal_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-brooch-metal-fem.jpg"
+  },
+  {
+    "key": "accessory_gold_stacked_bracelets_gold_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-stacked-bracelets-gold-fem.svg"
+  },
+  {
+    "key": "accessory_silver_stacked_bracelets_gold_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-stacked-bracelets-gold-fem.svg"
+  },
+  {
+    "key": "accessory_silver_charm_bracelet_silver_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-silver-charm-bracelet-silver-fem.jpg"
+  },
+  {
+    "key": "accessory_gold_charm_bracelet_silver_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-gold-charm-bracelet-silver-fem.jpg"
+  },
+  {
+    "key": "accessory_black_beret_wool_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-black-beret-wool-fem.svg"
+  },
+  {
+    "key": "accessory_red_beret_wool_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-red-beret-wool-fem.jpg"
+  },
+  {
+    "key": "accessory_navy_beret_wool_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-navy-beret-wool-fem.svg"
+  },
+  {
+    "key": "accessory_cream_beret_wool_fem_v1",
+    "slot": "accessory",
+    "gender": "feminine",
+    "path": "assets/recommendation-stock/accessory-cream-beret-wool-fem.jpg"
+  }
+]

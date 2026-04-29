@@ -1,0 +1,25 @@
+{
+  "createdAt": "2026-04-27T20:27:48.879Z",
+  "items": [
+    {
+      "path": "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc676cd9081918735701d09a04458.png",
+      "crop": {
+        "left": 17,
+        "top": 19,
+        "width": 802,
+        "height": 903
+      }
+    },
+    {
+      "path": "assets/recommendation-stock/accessory-white-beanie-studio.jpg",
+      "source": "/Users/moeezaziz/.codex/generated_images/019dd054-eaff-77d0-ab53-192f54c3590f/ig_006d92d672d675c90169efc676cd9081918735701d09a04458.png",
+      "crop": {
+        "left": 853,
+        "top": 19,
+        "width": 802,
+        "height": 903
+      }
+    }
+  ]
+}

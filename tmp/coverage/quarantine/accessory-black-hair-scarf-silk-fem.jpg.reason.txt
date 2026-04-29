@@ -1,0 +1,4 @@
+bad_aspect_ratio (0.48)
+source: https://commons.wikimedia.org/wiki/File:Robert_Henri_-_Lady_in_Black_with_Spanish_Scarf_(O_in_Black_with_a_Scarf)_-_Google_Art_Project.jpg
+license: Public domain
+title: File:Robert Henri - Lady in Black with Spanish Scarf (O in Black with a Scarf) - Google Art Project.jpg

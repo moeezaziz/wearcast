@@ -1,0 +1,4 @@
+bad_aspect_ratio (2.11)
+source: https://commons.wikimedia.org/wiki/File:Coast_watch_(1979)_(20471968148).jpg
+license: No restrictions
+title: File:Coast watch (1979) (20471968148).jpg
