@@ -62,7 +62,30 @@ export async function initDB() {
       backlog_key       TEXT NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS saved_looks (
+      id                SERIAL PRIMARY KEY,
+      user_id           INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      signature         TEXT NOT NULL,
+      headline          TEXT,
+      subtitle          TEXT,
+      location_name     TEXT,
+      coverage          INT DEFAULT 0,
+      missing_items     JSONB DEFAULT '[]',
+      outfit            JSONB DEFAULT '{}',
+      created_at        TIMESTAMPTZ DEFAULT NOW(),
+      updated_at        TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(user_id, signature)
+    );
+
+    CREATE TABLE IF NOT EXISTS photo_scan_events (
+      id                SERIAL PRIMARY KEY,
+      user_id           INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      created_at        TIMESTAMPTZ DEFAULT NOW()
+    );
+
     CREATE INDEX IF NOT EXISTS idx_wardrobe_user ON wardrobe_items(user_id);
+    CREATE INDEX IF NOT EXISTS idx_saved_looks_user ON saved_looks(user_id);
+    CREATE INDEX IF NOT EXISTS idx_photo_scan_events_user_created ON photo_scan_events(user_id, created_at);
     CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user ON refresh_tokens(user_id);
     CREATE INDEX IF NOT EXISTS idx_recommendation_stock_gaps_created ON recommendation_stock_gaps(created_at);
     CREATE INDEX IF NOT EXISTS idx_recommendation_stock_gaps_backlog_key ON recommendation_stock_gaps(backlog_key);
@@ -73,7 +96,12 @@ export async function initDB() {
     ALTER TABLE users
       ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT TRUE,
       ADD COLUMN IF NOT EXISTS verification_token_hash TEXT,
-      ADD COLUMN IF NOT EXISTS verification_expires_at TIMESTAMPTZ;
+      ADD COLUMN IF NOT EXISTS verification_expires_at TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'free',
+      ADD COLUMN IF NOT EXISTS subscription_plan TEXT DEFAULT 'free',
+      ADD COLUMN IF NOT EXISTS subscription_trial_active BOOLEAN DEFAULT FALSE,
+      ADD COLUMN IF NOT EXISTS subscription_renewal_status TEXT DEFAULT 'none',
+      ADD COLUMN IF NOT EXISTS subscription_updated_at TIMESTAMPTZ;
   `);
 
   await pool.query(`
@@ -88,6 +116,18 @@ export async function initDB() {
     UPDATE users
     SET email_verified = TRUE
     WHERE email_verified IS NULL;
+  `);
+  await pool.query(`
+    UPDATE users
+    SET
+      subscription_status = COALESCE(subscription_status, 'free'),
+      subscription_plan = COALESCE(subscription_plan, 'free'),
+      subscription_trial_active = COALESCE(subscription_trial_active, FALSE),
+      subscription_renewal_status = COALESCE(subscription_renewal_status, 'none')
+    WHERE subscription_status IS NULL
+       OR subscription_plan IS NULL
+       OR subscription_trial_active IS NULL
+       OR subscription_renewal_status IS NULL;
   `);
   console.info("DB schema ready");
 }

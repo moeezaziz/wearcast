@@ -22,9 +22,11 @@ This checklist reflects the app as it exists now.
 
 It assumes:
 
-- GoatCounter is enabled in production.
+- GoatCounter is enabled in production only after analytics consent.
+- PostHog may be enabled in production for product analytics and subscription-funnel measurement only after analytics consent.
 - email/password and Google sign-in are both enabled.
 - wardrobe items and wardrobe photos are synced when a user is signed in.
+- saved looks and verified signed StoreKit subscription state are synced when a user is signed in.
 - recommendation and photo-analysis requests go through the WearCast backend.
 
 This document is meant to reduce submission risk, but the final App Store Connect answers should still be reviewed carefully before submission.
@@ -39,7 +41,7 @@ Recommended answer:
 
 Reasoning:
 
-- current analytics appears limited to GoatCounter
+- current analytics includes GoatCounter and optional PostHog product analytics
 - no ad SDKs are present
 - no attribution / retargeting stack is visible
 

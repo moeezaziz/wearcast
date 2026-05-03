@@ -320,6 +320,27 @@ main {
 .today-screen.has-wardrobe-banner .today-column-primary {
   padding-bottom: 72px;
 }
+.today-screen.has-results .today-column-primary {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  padding-bottom: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.today-screen.has-results .today-column-primary.is-weather-expanded {
+  grid-template-rows: minmax(0, 1fr) 0 0;
+}
+.today-column-primary.is-weather-expanded .today-inline-upgrade-card {
+  display: none;
+}
+.today-column-primary.is-weather-expanded .today-rec-signal-row {
+  display: none;
+}
+.today-rec-signal-row:empty {
+  display: none;
+}
 
 .pull-refresh-indicator {
   position: absolute;
@@ -874,6 +895,13 @@ main {
   transition: transform .15s, box-shadow .15s;
   box-shadow: 0 10px 24px rgba(41,121,255,.22);
 }
+.geo-btn-icon {
+  display: inline-grid;
+  place-items: center;
+}
+.geo-btn-icon svg {
+  display: block;
+}
 .geo-btn:active { transform: scale(.95); box-shadow: 0 2px 6px rgba(41,121,255,.2); }
 .geo-btn.loading { box-shadow: 0 0 0 4px rgba(41,121,255,.14), 0 4px 12px rgba(41,121,255,.25); }
 .geo-btn.loading .geo-btn-icon { display: none; }
@@ -1320,20 +1348,34 @@ main {
   appearance: none;
   position: absolute;
   left: 50%;
-  bottom: 8px;
+  bottom: 1px;
   z-index: 2;
-  width: 34px;
-  height: 24px;
+  width: 48px;
+  height: 20px;
   border: 0;
   background: transparent;
   cursor: pointer;
   transform: translateX(-50%);
 }
+.weather-expand-toggle::after {
+  content: "Expand";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.72);
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
 .weather-expand-toggle::before {
   content: "";
   position: absolute;
   left: 50%;
-  top: 7px;
+  top: 9px;
   width: 6px;
   height: 6px;
   border-right: 1.8px solid rgba(255,255,255,.76);
@@ -1345,6 +1387,9 @@ main {
 .weather-hero-clickable.is-expanded .weather-expand-toggle::before {
   transform: translateX(-50%) rotate(225deg);
   opacity: .76;
+}
+.weather-hero-clickable.is-expanded .weather-expand-toggle::after {
+  content: "Collapse";
 }
 .weather-expand-toggle:focus-visible {
   outline: 2px solid rgba(255,255,255,.42);
@@ -1426,12 +1471,23 @@ main {
     0 5px 14px rgba(41,215,179,.16),
     inset 0 1px 0 rgba(255,255,255,.44);
   cursor: pointer;
+  transform-origin: 50% 50%;
+  animation: adjust-attention-nudge 4s ease-in-out .8s infinite;
   transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.today-adjust-btn:hover,
+.today-adjust-btn:focus-visible,
+.today-adjust-btn:active {
+  animation-play-state: paused;
 }
 .today-adjust-btn span {
   font-size: 12px;
   color: rgba(255,255,255,.92);
   filter: drop-shadow(0 2px 5px rgba(5,31,73,.18));
+}
+.today-adjust-btn:focus-visible {
+  outline: 3px solid rgba(41,121,255,.22);
+  outline-offset: 3px;
 }
 .today-adjust-btn:active {
   transform: scale(.97);
@@ -1440,6 +1496,31 @@ main {
     0 8px 18px rgba(18,98,208,.22),
     0 3px 10px rgba(41,215,179,.14),
     inset 0 1px 0 rgba(255,255,255,.42);
+}
+@keyframes adjust-attention-nudge {
+  0%, 84%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  86% {
+    transform: translateX(-2px) rotate(-1.5deg);
+  }
+  88% {
+    transform: translateX(2px) rotate(1.5deg);
+  }
+  90% {
+    transform: translateX(-1.5px) rotate(-1deg);
+  }
+  92% {
+    transform: translateX(1.5px) rotate(1deg);
+  }
+  94% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .today-adjust-btn {
+    animation: none;
+  }
 }
 .today-rec-content {
   padding: 0 14px 12px;
@@ -1997,8 +2078,90 @@ main {
   background: rgba(214,247,255,.72);
   border-color: rgba(52,166,214,.16);
 }
+.today-rec-logic-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.today-rec-logic-row .today-rec-meta-chips {
+  flex: 1 1 auto;
+  margin-top: 0;
+  min-width: 0;
+}
+.today-rec-logic-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(41,121,255,.14);
+  background: rgba(255,255,255,.88);
+  color: #17448f;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 8px 16px rgba(19,71,156,.08), inset 0 1px 0 rgba(255,255,255,.72);
+}
+.today-rec-logic-btn svg,
+.today-rec-logic-btn img {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
 .today-secondary-actions {
   display: grid;
+}
+.today-wardrobe-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 8px;
+  min-height: 38px;
+  padding: 6px 8px 6px 10px;
+  border-radius: 16px;
+  background: rgba(247,251,255,.78);
+  border: 1px solid rgba(18,98,208,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.74);
+}
+.today-wardrobe-strip-copy {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+.today-wardrobe-strip-copy strong {
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.18;
+  font-weight: 900;
+}
+.today-wardrobe-strip-copy span {
+  color: var(--text3);
+  font-size: 11.5px;
+  line-height: 1.22;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.today-wardrobe-strip-action {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(41,121,255,.14);
+  background:
+    radial-gradient(circle at 22% 20%, rgba(255,255,255,.44), transparent 30%),
+    linear-gradient(135deg, #2f7cff, #15c7ef 56%, #12d685);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 8px 16px rgba(18,98,208,.16);
+}
+.today-wardrobe-strip-empty {
+  background: rgba(255,255,255,.78);
 }
 .today-wardrobe-loop,
 .today-wardrobe-history {
@@ -2006,15 +2169,26 @@ main {
   gap: 10px;
   margin-top: 10px;
   padding: 12px;
-  border-radius: 24px;
-  background: rgba(255,255,255,.8);
-  border: 1px solid rgba(18,98,208,.1);
-  box-shadow: 0 14px 28px rgba(19,71,156,.08);
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(18,98,208,.08);
+  box-shadow: 0 10px 20px rgba(19,71,156,.06);
+}
+.today-wardrobe-loop {
+  padding-bottom: calc(12px + var(--safe-b) / 3);
+}
+.today-wardrobe-loop.is-starter {
+  background: rgba(247,250,255,.68);
 }
 .today-wardrobe-loop-summary,
 .today-wardrobe-history-head {
   display: grid;
   gap: 5px;
+}
+.today-wardrobe-loop-summary .today-cta-kicker,
+.today-wardrobe-history-head .today-cta-kicker {
+  display: block;
+  width: fit-content;
 }
 .today-wardrobe-loop-summary strong,
 .today-wardrobe-history-head strong,
@@ -2063,17 +2237,129 @@ main {
   display: grid;
   gap: 8px;
   padding: 11px;
-  border-radius: 18px;
+  border-radius: 14px;
   background: rgba(245,249,255,.7);
   border: 1px solid rgba(18,98,208,.08);
+}
+.today-wardrobe-history-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
 }
 .today-wardrobe-loop-primary {
   flex: 1 1 210px;
   min-height: 42px;
 }
 .today-wardrobe-history-item strong {
+  display: block;
   font-size: 13px;
   color: var(--text);
+}
+.today-saved-look-delete {
+  border: 0;
+  background: transparent;
+  color: #7f6680;
+  font-size: 12px;
+  font-weight: 800;
+  min-height: 32px;
+  padding: 0 4px 0 10px;
+}
+.saved-looks-dialog .dialog-inner {
+  width: min(440px, calc(100vw - var(--safe-l) - var(--safe-r) - 24px));
+  max-height: min(760px, calc(100dvh - var(--safe-t) - var(--safe-b) - 28px));
+  overflow: hidden;
+  padding: 16px 0 14px;
+}
+.saved-looks-dialog-head {
+  display: grid;
+  gap: 4px;
+  padding: 0 18px 12px;
+}
+.saved-looks-dialog-head h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.08;
+}
+.saved-looks-dialog-head p {
+  margin: 0;
+  color: var(--text3);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.saved-looks-dialog-body {
+  min-height: 330px;
+}
+.saved-looks-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 18px 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.saved-look-card {
+  flex: 0 0 min(342px, calc(100vw - var(--safe-l) - var(--safe-r) - 56px));
+  scroll-snap-align: center;
+  display: grid;
+  grid-template-rows: auto minmax(300px, 1fr);
+  gap: 10px;
+  padding: 12px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(239,247,255,.9));
+  border: 1px solid rgba(18,98,208,.1);
+  box-shadow: 0 16px 32px rgba(11,37,81,.1), inset 0 1px 0 rgba(255,255,255,.72);
+}
+.saved-look-card-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+.saved-look-card-head h3 {
+  margin: 3px 0 2px;
+  font-size: 17px;
+  line-height: 1.12;
+  color: var(--text);
+}
+.saved-look-card-head p {
+  margin: 0;
+  color: var(--text3);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.saved-look-card-delete {
+  border: 0;
+  background: transparent;
+  color: #7f6680;
+  font-size: 12px;
+  font-weight: 850;
+  min-height: 30px;
+  padding: 0 2px 0 8px;
+}
+.saved-look-card-collage,
+.saved-look-card-collage .today-rec-collage-wrap,
+.saved-look-card-collage .today-rec-collage {
+  min-height: 300px;
+  height: 100%;
+}
+.saved-look-card-collage .today-rec-collage {
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(235,245,255,.92), rgba(247,251,255,.72));
+}
+.saved-looks-empty-state {
+  display: grid;
+  gap: 8px;
+  margin: 0 18px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(247,251,255,.84);
+  border: 1px solid rgba(18,98,208,.08);
+  color: var(--text2);
+}
+.saved-looks-empty-state strong {
+  color: var(--text);
+  font-size: 16px;
 }
 .settings-diagnostics {
   display: grid;
@@ -3305,8 +3591,38 @@ main {
   gap: 8px;
 }
 .wardrobe-top-bar {
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
+}
+.wardrobe-saved-looks-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 48px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(41,121,255,.12);
+  background: rgba(255,255,255,.76);
+  color: #1c3f7c;
+  font-size: 12px;
+  font-weight: 850;
+  box-shadow: 0 8px 18px rgba(14,39,81,.08), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.wardrobe-saved-looks-btn strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(41,121,255,.12);
+  color: #1d5fd0;
+  font-size: 11px;
+}
+.wardrobe-saved-looks-btn.has-saved-looks strong {
+  background: linear-gradient(135deg, #2f7cff, #16c7ef 58%, #12d685);
+  color: #fff;
 }
 .wardrobe-top-copy {
   min-width: 0;
@@ -3325,7 +3641,7 @@ main {
   padding: 0;
   border: none;
   border-radius: 999px;
-  display: grid;
+  display: none;
   place-items: center;
   justify-content: center;
   align-items: center;
@@ -3338,6 +3654,9 @@ main {
     0 12px 24px rgba(41,121,255,.22),
     0 4px 10px rgba(18,50,94,.1),
     inset 0 1px 0 rgba(255,255,255,.22);
+}
+body[data-active-tab="tabWardrobe"] .btn-primary-sm.wardrobe-add-btn {
+  display: grid;
 }
 .wardrobe-add-btn-icon {
   display: inline-flex;
@@ -3381,20 +3700,75 @@ main {
   align-items: start;
 }
 .wardrobe-empty-state {
-  min-height: 260px;
+  min-height: 0;
   margin-top: 0;
+  padding: 20px 16px;
+  gap: 10px;
 }
 .wardrobe-empty-state {
   background:
     linear-gradient(180deg, rgba(255,255,255,.94), rgba(238,248,255,.88)),
     radial-gradient(circle at top, rgba(41,121,255,.14), transparent 44%);
 }
+.wardrobe-empty-state h3 {
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+}
+.wardrobe-empty-state p {
+  max-width: 31ch;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.wardrobe-empty-progress {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 4px;
+}
+.wardrobe-empty-slot {
+  min-width: 0;
+  min-height: 64px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: 1px dashed rgba(41,121,255,.22);
+  border-radius: 16px;
+  background: rgba(246,250,255,.86);
+  color: var(--text2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.74);
+}
+.wardrobe-empty-slot span {
+  color: var(--accent);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.wardrobe-empty-slot strong {
+  max-width: 100%;
+  color: var(--text);
+  font-size: 10px;
+  line-height: 1.08;
+  font-weight: 850;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .wardrobe-empty-guides {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 2px;
 }
 .wardrobe-empty-guide {
   display: inline-flex;
@@ -3416,9 +3790,29 @@ main {
   transform: scale(.98);
 }
 .wardrobe-empty-btn {
-  margin-top: 18px;
+  margin-top: 0;
   width: min(260px, 100%);
   justify-content: center;
+}
+.wardrobe-empty-actions {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.wardrobe-empty-secondary-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.wardrobe-empty-secondary-btn {
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 850;
 }
 
 /* ── Buttons ── */
@@ -7756,9 +8150,9 @@ textarea.text-input::placeholder {
   box-shadow: 0 18px 34px rgba(11,37,81,.1), inset 0 1px 0 rgba(255,255,255,.66);
 }
 .today-screen .today-rec-header {
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
-  padding: 7px 10px 0;
+  padding: 10px 12px 2px;
   color: var(--text);
 }
 .today-screen .today-rec-expand-hint {
@@ -7768,9 +8162,17 @@ textarea.text-input::placeholder {
 .today-screen .today-rec-header h2 {
   color: var(--text);
 }
+.today-screen .today-rec-header h2 {
+  font-size: 18px;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  font-weight: 900;
+}
 .today-screen .today-adjust-btn {
-  min-height: 31px;
-  padding-inline: 11px;
+  min-height: 38px;
+  padding-inline: 14px 15px;
+  gap: 7px;
+  font-size: 13px;
   background:
     radial-gradient(circle at 22% 18%, rgba(255,255,255,.4), transparent 28%),
     linear-gradient(135deg, #2f7cff 0%, #1aa8f2 48%, #42d7b3 100%);
@@ -7780,6 +8182,18 @@ textarea.text-input::placeholder {
     inset 0 1px 0 rgba(255,255,255,.4),
     0 10px 20px rgba(18,98,208,.2),
     0 4px 12px rgba(66,215,179,.14);
+}
+.today-screen .today-adjust-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-grid;
+  place-items: center;
+  color: rgba(255,255,255,.96);
+  filter: drop-shadow(0 2px 5px rgba(5,31,73,.2));
+}
+.today-screen .today-adjust-icon svg {
+  width: 15px;
+  height: 15px;
 }
 .today-screen .today-adjust-btn span {
   color: rgba(255,255,255,.92);
@@ -7795,6 +8209,13 @@ textarea.text-input::placeholder {
   flex-direction: column;
   min-height: 0;
   gap: 3px;
+}
+.today-screen .today-rec-logic-row {
+  flex: 0 0 auto;
+  padding: 0 2px;
+}
+.today-screen .today-rec-logic-row .today-rec-meta-chips {
+  display: none;
 }
 .today-screen .today-rec-meta-chips {
   flex: 0 0 22px;
@@ -7813,6 +8234,11 @@ textarea.text-input::placeholder {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.today-screen .today-rec-logic-btn {
+  min-height: 25px;
+  padding-inline: 8px;
+  font-size: 10px;
 }
 .today-screen .today-rec-hero {
   min-height: auto;
@@ -7860,9 +8286,10 @@ textarea.text-input::placeholder {
 }
 .today-screen .weather-hero {
   display: grid;
-  gap: 8px;
-  padding: 13px 15px;
-  border-radius: 26px;
+  gap: 5px;
+  min-height: 0;
+  padding: 2px 12px 8px;
+  border-radius: 22px;
   background:
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)),
     radial-gradient(circle at 84% 12%, rgba(255,255,255,.14), transparent 28%),
@@ -7874,19 +8301,54 @@ textarea.text-input::placeholder {
   transition: padding .28s ease, gap .28s ease, box-shadow .28s ease, transform .28s ease;
 }
 .today-screen .weather-hero.is-expanded {
-  gap: 9px;
-  padding: 12px;
+  align-self: stretch;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  align-content: start;
+  gap: 8px;
+  padding: 11px;
   box-shadow: 0 28px 58px rgba(18,55,108,.22), 0 8px 20px rgba(41,121,255,.16);
 }
 .today-screen .weather-hero.is-expanded .hero-temp {
-  font-size: 48px;
+  font-size: 43px;
 }
 .today-screen .weather-hero.is-expanded .weather-hero-headline {
-  font-size: 17px;
+  font-size: 15px;
   line-height: .98;
 }
 .today-screen .weather-hero.is-expanded .hero-feels {
+  font-size: 9px;
+}
+.today-screen .weather-hero.is-expanded .weather-hero-topline {
+  gap: 9px;
+}
+.today-screen .weather-hero.is-expanded .hero-main {
+  gap: 7px;
+}
+.today-screen .weather-hero.is-expanded .hero-temp-stack,
+.today-screen .weather-hero.is-expanded .hero-side {
+  gap: 5px;
+}
+.today-screen .weather-hero.is-expanded .hero-condition-icon {
+  width: 22px;
+  height: 22px;
+}
+.today-screen .weather-hero.is-expanded .hero-condition {
+  font-size: 12px;
+}
+.today-screen .weather-hero.is-expanded .hero-stats {
+  gap: 4px;
+}
+.today-screen .weather-hero.is-expanded .hero-stat {
+  padding: 6px 8px;
+  border-radius: 12px;
   font-size: 10px;
+}
+.today-screen .weather-hero:not(.is-expanded) .weather-hero-topline,
+.today-screen .weather-hero:not(.is-expanded) .hero-feels {
+  display: none;
+}
+.today-screen .weather-hero.is-expanded .weather-collapsed-timeline {
+  display: none;
 }
 .today-screen .weather-hero::after,
 .today-screen .weather-hero-sheen {
@@ -7900,8 +8362,13 @@ textarea.text-input::placeholder {
 }
 .today-screen .hero-main {
   display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr);
+  gap: 7px;
+  align-items: center;
+  margin-top: 5px;
+}
+.today-screen .weather-hero.is-expanded .hero-main {
   grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
-  gap: 8px;
   align-items: start;
 }
 .today-screen .hero-temp-stack {
@@ -7909,9 +8376,16 @@ textarea.text-input::placeholder {
   display: grid;
   gap: 3px;
 }
+.today-screen .weather-hero:not(.is-expanded) .hero-temp-stack {
+  display: grid;
+  grid-template-columns: auto minmax(76px, 1fr);
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 0;
+}
 .today-screen .hero-temp {
   min-width: 0;
-  font-size: 52px;
+  font-size: 36.5px;
   line-height: .9;
   color: #fff;
   -webkit-text-fill-color: #fff;
@@ -7924,10 +8398,24 @@ textarea.text-input::placeholder {
   line-height: 1.2;
   color: rgba(255,255,255,.84);
 }
+.today-screen .weather-hero:not(.is-expanded) .weather-hero-headline {
+  display: block;
+  max-width: 13ch;
+  font-size: 10px;
+  line-height: .98;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.today-screen .weather-hero:not(.is-expanded) .hero-temp-unit {
+  margin-top: 5px;
+  font-size: 16px;
+}
 .today-screen .hero-side {
   display: grid;
   align-content: start;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 .today-screen .hero-meta {
@@ -7936,19 +8424,19 @@ textarea.text-input::placeholder {
 .today-screen .hero-condition-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 .today-screen .hero-condition-icon {
-  width: 24px;
-  height: 24px;
+  width: 19px;
+  height: 19px;
   color: #fff;
   background: rgba(255,255,255,.16);
   box-shadow: none;
 }
 .today-screen .hero-condition {
   color: #fff;
-  font-size: 13px;
+  font-size: 10.5px;
   font-weight: 800;
   white-space: nowrap;
   overflow: hidden;
@@ -7957,29 +8445,32 @@ textarea.text-input::placeholder {
 .today-screen .hero-stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 5px;
+  gap: 4px;
   margin-left: 0;
+}
+.today-screen .weather-hero:not(.is-expanded) .hero-stat:nth-child(n+3) {
+  display: none;
 }
 .today-screen .hero-stat {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 5.25px;
   min-width: 0;
-  padding: 7px 9px;
-  border-radius: 13px;
+  padding: 5.25px 7.35px;
+  border-radius: 11.5px;
   background: rgba(255,255,255,.16);
   border: 1px solid rgba(255,255,255,.16);
   color: #fff;
-  font-size: 11px;
+  font-size: 9.5px;
   font-weight: 800;
 }
 .today-screen .hero-stat:not(:first-child) {
   display: flex;
 }
 .today-screen .hero-stat svg {
-  width: 12px;
-  height: 12px;
-  flex: 0 0 12px;
+  width: 9.5px;
+  height: 9.5px;
+  flex: 0 0 9.5px;
 }
 .today-screen .hero-stat span {
   min-width: 0;
@@ -7987,48 +8478,117 @@ textarea.text-input::placeholder {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.weather-collapsed-timeline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 5px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 1px 1px 0;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+.weather-collapsed-timeline:empty {
+  display: none;
+}
+.weather-collapsed-timeline::-webkit-scrollbar {
+  display: none;
+}
+.weather-collapsed-hour {
+  flex: 1 0 41px;
+  min-width: 41px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 4.2px;
+  border-radius: 11.5px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.13);
+  color: rgba(255,255,255,.82);
+}
+.weather-collapsed-hour.is-now {
+  background: rgba(255,255,255,.2);
+  color: #fff;
+}
+.weather-collapsed-hour-time,
+.weather-collapsed-hour span:last-child {
+  font-size: 7.5px;
+  line-height: 1;
+  font-weight: 850;
+  color: rgba(255,255,255,.68);
+}
+.weather-collapsed-hour-icon {
+  width: 11.5px;
+  height: 11.5px;
+  display: grid;
+  place-items: center;
+}
+.weather-collapsed-hour-icon svg {
+  width: 11.5px;
+  height: 11.5px;
+}
+.weather-collapsed-hour strong {
+  font-size: 9.5px;
+  line-height: 1;
+}
 .weather-expanded-panel {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-rows: 0fr;
+  display: block;
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(-6px);
-  transition: grid-template-rows .34s ease, opacity .24s ease, transform .34s ease;
+  transition: max-height .34s ease, opacity .24s ease, transform .34s ease;
 }
 .weather-hero.is-expanded .weather-expanded-panel {
-  grid-template-rows: 1fr;
+  max-height: none;
+  min-height: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
   opacity: 1;
   transform: translateY(0);
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: none;
+  scrollbar-width: none;
+  touch-action: auto;
+}
+.weather-hero.is-expanded .weather-expanded-panel::-webkit-scrollbar {
+  display: none;
 }
 .weather-expanded-inner {
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
   display: grid;
-  gap: 8px;
+  gap: 9px;
+  padding-bottom: 0;
 }
 .weather-expanded-section,
 .weather-expanded-outlook {
-  border-radius: 20px;
+  border-radius: 18px;
   background: rgba(255,255,255,.12);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
 }
 .weather-expanded-section {
   display: grid;
-  gap: 8px;
+  gap: 7px;
   padding: 9px;
 }
 .weather-expanded-section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 9px;
 }
 .weather-expanded-section-head p,
 .weather-expanded-muted {
   color: rgba(255,255,255,.68);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 }
 .weather-expanded-timeline {
@@ -8050,7 +8610,7 @@ textarea.text-input::placeholder {
   justify-items: center;
   gap: 4px;
   padding: 7px 6px;
-  border-radius: 15px;
+  border-radius: 14px;
   background: rgba(255,255,255,.1);
   border: 1px solid rgba(255,255,255,.12);
   color: rgba(255,255,255,.82);
@@ -8061,20 +8621,20 @@ textarea.text-input::placeholder {
 }
 .weather-expanded-hour-time,
 .weather-expanded-hour-meta {
-  font-size: 10px;
+  font-size: 9px;
   line-height: 1;
   font-weight: 850;
   color: rgba(255,255,255,.66);
 }
 .weather-expanded-hour-icon {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   display: grid;
   place-items: center;
 }
 .weather-expanded-hour-icon svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 .weather-expanded-hour strong {
   font-size: 13px;
@@ -8082,13 +8642,13 @@ textarea.text-input::placeholder {
 }
 .weather-expanded-outlook {
   display: grid;
-  gap: 9px;
+  gap: 8px;
   padding: 11px;
 }
 .weather-expanded-outlook > strong {
   display: block;
   font-size: 14px;
-  line-height: 1.15;
+  line-height: 1.16;
   letter-spacing: -.02em;
 }
 .weather-expanded-outlook-list {
@@ -8097,35 +8657,39 @@ textarea.text-input::placeholder {
 }
 .weather-expanded-outlook-row {
   display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
-  column-gap: 10px;
-  row-gap: 3px;
+  grid-template-columns: 54px minmax(0, 1fr);
+  column-gap: 9px;
+  row-gap: 4px;
   align-items: start;
   padding: 9px;
-  border-radius: 16px;
+  border-radius: 15px;
   background: rgba(255,255,255,.09);
   border: 1px solid rgba(255,255,255,.1);
 }
 .weather-expanded-outlook-row div {
   display: grid;
-  gap: 3px;
+  gap: 2px;
 }
 .weather-expanded-outlook-row span,
 .weather-expanded-outlook-row small {
   color: rgba(255,255,255,.62);
-  font-size: 10px;
+  font-size: 9px;
   line-height: 1;
   font-weight: 850;
 }
 .weather-expanded-outlook-row div strong {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1;
 }
 .weather-expanded-outlook-row p {
   margin: 0;
   color: rgba(255,255,255,.83);
-  font-size: 11.5px;
+  font-size: 11px;
   line-height: 1.28;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .weather-expanded-outlook-row small {
   grid-column: 2;
@@ -8136,10 +8700,17 @@ textarea.text-input::placeholder {
   overflow: hidden;
 }
 .today-rec-card-inline.is-weather-collapsed {
+  align-self: start !important;
+  height: 0 !important;
+  min-height: 0 !important;
   max-height: 0;
   opacity: 0;
   transform: translateY(-8px) scale(.985);
-  margin-top: -8px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
   pointer-events: none;
 }
 .today-screen .today-rec-collage {

@@ -8,7 +8,7 @@ Phase 6 starts with instrumentation inside the app before we add a heavier analy
 
 ## What Is Live Now
 
-The app now tracks a first-pass launch funnel in `www/app.js` and sends events through the existing GoatCounter hook while also keeping a short local event history for debugging.
+The app now tracks a launch funnel in `www/app.js` and sends events through a small analytics abstraction: local diagnostics always, plus GoatCounter and PostHog when configured and analytics consent is enabled.
 
 Current event coverage includes:
 
@@ -36,6 +36,10 @@ Current event coverage includes:
 - `first_wardrobe_item_added`
 - `five_wardrobe_items_added`
 - `saved_look_added`
+- `saved_look_limit_hit`
+- `server_limit_hit`
+- `subscription_snapshot_synced`
+- `wardrobe_payoff_viewed`
 - `paywall_viewed`
 - `paywall_dismissed`
 - `paywall_cta_tapped`
@@ -72,20 +76,19 @@ This is enough to answer the first launch questions:
 
 This is still a baseline, not the final analytics stack.
 
-- GoatCounter is still the main live event destination.
-- Events are good for funnel counting, not deep cohort analysis.
-- There is no dashboard layer yet for D1, D7, churn, or experiment analysis.
-- There is no server-side warehouse or user-level subscription reporting yet.
+- GoatCounter remains the lightweight baseline destination.
+- PostHog is the launch-grade funnel destination when `POSTHOG_KEY` is configured and product analytics consent is enabled.
+- Dashboard definitions for D1, D7, churn, and experiments still need to be maintained outside the repo.
+- Server-side subscription state is synced from signed StoreKit transactions verified by the backend.
 
 ## Next Analytics Step
 
-After this baseline, the next upgrade should be a real product analytics platform such as PostHog or Amplitude.
+After this baseline, the next upgrade should be dashboard and cohort maintenance inside PostHog.
 
 When that lands, map the current event names forward instead of renaming them casually. Keeping the naming stable will make launch learning much easier.
 
 ## Recommended Follow-Up
 
-1. Add an analytics provider abstraction so GoatCounter and a future analytics SDK can both receive the same event payloads.
-2. Add a small internal debug surface in Settings that shows the most recent tracked events on-device.
-3. Add recommendation quality feedback with optional negative text input.
-4. Build a simple launch dashboard for first recommendation rate, first wardrobe item rate, 5-item completion, paywall view to purchase start, purchase start to paid, and D1/D7 retention.
+1. Build a simple launch dashboard for first recommendation rate, first wardrobe item rate, 5-item completion, paywall view to purchase start, purchase start to paid, and D1/D7 retention.
+2. Add recommendation quality feedback with optional negative text input.
+3. Add experiment naming conventions before testing paywall variants.

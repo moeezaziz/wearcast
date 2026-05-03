@@ -10,8 +10,17 @@ import cors from "cors";
 import { Jimp } from "jimp";
 import * as Sentry from "@sentry/node";
 import dbPool, { initDB } from "./db.js";
+import { optionalAuthStrict } from "./auth.js";
 import authRoutes from "./routes/auth.js";
 import wardrobeRoutes from "./routes/wardrobe.js";
+import savedLooksRoutes from "./routes/savedLooks.js";
+import subscriptionRoutes from "./routes/subscription.js";
+import { FREE_PHOTO_SCANS_PER_WINDOW, countRecentPhotoScans, limitError, recordPhotoScan, userHasPremiumAccess } from "./premium.js";
+import {
+  buildLlmSelectedRecommendationAssetMatches,
+  buildRobustRecommendationImageMatches,
+  validateStockCatalogIntegrity,
+} from "./assetMatcher.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STOCK_IMAGE_ASSET_ROOT = join(__dirname, "..", "www");
@@ -150,6 +159,8 @@ app.get("/app-config.js", (req, res) => {
     sentryBrowserDsn: process.env.SENTRY_BROWSER_DSN || "",
     sentryEnvironment: SENTRY_ENVIRONMENT,
     sentryRelease: SENTRY_RELEASE,
+    posthogKey: process.env.POSTHOG_KEY || "",
+    posthogHost: process.env.POSTHOG_HOST || "https://app.posthog.com",
   })};`);
 });
 
@@ -164,7 +175,7 @@ const OPENROUTER_REASONING_EFFORT = process.env.OPENROUTER_REASONING_EFFORT || "
 const STOCK_GAP_ADMIN_TOKEN = process.env.STOCK_GAP_ADMIN_TOKEN || "";
 const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
 const RECOMMENDATION_CACHE_TTL_MS = 2 * 60 * 1000;
-const RECOMMENDATION_COPY_VERSION = 28;
+const RECOMMENDATION_COPY_VERSION = 29;
 const DEBUG_LOGS = String(process.env.DEBUG || "").toLowerCase() === "true";
 const weatherCache = new Map();
 const recommendationCache = new Map();
@@ -197,6 +208,16 @@ const STOCK_IMAGE_CATALOG = {
     path: "assets/recommendation-stock/top-white-button-up-shirt-studio.jpg",
     description: "white button-up shirt in soft studio light",
     keywords: ["button-up", "button down", "button-up shirt", "button-down", "oxford", "oxford shirt", "dress shirt", "collared shirt", "white shirt", "long-sleeve shirt", "polo shirt", "linen shirt"],
+  },
+  top_blue_oxford_shirt_cotton_v1: {
+    slot: "top",
+    gender: "unisex",
+    path: "assets/recommendation-stock/top-blue-oxford-shirt-cotton-studio.png",
+    description: "light blue cotton Oxford button-down shirt in a clean studio product shot",
+    keywords: ["blue oxford shirt", "light blue oxford shirt", "blue cotton shirt", "blue button-down shirt", "blue button-up shirt", "oxford shirt", "collared shirt", "dress shirt"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
   },
   top_linen_shirt_warm: {
     slot: "top",
@@ -233,6 +254,26 @@ const STOCK_IMAGE_CATALOG = {
     description: "cream knit sweater in a studio product shot",
     keywords: ["cream sweater", "cream knit sweater", "sweater", "knit", "jumper", "pullover", "crewneck", "thermal", "base layer", "thermal shirt", "long-sleeve thermal shirt"],
   },
+  top_charcoal_thermal_base_layer_wool_v1: {
+    slot: "top",
+    gender: "unisex",
+    path: "assets/recommendation-stock/top-charcoal-thermal-base-layer-wool-studio.png",
+    description: "charcoal thermal merino-style base layer in a clean studio product shot",
+    keywords: ["charcoal thermal base layer", "thermal base layer", "thermal shirt", "base layer", "merino wool base layer", "merino base layer", "wool base layer", "thermal long-sleeve base", "thermal undershirt"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
+  top_charcoal_crewneck_sweater_knit_v1: {
+    slot: "top",
+    gender: "unisex",
+    path: "assets/recommendation-stock/top-charcoal-crewneck-sweater-knit-studio.png",
+    description: "charcoal gray crew-neck knit sweater in a clean studio product shot",
+    keywords: ["charcoal sweater", "gray sweater", "grey sweater", "charcoal knit sweater", "crew-neck sweater", "crewneck sweater", "knit sweater", "wool sweater", "jumper", "pullover"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
   top_white_tank_top_studio: {
     slot: "top",
     gender: "unisex",
@@ -247,6 +288,16 @@ const STOCK_IMAGE_CATALOG = {
     description: "navy denim jeans in a studio product shot",
     keywords: ["jeans", "denim", "pants", "trousers", "bottoms", "warm jeans"],
     fallback: true,
+  },
+  bottom_dark_indigo_jeans_denim_v1: {
+    slot: "bottom",
+    gender: "unisex",
+    path: "assets/recommendation-stock/bottom-dark-indigo-jeans-denim-studio.png",
+    description: "dark indigo straight-leg jeans in a clean studio product shot",
+    keywords: ["dark jeans", "dark denim", "dark indigo jeans", "indigo jeans", "navy jeans", "black jeans", "straight-leg jeans", "denim jeans", "jeans"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
   },
   bottom_blue_denim_shorts_studio: {
     slot: "bottom",
@@ -317,7 +368,7 @@ const STOCK_IMAGE_CATALOG = {
   bottom_cargo_pants_studio: {
     slot: "bottom",
     gender: "unisex",
-    path: "assets/recommendation-stock/bottom-cargo-pants-studio.jpg",
+    path: "assets/recommendation-stock/bottom-gray-joggers-tech-studio.jpg",
     description: "cargo-style pants in a clean fashion shot",
     keywords: ["cargo pants", "water-resistant pants", "insulated pants", "fleece-lined pants", "rain pants", "utility pants"],
   },
@@ -380,6 +431,26 @@ const STOCK_IMAGE_CATALOG = {
     description: "charcoal overshirt jacket over a knit top",
     keywords: ["overshirt", "shirt jacket", "charcoal overshirt", "light jacket", "casual jacket", "overshirt jacket"],
   },
+  outer_olive_lightweight_overshirt_cotton_v1: {
+    slot: "outer",
+    gender: "unisex",
+    path: "assets/recommendation-stock/outer-olive-lightweight-overshirt-cotton-studio.png",
+    description: "olive lightweight cotton overshirt in a clean studio product shot",
+    keywords: ["olive overshirt", "green overshirt", "lightweight overshirt", "cotton overshirt", "shirt jacket", "shacket", "olive shirt jacket", "light jacket"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
+  outer_charcoal_fleece_jacket_fleece_v1: {
+    slot: "outer",
+    gender: "unisex",
+    path: "assets/recommendation-stock/outer-charcoal-fleece-jacket-fleece-studio.png",
+    description: "charcoal fleece zip jacket in a clean studio product shot",
+    keywords: ["charcoal fleece jacket", "gray fleece jacket", "grey fleece jacket", "fleece jacket", "fleece zip jacket", "zip fleece", "warm fleece jacket", "lightweight fleece jacket", "sherpa fleece"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
   outer_black_light_overshirt_street: {
     slot: "outer",
     gender: "unisex",
@@ -404,6 +475,16 @@ const STOCK_IMAGE_CATALOG = {
     description: "heavy winter coat detail in a cold-weather fashion shot",
     keywords: ["waterproof parka", "parka", "winter coat", "waterproof winter coat", "insulated jacket", "insulated coat", "wool overcoat", "overcoat", "long coat"],
   },
+  outer_camel_wool_coat_wool_v1: {
+    slot: "outer",
+    gender: "unisex",
+    path: "assets/recommendation-stock/outer-camel-wool-coat-wool-studio.png",
+    description: "camel tan wool coat in a clean studio product shot",
+    keywords: ["camel wool coat", "camel coat", "tan wool coat", "wool coat", "wool overcoat", "overcoat", "long coat", "classic coat"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
   outer_white_overcoat_studio: {
     slot: "outer",
     gender: "unisex",
@@ -418,6 +499,16 @@ const STOCK_IMAGE_CATALOG = {
     description: "minimal black-and-white sneakers in studio lighting",
     keywords: ["sneakers", "trainers", "tennis shoes", "casual shoes", "white sneakers", "casual sneakers", "low-top sneakers", "white leather sneakers", "supportive sneakers", "canvas sneakers"],
     fallback: true,
+  },
+  shoes_white_canvas_sneakers_canvas_v1: {
+    slot: "shoes",
+    gender: "unisex",
+    path: "assets/recommendation-stock/shoes-white-canvas-sneakers-canvas-studio.png",
+    description: "white low-top canvas sneakers in a clean studio product shot",
+    keywords: ["white canvas sneakers", "canvas sneakers", "white sneakers", "casual sneakers", "low-top sneakers", "tennis shoes", "trainers", "canvas trainers", "rubber sole sneakers"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
   },
   shoes_black_white_sneakers_studio: {
     slot: "shoes",
@@ -453,7 +544,7 @@ const STOCK_IMAGE_CATALOG = {
   shoes_black_loafers_studio: {
     slot: "shoes",
     gender: "unisex",
-    path: "assets/recommendation-stock/shoes-black-loafers-studio.jpg",
+    path: "assets/recommendation-stock/shoes-black-dress-loafers-studio.jpg",
     description: "black loafers in a studio product shot",
     keywords: ["loafers", "dress loafers", "smart loafers", "leather loafers"],
   },
@@ -608,6 +699,16 @@ const STOCK_IMAGE_CATALOG = {
     license: "Project-generated asset",
     attribution: "WearCast generated studio asset",
     fallback: true,
+  },
+  accessory_charcoal_baseball_cap_cotton_v1: {
+    slot: "accessory",
+    gender: "unisex",
+    path: "assets/recommendation-stock/accessory-charcoal-baseball-cap-cotton-studio.png",
+    description: "charcoal cotton baseball cap in a clean studio product shot",
+    keywords: ["charcoal baseball cap", "charcoal cap", "gray baseball cap", "grey baseball cap", "dark cap", "cotton cap", "baseball cap", "dad cap", "compact cap", "sports cap"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
   },
   accessory_black_backpack_nylon_v1: {
     slot: "accessory",
@@ -907,6 +1008,16 @@ const STOCK_IMAGE_CATALOG = {
     // attribution: "WearCast generated studio asset"
     // source: https://commons.wikimedia.org/wiki/File:Trans_Mexican_Volcanic_Belt_extension.png
   },
+  accessory_tan_canvas_belt_canvas_v1: {
+    slot: "accessory",
+    gender: "unisex",
+    path: "assets/recommendation-stock/accessory-tan-canvas-belt-canvas-studio.png",
+    description: "tan canvas web belt in a clean studio product shot",
+    keywords: ["tan canvas belt", "canvas belt", "web belt", "tan belt", "casual belt", "fabric belt", "belt"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
+  },
   accessory_black_gloves_cotton_v1: {
     slot: "accessory",
     gender: "unisex",
@@ -1016,6 +1127,16 @@ const STOCK_IMAGE_CATALOG = {
     license: "Project-generated asset",
     // attribution: "WearCast generated studio asset"
     // source: https://commons.wikimedia.org/wiki/File:Scarf_(AM_1955.16.2-4).jpg
+  },
+  accessory_cream_lightweight_scarf_linen_v1: {
+    slot: "accessory",
+    gender: "unisex",
+    path: "assets/recommendation-stock/accessory-cream-lightweight-scarf-linen-studio.png",
+    description: "cream lightweight linen scarf in a clean studio product shot",
+    keywords: ["cream lightweight scarf", "lightweight scarf", "linen scarf", "cream scarf", "light scarf", "neck scarf", "scarf"],
+    source: "generated",
+    license: "Project-generated asset",
+    attribution: "WearCast generated studio asset",
   },
   accessory_black_sun_hat_cotton_v1: {
     slot: "accessory",
@@ -5166,6 +5287,11 @@ const STOCK_IMAGE_CATALOG = {
   },
 };;
 
+validateStockCatalogIntegrity(STOCK_IMAGE_CATALOG, {
+  assetRoot: STOCK_IMAGE_ASSET_ROOT,
+  log: (message, metadata) => logApiEvent("warn", "stock_catalog_integrity", { message, ...(metadata || {}) }),
+});
+
 function isUsableStockImageCatalogEntry(entry = {}) {
   const imagePath = String(entry?.path || "");
   if (!imagePath) return false;
@@ -6899,6 +7025,7 @@ function normalizeRecommendationResponse(parsed) {
   const itemDetails = normalizeRecommendationItemDetails(parsed?.itemDetails);
   return {
     outfit,
+    savedLookCaption: normalizeSavedLookCaption(parsed?.savedLookCaption, outfit),
     outfitImages: buildRecommendationImageMatches(outfit, null, { itemDetails }),
     slotReasons,
     itemDetails,
@@ -6908,6 +7035,31 @@ function normalizeRecommendationResponse(parsed) {
     missingItems: normalizeList(parsed?.missingItems, { limit: 1 }),
     outlook: normalizeOutlook(parsed?.outlook),
   };
+}
+
+function normalizeSavedLookCaption(value, outfit = {}) {
+  const cleaned = cleanInlineText(value)
+    .replace(/[.!?]+$/g, "")
+    .replace(/\s+[—-]\s+.*$/g, "")
+    .trim();
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  if (words.length && words.length < 5 && cleaned.length <= 48) return cleaned;
+
+  const outfitText = [
+    outfit.outer,
+    outfit.top,
+    outfit.bottom,
+    outfit.shoes,
+    Array.isArray(outfit.accessories) ? outfit.accessories[0] : outfit.accessories,
+  ].map((item) => cleanInlineText(item).toLowerCase()).join(" ");
+  const layer = /jacket|coat|overshirt|cardigan|hoodie|fleece|parka/.test(outfitText) ? "Layered" : "Easy";
+  const base =
+    /jeans|denim/.test(outfitText) ? "Denim" :
+    /chino|trouser|pant/.test(outfitText) ? "Everyday" :
+    /dress|skirt/.test(outfitText) ? "Polished" :
+    /short|linen|tee|t-shirt/.test(outfitText) ? "Light" :
+    "Casual";
+  return `${layer} ${base} Look`;
 }
 
 function normalizeOutlook(raw) {
@@ -6972,6 +7124,7 @@ function ensureRecommendationShape(response, weather = {}, preferences = {}, war
   return {
     ...response,
     outfit,
+    savedLookCaption: normalizeSavedLookCaption(response?.savedLookCaption, outfit),
     slotReasons,
     itemDetails,
     outfitImages: buildRecommendationImageMatches(outfit, null, {
@@ -8034,6 +8187,96 @@ function detectWardrobeUsage(response = {}, wardrobeAnalysis = {}) {
   };
 }
 
+function getOutfitUsageEntries(outfit = {}) {
+  const accessories = Array.isArray(outfit?.accessories)
+    ? outfit.accessories
+    : [outfit?.accessories].filter(Boolean);
+  return [
+    ["top", "Top", outfit?.top],
+    ["bottom", "Bottom", outfit?.bottom],
+    ["outer", "Outer", outfit?.outer],
+    ["shoes", "Shoes", outfit?.shoes],
+    ...accessories.slice(0, 1).map((item, index) => [`accessory-${index}`, "Accessory", item]),
+  ]
+    .map(([key, slot, value]) => ({ key, slot, value: cleanInlineText(value) }))
+    .filter((entry) => entry.value);
+}
+
+function buildWardrobeUsageFromImageMatches(response = {}, outfitImages = {}, wardrobeAnalysis = {}, fallbackUsage = {}) {
+  const entries = getOutfitUsageEntries(response?.outfit || {});
+  const candidatesById = new Map(
+    (wardrobeAnalysis?.candidates || [])
+      .filter((item) => item?.id != null)
+      .map((item) => [String(item.id), item])
+  );
+  const matchedItems = [];
+  const missingItems = [];
+
+  for (const entry of entries) {
+    const slotKey = entry.key.startsWith("accessory") ? "accessory" : entry.key;
+    const match = outfitImages?.[entry.key] || outfitImages?.[slotKey] || null;
+    if (match?.source === "wardrobe" && match?.itemId != null) {
+      const candidate = candidatesById.get(String(match.itemId)) || null;
+      matchedItems.push({
+        id: match.itemId,
+        name: cleanInlineText(match.itemName || candidate?.name || entry.value),
+        slot: cleanInlineText(candidate?.slot || slotKey),
+        recommendedItem: entry.value,
+        color: cleanInlineText(match.color || candidate?.color),
+        material: cleanInlineText(match.material || candidate?.material),
+        confidence: Number(match.confidence || 0),
+        matchQuality: cleanInlineText(match.matchQuality),
+      });
+    } else {
+      missingItems.push({
+        slot: entry.slot,
+        item: entry.value,
+      });
+    }
+  }
+
+  const matchedCount = matchedItems.length;
+  const totalSlots = entries.length;
+  const coverage = totalSlots ? Math.round((matchedCount / totalSlots) * 100) : 0;
+  const fallbackSkipped = Array.isArray(fallbackUsage?.skippedRecommended) ? fallbackUsage.skippedRecommended : [];
+  return {
+    usedCount: matchedCount,
+    used: matchedItems,
+    matchedCount,
+    totalSlots,
+    coverage,
+    matchedItems,
+    missingItems,
+    skippedRecommended: fallbackSkipped.slice(0, 5),
+  };
+}
+
+function buildRecommendationPremiumPreview(wardrobeUsage = {}, response = {}) {
+  const matchedCount = Number(wardrobeUsage?.matchedCount || wardrobeUsage?.usedCount || 0);
+  const totalSlots = Number(wardrobeUsage?.totalSlots || 0);
+  const savedLookCaption = cleanInlineText(response?.savedLookCaption);
+  if (matchedCount > 0) {
+    return {
+      headline: matchedCount >= 3
+        ? "Your closet is shaping this look"
+        : "WearCast found pieces you own",
+      bullets: [
+        `${matchedCount} of ${totalSlots || 5} pieces matched from your wardrobe.`,
+        "Premium keeps using your full closet, synced saved looks, and unlimited scans.",
+        savedLookCaption ? `Save this as "${savedLookCaption}" for outfit memory.` : "Save the look to build outfit memory.",
+      ].filter(Boolean),
+    };
+  }
+  return {
+    headline: "Build a starter closet",
+    bullets: [
+      "Add a few staples so recommendations can use clothes you actually own.",
+      "Free includes the first wardrobe-powered payoff before premium prompts.",
+      "Premium unlocks full closet, unlimited scans, synced saved looks, and better closet-powered recommendations.",
+    ],
+  };
+}
+
 function buildWardrobePenaltyRules(filteredWardrobe, originalWardrobe, preferences = {}, weather = {}) {
   const eligibleCount = Array.isArray(filteredWardrobe) ? filteredWardrobe.length : 0;
   const totalCount = Array.isArray(originalWardrobe) ? originalWardrobe.length : 0;
@@ -8337,6 +8580,7 @@ ${archetypeRevisionRule}
 - Return JSON only.
 
 {
+  "savedLookCaption": "Short non-weather outfit caption under 5 words",
   "outfit": {
     "top": "short item name",
     "bottom": "short item name",
@@ -8430,6 +8674,7 @@ Non-negotiable rules:
 - Return JSON only using the same schema.
 
 {
+  "savedLookCaption": "Short non-weather outfit caption under 5 words",
   "outfit": {
     "top": "short item name",
     "bottom": "short item name",
@@ -8482,6 +8727,7 @@ async function finalizeRecommendation(response, weather, preferences, location, 
   // never has to fall back to rule-based copy just because the gate fired.
   const preservedOutlook = normalized.outlook || null;
   const preservedDetailsOverview = normalized.detailsOverview || null;
+  const preservedSavedLookCaption = normalized.savedLookCaption || "";
   const preservedReasoning = typeof normalized.reasoning === "string" ? normalized.reasoning : "";
   let quality = validateRecommendationQuality(normalized, weather, preferences);
   const initialQualityIssues = quality.issues || [];
@@ -8518,10 +8764,10 @@ async function finalizeRecommendation(response, weather, preferences, location, 
   }
   if (preservedOutlook && !normalized.outlook) normalized.outlook = preservedOutlook;
   if (preservedDetailsOverview && !normalized.detailsOverview) normalized.detailsOverview = preservedDetailsOverview;
+  if (preservedSavedLookCaption && !normalized.savedLookCaption) normalized.savedLookCaption = preservedSavedLookCaption;
   if (preservedReasoning && !normalized.reasoning) normalized.reasoning = preservedReasoning;
 
-  const wardrobeUsage = detectWardrobeUsage(normalized, wardrobeAnalysis || { candidates: [] });
-  const trustSignals = buildRecommendationTrustSignals(normalized, weather, preferences, wardrobeUsage);
+  const detectedWardrobeUsage = detectWardrobeUsage(normalized, wardrobeAnalysis || { candidates: [] });
   const wardrobeItemsForAssets = Array.isArray(assetWardrobeItems) ? assetWardrobeItems : eligibleWardrobeItems;
   const requestedItemDetails = normalized.itemDetails;
   const outfitImages = await buildRecommendationAssetMatches(normalized.outfit, wardrobeItemsForAssets, null, {
@@ -8530,15 +8776,29 @@ async function finalizeRecommendation(response, weather, preferences, location, 
     profileBand: deriveRecommendationProfileBand(preferences, weather),
     itemDetails: requestedItemDetails,
   });
+  const wardrobeBound = bindWardrobeMatchesToRecommendation(normalized, outfitImages);
+  const wardrobeUsage = buildWardrobeUsageFromImageMatches(wardrobeBound, outfitImages, wardrobeAnalysis || { candidates: [] }, detectedWardrobeUsage);
+  const trustSignals = buildRecommendationTrustSignals(wardrobeBound, weather, preferences, wardrobeUsage);
   normalized = {
-    ...normalized,
+    ...wardrobeBound,
     recommendationSource,
     fallbackReason,
-    itemDetails: reconcileItemDetailsWithImageMatches(requestedItemDetails, outfitImages),
+    itemDetails: reconcileItemDetailsWithImageMatches(wardrobeBound.itemDetails, outfitImages),
     outfitImages,
     weatherProfile: classifyWeatherProfile(weather),
     wardrobeAnalysis: wardrobeAnalysis ? { ...wardrobeAnalysis, usage: wardrobeUsage } : null,
-    quality,
+    wardrobeUsage: {
+      matchedCount: wardrobeUsage.matchedCount,
+      totalSlots: wardrobeUsage.totalSlots,
+      coverage: wardrobeUsage.coverage,
+      matchedItems: wardrobeUsage.matchedItems,
+      missingItems: wardrobeUsage.missingItems,
+    },
+    premiumPreview: buildRecommendationPremiumPreview(wardrobeUsage, wardrobeBound),
+    quality: {
+      status: quality.ok ? (quality.warningCount ? "warning" : "ok") : "fallback",
+      ...quality,
+    },
     initialQualityIssues,
     trustSignals,
   };
@@ -8693,10 +8953,16 @@ function scoreCatalogMatch(text, entry, key = "", context = {}) {
   const slot = cleanInlineText(entry?.slot);
   const wantedSubtype = inferItemSubtype(text, slot);
   const entrySubtype = getStockItemSubtype(slot, key, entry);
-  if (slot === "accessory" && wantedSubtype && entrySubtype && wantedSubtype !== entrySubtype) return -80;
-  if ((slot === "shoes" || slot === "bottom") && wantedSubtype && entrySubtype && wantedSubtype !== entrySubtype) return -70;
+  const descriptorScore = scoreAssetDescriptorMatch(
+    buildRequestedAssetDescriptor(slot, text, context),
+    buildStockAssetDescriptor(key, entry),
+    { candidateText: `${key} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}` }
+  );
+  if (descriptorScore.rejected) return -120;
+  if (slot === "accessory" && wantedSubtype && entrySubtype && wantedSubtype !== entrySubtype && !areStockSubtypesCompatible(slot, wantedSubtype, entrySubtype)) return -80;
+  if ((slot === "shoes" || slot === "bottom") && wantedSubtype && entrySubtype && wantedSubtype !== entrySubtype && !areStockSubtypesCompatible(slot, wantedSubtype, entrySubtype)) return -70;
   const textTokens = normalized.split(" ").filter((token) => token.length > 2);
-  let score = 0;
+  let score = descriptorScore.score;
   for (const keyword of entry.keywords) {
     const normalizedKeyword = normalizeMatchText(keyword);
     if (!normalizedKeyword) continue;
@@ -8728,6 +8994,7 @@ function scoreCatalogMatch(text, entry, key = "", context = {}) {
   if (wantedSubtype && entrySubtype && wantedSubtype === entrySubtype) score += 20;
   else if (wantedSubtype && entrySubtype && areStockSubtypesCompatible(slot, wantedSubtype, entrySubtype)) score += 8;
   if ((slot === "top" || slot === "outer") && wantedSubtype && entrySubtype && !areStockSubtypesCompatible(slot, wantedSubtype, entrySubtype)) score -= 36;
+  score += scoreStockVisualMatch(stockImageVisualCompatibility(slot, text, key, entry, context));
   score += scoreAestheticContext(text, entry, key, context).score;
   return score;
 }
@@ -8825,6 +9092,174 @@ function inferItemSubtype(text = "", slot = "") {
   return "";
 }
 
+function assetFamilyForSubtype(slot = "", subtype = "") {
+  const normalizedSlot = normalizeWardrobeSlot(slot) || cleanInlineText(slot).toLowerCase();
+  const value = cleanInlineText(subtype).toLowerCase();
+  if (!value) return "";
+  if (normalizedSlot === "accessory") {
+    if (["hat", "beanie", "sun-hat", "baseball-cap"].includes(value)) return "hat";
+    if (["watch"].includes(value)) return "watch";
+    if (["bag"].includes(value)) return "bag";
+    if (["scarf"].includes(value)) return "scarf";
+    if (["gloves"].includes(value)) return "gloves";
+    if (["sunglasses"].includes(value)) return "eyewear";
+    if (["umbrella"].includes(value)) return "umbrella";
+    if (["belt"].includes(value)) return "belt";
+  }
+  if (normalizedSlot === "shoes") {
+    if (["sneakers", "runners"].includes(value)) return "sneakers";
+    if (["dress-shoes"].includes(value)) return "dress-shoes";
+    if (["boots"].includes(value)) return "boots";
+    if (["sandals"].includes(value)) return "sandals";
+  }
+  if (normalizedSlot === "bottom") {
+    if (["jeans"].includes(value)) return "denim-bottom";
+    if (["chinos", "trousers"].includes(value)) return "woven-bottom";
+    return value;
+  }
+  if (normalizedSlot === "top") {
+    if (["sweater", "knit", "knit-tee", "thermal", "turtleneck", "cardigan"].includes(value)) return "knit-top";
+    if (["shirt", "polo", "tee", "tank"].includes(value)) return "shirt-top";
+    return value;
+  }
+  if (normalizedSlot === "outer") {
+    if (["fleece", "hoodie", "cardigan"].includes(value)) return "soft-outer";
+    if (["shell", "parka", "coat", "jacket", "field-jacket", "bomber", "windbreaker"].includes(value)) return "outerwear";
+    return value;
+  }
+  return value;
+}
+
+function assetSlotsCompatibleForMatch(requestSlot = "", candidateSlot = "", requestText = "", candidateText = "") {
+  const wantedSlot = normalizeWardrobeSlot(requestSlot) || cleanInlineText(requestSlot).toLowerCase();
+  const itemSlot = normalizeWardrobeSlot(candidateSlot) || cleanInlineText(candidateSlot).toLowerCase();
+  if (!wantedSlot || !itemSlot) return false;
+  if (wantedSlot === itemSlot) return true;
+  const text = `${requestText} ${candidateText}`.toLowerCase();
+  return (
+    ((wantedSlot === "outer" && itemSlot === "top") || (wantedSlot === "top" && itemSlot === "outer"))
+    && /\b(hoodie|sweater|jumper|cardigan|overshirt|shacket|shirt jacket|jacket|fleece)\b/.test(text)
+  );
+}
+
+function buildRequestedAssetDescriptor(slot = "", itemName = "", context = {}) {
+  const normalizedSlot = normalizeWardrobeSlot(slot) || cleanInlineText(slot).toLowerCase();
+  const details = itemDetailsForAssetSlot(normalizedSlot, context);
+  const text = assetMatchTextForSlot(normalizedSlot, itemName, context) || itemName;
+  const subtype = inferItemSubtype(text, normalizedSlot);
+  return {
+    source: "request",
+    slot: normalizedSlot,
+    subtype,
+    family: assetFamilyForSubtype(normalizedSlot, subtype),
+    colors: uniqueList(requestedColorTerms(text, details)),
+    materials: uniqueList(requestedMaterialTerms(text, details)),
+    tokens: tokenSetForAssetMatch(text),
+    text: cleanInlineText(text).toLowerCase(),
+  };
+}
+
+function buildStockAssetDescriptor(key = "", entry = {}) {
+  const slot = cleanInlineText(entry?.slot).toLowerCase();
+  const text = `${key || ""} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}`;
+  const subtype = getStockItemSubtype(slot, key, entry);
+  const tags = inferVisualTagsFromText(text);
+  return {
+    id: key,
+    source: "stock",
+    slot,
+    subtype,
+    family: assetFamilyForSubtype(slot, subtype),
+    colors: tags.colors || [],
+    materials: tags.materials || [],
+    tokens: tokenSetForAssetMatch(text),
+    text: cleanInlineText(text).toLowerCase(),
+  };
+}
+
+function buildWardrobeAssetDescriptor(item = {}) {
+  const slot = normalizeWardrobeSlot(item?.type);
+  const text = itemTextForAssetMatch(item);
+  const subtype = inferItemSubtype(item?.name, slot)
+    || inferItemSubtype(item?.type, slot)
+    || inferItemSubtype(text, slot);
+  const tags = inferVisualTagsFromText(text);
+  return {
+    id: item?.id ?? item?.name ?? null,
+    source: "wardrobe",
+    slot,
+    subtype,
+    family: assetFamilyForSubtype(slot, subtype),
+    colors: uniqueList([...tags.colors, ...requestedColorTerms("", { color: item?.color })]),
+    materials: uniqueList([...tags.materials, ...requestedMaterialTerms("", { material: item?.material })]),
+    tokens: tokenSetForAssetMatch(text),
+    text: cleanInlineText(text).toLowerCase(),
+  };
+}
+
+function descriptorVisualMatchScore(requested = [], selected = [], covers) {
+  if (!requested.length) return { score: 0, rejected: false, exact: false };
+  if (!selected.length) return { score: -5, rejected: false, exact: false };
+  const matching = selected.filter((value) => covers(requested, value));
+  if (!matching.length) return { score: -70, rejected: true, exact: false };
+  const exact = matching.some((value) => requested.includes(value));
+  return { score: exact ? 28 : 16, rejected: false, exact };
+}
+
+function scoreAssetDescriptorMatch(request = {}, candidate = {}, { candidateText = "" } = {}) {
+  const reasons = [];
+  if (!request?.slot || !candidate?.slot) return { score: -120, rejected: true, reasons: ["missing_slot"] };
+  if (!assetSlotsCompatibleForMatch(request.slot, candidate.slot, request.text, candidateText || candidate.text)) {
+    return { score: -120, rejected: true, reasons: ["slot_mismatch"] };
+  }
+
+  let score = 0;
+  if (request.subtype && candidate.subtype) {
+    if (request.subtype === candidate.subtype) {
+      score += 34;
+      reasons.push("subtype_match");
+    } else if (areStockSubtypesCompatible(request.slot, request.subtype, candidate.subtype)) {
+      score += 16;
+      reasons.push("compatible_subtype");
+    } else if (request.family && candidate.family && request.family === candidate.family) {
+      score += 8;
+      reasons.push("family_match");
+    } else {
+      return { score: -120, rejected: true, reasons: ["family_mismatch"] };
+    }
+  } else if (request.family && candidate.family && request.family !== candidate.family) {
+    return { score: -120, rejected: true, reasons: ["family_mismatch"] };
+  }
+
+  const colorScore = descriptorVisualMatchScore(request.colors || [], candidate.colors || [], visualColorCovered);
+  if (colorScore.rejected) return { score: -120, rejected: true, reasons: ["color_mismatch"] };
+  if (colorScore.score) {
+    score += colorScore.score;
+    reasons.push(colorScore.exact ? "color_match" : "compatible_color");
+  }
+
+  const materialScore = descriptorVisualMatchScore(request.materials || [], candidate.materials || [], visualMaterialCovered);
+  if (materialScore.rejected) return { score: -120, rejected: true, reasons: ["material_mismatch"] };
+  if (materialScore.score) {
+    score += Math.round(materialScore.score * 0.45);
+    reasons.push(materialScore.exact ? "material_match" : "compatible_material");
+  }
+
+  const requestTokens = request.tokens || [];
+  const candidateTokens = candidate.tokens || [];
+  const overlap = requestTokens.filter((token) => candidateTokens.includes(token)).length;
+  if (overlap) {
+    score += Math.min(18, overlap * 5);
+    reasons.push("token_overlap");
+  }
+  if (requestTokens.length && overlap === requestTokens.length) {
+    score += 6;
+    reasons.push("all_tokens_match");
+  }
+
+  return { score, rejected: false, reasons };
+}
+
 function tokenSetForAssetMatch(text = "") {
   const stop = new Set(["the", "and", "for", "with", "clean", "simple", "easy", "everyday", "comfortable", "light", "dark", "warm", "cool"]);
   return normalizeMatchText(text)
@@ -8843,15 +9278,7 @@ function colorMatchScore(wanted = "", item = {}) {
 }
 
 function wardrobeSlotsCompatibleForAssetMatch(wantedSlot, itemSlot, wantedName = "", item = {}) {
-  if (wantedSlot === itemSlot) return true;
-  const text = `${wantedName} ${itemTextForAssetMatch(item)}`.toLowerCase();
-  if (
-    ((wantedSlot === "outer" && itemSlot === "top") || (wantedSlot === "top" && itemSlot === "outer"))
-    && /\b(hoodie|sweater|jumper|cardigan|overshirt|shacket|shirt jacket|jacket|fleece)\b/.test(text)
-  ) {
-    return true;
-  }
-  return false;
+  return assetSlotsCompatibleForMatch(wantedSlot, itemSlot, wantedName, itemTextForAssetMatch(item));
 }
 
 function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) {
@@ -8865,6 +9292,11 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
   const itemText = itemTextForAssetMatch(item);
   if (!wanted || !itemText) return null;
 
+  const requestDescriptor = buildRequestedAssetDescriptor(wantedSlot, wanted, context);
+  const itemDescriptor = buildWardrobeAssetDescriptor(item);
+  const descriptorScore = scoreAssetDescriptorMatch(requestDescriptor, itemDescriptor, { candidateText: itemText });
+  if (descriptorScore.rejected) return null;
+
   const wantedSubtype = inferItemSubtype(wanted, wantedSlot);
   const itemSubtype = inferItemSubtype(item?.name, wantedSlot)
     || inferItemSubtype(item?.type, wantedSlot)
@@ -8873,8 +9305,8 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
   const itemTokens = tokenSetForAssetMatch(itemText);
   const overlap = wantedTokens.filter((token) => itemTokens.includes(token)).length;
   const fitScore = wardrobeItemFitScore(item, context.preferences || {}, context.weather || {});
-  let score = 0;
-  const reasons = [];
+  let score = descriptorScore.score;
+  const reasons = [...(descriptorScore.reasons || [])];
 
   const exactName = normalizeMatchText(item?.name) === normalizeMatchText(wanted);
   const nameContains = normalizeMatchText(wanted).includes(normalizeMatchText(item?.name)) || normalizeMatchText(item?.name).includes(normalizeMatchText(wanted));
@@ -8889,7 +9321,7 @@ function scoreWardrobeAssetCandidate(slot, wantedName, item = {}, context = {}) 
   if (wantedSubtype && itemSubtype && wantedSubtype === itemSubtype) {
     score += 26;
     reasons.push("subtype_match");
-  } else if (wantedSubtype && itemSubtype && !nameContains) {
+  } else if (wantedSubtype && itemSubtype && !areStockSubtypesCompatible(wantedSlot, wantedSubtype, itemSubtype) && !nameContains) {
     score -= 28;
     reasons.push("subtype_mismatch");
   }
@@ -9069,6 +9501,10 @@ function areStockSubtypesCompatible(slot, wantedSubtype = "", entrySubtype = "")
     const softLayer = new Set(["fleece", "hoodie", "cardigan"]);
     if (softLayer.has(wantedSubtype) && softLayer.has(entrySubtype)) return true;
   }
+  if (slot === "accessory") {
+    const hatFamily = new Set(["hat", "beanie", "sun-hat", "baseball-cap"]);
+    if (hatFamily.has(wantedSubtype) && hatFamily.has(entrySubtype)) return true;
+  }
   return false;
 }
 
@@ -9082,15 +9518,17 @@ function stockImagePresentationCompatible(entry = {}, preferences = {}) {
 
 function stockImageVisualCompatibility(slot, itemName, key, entry, context = {}) {
   const details = itemDetailsForAssetSlot(slot, context);
-  const entryDetails = inferVisualDetailFromText(`${key || ""} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}`);
+  const entryTags = inferVisualTagsFromText(`${key || ""} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}`);
   const requestedColors = uniqueList(requestedColorTerms(itemName, details));
   const requestedMaterials = uniqueList(requestedMaterialTerms(itemName, details));
+  const selectedColors = entryTags.colors || [];
+  const selectedMaterials = entryTags.materials || [];
   const reasons = [];
 
-  if (requestedColors.length && entryDetails.color && !visualColorCovered(requestedColors, entryDetails.color)) {
+  if (requestedColors.length && selectedColors.length && !selectedColors.some((color) => visualColorCovered(requestedColors, color))) {
     reasons.push("color_conflict");
   }
-  if (requestedMaterials.length && entryDetails.material && !visualMaterialCovered(requestedMaterials, entryDetails.material)) {
+  if (requestedMaterials.length && selectedMaterials.length && !selectedMaterials.some((material) => visualMaterialCovered(requestedMaterials, material))) {
     const looseMaterialOk = requestedMaterials.includes("nylon") && /\b(shell|rain|waterproof|weatherproof|tech|parka)\b/i.test(`${key} ${entry?.description || ""}`);
     if (!looseMaterialOk) reasons.push("material_conflict");
   }
@@ -9100,14 +9538,62 @@ function stockImageVisualCompatibility(slot, itemName, key, entry, context = {})
     reasons,
     requestedColors,
     requestedMaterials,
-    selectedColor: entryDetails.color || "",
-    selectedMaterial: entryDetails.material || "",
+    selectedColors,
+    selectedMaterials,
+    selectedColor: selectedColors[0] || "",
+    selectedMaterial: selectedMaterials[0] || "",
   };
+}
+
+function scoreStockVisualMatch(visual = {}) {
+  let score = 0;
+  const requestedColors = Array.isArray(visual.requestedColors) ? visual.requestedColors : [];
+  const requestedMaterials = Array.isArray(visual.requestedMaterials) ? visual.requestedMaterials : [];
+  const selectedColors = uniqueList([
+    ...(Array.isArray(visual.selectedColors) ? visual.selectedColors : []),
+    visual.selectedColor,
+  ].map(normalizeVisualColorTerm));
+  const selectedMaterials = uniqueList([
+    ...(Array.isArray(visual.selectedMaterials) ? visual.selectedMaterials : []),
+    visual.selectedMaterial,
+  ].map(normalizeVisualMaterialTerm));
+
+  if (requestedColors.length) {
+    const matchingColors = selectedColors.filter((color) => visualColorCovered(requestedColors, color));
+    const exactColorMatch = matchingColors.some((color) => requestedColors.includes(color));
+    if (!selectedColors.length) {
+      score -= 8;
+    } else if (matchingColors.length) {
+      score += exactColorMatch ? 34 : 20;
+    } else {
+      score -= 70;
+    }
+  }
+
+  if (requestedMaterials.length) {
+    const matchingMaterials = selectedMaterials.filter((material) => visualMaterialCovered(requestedMaterials, material));
+    const exactMaterialMatch = matchingMaterials.some((material) => requestedMaterials.includes(material));
+    if (!selectedMaterials.length) {
+      score -= 3;
+    } else if (matchingMaterials.length) {
+      score += exactMaterialMatch ? 10 : 6;
+    } else {
+      score -= 24;
+    }
+  }
+
+  return score;
 }
 
 function stockImageSemanticallyCompatible(slot, itemName, key, entry, { allowGeneric = false, preferences = {} } = {}) {
   if (!entry || entry.slot !== slot || !isUsableStockImageCatalogEntry(entry)) return false;
   if (!stockImagePresentationCompatible(entry, preferences)) return false;
+  const descriptorScore = scoreAssetDescriptorMatch(
+    buildRequestedAssetDescriptor(slot, itemName, { preferences }),
+    buildStockAssetDescriptor(key, entry),
+    { candidateText: `${key} ${entry?.description || ""} ${(entry?.keywords || []).join(" ")}` }
+  );
+  if (descriptorScore.rejected) return false;
   const wantedSubtype = inferItemSubtype(itemName, slot);
   if (!wantedSubtype) return true;
   const entrySubtype = getStockItemSubtype(slot, key, entry);
@@ -9131,11 +9617,15 @@ function getCanonicalStockKeyForItem(slot, itemName = "") {
   const text = cleanInlineText(itemName).toLowerCase();
   if (!text) return null;
   if (slot === "top") {
+    if (/\b(thermal|base layer|baselayer|merino)\b/.test(text)) return "top_charcoal_thermal_base_layer_wool_v1";
+    if (/\b(charcoal|gray|grey|dark)\b/.test(text) && /\b(sweater|jumper|pullover|crewneck|crew-neck|knit)\b/.test(text)) return "top_charcoal_crewneck_sweater_knit_v1";
+    if (/\b(oxford|button[-\s]?down|button[-\s]?up|dress shirt|collared shirt)\b/.test(text) && /\b(blue|light blue)\b/.test(text)) return "top_blue_oxford_shirt_cotton_v1";
     if (/\b(thermal|base layer|baselayer|wool|merino|sweater|jumper|pullover|knit)\b/.test(text)) return "top_knit_sweater_hanger";
     if (/\blong[-\s]?sleeve|long sleeve top\b/.test(text)) return "top_white_long_sleeve_tshirt_studio";
     if (/\bbreathable|t-?shirt|tee\b/.test(text)) return "top_white_tshirt_studio";
   }
   if (slot === "bottom") {
+    if (/\b(dark|indigo|navy|black)\b/.test(text) && /\bjeans?|denim\b/.test(text)) return "bottom_dark_indigo_jeans_denim_v1";
     if (/\bcomfortable\s+(pants|trousers)|everyday\s+(pants|trousers)|practical\s+(pants|trousers)|\bcomfortable bottoms?\b/.test(text)) return "bottom_black_trousers_studio";
   }
   if (slot === "outer") {
@@ -9148,18 +9638,26 @@ function getCanonicalStockKeyForItem(slot, itemName = "") {
       olive: "outer_olive_hoodie_cotton_v1",
       tan: "outer_tan_hoodie_cotton_v1",
     };
-    if (/\b(fleece|sherpa)\b/.test(text)) return chooseColorAwareStockKey(text, hoodieByColor, "outer_gray_hoodie_cotton_v1");
+    if (/\b(camel|tan)\b/.test(text) && /\b(wool coat|coat|overcoat)\b/.test(text)) return "outer_camel_wool_coat_wool_v1";
+    if (/\b(fleece|sherpa)\b/.test(text)) return "outer_charcoal_fleece_jacket_fleece_v1";
     if (/\b(rain|waterproof|weatherproof|shell|windbreaker)\b/.test(text)) return null;
+    if (/\b(olive|green)\b/.test(text) && /\blight\s+overshirt|overshirt|shacket|shirt jacket\b/.test(text)) return "outer_olive_lightweight_overshirt_cotton_v1";
     if (/\blight\s+overshirt|overshirt|shacket\b/.test(text)) return "outer_charcoal_overshirt_studio";
     if (/\bhoodie\b/.test(text)) return chooseColorAwareStockKey(text, hoodieByColor, "outer_gray_hoodie_cotton_v1");
     if (/\bblazer\b/.test(text)) return "outer_black_blazer_studio";
   }
   if (slot === "shoes") {
-    if (/\bsneakers?|trainers?\b/.test(text)) return "shoes_white_sneakers_minimal";
+    if (/\b(canvas|white|casual|low[-\s]?top)\b/.test(text) && /\bsneakers?|trainers?\b/.test(text)) return "shoes_white_canvas_sneakers_canvas_v1";
+    if (/\bsneakers?|trainers?\b/.test(text)) return "shoes_white_canvas_sneakers_canvas_v1";
   }
   if (slot === "accessory") {
     if (/\bwatch|wristwatch\b/.test(text)) return "accessory_black_watch_metal_v1";
-    if (/\bbaseball cap|dad cap|snapback|sport cap|cap\b/.test(text)) return "accessory_baseball_cap_studio";
+    if (/\b(wool|knit|winter|warm)\b/.test(text) && /\b(hat|beanie|cap)\b/.test(text)) return "accessory_knit_beanies_outdoors";
+    if (/\b(black|dark)\b/.test(text) && /\b(sun hat|wide[-\s]?brim|bucket hat)\b/.test(text)) return "accessory_black_sun_hat_cotton_v1";
+    if (/\b(charcoal|gray|grey|dark|compact)\b/.test(text) && /\bbaseball cap|dad cap|snapback|sport cap|cap\b/.test(text)) return "accessory_charcoal_baseball_cap_cotton_v1";
+    if (/\bbaseball cap|dad cap|snapback|sport cap|cap\b/.test(text)) return "accessory_charcoal_baseball_cap_cotton_v1";
+    if (/\b(canvas|web|fabric)\b/.test(text) && /\bbelt\b/.test(text)) return "accessory_tan_canvas_belt_canvas_v1";
+    if (/\b(lightweight|linen|cream|light)\b/.test(text) && /\bscarf\b/.test(text)) return "accessory_cream_lightweight_scarf_linen_v1";
     if (/\bumbrella\b/.test(text)) return "accessory_white_umbrella_studio";
     if (/\bsunglasses?\b/.test(text)) return "accessory_black_sunglasses_studio";
   }
@@ -9188,35 +9686,54 @@ function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}
       ...(preferred ? { preferred: true } : {}),
     };
   };
-  if (
-    preferredKey
-    && stockOk(preferredKey, STOCK_IMAGE_CATALOG[preferredKey])
-  ) {
-    const entry = STOCK_IMAGE_CATALOG[preferredKey];
-    return buildStockMatch(preferredKey, entry, { baseConfidence: 80, preferred: true, matchQuality: "preferred_stock" });
-  }
   const canonicalKey = getCanonicalStockKeyForItem(slot, itemName);
-  if (
-    canonicalKey
-    && stockOk(canonicalKey, STOCK_IMAGE_CATALOG[canonicalKey])
-  ) {
-    const entry = STOCK_IMAGE_CATALOG[canonicalKey];
-    return buildStockMatch(canonicalKey, entry, { baseConfidence: 88, canonical: true, matchQuality: "canonical_stock" });
-  }
-
   const entries = getUsableStockImageCatalogEntries().filter(([, entry]) => entry.slot === slot);
   let best = null;
   let bestScore = -1;
-  for (const [key, entry] of entries) {
-    if (!stockOk(key, entry)) continue;
-    const score = scoreCatalogMatch(itemName, entry, key, context);
-    if (score > bestScore) {
-      best = buildStockMatch(key, entry, {
-        baseConfidence: 55 + score,
-        matchQuality: score >= 30 ? "strong_stock" : "acceptable_stock",
+  const scoreCandidate = (key, entry, { canonical = false, preferred = false } = {}) => {
+    if (!stockOk(key, entry)) return null;
+    const catalogScore = scoreCatalogMatch(itemName, entry, key, context);
+    const selectionScore = catalogScore + (preferred ? 8 : 0) + (canonical ? 6 : 0);
+    if (selectionScore <= 0) return null;
+    return {
+      key,
+      entry,
+      score: selectionScore,
+      canonical,
+      preferred,
+    };
+  };
+  const consider = (candidate) => {
+    if (!candidate) return;
+    if (candidate.score > bestScore) {
+      const matchQuality = candidate.preferred
+        ? "preferred_stock"
+        : candidate.canonical
+          ? "canonical_stock"
+          : candidate.score >= 30
+            ? "strong_stock"
+            : "acceptable_stock";
+      best = buildStockMatch(candidate.key, candidate.entry, {
+        baseConfidence: 55 + candidate.score,
+        canonical: candidate.canonical,
+        preferred: candidate.preferred,
+        matchQuality,
       });
-      bestScore = score;
+      bestScore = candidate.score;
     }
+  };
+
+  if (preferredKey) {
+    consider(scoreCandidate(preferredKey, STOCK_IMAGE_CATALOG[preferredKey], { preferred: true }));
+  }
+  if (canonicalKey && canonicalKey !== preferredKey) {
+    consider(scoreCandidate(canonicalKey, STOCK_IMAGE_CATALOG[canonicalKey], { canonical: true }));
+  }
+  for (const [key, entry] of entries) {
+    consider(scoreCandidate(key, entry, {
+      canonical: Boolean(canonicalKey && key === canonicalKey),
+      preferred: Boolean(preferredKey && key === preferredKey),
+    }));
   }
 
   if (best && bestScore > 0 && stockOk(best.key, STOCK_IMAGE_CATALOG[best.key])) return best;
@@ -9240,65 +9757,32 @@ function findStockImageForSlot(slot, itemName, preferredKey = null, context = {}
 }
 
 async function buildRecommendationAssetMatches(outfit, wardrobeItems = [], preferredKeys = null, context = {}) {
-  const output = {};
-  const preferred = preferredKeys && typeof preferredKeys === "object" ? preferredKeys : {};
-  if (!Array.isArray(wardrobeItems) || wardrobeItems.length === 0) {
-    const stockTasks = ["top", "bottom", "outer", "shoes"]
-      .map((slot) => ({ slot, itemName: cleanInlineText(outfit?.[slot]) }))
-      .filter((entry) => entry.itemName)
-      .map(async ({ slot, itemName }) => {
-        const matchText = assetMatchTextForSlot(slot, itemName, context) || itemName;
-        output[slot] = findStockImageForSlot(slot, matchText, cleanInlineText(preferred?.[slot]), context) || null;
-      });
-    const accessories = Array.isArray(outfit?.accessories)
-      ? outfit.accessories
-      : [outfit?.accessories];
-    accessories.map((item) => cleanInlineText(item)).filter(Boolean).slice(0, 1).forEach((itemName, index) => {
-      stockTasks.push(Promise.resolve().then(() => {
-        const matchText = assetMatchTextForSlot("accessory", itemName, context) || itemName;
-        output[`accessory-${index}`] = findStockImageForSlot("accessory", matchText, cleanInlineText(preferred?.accessory), context) || null;
-      }));
-    });
-    await Promise.all(stockTasks);
-    return output;
-  }
-  const usedItemIds = new Set();
-  const resolveSlot = async (slot, itemName, outputKey = slot) => {
-    const matchText = assetMatchTextForSlot(slot, itemName, context) || itemName;
-    const wardrobeMatch = await findWardrobeImageForSlot(slot, matchText, wardrobeItems, context, usedItemIds);
-    if (wardrobeMatch) {
-      const id = String(wardrobeMatch.itemId ?? wardrobeMatch.itemName ?? "");
-      if (id) usedItemIds.add(id);
-      output[outputKey] = wardrobeMatch;
-      return;
-    }
-    output[outputKey] = findStockImageForSlot(slot, matchText, cleanInlineText(preferred?.[slot]), context) || null;
-  };
-
-  for (const slot of ["top", "bottom", "outer", "shoes"]) {
-    const itemName = cleanInlineText(outfit?.[slot]);
-    if (!itemName) {
-      output[slot] = null;
-      continue;
-    }
-    await resolveSlot(slot, itemName, slot);
-  }
-
-  const accessories = Array.isArray(outfit?.accessories)
-    ? outfit.accessories
-    : [outfit?.accessories];
-  for (const [index, value] of accessories.map((item) => cleanInlineText(item)).filter(Boolean).slice(0, 1).entries()) {
-    await resolveSlot("accessory", value, `accessory-${index}`);
-  }
-  return output;
+  return buildLlmSelectedRecommendationAssetMatches(outfit, wardrobeItems, preferredKeys, context, {
+    catalog: STOCK_IMAGE_CATALOG,
+    assetRoot: STOCK_IMAGE_ASSET_ROOT,
+    services: {
+      chatCompletion,
+      parseModelJson,
+      log: (level, event, metadata = {}) => logApiEvent(level, event, metadata),
+    },
+  });
 }
 
 function inferVisualDetailFromText(text = "") {
+  const tags = inferVisualTagsFromText(text);
+  return {
+    color: tags.colors[0] || "",
+    material: tags.materials[0] || "",
+  };
+}
+
+function inferVisualTagsFromText(text = "") {
   const value = cleanInlineText(text).toLowerCase();
-  if (!value) return {};
+  if (!value) return { colors: [], materials: [] };
   const colorPatterns = [
     ["off-white", /\boff[-\s]?white\b/],
     ["charcoal", /\bcharcoal\b/],
+    ["indigo", /\bindigo\b/],
     ["navy", /\bnavy\b/],
     ["black", /\bblack\b/],
     ["white", /\bwhite\b/],
@@ -9316,6 +9800,7 @@ function inferVisualDetailFromText(text = "") {
     ["purple", /\bpurple\b/],
     ["yellow", /\byellow\b/],
     ["orange", /\borange\b/],
+    ["dark", /\bdark\b/],
   ];
   const materialPatterns = [
     ["merino wool", /\bmerino\b/],
@@ -9332,9 +9817,13 @@ function inferVisualDetailFromText(text = "") {
     ["knit", /\bknit|sweater|jumper|pullover|cardigan\b/],
     ["metal", /\bmetal|steel\b/],
   ];
-  const color = colorPatterns.find(([, pattern]) => pattern.test(value))?.[0] || "";
-  const material = materialPatterns.find(([, pattern]) => pattern.test(value))?.[0] || "";
-  return { color, material };
+  const colors = uniqueList(colorPatterns
+    .filter(([, pattern]) => pattern.test(value))
+    .map(([color]) => normalizeVisualColorTerm(color)));
+  const materials = uniqueList(materialPatterns
+    .filter(([, pattern]) => pattern.test(value))
+    .map(([material]) => normalizeVisualMaterialTerm(material)));
+  return { colors, materials };
 }
 
 function inferAssetDetailFromImageMatch(match = {}) {
@@ -9345,7 +9834,7 @@ function inferAssetDetailFromImageMatch(match = {}) {
       material: cleanInlineText(match.material),
     };
   }
-  if (match.source !== "stock" && match.source !== "fallback") return {};
+  if (!["stock", "fallback", "llm_stock", "raster_fallback"].includes(match.source)) return {};
   const entry = STOCK_IMAGE_CATALOG[match.key] || {};
   return inferVisualDetailFromText(`${match.key || ""} ${entry.description || ""} ${(entry.keywords || []).join(" ")}`);
 }
@@ -9362,13 +9851,52 @@ function reconcileItemDetailsWithImageMatches(itemDetails = {}, outfitImages = {
   slots.forEach(([detailKey, imageKey]) => {
     const inferred = inferAssetDetailFromImageMatch(outfitImages?.[imageKey]);
     if (!inferred.color && !inferred.material) return;
-    next[detailKey] = {
-      ...(next[detailKey] || {}),
-      ...(inferred.color ? { color: inferred.color } : {}),
-      ...(inferred.material ? { material: inferred.material } : {}),
-    };
+    const current = next[detailKey] || {};
+    const currentColors = uniqueList(requestedColorTerms("", current));
+    const currentMaterials = uniqueList(requestedMaterialTerms("", current));
+    const reconciled = { ...current };
+    if (inferred.color) {
+      const inferredColor = normalizeVisualColorTerm(inferred.color);
+      if (!currentColors.length || visualColorCovered(currentColors, inferredColor)) {
+        reconciled.color = inferredColor;
+      }
+    }
+    if (inferred.material) {
+      const inferredMaterial = normalizeVisualMaterialTerm(inferred.material);
+      if (!currentMaterials.length || visualMaterialCovered(currentMaterials, inferredMaterial)) {
+        reconciled.material = inferredMaterial;
+      }
+    }
+    next[detailKey] = reconciled;
   });
   return next;
+}
+
+function bindWardrobeMatchesToRecommendation(response = {}, outfitImages = {}) {
+  const outfit = response?.outfit && typeof response.outfit === "object" ? { ...response.outfit } : {};
+  const itemDetails = response?.itemDetails && typeof response.itemDetails === "object" ? { ...response.itemDetails } : {};
+  const bindSlot = (slot, imageKey) => {
+    const match = outfitImages?.[imageKey];
+    if (match?.source !== "wardrobe" || !cleanInlineText(match.itemName)) return;
+    if (slot === "accessory") {
+      const accessories = Array.isArray(outfit.accessories) ? [...outfit.accessories] : [outfit.accessories].filter(Boolean);
+      accessories[0] = cleanInlineText(match.itemName);
+      outfit.accessories = accessories;
+    } else {
+      outfit[slot] = cleanInlineText(match.itemName);
+    }
+    itemDetails[slot] = {
+      ...(itemDetails[slot] || {}),
+      ...(cleanInlineText(match.color) ? { color: cleanInlineText(match.color) } : {}),
+      ...(cleanInlineText(match.material) ? { material: cleanInlineText(match.material) } : {}),
+    };
+  };
+  bindSlot("top", "top");
+  bindSlot("bottom", "bottom");
+  bindSlot("outer", "outer");
+  bindSlot("shoes", "shoes");
+  bindSlot("accessory", "accessory-0");
+  return { ...response, outfit, itemDetails };
 }
 
 function extractVisualTerms(text = "", terms = []) {
@@ -9379,7 +9907,7 @@ function extractVisualTerms(text = "", terms = []) {
 
 function requestedColorTerms(itemName = "", details = {}) {
   return extractVisualTerms(`${itemName} ${details?.color || ""}`, [
-    "off-white", "charcoal", "navy", "black", "white", "cream", "ivory", "gray", "grey",
+    "off-white", "charcoal", "indigo", "navy", "black", "dark", "white", "cream", "ivory", "gray", "grey",
     "beige", "tan", "camel", "brown", "olive", "green", "blue", "burgundy", "red",
     "pink", "purple", "yellow", "orange",
   ]).map((term) => term === "grey" ? "gray" : term === "ivory" ? "cream" : term);
@@ -9405,17 +9933,38 @@ function uniqueList(values = []) {
   return [...new Set(values.filter(Boolean))];
 }
 
+function normalizeVisualColorTerm(value = "") {
+  const color = cleanInlineText(value).toLowerCase();
+  if (color === "grey") return "gray";
+  if (color === "ivory") return "cream";
+  return color;
+}
+
+function normalizeVisualMaterialTerm(value = "") {
+  const material = cleanInlineText(value).toLowerCase();
+  if (material === "merino" || material === "merino wool") return "wool";
+  if (material === "sherpa") return "fleece";
+  if (material === "suede") return "leather";
+  if (["shell", "waterproof", "weatherproof", "rain"].includes(material)) return "nylon";
+  if (["chino", "twill"].includes(material)) return "cotton";
+  if (material === "steel") return "metal";
+  return material;
+}
+
 function visualColorCovered(requested = [], selected = "") {
-  const selectedColor = selected === "grey" || selected === "gray" ? "gray" : selected === "ivory" ? "cream" : selected;
+  const selectedColor = normalizeVisualColorTerm(selected);
   if (!requested.length || !selectedColor) return true;
   if (requested.includes(selectedColor)) return true;
   if (requested.includes("off-white") && ["white", "cream"].includes(selectedColor)) return true;
   if (requested.includes("cream") && ["ivory", "off-white"].includes(selectedColor)) return true;
+  if (requested.includes("dark") && ["black", "charcoal", "navy", "indigo", "brown"].includes(selectedColor)) return true;
+  if (requested.includes("indigo") && ["navy", "blue"].includes(selectedColor)) return true;
+  if (requested.includes("navy") && selectedColor === "indigo") return true;
   return false;
 }
 
 function visualMaterialCovered(requested = [], selected = "") {
-  const selectedMaterial = selected === "merino wool" ? "wool" : selected;
+  const selectedMaterial = normalizeVisualMaterialTerm(selected);
   if (!requested.length || !selectedMaterial) return true;
   if (requested.includes(selectedMaterial)) return true;
   if (requested.includes("knit") && ["wool", "cotton"].includes(selectedMaterial)) return true;
@@ -9458,7 +10007,7 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
 
     const requestedText = assetMatchTextForSlot(slot, itemName, { itemDetails: recommendation?.itemDetails }) || itemName;
     const requestedSubtype = inferItemSubtype(requestedText, slot);
-    const selectedSubtype = imageMatch?.source === "stock" || imageMatch?.source === "fallback"
+    const selectedSubtype = ["stock", "fallback", "llm_stock", "raster_fallback"].includes(imageMatch?.source)
       ? getStockItemSubtype(slot, imageMatch.key, STOCK_IMAGE_CATALOG[imageMatch.key])
       : "";
     const selectedDetails = inferAssetDetailFromImageMatch(imageMatch);
@@ -9467,8 +10016,8 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
     const reasons = [];
 
     if (!imageMatch) reasons.push("no_stock_image");
-    if (imageMatch?.source === "fallback" || imageMatch?.fallback) reasons.push("fallback_stock_image");
-    if ((imageMatch?.source === "stock" || imageMatch?.source === "fallback") && imageMatch.canonical && requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("canonical_approximation");
+    if (imageMatch?.source === "fallback" || imageMatch?.source === "raster_fallback" || imageMatch?.fallback) reasons.push("fallback_stock_image");
+    if (["stock", "fallback", "llm_stock", "raster_fallback"].includes(imageMatch?.source) && imageMatch.canonical && requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("canonical_approximation");
     if (requestedSubtype && selectedSubtype && requestedSubtype !== selectedSubtype) reasons.push("subtype_approximation");
     if (colors.length && !visualColorCovered(colors, selectedDetails.color)) reasons.push("color_gap");
     if (materials.length && !visualMaterialCovered(materials, selectedDetails.material)) reasons.push("material_gap");
@@ -9492,7 +10041,7 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
         colors,
         materials,
       },
-      selectedStock: imageMatch?.source === "stock" || imageMatch?.source === "fallback" ? {
+      selectedStock: ["stock", "fallback", "llm_stock", "raster_fallback"].includes(imageMatch?.source) ? {
         key: imageMatch.key || "",
         path: imageMatch.path || "",
         subtype: selectedSubtype,
@@ -9502,6 +10051,9 @@ function stockImageGapRecords(recommendation = {}, weather = {}, preferences = {
         source: imageMatch.source || "",
         matchQuality: imageMatch.matchQuality || "",
         penalties: Array.isArray(imageMatch.penalties) ? imageMatch.penalties : [],
+        requestedDescriptor: imageMatch.requestedDescriptor || null,
+        selectedDescriptor: imageMatch.selectedDescriptor || null,
+        adjudicated: imageMatch.adjudicated === true,
       } : null,
       reasons: uniqueReasons,
       context: {
@@ -9596,29 +10148,10 @@ async function recordStockImageGaps(recommendation = {}, weather = {}, preferenc
 }
 
 function buildRecommendationImageMatches(outfit, preferredKeys = null, context = {}) {
-  const output = {};
-  const preferred = preferredKeys && typeof preferredKeys === "object" ? preferredKeys : {};
-  for (const slot of ["top", "bottom", "outer", "shoes"]) {
-    const itemName = cleanInlineText(outfit?.[slot]);
-    if (!itemName) {
-      output[slot] = null;
-      continue;
-    }
-    const matchText = assetMatchTextForSlot(slot, itemName, context) || itemName;
-    output[slot] = findStockImageForSlot(slot, matchText, cleanInlineText(preferred?.[slot]), context) || null;
-  }
-  const accessories = Array.isArray(outfit?.accessories)
-    ? outfit.accessories
-    : [outfit?.accessories];
-  accessories
-    .map((value) => cleanInlineText(value))
-    .filter(Boolean)
-    .slice(0, 1)
-    .forEach((itemName, index) => {
-      const matchText = assetMatchTextForSlot("accessory", itemName, context) || itemName;
-      output[`accessory-${index}`] = findStockImageForSlot("accessory", matchText, cleanInlineText(preferred?.accessory), context) || null;
-    });
-  return output;
+  return buildRobustRecommendationImageMatches(outfit, preferredKeys, context, {
+    catalog: STOCK_IMAGE_CATALOG,
+    assetRoot: STOCK_IMAGE_ASSET_ROOT,
+  });
 }
 
 function hasCompleteSlotReasons(slotReasons, outfit) {
@@ -10097,6 +10630,7 @@ function buildFallbackRecommendation(weather, preferences = {}, reason = "weathe
 
   const response = {
     outfit: { top, bottom, outer, shoes, accessories },
+    savedLookCaption: normalizeSavedLookCaption("", { top, bottom, outer, shoes, accessories }),
     slotReasons: {
       top: veryCold ? "Builds a warmer base for the cold." : hot ? "Keeps the outfit light in the heat." : "Works as a comfortable base layer.",
       bottom: veryCold ? "Adds needed insulation for colder air." : hot ? "Keeps airflow and movement easy." : "Balances coverage and comfort.",
@@ -10124,13 +10658,25 @@ function buildFallbackRecommendation(weather, preferences = {}, reason = "weathe
 }
 
 // ─── POST /api/scan-tag ───────────────────────────────────────
-app.post("/api/analyze-item-photo", async (req, res) => {
+app.post("/api/analyze-item-photo", optionalAuthStrict, async (req, res) => {
   const requestId = randomUUID();
   const log = createAnalyzeLogger(requestId);
   try {
     const { image } = req.body;
     res.set("X-WearCast-Request-Id", requestId);
     if (!image) return res.status(400).json({ error: "No image provided", requestId });
+    if (req.userId) {
+      const hasPremium = await userHasPremiumAccess(req.userId);
+      const count = await countRecentPhotoScans(req.userId);
+      if (!hasPremium && count >= FREE_PHOTO_SCANS_PER_WINDOW) {
+        return limitError(res, {
+          limitCode: "scan_cap",
+          limit: FREE_PHOTO_SCANS_PER_WINDOW,
+          count,
+          error: `Free includes ${FREE_PHOTO_SCANS_PER_WINDOW} clothing photo scans every 7 days. Go premium for unlimited scans.`,
+        });
+      }
+    }
 
     log.event("start", {
       imageChars: typeof image === "string" ? image.length : 0,
@@ -10277,6 +10823,10 @@ app.post("/api/analyze-item-photo", async (req, res) => {
       count: items.length,
       items: summarizeAnalyzeItems(items),
     });
+
+    if (req.userId) {
+      await recordPhotoScan(req.userId);
+    }
 
     res.json({
       requestId,
@@ -10574,6 +11124,7 @@ RULES
 - Strictly follow the PRESENTATION block above. Never propose a piece that conflicts with the user's chosen presentation (e.g. no skirts/heels for menswear, no neckties/oxford brogues for womenswear, no cocktail dresses or stilettos for unisex unless warranted).
 ${archetypePromptRule}
 - For "outlook": write a short headline (max ~10 words) that names the outfit's lead pieces in plain language, and one specific sentence per window (now / later / evening) tying the outfit to that window's weather. Reference real items from "outfit" (top, outer, shoes, etc.) by name. No raw numbers, no generic filler ("stay comfortable"), and never repeat the same advice across windows.
+- For "savedLookCaption": write a reusable outfit-memory caption under 5 words. It must describe the overall look, not the weather, location, temperature, or raw item list. Examples: "Soft Casual Layers", "Clean Weekend Denim", "Polished Rain Basics".
 - If a window key is missing from OUTLOOK WINDOWS above, you may omit it from "outlook.windows".
 - JSON only.
 
@@ -10587,6 +11138,7 @@ Return ONLY valid JSON (no markdown fences). Fill "outlook" BEFORE moving on to 
       "evening": { "copy": "One specific sentence for evening; mention layering or removal if relevant" }
     }
   },
+  "savedLookCaption": "Short non-weather outfit caption under 5 words",
   "outfit": {
     "top": "short item name",
     "bottom": "short item name",
@@ -10629,9 +11181,9 @@ WEATHER RULES:
 ${weatherRules}
 STYLE: ${styleGuardrails.length ? styleGuardrails.slice(0, 4).join("\n") : "- keep it practical and natural"}
 
-Rules: short item names; at most one outer; exactly one accessory; one warning and one missing item max; no raw numbers in user-facing copy; strictly follow presentation preference.
+Rules: short item names; at most one outer; exactly one accessory; one warning and one missing item max; no raw numbers in user-facing copy; strictly follow presentation preference; include savedLookCaption under 5 words that describes the outfit, not weather.
 Return ONLY valid compact JSON with this shape:
-{"outlook":{"headline":"max 10 words","windows":{"now":{"copy":"specific sentence"},"later":{"copy":"specific sentence"},"evening":{"copy":"specific sentence"}}},"outfit":{"top":"","bottom":"","outer":"","shoes":"","accessories":[""]},"slotReasons":{"top":"","bottom":"","outer":"","shoes":"","accessory":""},"itemDetails":{"top":{"color":"","material":""},"bottom":{"color":"","material":""},"outer":{"color":"","material":""},"shoes":{"color":"","material":""},"accessory":{"color":"","material":""}},"reasoning":"one natural weather-overview subline","detailsOverview":{"what":"one sentence","why":"one sentence","note":"optional short note"},"warnings":[],"missingItems":[]}`;
+{"outlook":{"headline":"max 10 words","windows":{"now":{"copy":"specific sentence"},"later":{"copy":"specific sentence"},"evening":{"copy":"specific sentence"}}},"savedLookCaption":"under 5 words, not weather-specific","outfit":{"top":"","bottom":"","outer":"","shoes":"","accessories":[""]},"slotReasons":{"top":"","bottom":"","outer":"","shoes":"","accessory":""},"itemDetails":{"top":{"color":"","material":""},"bottom":{"color":"","material":""},"outer":{"color":"","material":""},"shoes":{"color":"","material":""},"accessory":{"color":"","material":""}},"reasoning":"one natural weather-overview subline","detailsOverview":{"what":"one sentence","why":"one sentence","note":"optional short note"},"warnings":[],"missingItems":[]}`;
 
     const activePrompt = hasWardrobe ? prompt : compactNoWardrobePrompt;
     const recommendationModel = hasWardrobe ? MODEL : RECOMMENDATION_FAST_MODEL;
@@ -10811,9 +11363,13 @@ app.post("/api/recommend/feedback", async (req, res) => {
     const weatherProfile = classifyWeatherProfile(req.body?.weather || {});
     logApiEvent("info", "recommendation_feedback", {
       feedback,
+      outfitSignature: cleanInlineText(req.body?.outfitSignature).slice(0, 220),
+      recommendationId: cleanInlineText(req.body?.recommendationId).slice(0, 120),
+      issue: cleanInlineText(req.body?.issue).slice(0, 120),
       weatherProfile,
       outfitText,
       wardrobeUsageCount: Number(req.body?.wardrobeUsageCount || 0),
+      coverage: Number(req.body?.coverage || 0),
       imageConfidence: Number(req.body?.imageConfidence || 0),
     });
     res.json({ ok: true });
@@ -10984,6 +11540,8 @@ app.post("/api/client-log", (req, res) => {
 // ─── Auth & Wardrobe routes ──────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/wardrobe", wardrobeRoutes);
+app.use("/api/saved-looks", savedLooksRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 
 // Google OAuth HTTPS → custom scheme bridge for Capacitor and web
 app.get('/oauth2redirect/google', (req, res) => {

@@ -4,25 +4,22 @@ WearCast helps you decide what to wear today with weather-smart outfit recommend
 
 - Weather: **Open‑Meteo** (no API key)
 - Location search / reverse geocode: **OpenStreetMap Nominatim**
-- No backend, no accounts
+- Backend: **Fly.io** Node/Express API for auth, synced wardrobe, saved looks, AI recommendations, and photo analysis
+- Accounts: email/password and Google sign-in
+- Premium: StoreKit subscriptions with synced entitlement state, free limits, and purchase restore/manage flows
+- Analytics: GoatCounter baseline plus optional PostHog funnel analytics, both gated by product analytics consent
 
 ## Run
 
-### Option A: open directly
-Open `index.html` in a browser.
-
-> Note: Some browsers restrict geolocation or service workers on `file://` URLs.
-
-### Option B (recommended): run a local server
-From the `what-to-wear/` folder:
+### Web app
 
 ```bash
-python3 -m http.server 5173
+npm run web:serve
 ```
 
 Then open:
 
-- http://localhost:5173
+- http://127.0.0.1:5173
 
 ## Faster iOS Simulator Loop
 
@@ -67,7 +64,7 @@ npx cap copy ios
 ```
 
 ## Customize
-Edit decision rules in `app.js` (function `deriveRecommendation`).
+Recommendation rules and UI live primarily in `www/app.js`; backend recommendation, scan, auth, saved-look, and wardrobe APIs live in `server/`.
 
 ## Privacy
-Stores last location + preferences in your browser (`localStorage`).
+WearCast stores local preferences and diagnostics on device when functional storage is enabled. Signed-in users can sync wardrobe items, wardrobe photos, saved looks, account data, verified StoreKit subscription state, and related metadata through the backend. GoatCounter and PostHog only receive product analytics events after analytics consent is enabled.

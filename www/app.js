@@ -114,6 +114,7 @@ const els = {
   consentSelectAll: $("consentSelectAll"),
   consentFunctional: $("consentFunctional"),
   consentLocation: $("consentLocation"),
+  consentAnalytics: $("consentAnalytics"),
   consentEssential: $("consentEssential"),
   consentAccept: $("consentAccept"),
 
@@ -283,6 +284,7 @@ const els = {
 
   // New UI
   weatherHero: $("weatherHero"),
+  weatherCollapsedTimeline: $("weatherCollapsedTimeline"),
   weatherExpandedPanel: $("weatherExpandedPanel"),
   weatherExpandToggle: $("weatherExpandToggle"),
   emptyState: $("emptyState"),
@@ -293,6 +295,8 @@ const els = {
   weatherDetailsCard: $("weatherDetailsCard"),
   reasonsCard: $("reasonsCard"),
   addItemBtnEmpty: $("addItemBtnEmpty"),
+  wardrobeEmptyScanBtn: $("wardrobeEmptyScanBtn"),
+  wardrobeEmptyManualBtn: $("wardrobeEmptyManualBtn"),
   todayWardrobeCtaBtn: $("todayWardrobeCtaBtn"),
   todayWardrobeDialog: $("todayWardrobeDialog"),
   todayWardrobeDialogCloseBtn: $("todayWardrobeDialogCloseBtn"),
@@ -382,6 +386,16 @@ const els = {
   paywallAnnualMeta: $("paywallAnnualMeta"),
   paywallMonthlyPrice: $("paywallMonthlyPrice"),
   paywallMonthlyMeta: $("paywallMonthlyMeta"),
+  savedLookDeleteDialog: $("savedLookDeleteDialog"),
+  savedLookDeleteMessage: $("savedLookDeleteMessage"),
+  savedLookDeleteCancelBtn: $("savedLookDeleteCancelBtn"),
+  savedLookDeleteConfirmBtn: $("savedLookDeleteConfirmBtn"),
+  savedLooksLibraryBtn: $("savedLooksLibraryBtn"),
+  savedLooksLibraryCount: $("savedLooksLibraryCount"),
+  savedLooksDialog: $("savedLooksDialog"),
+  savedLooksDialogBody: $("savedLooksDialogBody"),
+  savedLooksDialogCloseBtn: $("savedLooksDialogCloseBtn"),
+  savedLooksDialogSubtitle: $("savedLooksDialogSubtitle"),
   deleteAccountDialog: $("deleteAccountDialog"),
   deleteAccountPrompt: $("deleteAccountPrompt"),
   deleteAccountPassword: $("deleteAccountPassword"),
@@ -409,6 +423,8 @@ const PREMIUM_SAVED_LOOK_LIMIT = 100;
 const PRODUCT_ID_MONTHLY = "wearcast_ai_premium_monthly";
 const PRODUCT_ID_ANNUAL = "wearcast_ai_premium_annual";
 const APPLE_MANAGE_SUBSCRIPTIONS_URL = "https://apps.apple.com/account/subscriptions";
+const POSTHOG_KEY = runtimeConfig.posthogKey || "";
+const POSTHOG_HOST = runtimeConfig.posthogHost || "https://app.posthog.com";
 
 // ─── Auth state ──────────────────────────────────────────────
 let authToken = localStorage.getItem(AUTH_TOKEN_KEY) || null;
@@ -547,6 +563,7 @@ async function finalizeAuthSuccess(token, user, refreshToken = authRefreshToken)
   await refreshSubscriptionState({ silent: true });
   try {
     await syncLocalWardrobeToServer();
+    await loadSavedLooksFromServer({ force: true });
     await renderWardrobe();
   } catch (err) {
     console.error("post-auth wardrobe sync error:", err);
@@ -734,6 +751,7 @@ const DEFAULT_CONSENT = {
   seen: false,
   functionalStorage: false,
   deviceLocation: false,
+  analytics: false,
   updatedAt: null,
 };
 
@@ -772,8 +790,14 @@ let activePaywallPlan = "annual";
 let subscriptionCatalog = {};
 let subscriptionProductsLoadAttempted = false;
 let subscriptionRefreshPromise = null;
+let savedLooksLoadPromise = null;
+let savedLooksLoadFailed = false;
+let pendingSavedLookDeleteId = null;
+let reopenSavedLooksAfterDelete = false;
+let reopenSavedLooksAfterItemDialog = false;
 let latestWeatherSnapshot = null;
 let latestRecommendationSnapshot = null;
+let recommendationDialogItemsOverride = null;
 let wardrobePromptDismissedThisSession = false;
 let pendingLocalWardrobeConsentPreset = null;
 let isWeatherExpanded = false;
@@ -984,7 +1008,8 @@ function areRecommendationPrefsDefault(prefs = {}) {
 function summarizeConsentSettings() {
   const storageText = consent.functionalStorage ? "Functional storage on" : "Functional storage off";
   const locationText = consent.deviceLocation ? "device location allowed" : "device location off";
-  return `${storageText} • ${locationText}.`;
+  const analyticsText = consent.analytics ? "analytics on" : "analytics off";
+  return `${storageText} • ${locationText} • ${analyticsText}.`;
 }
 
 function summarizeSavedLocation(state = loadState()) {
@@ -1061,6 +1086,46 @@ function getSubscriptionState(state = loadState()) {
 function hasPremiumAccess(state = loadState()) {
   const subscription = getSubscriptionState(state);
   return ["premium_active", "premium_trial", "premium_grace_period"].includes(subscription.status);
+}
+
+function normalizeSyncedSavedLook(look = {}) {
+  return {
+    id: look.id || look.signature || `look-${Date.now()}`,
+    createdAt: look.createdAt || new Date().toISOString(),
+    updatedAt: look.updatedAt || look.createdAt || new Date().toISOString(),
+    headline: look.headline || "Saved look",
+    subtitle: look.subtitle || "",
+    locationName: look.locationName || "",
+    coverage: Number(look.coverage || 0),
+    missingItems: Array.isArray(look.missingItems) ? look.missingItems.filter(Boolean) : [],
+    signature: look.signature || buildLookSignature(look.outfit || {}),
+    outfit: look.outfit || {},
+  };
+}
+
+async function loadSavedLooksFromServer({ force = false } = {}) {
+  if (!isLoggedIn()) return [];
+  const state = loadState();
+  if (!force && Array.isArray(state.savedLooks) && state.savedLooks.length) return state.savedLooks;
+  if (savedLooksLoadPromise) return savedLooksLoadPromise;
+  savedLooksLoadPromise = (async () => {
+    try {
+      const res = await authFetch(`${API_BASE}/api/saved-looks`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to load saved looks");
+      const looks = (Array.isArray(data.looks) ? data.looks : []).map(normalizeSyncedSavedLook);
+      savedLooksLoadFailed = false;
+      saveState({ savedLooks: looks });
+      return looks;
+    } catch (err) {
+      console.error("saved looks load error:", err);
+      savedLooksLoadFailed = true;
+      return Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+    } finally {
+      savedLooksLoadPromise = null;
+    }
+  })();
+  return savedLooksLoadPromise;
 }
 
 function getRecentPhotoScanTimestamps(state = loadState(), now = Date.now()) {
@@ -1148,6 +1213,32 @@ function updateSubscriptionCatalog(products = []) {
   setActivePaywallPlan(activePaywallPlan);
 }
 
+async function syncSubscriptionSnapshotToServer(subscription = getSubscriptionState()) {
+  if (!isLoggedIn()) return false;
+  const transactions = Array.isArray(subscription.transactions) ? subscription.transactions : [];
+  try {
+    const res = await authFetch(`${API_BASE}/api/subscription/snapshot`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        transactions,
+        activeProductIds: Array.isArray(subscription.activeProductIds) ? subscription.activeProductIds : [],
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Could not sync subscription state");
+    trackAnalyticsEvent("subscription_snapshot_synced", {
+      title: "subscription_snapshot_synced",
+      plan: data.subscription?.plan || subscription.plan,
+      status: data.subscription?.status || subscription.status,
+    });
+    return true;
+  } catch (err) {
+    console.error("subscription snapshot sync error:", err);
+    return false;
+  }
+}
+
 function applySubscriptionSnapshot(snapshot = {}) {
   if (Array.isArray(snapshot.products)) updateSubscriptionCatalog(snapshot.products);
   const state = loadState();
@@ -1168,6 +1259,7 @@ function applySubscriptionSnapshot(snapshot = {}) {
       usagePromptShown: !!(state.subscription?.usagePromptShown),
     },
   });
+  void syncSubscriptionSnapshotToServer(snapshot);
   updateAuthUI();
   return nextState;
 }
@@ -1427,7 +1519,8 @@ function maybePromptUsageMilestonePaywall() {
   const state = loadState();
   const days = Array.isArray(state.usage?.successfulUseDays) ? state.usage.successfulUseDays : [];
   const subscription = getSubscriptionState(state);
-  if (hasPremiumAccess(state) || subscription.usagePromptShown || days.length < 3) return;
+  const analytics = getAnalyticsState(state);
+  if (hasPremiumAccess(state) || subscription.usagePromptShown || days.length < 3 || !analytics.firstWardrobeRecommendationTracked) return;
   saveState({
     subscription: {
       ...subscription,
@@ -1438,11 +1531,16 @@ function maybePromptUsageMilestonePaywall() {
 }
 
 function buildPaywallContent(trigger = "generic", context = {}) {
+  const state = loadState();
+  const wardrobeCount = Number(context.wardrobeCount ?? loadWardrobe().length ?? 0);
+  const savedLooksCount = Number(context.savedLooksCount ?? (Array.isArray(state.savedLooks) ? state.savedLooks.length : 0));
+  const scanCount = Number(context.scanCount ?? getRecentPhotoScanTimestamps(state).length);
+  const matchedItems = Number(context.matchedItems ?? 0);
   const copyMap = {
     generic: {
       kicker: "WearCast Premium",
       title: "Unlock your full digital closet",
-      subtitle: "Get more from your wardrobe with unlimited items, more scans, and better closet-powered recommendations.",
+      subtitle: "Build your full closet, scan freely, sync saved looks, and get better outfit picks from clothes you own.",
     },
     manage_subscription: {
       kicker: "WearCast Premium",
@@ -1454,6 +1552,11 @@ function buildPaywallContent(trigger = "generic", context = {}) {
       title: "Keep building your full wardrobe",
       subtitle: `Free includes up to ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep growing the closet WearCast can style from.`,
     },
+    saved_looks_cap: {
+      kicker: "Saved looks limit",
+      title: "Keep a synced library of outfits",
+      subtitle: `Free includes ${FREE_SAVED_LOOK_LIMIT} synced saved looks. Go premium to save every outfit reference across devices.`,
+    },
     scan_cap: {
       kicker: "Weekly scan limit",
       title: "Scan your wardrobe without the weekly cap",
@@ -1461,17 +1564,26 @@ function buildPaywallContent(trigger = "generic", context = {}) {
     },
     starter_ready: {
       kicker: "Starter ready",
-      title: "You’ve unlocked the best moment to upgrade",
-      subtitle: "Your starter wardrobe is ready. Go premium to keep building your full closet and get more from every recommendation.",
+      title: "Your closet is ready to get smarter",
+      subtitle: "WearCast can now show which pieces match, what is missing, and how premium turns your full wardrobe into daily outfit picks.",
     },
   };
   return {
     ...(copyMap[trigger] || copyMap.generic),
     primaryLabel: getPaywallPrimaryLabel(activePaywallPlan),
     features: [
-      "Unlimited wardrobe items",
-      "Unlimited photo scans",
-      "Smarter recommendations from your closet",
+      wardrobeCount
+        ? `Use your full ${wardrobeCount}-item closet in recommendations`
+        : "Build your full digital closet",
+      scanCount
+        ? `${scanCount} scan${scanCount === 1 ? "" : "s"} used this week; premium removes the cap`
+        : "Scan without the weekly cap",
+      savedLooksCount
+        ? `${savedLooksCount} saved look${savedLooksCount === 1 ? "" : "s"} synced; premium makes outfit memory unlimited`
+        : "Sync saved looks across devices",
+      matchedItems
+        ? `Keep improving looks from ${matchedItems} matched piece${matchedItems === 1 ? "" : "s"} you own`
+        : "Better outfit picks from clothes you own",
     ],
     context,
   };
@@ -1554,7 +1666,17 @@ async function restorePurchases() {
 }
 
 function summarizeSavedLooksStatus(state = loadState()) {
-  return "";
+  const count = Array.isArray(state.savedLooks) ? state.savedLooks.length : 0;
+  if (!isLoggedIn()) return "Sign in to save outfit references and keep them synced across devices.";
+  if (hasPremiumAccess(state)) {
+    return count
+      ? `${count} synced saved look${count === 1 ? "" : "s"}. Premium keeps your outfit library unlimited.`
+      : "Premium includes unlimited synced saved looks. Save an outfit from Today to start your library.";
+  }
+  const remaining = Math.max(0, FREE_SAVED_LOOK_LIMIT - count);
+  return count
+    ? `${count} of ${FREE_SAVED_LOOK_LIMIT} free synced saved looks used • ${remaining} left.`
+    : `${FREE_SAVED_LOOK_LIMIT} free synced saved looks available.`;
 }
 
 function summarizeProfileValidationStatus(state = loadState()) {
@@ -1817,8 +1939,67 @@ function sanitizeAnalyticsMetadata(metadata = {}) {
   return sanitized;
 }
 
+function getAnalyticsDistinctId() {
+  if (authUser?.id) return `user-${authUser.id}`;
+  return ANALYTICS_SESSION_ID;
+}
+
+function getAnalyticsContext() {
+  const state = loadState();
+  return {
+    userState: isLoggedIn() ? "signed_in" : "signed_out",
+    plan: getActiveSubscriptionPlan(state),
+    wardrobeCount: loadWardrobe().length,
+    savedLooksCount: Array.isArray(state.savedLooks) ? state.savedLooks.length : 0,
+    scanCount: getRecentPhotoScanTimestamps(state).length,
+  };
+}
+
+function sendPostHogEvent(name, properties = {}) {
+  if (!POSTHOG_KEY) return;
+  try {
+    const host = String(POSTHOG_HOST || "https://app.posthog.com").replace(/\/+$/, "");
+    const payload = {
+      api_key: POSTHOG_KEY,
+      event: name,
+      distinct_id: getAnalyticsDistinctId(),
+      properties: {
+        ...properties,
+        appVersion: APP_VERSION,
+        native: isNative,
+      },
+    };
+    const body = JSON.stringify(payload);
+    if (navigator.sendBeacon) {
+      const blob = new Blob([body], { type: "application/json" });
+      navigator.sendBeacon(`${host}/capture/`, blob);
+      return;
+    }
+    fetch(`${host}/capture/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
+
+function ensureGoatCounterLoaded() {
+  if (window.goatcounter?.count || document.querySelector("script[data-goatcounter]")) return;
+  window.goatcounter = window.goatcounter || {};
+  window.goatcounter.no_onload = true;
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://gc.zgo.at/count.js";
+  script.setAttribute("data-goatcounter", "https://wearcast.goatcounter.com/count");
+  document.head.appendChild(script);
+}
+
 function trackAnalyticsEvent(name, metadata = {}) {
-  const details = sanitizeAnalyticsMetadata(metadata);
+  const details = sanitizeAnalyticsMetadata({
+    ...getAnalyticsContext(),
+    ...metadata,
+  });
   try {
     const state = loadState();
     const analytics = getAnalyticsState(state);
@@ -1837,13 +2018,17 @@ function trackAnalyticsEvent(name, metadata = {}) {
       },
     });
   } catch {}
-  try {
-    window.goatcounter?.count?.({
-      path: `${window.location.pathname}#${name}`,
-      title: details.title || name,
-      event: true,
-    });
-  } catch {}
+  if (consent.analytics) {
+    ensureGoatCounterLoaded();
+    try {
+      window.goatcounter?.count?.({
+        path: `${window.location.pathname}#${name}`,
+        title: details.title || name,
+        event: true,
+      });
+    } catch {}
+    sendPostHogEvent(name, details);
+  }
 }
 
 function flushTabDwellMetrics(tabId = getActiveTabId(), { now = Date.now() } = {}) {
@@ -2096,7 +2281,10 @@ function privacyPromptFallback({ source = null } = {}) {
   const location = confirm(
     "WearCast privacy: Allow device location?\n\nThis enables the ‘Use my location’ button. Your browser will still ask for permission when used."
   );
-  saveConsent({ seen: true, functionalStorage: functional, deviceLocation: location });
+  const analytics = confirm(
+    "WearCast privacy: Allow product analytics?\n\nThis helps improve onboarding, premium, and wardrobe flows."
+  );
+  saveConsent({ seen: true, functionalStorage: functional, deviceLocation: location, analytics });
 
   // If storage was enabled, persist whatever is currently in memory.
   if (canUseFunctionalStorage()) {
@@ -2120,9 +2308,11 @@ function showConsentDialog({ forceModal = false, source = null } = {}) {
   // Sync UI
   els.consentFunctional.checked = !!consent.functionalStorage;
   els.consentLocation.checked = !!consent.deviceLocation;
+  if (els.consentAnalytics) els.consentAnalytics.checked = !!consent.analytics;
   if (els.consentSelectAll) {
-    els.consentSelectAll.checked = !!(els.consentFunctional.checked && els.consentLocation.checked);
-    els.consentSelectAll.indeterminate = !!(els.consentFunctional.checked !== els.consentLocation.checked);
+    const checkedValues = [els.consentFunctional, els.consentLocation, els.consentAnalytics].filter(Boolean).map((el) => !!el.checked);
+    els.consentSelectAll.checked = checkedValues.length > 0 && checkedValues.every(Boolean);
+    els.consentSelectAll.indeterminate = checkedValues.some(Boolean) && !checkedValues.every(Boolean);
   }
 
   // HTMLDialogElement isn't supported in some older browsers.
@@ -2674,6 +2864,7 @@ function renderWeather(current, derived, hourly) {
     conditionLabel,
     headline: buildWeatherHeroHeadline(current, derived, effective),
   };
+  renderWeatherCollapsedTimeline();
   renderWeatherExpandedPanel();
 }
 
@@ -2745,6 +2936,28 @@ function renderWeatherExpandedPanel() {
       ${outlook}
     </div>
   `;
+}
+
+function renderWeatherCollapsedTimeline() {
+  if (!els.weatherCollapsedTimeline) return;
+  const snapshot = latestWeatherSnapshot;
+  if (!snapshot?.current) {
+    els.weatherCollapsedTimeline.innerHTML = "";
+    return;
+  }
+  const hours = getNextWeatherHours(snapshot.current, snapshot.hourly, 15);
+  if (!hours.length) {
+    els.weatherCollapsedTimeline.innerHTML = "";
+    return;
+  }
+  els.weatherCollapsedTimeline.innerHTML = hours.map((hour) => `
+    <div class="weather-collapsed-hour ${hour.itemIndex === 0 ? "is-now" : ""}">
+      <span class="weather-collapsed-hour-time">${escapeHtml(hour.hour || "—")}</span>
+      <span class="weather-collapsed-hour-icon" aria-hidden="true">${renderTimelineWeatherIcon(hour.label)}</span>
+      <strong>${Number.isFinite(Number(hour.temp)) ? fmt1(hour.temp, "°") : "—"}</strong>
+      <span>${Number.isFinite(Number(hour.rain)) ? `${fmt(Math.round(Number(hour.rain)), "")}%` : "—"}</span>
+    </div>
+  `).join("");
 }
 
 function getRecommendedOutfitItemsForOutlook() {
@@ -3122,35 +3335,123 @@ function getRecommendationSlotArtKey(label = "", value = "") {
   return itemTypeIconKey(`${label} ${value}`);
 }
 
-function getRecommendationFallbackPhoto(label = "", value = "") {
-  const slotKey = getRecommendationSlotArtKey(label, value);
-  const text = `${label} ${value}`.toLowerCase();
-  if (slotKey === "jacket") {
-    if (/\b(fleece|sherpa|hoodie|soft layer)\b/.test(text)) return "assets/recommendation-stock/outer-gray-hoodie-cotton-studio.jpg";
-    if (/\b(rain|waterproof|weatherproof|shell|windbreaker)\b/.test(text)) return "assets/recommendation-stock/outer-gray-shell-jacket-tech-studio.jpg";
-    if (/\bovershirt|shacket|shirt jacket\b/.test(text)) return "assets/recommendation-stock/outer-charcoal-overshirt-studio.jpg";
-    if (/\bblazer\b/.test(text)) return "assets/recommendation-stock/outer-black-blazer-studio.jpg";
-  }
-  if (slotKey === "accessory") {
-    if (/\bwatch|wristwatch\b/.test(text)) return "assets/recommendation-stock/accessory-watch-studio.jpg";
-    if (/\bbaseball cap|dad cap|snapback|sport cap|cap\b/.test(text)) return "assets/recommendation-stock/accessory-baseball-cap-studio.svg";
-    if (/\bumbrella\b/.test(text)) return "assets/recommendation-stock/accessory-white-umbrella-studio.jpg";
-    if (/\bbeanie\b/.test(text)) return "assets/recommendation-stock/accessory-white-beanie-studio.jpg";
-    if (/\bscarf\b/.test(text)) return "assets/recommendation-stock/accessory-pattern-scarf-studio.jpg";
-    if (/\bgloves?\b/.test(text)) return "assets/recommendation-stock/accessory-white-gloves-studio.jpg";
-    if (/\bbag|tote|backpack\b/.test(text)) return "assets/recommendation-stock/accessory-tote-bag-studio.jpg";
-    return "assets/recommendation-stock/accessory-watch-studio.jpg";
-  }
-  if (slotKey === "top" && /\b(thermal|base layer|baselayer|wool|merino|sweater|jumper|pullover|knit)\b/.test(text)) {
-    return "assets/recommendation-stock/top-knit-sweater-hanger-studio.jpg";
-  }
+const RECOMMENDATION_IMAGE_PLACEHOLDER = "assets/recommendation-stock/top-white-tshirt-studio.jpg";
+const RECOMMENDATION_RASTER_RE = /\.(png|jpe?g|webp)(?:$|\?)/i;
+const missingRecommendationImageWarnings = new Set();
+const recommendationQualityWarningKeys = new Set();
+
+function isRasterRecommendationImagePath(path = "") {
+  const value = compactText(path, "");
+  return !!value && (value.startsWith("data:image/") || RECOMMENDATION_RASTER_RE.test(value));
+}
+
+function getImageMatchForRecommendationEntry(entry = {}, imageMatches = {}) {
+  const normalizedEntry = normalizeRecommendationEntry(entry);
+  const slotKey = String(normalizedEntry.label || "").toLowerCase();
+  return imageMatches?.[normalizedEntry.key] || imageMatches?.[slotKey] || null;
+}
+
+function getWardrobeItemById(items = [], id = "") {
+  const normalizedId = String(id ?? "");
+  if (!normalizedId) return null;
+  return (Array.isArray(items) ? items : []).find((item) => String(item?.id ?? "") === normalizedId) || null;
+}
+
+function wardrobeItemCompatibleWithRecommendationEntry(entry = {}, item = null) {
+  if (!item) return false;
+  const wantedSlot = normalizeWardrobeType(entry.label || "");
+  const itemSlot = normalizeWardrobeType(item.type || "");
+  if (!wantedSlot || !itemSlot) return false;
+  if (wantedSlot === itemSlot) return true;
+  const combined = `${entry.value || ""} ${item.name || ""} ${item.type || ""}`.toLowerCase();
+  return (
+    ["top", "outer"].includes(wantedSlot) &&
+    ["top", "outer"].includes(itemSlot) &&
+    /\b(hoodie|sweater|cardigan|fleece|overshirt|shacket)\b/.test(combined)
+  );
+}
+
+function buildClientRecommendationFallbackMatch(match = null, reasons = []) {
   return {
-    top: "assets/recommendation-stock/top-white-tshirt-studio.jpg",
-    pants: "assets/recommendation-stock/bottom-black-trousers-studio.jpg",
-    jacket: "assets/recommendation-stock/outer-gray-jacket-studio.jpg",
-    shoes: "assets/recommendation-stock/shoes-black-white-sneakers-studio.jpg",
-    dress: "assets/recommendation-stock/top-black-wrap-dress-jersey-studio-fem.jpg",
-  }[slotKey] || "assets/recommendation-stock/top-white-tshirt-studio.jpg";
+    ...(match && typeof match === "object" ? match : {}),
+    path: RECOMMENDATION_IMAGE_PLACEHOLDER,
+    source: "raster_fallback",
+    confidence: 0,
+    matchQuality: "client_quality_fallback",
+    matchReasons: Array.from(new Set([...(Array.isArray(match?.matchReasons) ? match.matchReasons : []), ...reasons])),
+    clientFallback: true,
+  };
+}
+
+function sanitizeRecommendationImageMatchesForRender(rowEntries = [], imageMatches = {}, wardrobeItems = []) {
+  const sanitized = { ...(imageMatches || {}) };
+  const issues = [];
+
+  rowEntries.forEach((entry, index) => {
+    const normalizedEntry = normalizeRecommendationEntry(entry, index);
+    const slotKey = String(normalizedEntry.label || "").toLowerCase();
+    const match = getImageMatchForRecommendationEntry(normalizedEntry, sanitized);
+    const reasons = [];
+
+    if (!match?.path) reasons.push("missing_image");
+    else if (!isRasterRecommendationImagePath(match.path)) reasons.push("non_raster_image");
+    if (match?.path && Number.isFinite(Number(match.confidence)) && Number(match.confidence) > 0 && Number(match.confidence) < 35) {
+      reasons.push("low_confidence_image_match");
+    }
+
+    if (match?.source === "wardrobe") {
+      const item = getWardrobeItemById(wardrobeItems, match.itemId);
+      if (!match.itemId) reasons.push("wardrobe_unbound");
+      else if (!item) reasons.push("wardrobe_unknown_item");
+      else if (!wardrobeItemCompatibleWithRecommendationEntry(normalizedEntry, item)) reasons.push("wardrobe_slot_mismatch");
+    }
+
+    if (!reasons.length) return;
+    const fallback = buildClientRecommendationFallbackMatch(match, reasons);
+    sanitized[normalizedEntry.key] = fallback;
+    if (slotKey && !sanitized[slotKey]) sanitized[slotKey] = fallback;
+    issues.push({
+      slot: normalizedEntry.label || slotKey || "Item",
+      item: normalizedEntry.value || "",
+      code: reasons[0],
+      reasons,
+      source: match?.source || "missing",
+      matchQuality: match?.matchQuality || "",
+    });
+  });
+
+  return { imageMatches: sanitized, issues };
+}
+
+function trackRecommendationQualityIssues(issues = [], data = {}, wardrobeSummary = {}) {
+  const signature = buildLookSignature(data?.outfit || {});
+  issues.forEach((issue) => {
+    const key = `${signature}:${issue.slot}:${issue.item}:${issue.code}`;
+    if (recommendationQualityWarningKeys.has(key)) return;
+    recommendationQualityWarningKeys.add(key);
+    const payload = {
+      title: `recommendation_quality_issue:${issue.code}`,
+      issue: issue.code,
+      slot: issue.slot,
+      item: issue.item,
+      source: issue.source,
+      matchQuality: issue.matchQuality,
+      coverage: Number(wardrobeSummary?.coverage || 0),
+      matchedItems: Number(wardrobeSummary?.matchedCount || 0),
+    };
+    trackAnalyticsEvent("recommendation_quality_issue", payload);
+    trackAnalyticsEvent("fallback_image_used", {
+      ...payload,
+      title: `fallback_image_used:${issue.code}`,
+    });
+    if (/wardrobe_/.test(issue.code)) {
+      trackAnalyticsEvent("wardrobe_mismatch_prevented", {
+        ...payload,
+        title: `wardrobe_mismatch_prevented:${issue.code}`,
+      });
+    }
+    console.warn("[recommendation] quality fallback", issue);
+  });
 }
 
 function formatCityLevelLocation(displayName, address = null) {
@@ -3377,6 +3678,18 @@ function getRecommendationTileIcon(label) {
 
 function getRecommendationCardArt(label, value, imageMatch = null) {
   const key = getRecommendationSlotArtKey(label, value);
+  if (!imageMatch?.path) {
+    const warningKey = `${label}:${value}`;
+    if (!missingRecommendationImageWarnings.has(warningKey)) {
+      missingRecommendationImageWarnings.add(warningKey);
+      trackAnalyticsEvent("recommendation_image_missing", {
+        title: "recommendation_image_missing",
+        slot: label,
+        item: value,
+      });
+      console.warn("[recommendation] missing server image match", { label, value });
+    }
+  }
   const toneMap = {
     top: "top",
     pants: "bottom",
@@ -3389,7 +3702,7 @@ function getRecommendationCardArt(label, value, imageMatch = null) {
     key,
     tone: toneMap[key] || "top",
     icon: renderInlineIcon(key),
-    photo: imageMatch?.path || getRecommendationFallbackPhoto(label, value),
+    photo: imageMatch?.path || RECOMMENDATION_IMAGE_PLACEHOLDER,
   };
 }
 
@@ -3449,9 +3762,10 @@ function buildClientFallbackRecommendation(weather = {}, reason = "AI response t
   else accessories.push("Watch");
 
   const weatherSummary = buildLocalRecommendationSubtitle(weather);
-  return {
-    outfit: { top, bottom, outer, shoes, accessories },
-    reasoning: weatherSummary,
+	  return {
+	    outfit: { top, bottom, outer, shoes, accessories },
+	    savedLookCaption: buildSavedLookFallbackCaption({ outfit: { top, bottom, outer, shoes, accessories } }),
+	    reasoning: weatherSummary,
     slotReasons: {
       top: cold ? "Adds comfortable warmth without making the base bulky." : hot ? "Keeps the base breathable in warmer air." : "Creates a flexible base for changing conditions.",
       bottom: wet ? "Darker, sturdier fabric is more forgiving if showers arrive." : "Balances coverage, comfort, and easy movement.",
@@ -3699,16 +4013,7 @@ function buildWardrobePhotoMatches(entries, wardrobeItems = []) {
 }
 
 function mergeRecommendationImageMatches(serverMatches = {}, wardrobeMatches = {}) {
-  const merged = { ...(serverMatches || {}) };
-  Object.entries(wardrobeMatches || {}).forEach(([key, match]) => {
-    if (!match || match.source !== "wardrobe") return;
-    const serverMatch = merged[key];
-    if (serverMatch?.source === "wardrobe") return;
-    if (!serverMatch || Number(match.matchScore || 0) >= 18) {
-      merged[key] = match;
-    }
-  });
-  return merged;
+  return { ...(serverMatches || {}) };
 }
 
 function buildWardrobeItemMatches(entries, wardrobeItems = []) {
@@ -3789,7 +4094,7 @@ function getRecommendationWardrobeSummary(rowEntries = [], wardrobeItems = [], i
   }, {});
   const directMatches = Object.keys(serverMatches).length
     ? serverMatches
-    : buildWardrobeItemMatches(rowEntries, wardrobeItems);
+    : {};
   const matchedCount = rowEntries.filter((entry) => directMatches[entry.key]).length;
   const totalCount = rowEntries.length;
   const missingCount = Math.max(0, totalCount - matchedCount);
@@ -3812,6 +4117,12 @@ function describeRecommendationConfidence(summary = {}) {
   return "Early match confidence";
 }
 
+function isStrongWardrobePoweredRecommendation(summary = {}) {
+  const matchedCount = Number(summary?.matchedCount || 0);
+  const coverage = Number(summary?.coverage || 0);
+  return matchedCount >= 3 || coverage >= 60;
+}
+
 function buildLookSignature(outfit = {}) {
   return [
     outfit.top || "",
@@ -3822,64 +4133,404 @@ function buildLookSignature(outfit = {}) {
   ].map((value) => normalizeItemLabel(value).toLowerCase()).filter(Boolean).join("|");
 }
 
-function saveRecommendationLook(payload) {
+function getOutfitEntries(outfit = {}) {
+  const accessories = Array.isArray(outfit.accessories)
+    ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
+    : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
+  return [
+    { label: "Top", value: preserveUsefulItemLabel(outfit.top), key: "top" },
+    { label: "Bottom", value: preserveUsefulItemLabel(outfit.bottom), key: "bottom" },
+    { label: "Outer", value: preserveUsefulItemLabel(outfit.outer), key: "outer" },
+    { label: "Shoes", value: preserveUsefulItemLabel(outfit.shoes), key: "shoes" },
+    ...accessories.map((value, index) => ({
+      label: "Accessory",
+      value,
+      key: `accessory-${index}`,
+    })),
+  ].filter((entry) => entry.value);
+}
+
+async function saveRecommendationLook(payload) {
   if (!payload) return false;
-  showAppToast("Outfit saving is not included in this launch build.", "info");
-  return false;
+  if (!isLoggedIn()) {
+    showAuthDialog("save_look");
+    showAppToast("Sign in to save looks and keep them synced across devices.", "info");
+    return false;
+  }
+  const signature = payload.signature || buildLookSignature(payload.outfit || {});
+  if (!signature) {
+    showAppToast("This look needs an outfit before it can be saved.", "warning");
+    return false;
+  }
+  try {
+    const res = await authFetch(`${API_BASE}/api/saved-looks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...payload,
+        signature,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 402 && data.limitCode === "saved_looks_cap") {
+      openPaywall("saved_looks_cap", { source: "save-look", savedLooksCount: data.count });
+      showAppToast(data.error || `Free includes ${FREE_SAVED_LOOK_LIMIT} synced saved looks. Go premium to save more.`, "warning");
+      trackAnalyticsEvent("saved_look_limit_hit", {
+        title: "saved_look_limit_hit",
+        limit: data.limit || FREE_SAVED_LOOK_LIMIT,
+        count: data.count || FREE_SAVED_LOOK_LIMIT,
+      });
+      trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:saved_looks_cap" });
+      return false;
+    }
+    if (!res.ok) throw new Error(data.error || "Could not save look");
+    const savedLook = normalizeSyncedSavedLook(data.look);
+    const existing = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+    const nextLooks = [savedLook, ...existing.filter((entry) => entry.signature !== savedLook.signature)];
+    saveState({ savedLooks: nextLooks });
+    renderSavedLooksLibrarySummary();
+    trackAnalyticsEvent("saved_look_added", {
+      title: "saved_look_added",
+      totalSavedLooks: nextLooks.length,
+      coverage: Number(savedLook.coverage || 0),
+    });
+    return true;
+  } catch (err) {
+    console.error("save look error:", err);
+    showAppToast(err.message || "Could not save that look right now.", "error");
+    return false;
+  }
 }
 
 function renderSavedLookHistory(savedLooks = []) {
-  return "";
+  if (!isLoggedIn()) {
+    return `
+      <section class="today-wardrobe-history">
+        <div class="today-wardrobe-history-head">
+          <span class="today-cta-kicker">Outfit memory</span>
+          <strong>Save looks after signing in</strong>
+          <span>Synced saved looks become your outfit reference library across devices.</span>
+        </div>
+      </section>
+    `;
+  }
+  const limitText = hasPremiumAccess()
+    ? "Unlimited saved looks"
+    : `${savedLooks.length} of ${FREE_SAVED_LOOK_LIMIT} saved`;
+  if (savedLooksLoadFailed) {
+    return `
+      <section class="today-wardrobe-history">
+        <div class="today-wardrobe-history-head">
+          <span class="today-cta-kicker">Synced saved looks</span>
+          <strong>Could not refresh saved looks</strong>
+          <span>Your current recommendation still works. Retry syncing when you want to manage saved looks.</span>
+        </div>
+        <div class="today-wardrobe-history-actions">
+          <button type="button" class="today-details-button" data-rec-action="retry-saved-looks">Retry sync</button>
+        </div>
+      </section>
+    `;
+  }
+  if (!savedLooks.length) {
+    return `
+      <section class="today-wardrobe-history">
+        <div class="today-wardrobe-history-head">
+          <span class="today-cta-kicker">Synced saved looks</span>
+          <strong>No saved looks yet</strong>
+          <span>Save a recommendation to build an outfit reference library across devices. ${limitText}.</span>
+        </div>
+      </section>
+    `;
+  }
+  const visibleLooks = savedLooksExpanded ? savedLooks : savedLooks.slice(0, 2);
+  const toggleLabel = savedLooksExpanded ? "Show fewer" : `View all ${savedLooks.length}`;
+  return `
+    <section class="today-wardrobe-history">
+      <div class="today-wardrobe-history-head">
+        <span class="today-cta-kicker">Synced saved looks</span>
+        <strong>Recent outfit references</strong>
+        <span>${limitText}. Saved to your account so you can revisit the outfits that worked.</span>
+      </div>
+      <div class="today-wardrobe-history-list">
+        ${visibleLooks.map((look) => `
+          <div class="today-wardrobe-history-item">
+            <div>
+              <strong>${escapeHtml(look.headline || "Saved look")}</strong>
+              <span>${escapeHtml(look.locationName || "Synced to your account")}</span>
+            </div>
+            <button type="button" class="today-saved-look-delete" data-rec-action="delete-saved-look" data-saved-look-id="${escapeHtml(String(look.id))}" aria-label="Delete ${escapeHtml(look.headline || "saved look")}">Delete</button>
+          </div>
+        `).join("")}
+      </div>
+      ${savedLooks.length > 2 ? `
+        <div class="today-wardrobe-history-actions">
+          <button type="button" class="today-details-button" data-rec-action="toggle-saved-looks">${toggleLabel}</button>
+        </div>
+      ` : ""}
+    </section>
+  `;
+}
+
+function renderSavedLooksLibrarySummary(state = loadState()) {
+  const savedLooks = Array.isArray(state.savedLooks) ? state.savedLooks : [];
+  if (els.savedLooksLibraryCount) {
+    els.savedLooksLibraryCount.textContent = String(savedLooks.length);
+  }
+  if (els.savedLooksLibraryBtn) {
+    els.savedLooksLibraryBtn.classList.toggle("has-saved-looks", savedLooks.length > 0);
+    els.savedLooksLibraryBtn.setAttribute(
+      "aria-label",
+      savedLooks.length
+        ? `Open ${savedLooks.length} saved look${savedLooks.length === 1 ? "" : "s"}`
+        : "Open saved looks"
+    );
+  }
+}
+
+function renderSavedLooksLibrary() {
+  const state = loadState();
+  const savedLooks = Array.isArray(state.savedLooks) ? state.savedLooks : [];
+  renderSavedLooksLibrarySummary(state);
+  if (els.savedLooksDialogSubtitle) {
+    els.savedLooksDialogSubtitle.textContent = hasPremiumAccess(state)
+      ? "Swipe through your synced outfit library."
+      : `${savedLooks.length} of ${FREE_SAVED_LOOK_LIMIT} free saved looks used.`;
+  }
+  if (!els.savedLooksDialogBody) return;
+  if (savedLooksLoadFailed) {
+    els.savedLooksDialogBody.innerHTML = `
+      <div class="saved-looks-empty-state">
+        <strong>Could not refresh saved looks</strong>
+        <p>Your local saved looks are still shown when available.</p>
+        <button type="button" class="today-details-button" data-saved-looks-action="retry">Retry sync</button>
+      </div>
+    `;
+    return;
+  }
+  if (!savedLooks.length) {
+    els.savedLooksDialogBody.innerHTML = `
+      <div class="saved-looks-empty-state">
+        <strong>No saved looks yet</strong>
+        <p>Save an outfit from Today and it will appear here as a swipeable reference card.</p>
+      </div>
+    `;
+    return;
+  }
+  els.savedLooksDialogBody.innerHTML = `
+    <div class="saved-looks-carousel" aria-label="Saved looks">
+      ${savedLooks.map((look, lookIndex) => {
+        const entries = getOutfitEntries(look.outfit || {});
+        const imageMatches = getSavedLookImageMatches(look);
+        const slotReasons = look.outfit?._slotReasons && typeof look.outfit._slotReasons === "object" ? look.outfit._slotReasons : {};
+        const displayTitle = buildSavedLookDisplayTitle(look, imageMatches);
+        const displaySubtitle = buildSavedLookDisplaySubtitle(look, imageMatches);
+        return `
+          <article class="saved-look-card" data-saved-look-index="${lookIndex}">
+            <div class="saved-look-card-head">
+              <div>
+                <span class="today-cta-kicker">Saved outfit</span>
+                <h3>${escapeHtml(displayTitle)}</h3>
+                <p>${escapeHtml(displaySubtitle)}</p>
+              </div>
+              <button type="button" class="saved-look-card-delete" data-saved-looks-action="delete" data-saved-look-id="${escapeHtml(String(look.id))}" aria-label="Delete ${escapeHtml(displayTitle)}">Delete</button>
+            </div>
+            <div class="saved-look-card-collage">
+              ${entries.length ? renderRecommendationDeck(entries, lastWeatherForAI || {}, imageMatches, slotReasons) : `<div class="saved-looks-empty-state"><strong>Outfit details unavailable</strong></div>`}
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function getSavedLookDialogItems(look = {}) {
+  const entries = getOutfitEntries(look.outfit || {});
+  const imageMatches = getSavedLookImageMatches(look);
+  const slotReasons = look.outfit?._slotReasons && typeof look.outfit._slotReasons === "object" ? look.outfit._slotReasons : {};
+  const itemDetails = look.outfit?._itemDetails && typeof look.outfit._itemDetails === "object" ? look.outfit._itemDetails : {};
+  return buildRecommendationDialogItems(entries, lastWeatherForAI || {}, imageMatches, slotReasons, itemDetails);
+}
+
+function getSavedLookImageMatches(look = {}) {
+  const savedImageMatches = look.outfit?._imageMatches && typeof look.outfit._imageMatches === "object" ? look.outfit._imageMatches : {};
+  const entries = getOutfitEntries(look.outfit || {});
+  return sanitizeRecommendationImageMatchesForRender(
+    entries,
+    mergeRecommendationImageMatches(savedImageMatches),
+    loadWardrobe()
+  ).imageMatches;
+}
+
+function cleanSavedLookCaption(value = "") {
+  const text = compactText(value, "")
+    .replace(/[.!?]+$/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text || /[+,]/.test(text)) return "";
+  const words = text.split(/\s+/).filter(Boolean);
+  if (!words.length || words.length >= 5 || text.length > 48) return "";
+  return words
+    .map((word) => word
+      .split("-")
+      .map((part) => part ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase() : part)
+      .join("-"))
+    .join(" ");
+}
+
+function buildSavedLookFallbackCaption(look = {}, imageMatches = {}) {
+  const entries = getOutfitEntries(look.outfit || {});
+  const matchedCount = entries.filter((entry) => {
+    const slotKey = String(entry.label || "").toLowerCase();
+    const match = imageMatches?.[entry.key] || imageMatches?.[slotKey] || null;
+    return match?.source === "wardrobe";
+  }).length;
+  const outfitText = entries.map((entry) => normalizeItemLabel(entry.value).toLowerCase()).join(" ");
+  const prefix = matchedCount ? "Closet" : /jacket|coat|overshirt|cardigan|hoodie|fleece/.test(outfitText) ? "Layered" : "Easy";
+  const base =
+    /jeans|denim/.test(outfitText) ? "Denim" :
+    /chino|trouser|pant/.test(outfitText) ? "Everyday" :
+    /dress|skirt/.test(outfitText) ? "Polished" :
+    /short|linen|tee|t-shirt|polo/.test(outfitText) ? "Casual" :
+    "Outfit";
+  return `${prefix} ${base} Look`;
+}
+
+function buildSavedLookDisplayTitle(look = {}, imageMatches = {}) {
+  const explicitCaption = cleanSavedLookCaption(
+    look.outfit?._savedLookCaption ||
+    look.savedLookCaption ||
+    look.caption ||
+    look.headline
+  );
+  return explicitCaption || buildSavedLookFallbackCaption(look, imageMatches);
+}
+
+function buildSavedLookDisplaySubtitle(look = {}, imageMatches = {}) {
+  const entries = getOutfitEntries(look.outfit || {});
+  const matchedCount = entries.filter((entry) => {
+    const slotKey = String(entry.label || "").toLowerCase();
+    const match = imageMatches?.[entry.key] || imageMatches?.[slotKey] || null;
+    return match?.source === "wardrobe";
+  }).length;
+  const pieceText = `${entries.length || 0} piece${entries.length === 1 ? "" : "s"}`;
+  const matchText = matchedCount
+    ? `${matchedCount} from your wardrobe`
+    : `${Math.round(Number(look.coverage || 0))}% closet coverage`;
+  return `${pieceText} • ${matchText}`;
+}
+
+async function openSavedLooksLibrary() {
+  if (isLoggedIn()) {
+    await loadSavedLooksFromServer({ force: true });
+  }
+  renderSavedLooksLibrary();
+  if (typeof els.savedLooksDialog?.showModal === "function") {
+    els.savedLooksDialog.showModal();
+  }
+}
+
+function refreshRecommendationWardrobeLoop() {
+  if (!els.aiRecMissing) return;
+  const snapshot = latestRecommendationSnapshot;
+  if (!snapshot?.wardrobeSummary) {
+    els.aiRecMissing.innerHTML = "";
+    return;
+  }
+  els.aiRecMissing.innerHTML = renderRecommendationWardrobeLoop(snapshot.wardrobeSummary, {
+    outfit: snapshot.outfit,
+    missingItems: snapshot.missingItems,
+  });
+}
+
+function requestDeleteSavedLook(lookId) {
+  const savedLooks = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+  const look = savedLooks.find((entry) => String(entry.id) === String(lookId));
+  if (!look) return;
+  pendingSavedLookDeleteId = look.id;
+  const displayTitle = buildSavedLookDisplayTitle(look, getSavedLookImageMatches(look));
+  if (els.savedLookDeleteMessage) {
+    els.savedLookDeleteMessage.textContent = `Remove "${displayTitle}" from your synced outfit library?`;
+  }
+  if (typeof els.savedLookDeleteDialog?.showModal === "function") {
+    els.savedLookDeleteDialog.showModal();
+  } else if (confirm(`Delete "${displayTitle}"?`)) {
+    void deleteSavedLook(look.id);
+  }
+}
+
+async function deleteSavedLook(lookId = pendingSavedLookDeleteId) {
+  if (!lookId || !isLoggedIn()) return false;
+  try {
+    const res = await authFetch(`${API_BASE}/api/saved-looks/${encodeURIComponent(lookId)}`, { method: "DELETE" });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Could not delete saved look");
+    const existing = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+    saveState({ savedLooks: existing.filter((entry) => String(entry.id) !== String(lookId)) });
+    pendingSavedLookDeleteId = null;
+    refreshRecommendationWardrobeLoop();
+    renderSavedLooksLibrary();
+    renderSettingsUI();
+    showAppToast("Saved look deleted.", "success");
+    return true;
+  } catch (err) {
+    console.error("delete saved look error:", err);
+    showAppToast(err.message || "Could not delete saved look.", "error");
+    return false;
+  }
+}
+
+function getFirstRecommendationEntryToAdd(summary = {}, data = {}) {
+  const entries = getOutfitEntries(data?.outfit || {});
+  if (!entries.length) return null;
+  const directMatches = summary?.directMatches || {};
+  return entries.find((entry) => !directMatches[entry.key]) || entries[0];
 }
 
 function renderRecommendationWardrobeLoop(summary, data) {
-  const missingItems = Array.isArray(data?.missingItems) ? data.missingItems.filter(Boolean) : [];
+  const wardrobeCount = loadWardrobe().length;
+  const savedLooks = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+  const currentSignature = buildLookSignature(data?.outfit || {});
+  const isAlreadySaved = savedLooks.some((entry) => entry.signature === currentSignature);
   const matchedCount = Number(summary?.matchedCount || 0);
-  const totalCount = Number(summary?.totalCount || 0);
-  const missingCount = Number(summary?.missingCount || 0);
-  const matchHeadline = matchedCount
-    ? `${matchedCount} of ${totalCount || 0} pieces already match what you own`
-    : "Add your first pieces to make this look yours";
-  const matchCopy = matchedCount
-    ? (missingCount ? `${missingCount} piece${missingCount === 1 ? "" : "s"} still need a match, so this look is partly grounded in your closet already.` : "This look is fully grounded in your real wardrobe, so it should be easy to wear today.")
-    : "Add a few staples and WearCast can replace these suggestions with clothes you actually own.";
+  const totalCount = Number(summary?.totalCount || 0) || 5;
+  const coverage = Math.max(0, Math.min(100, Math.round(Number(summary?.coverage || 0))));
+  const addEntry = getFirstRecommendationEntryToAdd(summary, data);
+  const addAttrs = addEntry
+    ? `data-rec-slot="${escapeHtml(addEntry.label || "")}" data-rec-item="${escapeHtml(addEntry.value || "")}"`
+    : "";
 
-  return `
-    <section class="today-wardrobe-loop">
-      <div class="today-wardrobe-loop-summary">
-        <div>
-          <span class="today-cta-kicker">From your wardrobe</span>
-          <strong>${matchHeadline}</strong>
-          <p>${matchCopy}</p>
+	  if (!wardrobeCount) {
+	    return `
+	      <section class="today-wardrobe-strip today-wardrobe-strip-empty">
+	        <div class="today-wardrobe-strip-copy">
+	          <strong>Add wardrobe pieces</strong>
+          <span>Use your own clothes in future picks.</span>
         </div>
-        <div class="today-wardrobe-loop-metrics">
-          <span class="today-rec-meta-chip">${escapeHtml(describeRecommendationCoverage(summary))}</span>
-          <span class="today-rec-meta-chip">${escapeHtml(describeRecommendationConfidence(summary))}</span>
-        </div>
+        <button type="button" class="today-wardrobe-strip-action" data-rec-action="add-recommendation-item" ${addAttrs}>Add first</button>
+      </section>
+	    `;
+	  }
+
+	  if (matchedCount === 0) {
+	    return `
+	      <section class="today-wardrobe-strip today-wardrobe-strip-empty">
+	        <div class="today-wardrobe-strip-copy">
+	          <strong>0 of ${totalCount} matched</strong>
+	          <span>Add more pieces to improve closet coverage.</span>
+	        </div>
+	        <button type="button" class="today-wardrobe-strip-action" data-rec-action="add-recommendation-item" ${addAttrs}>Add item</button>
+	      </section>
+	    `;
+	  }
+
+	  return `
+	    <section class="today-wardrobe-strip">
+      <div class="today-wardrobe-strip-copy">
+        <strong>${matchedCount} of ${totalCount} matched</strong>
+        <span>${coverage}% closet coverage today</span>
       </div>
-      <div class="today-wardrobe-loop-actions">
-        <button type="button" class="btn-primary today-wardrobe-loop-primary" data-rec-action="open-wardrobe">Open wardrobe</button>
-      </div>
-      ${missingItems.length ? `
-        <div class="today-wardrobe-gap-list">
-          <div class="today-wardrobe-gap-section-head">
-            <span class="today-cta-kicker">Recommendation gap</span>
-            <strong>Add or swap one of these pieces to close the look</strong>
-          </div>
-          ${missingItems.map((item) => `
-            <div class="today-wardrobe-gap-card">
-              <div>
-                <strong>${escapeHtml(item)}</strong>
-                <p>Add a similar piece or swap to something you already own.</p>
-              </div>
-              <div class="today-wardrobe-gap-actions">
-                <button type="button" class="today-feedback-chip" data-rec-action="use-owned" data-rec-missing-item="${escapeHtml(item)}">Use one I own instead</button>
-              </div>
-            </div>
-          `).join("")}
-        </div>
-      ` : ""}
-      ${renderSavedLookHistory(savedLooks)}
+      <button type="button" class="today-wardrobe-strip-action" data-rec-action="save-look">${isAlreadySaved ? "Saved" : "Save look"}</button>
     </section>
   `;
 }
@@ -3961,12 +4612,34 @@ function buildRecommendationItemDialogDetails(item = {}, weather = {}) {
 }
 
 function getRecommendationDialogItems() {
+  if (Array.isArray(recommendationDialogItemsOverride)) {
+    return recommendationDialogItemsOverride;
+  }
   try {
     const items = JSON.parse(els.aiRecContent?.dataset?.collageItems || "[]");
     return Array.isArray(items) ? items : [];
   } catch {
     return [];
   }
+}
+
+function buildRecommendationDialogItems(entries, weather, imageMatches = {}, slotReasons = {}, itemDetails = {}) {
+  return entries.map((entry, index) => {
+    const slotKey = String(entry.label || "").toLowerCase();
+    const imageMatch = imageMatches?.[entry.key] || imageMatches?.[slotKey] || null;
+    const art = getRecommendationCardArt(entry.label, entry.value, imageMatch);
+    return {
+      label: entry.label,
+      value: entry.value,
+      reason: buildRecommendationItemReason(entry.label, entry.value, weather, slotReasons?.[entry.key] || slotReasons?.[slotKey] || ""),
+      photo: art.photo,
+      icon: art.icon,
+      tone: art.tone,
+      wardrobeDetails: imageMatch?.source === "wardrobe" ? imageMatch : null,
+      aiDetails: itemDetails?.[entry.key] || itemDetails?.[slotKey] || (slotKey.startsWith("accessory") ? itemDetails?.accessory : null),
+      index,
+    };
+  });
 }
 
 function stepRecommendationItemDialog(direction = 1) {
@@ -3990,10 +4663,8 @@ function getRecommendationDialogPreview() {
 }
 
 function renderRecommendationItemDialogMedia(item, className = "today-item-dialog-photo") {
-  if (item?.photo) {
-    return `<img class="${className}" src="${escapeHtml(item.photo)}" alt="" draggable="false" />`;
-  }
-  return `<div class="today-item-dialog-art">${item?.icon || ""}</div>`;
+  const photo = item?.photo || RECOMMENDATION_IMAGE_PLACEHOLDER;
+  return `<img class="${className}" src="${escapeHtml(photo)}" alt="" draggable="false" />`;
 }
 
 function getRecommendationCollageTextPlacement(positionClass = "") {
@@ -4052,7 +4723,7 @@ function renderRecommendationDeck(entries, weather, imageMatches = {}, slotReaso
             aria-label="Open ${escapeHtml(item.value)}"
           >
             <span class="today-rec-collage-photo-wrap">
-              ${item.photo ? `<img class="today-rec-collage-photo" src="${item.photo}" alt="" draggable="false" />` : `<span class="today-rec-collage-art">${item.icon}</span>`}
+              <img class="today-rec-collage-photo" src="${escapeHtml(item.photo || RECOMMENDATION_IMAGE_PLACEHOLDER)}" alt="" draggable="false" />
             </span>
             ${item.fromWardrobe ? `<span class="today-rec-collage-wardrobe-mark">W A R D R O B E</span>` : ""}
             <span class="today-rec-collage-chip">${escapeHtml(item.label)}</span>
@@ -4264,16 +4935,22 @@ function renderRecommendationControls({ mode = "default" } = {}) {
 
   const descriptions = isActivationMode
     ? {
+        Cut: "Choose the default clothing cut WearCast should match first.",
         Comfort: "Tell WearCast whether you usually need a warmer or lighter outfit.",
         "Day type": "Choose the shape of today so the recommendation fits the moment.",
         Style: "Pick the vibe you want without losing the weather logic.",
       }
     : {
+        Cut: "Choose the default clothing cut WearCast should match first.",
         Comfort: "Bias the outfit warmer or lighter based on how you usually feel.",
         Activity: "Adjust the look for how much movement your day actually has.",
         Setting: "Tell WearCast whether you’ll stay inside, outside, or in transit.",
         Style: "Shift the overall vibe without changing the weather logic.",
       };
+  const orderedGroups = [
+    ...groups.filter((group) => group.key === "gender"),
+    ...groups.filter((group) => group.key !== "gender"),
+  ];
 
   return `
     <div class="today-control-groups">
@@ -4283,7 +4960,7 @@ function renderRecommendationControls({ mode = "default" } = {}) {
         <p>${isActivationMode ? "Answer three quick questions and WearCast will refresh today’s look with a better fit." : "Adjust the human context around the forecast. Weather still stays in charge, but the outfit should feel more like yours."}</p>
         <div class="today-control-summary">${escapeHtml(summarizeRecommendationTuning(prefs))}</div>
       </div>
-      ${groups.map((group) => `
+      ${orderedGroups.map((group) => `
         <div class="today-control-group">
           <div class="today-control-heading">
             <div>
@@ -4519,6 +5196,18 @@ function renderRecommendationTrustSignals(data = {}, weather = {}, wardrobeSumma
   return renderRecommendationMeta(chips);
 }
 
+function renderRecommendationLogicRow(data = {}, weather = {}, wardrobeSummary = {}) {
+  return `
+    <div class="today-rec-logic-row">
+      ${renderRecommendationTrustSignals(data, weather, wardrobeSummary)}
+      <button type="button" class="today-rec-logic-btn" data-rec-action="why" aria-label="Why this recommendation works">
+        ${renderInfoIcon()}
+        <span>Why this works</span>
+      </button>
+    </div>
+  `;
+}
+
 function renderRecommendationFeedbackPanel() {
   const options = [
     ["good", "This was good"],
@@ -4606,6 +5295,37 @@ function renderWhyItems(items) {
   if (items && !Array.isArray(items) && typeof items === "object") {
     items = Object.values(items).filter(Boolean);
   }
+  const toSecondPerson = (value = "") => compactText(value, "")
+    .replace(/\bthe user's\b/gi, "your")
+    .replace(/\bthe user’s\b/gi, "your")
+    .replace(/\bthis user's\b/gi, "your")
+    .replace(/\bthe user is\b/gi, "you are")
+    .replace(/\bthis user is\b/gi, "you are")
+    .replace(/\bthe user has\b/gi, "you have")
+    .replace(/\bthis user has\b/gi, "you have")
+    .replace(/\bthe user wants\b/gi, "you want")
+    .replace(/\bthis user wants\b/gi, "you want")
+    .replace(/\bthe user needs\b/gi, "you need")
+    .replace(/\bthis user needs\b/gi, "you need")
+    .replace(/\bthe user can\b/gi, "you can")
+    .replace(/\bthis user can\b/gi, "you can")
+    .replace(/\bthe user should\b/gi, "you should")
+    .replace(/\bthis user should\b/gi, "you should")
+    .replace(/\bthe user will\b/gi, "you will")
+    .replace(/\bthis user will\b/gi, "you will")
+    .replace(/\bfor the user\b/gi, "for you")
+    .replace(/\bfor this user\b/gi, "for you")
+    .replace(/\bkeeps the user\b/gi, "keeps you")
+    .replace(/\bkeep the user\b/gi, "keep you")
+    .replace(/\bthe wearer is\b/gi, "you are")
+    .replace(/\bthe wearer has\b/gi, "you have")
+    .replace(/\bthe wearer needs\b/gi, "you need")
+    .replace(/\bthe wearer should\b/gi, "you should")
+    .replace(/\bfor the wearer\b/gi, "for you")
+    .replace(/\bkeeps the wearer\b/gi, "keeps you")
+    .replace(/\bthe wearer\b/gi, "you")
+    .replace(/\bthe user\b/gi, "you")
+    .replace(/\bthis user\b/gi, "you");
   const normalizedItems = (items || [])
     .map((item) => {
       if (item && typeof item === "object") {
@@ -4625,14 +5345,14 @@ function renderWhyItems(items) {
         return {
           title: compactText(item.title, ""),
           kicker: compactText(item.kicker, ""),
-          body: compactText(item.body, ""),
+          body: toSecondPerson(item.body),
           chips,
         };
       }
       return {
         title: "",
         kicker: "",
-        body: compactText(item, ""),
+        body: toSecondPerson(item),
         chips: [],
       };
     })
@@ -4641,8 +5361,8 @@ function renderWhyItems(items) {
     <div class="today-details-overview">
       <div class="today-details-overview-icon" aria-hidden="true">${renderInlineIcon("info")}</div>
       <div>
-        <strong>Using weather-based styling today</strong>
-        <span>A quick read on the look, the weather fit, and anything practical to keep in mind.</span>
+        <strong>Why this should work for you</strong>
+        <span>Here’s how this look fits your weather, comfort, and closet.</span>
       </div>
     </div>
     <div class="today-why-list today-details-list">
@@ -4818,6 +5538,12 @@ function getStarterTypePreset(type = "") {
       name: "Weather-ready boots",
       guideLabel: "Shoes",
       benefit: "This helps WearCast handle rain and cold-weather outfit picks.",
+    },
+    hat: {
+      type: "Hat",
+      name: "Everyday hat",
+      guideLabel: "Accessories",
+      benefit: "Accessories help WearCast finish the look without guessing.",
     },
   };
   return {
@@ -5522,27 +6248,30 @@ function bindConsentUI() {
   // Select-all logic
   const syncSelectAll = () => {
     if (!els.consentSelectAll) return;
-    const a = !!els.consentFunctional?.checked;
-    const b = !!els.consentLocation?.checked;
-    els.consentSelectAll.checked = a && b;
-    els.consentSelectAll.indeterminate = a !== b;
+    const values = [els.consentFunctional, els.consentLocation, els.consentAnalytics]
+      .filter(Boolean)
+      .map((el) => !!el.checked);
+    els.consentSelectAll.checked = values.length > 0 && values.every(Boolean);
+    els.consentSelectAll.indeterminate = values.some(Boolean) && !values.every(Boolean);
   };
 
   els.consentSelectAll?.addEventListener("change", () => {
     const on = !!els.consentSelectAll.checked;
     if (els.consentFunctional) els.consentFunctional.checked = on;
     if (els.consentLocation) els.consentLocation.checked = on;
+    if (els.consentAnalytics) els.consentAnalytics.checked = on;
     syncSelectAll();
   });
   els.consentFunctional?.addEventListener("change", syncSelectAll);
   els.consentLocation?.addEventListener("change", syncSelectAll);
+  els.consentAnalytics?.addEventListener("change", syncSelectAll);
 
   // Dialog buttons
   els.consentEssential?.addEventListener("click", (e) => {
     // Continue without saving (no functional storage, no device location)
     e.preventDefault();
     const source = consentDialogSource;
-    saveConsent({ seen: true, functionalStorage: false, deviceLocation: false });
+    saveConsent({ seen: true, functionalStorage: false, deviceLocation: false, analytics: false });
     closeConsentDialog();
     renderWardrobe();
     if (source === "local_wardrobe") {
@@ -5561,6 +6290,7 @@ function bindConsentUI() {
       seen: true,
       functionalStorage: !!els.consentFunctional?.checked,
       deviceLocation: !!els.consentLocation?.checked,
+      analytics: !!els.consentAnalytics?.checked,
     });
 
     // If storage was just enabled, persist whatever is in memory now.
@@ -6591,7 +7321,7 @@ async function renderWardrobe() {
   els.wardrobeEmpty.style.display = items.length ? "none" : "flex";
   if (els.addItemBtn) {
     const shouldShowFab = items.length > 0;
-    els.addItemBtn.style.display = shouldShowFab ? "inline-flex" : "none";
+    els.addItemBtn.hidden = !shouldShowFab;
   }
   if (els.wardrobeSubtitle) {
     els.wardrobeSubtitle.textContent =
@@ -6600,6 +7330,7 @@ async function renderWardrobe() {
       : stage === "active" ? "Browse, inspect, and refine your closet in one place."
       : "Search, filter, and scan your full collection quickly.";
   }
+  renderSavedLooksLibrarySummary();
   if (els.wardrobeSearchWrap) {
     els.wardrobeSearchWrap.style.display = stage === "rich" ? "" : "none";
   }
@@ -8329,12 +9060,24 @@ function updateItemVisual() {
 }
 
 async function analyzeItemPhoto(imageDataUrl) {
-  const res = await fetch(`${API_BASE}/api/analyze-item-photo`, {
+  const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ image: imageDataUrl }),
-  });
+  };
+  const res = isLoggedIn()
+    ? await authFetch(`${API_BASE}/api/analyze-item-photo`, requestOptions)
+    : await fetch(`${API_BASE}/api/analyze-item-photo`, requestOptions);
   const data = await res.json().catch(() => ({}));
+  if (res.status === 402 && data.limitCode === "scan_cap") {
+    openPaywall("scan_cap", { source: "server-scan-cap", scanCount: data.count });
+    trackAnalyticsEvent("server_limit_hit", {
+      title: "server_limit_hit:scan_cap",
+      limitCode: data.limitCode,
+      limit: data.limit,
+      count: data.count,
+    });
+  }
   if (!res.ok) throw new Error(data.error || "Could not analyze clothing photo");
   return data;
 }
@@ -8351,6 +9094,13 @@ function normalizeCareInstructionsInput(value) {
 async function applyItemPhotoPrefill(data) {
   if (!data || data.error) return false;
   const detectedItems = await normalizeDetectedItems(data, pendingPhotoDataUrl);
+  if (detectedItems.some((item) => itemNeedsMetadataReview(item))) {
+    trackAnalyticsEvent("low_confidence_item_metadata", {
+      title: "low_confidence_item_metadata",
+      itemCount: detectedItems.length,
+      needsReviewCount: detectedItems.filter((item) => itemNeedsMetadataReview(item)).length,
+    });
+  }
   itemRejectedPhotos = [];
   itemImportSession = { totalPhotos: 1, acceptedPhotos: 1, rejectedPhotos: 0 };
   if (detectedItems.length > 1) {
@@ -8464,6 +9214,13 @@ async function analyzeSelectedItemPhotoFile(file, { photoIndex = 1 } = {}) {
   try {
     const analysis = await analyzeItemPhoto(optimizedPhotoDataUrl);
     const detectedItems = await normalizeDetectedItems(analysis, optimizedPhotoDataUrl);
+    if (detectedItems.some((item) => itemNeedsMetadataReview(item))) {
+      trackAnalyticsEvent("low_confidence_item_metadata", {
+        title: "low_confidence_item_metadata:batch_scan",
+        itemCount: detectedItems.length,
+        needsReviewCount: detectedItems.filter((item) => itemNeedsMetadataReview(item)).length,
+      });
+    }
     if (!detectedItems.length) {
       return {
         status: "rejected",
@@ -8551,7 +9308,6 @@ async function processSelectedItemPhotos(files, { reset = true } = {}) {
   renderItemBatchReview();
   isReadingItemPhoto = true;
   isAnalyzingItemPhoto = true;
-  consumePhotoScanCredits(usableFiles.length);
   updateItemSaveState();
   setItemPhotoStatus(
     usableFiles.length > 1
@@ -8566,6 +9322,9 @@ async function processSelectedItemPhotos(files, { reset = true } = {}) {
     })));
     const acceptedResults = results.filter((entry) => entry.status === "accepted");
     const rejectedResults = results.filter((entry) => entry.status === "rejected");
+    if (!isLoggedIn() && acceptedResults.length) {
+      consumePhotoScanCredits(acceptedResults.length);
+    }
 
     const appendedItems = acceptedResults.flatMap((entry) => entry.items || []);
     itemBatchItems = reset ? appendedItems : [...itemBatchItems, ...appendedItems];
@@ -8694,6 +9453,15 @@ async function persistNewWardrobeItems(itemsToSave) {
           ...normalized,
           createdAt: new Date().toISOString(),
         });
+      } else if (res.status === 402 && data.limitCode === "wardrobe_cap") {
+        limitSkippedItems.push(normalized);
+        trackAnalyticsEvent("server_limit_hit", {
+          title: "server_limit_hit:wardrobe_cap",
+          limitCode: data.limitCode,
+          limit: data.limit,
+          count: data.count,
+        });
+        break;
       } else if (!res.ok) {
         throw new Error(data.error || "Could not save wardrobe item");
       } else {
@@ -9012,6 +9780,17 @@ async function saveItem() {
       resetNewItemFlow("");
       const latestState = loadState();
       const analytics = getAnalyticsState(latestState);
+      const crossedThreeItems = currentItemsBeforeSave.length < 3 && latestItems.length >= 3;
+      const crossedFiveItems = currentItemsBeforeSave.length < 5 && latestItems.length >= 5;
+      const savedPreview = result.savedItems[0] || {};
+      const savedTags = [savedPreview.type, savedPreview.color, savedPreview.material].map((value) => compactText(value, "")).filter(Boolean).slice(0, 3);
+      const payoffMessage = crossedFiveItems
+        ? "Starter closet ready. Your next recommendation can use your clothes."
+        : crossedThreeItems
+          ? "WearCast can start matching basics from your wardrobe."
+          : savedTags.length
+            ? `Item understood: ${savedTags.join(" • ")}. ${momentum.message}`
+            : momentum.message;
       if (!analytics.firstWardrobeItemTracked && currentItemsBeforeSave.length === 0 && latestItems.length > 0) {
         trackAnalyticsEvent("first_wardrobe_item_added", {
           title: "first_wardrobe_item_added",
@@ -9036,7 +9815,22 @@ async function saveItem() {
           },
         });
       }
-      showAppToast(momentum.message, "success", momentum.nextLabel
+      trackAnalyticsEvent("starter_slot_progress", {
+        title: "starter_slot_progress",
+        totalWardrobeItems: latestItems.length,
+        starterReady: isWardrobeStarterReady(latestItems),
+        savedCount,
+      });
+      trackAnalyticsEvent("wardrobe_activation_payoff_viewed", {
+        title: crossedFiveItems
+          ? "wardrobe_activation_payoff_viewed:item_5"
+          : crossedThreeItems
+            ? "wardrobe_activation_payoff_viewed:item_3"
+            : "wardrobe_activation_payoff_viewed:item_saved",
+        totalWardrobeItems: latestItems.length,
+        savedCount,
+      });
+      showAppToast(payoffMessage, "success", momentum.nextLabel
         ? {
             clickable: true,
             clickLabel: `Add ${momentum.nextLabel}`,
@@ -9058,7 +9852,10 @@ async function saveItem() {
           trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:wardrobe_cap" });
         }
       } else if (isLoggedIn() && !hadPremiumBeforeSave && currentItemsBeforeSave.length < 5 && latestItems.length >= 5) {
-        window.setTimeout(() => openPaywall("starter_ready", { source: "starter-milestone" }), 180);
+        window.setTimeout(() => openPaywall("starter_ready", {
+          source: "starter-milestone",
+          wardrobeCount: latestItems.length,
+        }), 1400);
       }
       return true;
     }
@@ -10459,23 +11256,16 @@ function renderAIRecommendation(data, options = {}) {
   const slotReasons = data.slotReasons || {};
   const itemDetails = data.itemDetails || {};
   const wardrobeItems = loadWardrobe();
-  const accessories = Array.isArray(outfit.accessories)
-    ? outfit.accessories.map(preserveUsefulItemLabel).filter(Boolean)
-    : [preserveUsefulItemLabel(outfit.accessories)].filter(Boolean);
-  const rowEntries = [
-    { label: "Top", value: preserveUsefulItemLabel(outfit.top), key: "top" },
-    { label: "Bottom", value: preserveUsefulItemLabel(outfit.bottom), key: "bottom" },
-    { label: "Outer", value: preserveUsefulItemLabel(outfit.outer), key: "outer" },
-    { label: "Shoes", value: preserveUsefulItemLabel(outfit.shoes), key: "shoes" },
-    ...accessories.map((value, index) => ({
-      label: "Accessory",
-      value,
-      key: `accessory-${index}`,
-    })),
-  ].filter((entry) => entry.value);
-  const wardrobePhotoMatches = buildWardrobePhotoMatches(rowEntries, wardrobeItems);
-  const resolvedImageMatches = mergeRecommendationImageMatches(imageMatches, wardrobePhotoMatches);
+  const rowEntries = getOutfitEntries(outfit);
+  const mergedImageMatches = mergeRecommendationImageMatches(imageMatches);
+  const imageQuality = sanitizeRecommendationImageMatchesForRender(rowEntries, mergedImageMatches, wardrobeItems);
+  const resolvedImageMatches = imageQuality.imageMatches;
   const wardrobeSummary = getRecommendationWardrobeSummary(rowEntries, wardrobeItems, resolvedImageMatches);
+  if (imageQuality.issues.length) {
+    trackRecommendationQualityIssues(imageQuality.issues, data, wardrobeSummary);
+  }
+  const savedLookCaption = cleanSavedLookCaption(data.savedLookCaption || data.outfit?.savedLookCaption)
+    || buildSavedLookFallbackCaption({ outfit, coverage: wardrobeSummary.coverage }, resolvedImageMatches);
   saveState({
     latestRecommendation: {
       matchedItemIds: Object.values(wardrobeSummary.directMatches || {}).map((item) => item?.id).filter(Boolean),
@@ -10494,6 +11284,8 @@ function renderAIRecommendation(data, options = {}) {
     missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
     reasoning: data.reasoning || "",
     outlook: data.outlook || null,
+    savedLookCaption,
+    qualityIssues: imageQuality.issues,
   };
   if (typeof window !== "undefined" && window.__DEBUG_OUTLOOK) {
     console.info("[outlook] received", {
@@ -10502,42 +11294,45 @@ function renderAIRecommendation(data, options = {}) {
     });
   }
   renderWeatherExpandedPanel();
-  const collageItems = rowEntries.map((entry, index) => {
-    const slotKey = String(entry.label || "").toLowerCase();
-    const imageMatch = resolvedImageMatches[entry.key] || resolvedImageMatches[slotKey] || null;
-    const art = getRecommendationCardArt(entry.label, entry.value, imageMatch);
-    return {
-      label: entry.label,
-      value: entry.value,
-      reason: buildRecommendationItemReason(entry.label, entry.value, weather, slotReasons?.[entry.key] || slotReasons?.[slotKey] || ""),
-      photo: art.photo,
-      icon: art.icon,
-      tone: art.tone,
-      wardrobeDetails: imageMatch?.source === "wardrobe" ? imageMatch : null,
-      aiDetails: itemDetails?.[entry.key] || itemDetails?.[slotKey] || (slotKey.startsWith("accessory") ? itemDetails?.accessory : null),
-    };
-  });
+  const collageItems = buildRecommendationDialogItems(rowEntries, weather, resolvedImageMatches, slotReasons, itemDetails);
   els.aiRecContent.innerHTML = `
     <div class="today-rec-body">
+      ${renderRecommendationLogicRow(data, weather, wardrobeSummary)}
       ${rowEntries.length ? renderRecommendationDeck(rowEntries, weather, resolvedImageMatches, slotReasons) : ""}
     </div>
   `;
+  setWeatherExpanded(false);
   els.aiRecContent.dataset.whyItems = JSON.stringify(detailsItems);
   els.aiRecContent.dataset.collageItems = JSON.stringify(collageItems);
   els.aiRecContent.dataset.wardrobeSummary = JSON.stringify(wardrobeSummary);
+  els.aiRecContent.dataset.recommendationId = data.recommendationId || data.requestId || "";
+  els.aiRecContent.dataset.qualityIssues = JSON.stringify(imageQuality.issues);
   els.aiRecContent.dataset.savedLook = JSON.stringify({
-    headline,
+    headline: savedLookCaption,
     subtitle,
-    outfit,
+    outfit: {
+      ...outfit,
+      _imageMatches: resolvedImageMatches,
+      _slotReasons: slotReasons,
+      _itemDetails: itemDetails,
+      _savedLookCaption: savedLookCaption,
+    },
     coverage: wardrobeSummary.coverage,
     missingItems: Array.isArray(data.missingItems) ? data.missingItems : [],
     locationName: stateBeforeSave.lastLocation?.name || "",
     signature: buildLookSignature(outfit),
   });
   els.aiRecWarnings.innerHTML = "";
-  els.aiRecMissing.innerHTML = "";
+  els.aiRecMissing.innerHTML = renderRecommendationWardrobeLoop(wardrobeSummary, data);
   initializeRecommendationDeck();
   animateRecommendationRefreshIn();
+  trackAnalyticsEvent("recommendation_shown", {
+    title: "recommendation_shown",
+    coverage: Number(wardrobeSummary.coverage || 0),
+    matchedItems: Number(wardrobeSummary.matchedCount || 0),
+    qualityStatus: data.quality?.ok === false ? "fallback_or_warning" : "ok",
+    qualityIssueCount: Number(data.quality?.issues?.length || 0) + imageQuality.issues.length,
+  });
   if (!fromCache && options.cacheKey) {
     saveRecommendationCacheEntry(options.cacheKey, data, options.cacheContext || { weather });
   }
@@ -10569,8 +11364,13 @@ function renderAIRecommendation(data, options = {}) {
         firstWardrobeRecommendationTracked: true,
       },
     });
-    if (isLoggedIn() && !hasPremiumAccess()) {
-      window.setTimeout(() => openPaywall("starter_ready", { source: "first-wardrobe-powered-recommendation" }), 900);
+    if (isLoggedIn() && !hasPremiumAccess() && isStrongWardrobePoweredRecommendation(wardrobeSummary)) {
+      window.setTimeout(() => openPaywall("starter_ready", {
+        source: "first-strong-wardrobe-powered-recommendation",
+        wardrobeCount: wardrobeItems.length,
+        matchedItems: Number(wardrobeSummary.matchedCount || 0),
+        coverage: Number(wardrobeSummary.coverage || 0),
+      }), 1400);
     }
   }
   markOnboardingRecommendationSeen();
@@ -10589,14 +11389,20 @@ function bindRecommendationControls() {
     try {
       const savedLook = JSON.parse(els.aiRecContent?.dataset?.savedLook || "null");
       const wardrobeSummary = JSON.parse(els.aiRecContent?.dataset?.wardrobeSummary || "null");
+      const qualityIssues = JSON.parse(els.aiRecContent?.dataset?.qualityIssues || "[]");
+      const outfitSignature = savedLook?.signature || buildLookSignature(savedLook?.outfit || {});
       fetch(`${API_BASE}/api/recommend/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           feedback,
           outfit: savedLook?.outfit || null,
+          outfitSignature,
+          recommendationId: els.aiRecContent?.dataset?.recommendationId || outfitSignature,
+          issue: feedback === "good" ? "" : (qualityIssues?.[0]?.code || feedback),
           weather: lastWeatherForAI || null,
           wardrobeUsageCount: Number(wardrobeSummary?.matchedCount || 0),
+          coverage: Number(wardrobeSummary?.coverage || 0),
         }),
       }).catch(() => {});
     } catch {}
@@ -10614,10 +11420,12 @@ function bindRecommendationControls() {
       sourceButton?.classList.add("is-active");
       return;
     } else if (feedback === "use_more_wardrobe") {
-      switchTab("tabWardrobe", { direction: 1 });
-      showAppToast("Add or review staples so the next look can use more of your closet.", "info");
-      sourceButton?.classList.add("is-active");
-      return;
+      const existingNotes = compactText(nextPrefs.fashionNotes, "");
+      const note = "Use more saved wardrobe items when they fit.";
+      nextPrefs = {
+        ...nextPrefs,
+        fashionNotes: existingNotes.includes(note) ? existingNotes : [existingNotes, note].filter(Boolean).join(" "),
+      };
     }
 
     const feedbackHistory = Array.isArray(latestState.recommendationFeedback) ? latestState.recommendationFeedback : [];
@@ -10636,6 +11444,7 @@ function bindRecommendationControls() {
     syncPreferenceInputs(nextPrefs);
     sourceButton?.classList.add("is-active");
     if (latestState.lastLocation) {
+      showAppToast("Refreshing today’s look with that feedback.", "info");
       await runForLocation(latestState.lastLocation);
     }
   };
@@ -10730,9 +11539,72 @@ function bindRecommendationControls() {
       return;
     }
 
+    const addRecommendationItemButton = event.target.closest("[data-rec-action='add-recommendation-item']");
+    if (addRecommendationItemButton) {
+      const recSlot = addRecommendationItemButton.dataset.recSlot || "";
+      const recItem = addRecommendationItemButton.dataset.recItem || "";
+      const presetType = getRecommendationCategoryPreset(recSlot.toLowerCase() === "accessory" ? recItem : recSlot);
+      const preset = {
+        ...getStarterTypePreset(presetType),
+        ...(recItem ? { name: recItem } : {}),
+      };
+      trackAnalyticsEvent("add_from_todays_look_tapped", {
+        title: "add_from_todays_look_tapped",
+        slot: recSlot,
+        item: recItem,
+      });
+      switchTab("tabWardrobe", { direction: 1 });
+      window.setTimeout(() => openItemDialog(null, preset), 220);
+      return;
+    }
+
     const openWardrobeButton = event.target.closest("[data-rec-action='open-wardrobe']");
     if (openWardrobeButton) {
       switchTab("tabWardrobe", { direction: 1 });
+      return;
+    }
+
+    const saveLookButton = event.target.closest("[data-rec-action='save-look']");
+    if (saveLookButton) {
+      let payload = null;
+      try {
+        payload = JSON.parse(els.aiRecContent?.dataset?.savedLook || "null");
+      } catch {}
+      trackAnalyticsEvent("save_look_tapped", {
+        title: "save_look_tapped",
+        trigger: "today_recommendation",
+      });
+      saveLookButton.disabled = true;
+      const saved = await saveRecommendationLook(payload);
+      saveLookButton.disabled = false;
+      if (saved) {
+        savedLooksExpanded = true;
+        saveLookButton.textContent = "Saved to looks";
+        showAppToast("Look saved and synced to your account.", "success");
+        refreshRecommendationWardrobeLoop();
+      }
+      return;
+    }
+
+    const toggleSavedLooksButton = event.target.closest("[data-rec-action='toggle-saved-looks']");
+    if (toggleSavedLooksButton) {
+      savedLooksExpanded = !savedLooksExpanded;
+      refreshRecommendationWardrobeLoop();
+      return;
+    }
+
+    const retrySavedLooksButton = event.target.closest("[data-rec-action='retry-saved-looks']");
+    if (retrySavedLooksButton) {
+      retrySavedLooksButton.disabled = true;
+      await loadSavedLooksFromServer({ force: true });
+      retrySavedLooksButton.disabled = false;
+      refreshRecommendationWardrobeLoop();
+      return;
+    }
+
+    const deleteSavedLookButton = event.target.closest("[data-rec-action='delete-saved-look']");
+    if (deleteSavedLookButton) {
+      requestDeleteSavedLook(deleteSavedLookButton.dataset.savedLookId);
       return;
     }
 
@@ -10791,6 +11663,7 @@ function bindRecommendationControls() {
   };
 
   els.aiRecContent?.addEventListener("click", handleRecommendationControlInteraction);
+  els.aiRecMissing?.addEventListener("click", handleRecommendationControlInteraction);
   els.aiRecAdjustBtn?.addEventListener("click", handleRecommendationControlInteraction);
   els.tuneLookDialogBody?.addEventListener("click", handleRecommendationControlInteraction);
   els.tuneLookDialogBody?.addEventListener("input", (event) => {
@@ -10948,10 +11821,18 @@ function bindRecommendationControls() {
     stepRecommendationItemDialog(direction);
   });
   els.todayItemDialog?.addEventListener("close", () => {
+    const shouldReturnToSavedLooks = reopenSavedLooksAfterItemDialog;
     activeRecommendationDialogIndex = -1;
+    recommendationDialogItemsOverride = null;
+    reopenSavedLooksAfterItemDialog = false;
     recommendationDialogTouchStartX = 0;
     recommendationDialogTouchDeltaX = 0;
     recommendationDialogSwipeActive = false;
+    if (shouldReturnToSavedLooks) {
+      window.setTimeout(() => {
+        void openSavedLooksLibrary();
+      }, 0);
+    }
   });
 }
 
@@ -10964,6 +11845,7 @@ let tabTransitionTimeoutId = null;
 let tabGestureStartTabId = "";
 
 function syncTabIndicators(tabId) {
+  document.body.dataset.activeTab = tabId;
   document.querySelectorAll(".nav-item").forEach((button) => {
     button.classList.toggle("active", button.dataset.tab === tabId);
   });
@@ -11085,6 +11967,8 @@ function bindIOSSwipeTabs() {
         ".today-chip-row-controls",
         ".weather-expanded-timeline",
         ".weather-expanded-hour",
+        ".weather-collapsed-timeline",
+        ".weather-collapsed-hour",
         ".ac-dropdown",
         ".location-input-wrap",
         "#geoBtn",
@@ -11360,14 +12244,61 @@ function bindOnboardingUI() {
 }
 
 function bindWeatherDetailUI() {
-  els.weatherHero?.addEventListener("click", toggleWeatherExpanded);
+  let weatherSwipeStart = null;
+  let lastWeatherSwipeCollapseAt = 0;
+  const shouldIgnoreWeatherSwipeStart = (target) => !!target?.closest?.(
+    ".weather-expanded-timeline, .weather-collapsed-timeline, button, input, textarea, select, a"
+  );
+  const readGesturePoint = (event) => {
+    const point = event.changedTouches?.[0] || event.touches?.[0] || event;
+    return {
+      x: Number(point.clientX) || 0,
+      y: Number(point.clientY) || 0,
+    };
+  };
+  const startWeatherSwipe = (event) => {
+    if (!isWeatherExpanded || shouldIgnoreWeatherSwipeStart(event.target)) {
+      weatherSwipeStart = null;
+      return;
+    }
+    weatherSwipeStart = readGesturePoint(event);
+  };
+  const finishWeatherSwipe = (event) => {
+    if (!weatherSwipeStart || !isWeatherExpanded) return;
+    const end = readGesturePoint(event);
+    const deltaX = end.x - weatherSwipeStart.x;
+    const deltaY = end.y - weatherSwipeStart.y;
+    weatherSwipeStart = null;
+    if (deltaY <= -50 && Math.abs(deltaX) <= 35) {
+      lastWeatherSwipeCollapseAt = Date.now();
+      event.preventDefault?.();
+      setWeatherExpanded(false);
+    }
+  };
+
+  els.weatherHero?.addEventListener("click", () => {
+    if (Date.now() - lastWeatherSwipeCollapseAt < 350) return;
+    toggleWeatherExpanded();
+  });
   els.weatherHero?.addEventListener("keydown", (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
     toggleWeatherExpanded();
   });
+  els.weatherHero?.addEventListener("pointerdown", startWeatherSwipe);
+  els.weatherHero?.addEventListener("pointerup", finishWeatherSwipe);
+  els.weatherHero?.addEventListener("pointercancel", () => {
+    weatherSwipeStart = null;
+  });
+  els.weatherHero?.addEventListener("touchstart", startWeatherSwipe, { passive: true });
+  els.weatherHero?.addEventListener("touchend", finishWeatherSwipe, { passive: false });
   els.weatherExpandedPanel?.addEventListener("click", (event) => {
     event.stopPropagation();
+  });
+  ["touchstart", "touchmove", "touchend"].forEach((eventName) => {
+    els.weatherCollapsedTimeline?.addEventListener(eventName, (event) => {
+      event.stopPropagation();
+    }, { passive: true });
   });
   els.weatherExpandToggle?.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -11678,6 +12609,7 @@ function bindAuthUI() {
     }
     setAuth(null, null, null);
     _wardrobeCache = null;
+    saveState({ savedLooks: [] });
     renderWardrobe();
     els.authDialog.close();
     showAppToast("Signed out", "success");
@@ -11691,8 +12623,8 @@ function bindAuthUI() {
     els.deleteAccountPassword.value = "";
     els.deleteAccountConfirmText.value = "";
     els.deleteAccountPrompt.textContent = authUser.authProvider === "google"
-      ? "Type DELETE to confirm. This permanently removes your account and synced wardrobe from WearCast."
-      : "Enter your password to confirm. This permanently removes your account and synced wardrobe from WearCast.";
+      ? "Type DELETE to confirm. This permanently removes your account, synced wardrobe, and saved looks from WearCast."
+      : "Enter your password to confirm. This permanently removes your account, synced wardrobe, and saved looks from WearCast.";
     if (typeof els.deleteAccountDialog.showModal === "function") els.deleteAccountDialog.showModal();
   });
 
@@ -11713,6 +12645,7 @@ function bindAuthUI() {
       if (!res.ok) throw new Error(data.error || "Could not delete account");
       setAuth(null, null, null);
       _wardrobeCache = null;
+      saveState({ savedLooks: [] });
       await renderWardrobe();
       els.deleteAccountDialog.close();
       els.authDialog.close();
@@ -11778,6 +12711,63 @@ function bindPaywallUI() {
     const trigger = els.paywallDialog?.dataset?.trigger || "generic";
     trackAnalyticsEvent("paywall_dismissed", { title: `paywall_dismissed:${trigger}` });
   });
+
+  els.savedLookDeleteCancelBtn?.addEventListener("click", () => {
+    pendingSavedLookDeleteId = null;
+    reopenSavedLooksAfterDelete = false;
+    els.savedLookDeleteDialog?.close();
+  });
+  els.savedLookDeleteConfirmBtn?.addEventListener("click", async () => {
+    const button = els.savedLookDeleteConfirmBtn;
+    const shouldReturnToLibrary = reopenSavedLooksAfterDelete;
+    button.disabled = true;
+    const deleted = await deleteSavedLook();
+    button.disabled = false;
+    els.savedLookDeleteDialog?.close();
+    reopenSavedLooksAfterDelete = false;
+    if (deleted && shouldReturnToLibrary) {
+      window.setTimeout(() => {
+        void openSavedLooksLibrary();
+      }, 0);
+    }
+  });
+  els.savedLooksLibraryBtn?.addEventListener("click", () => {
+    void openSavedLooksLibrary();
+  });
+  els.savedLooksDialogCloseBtn?.addEventListener("click", () => els.savedLooksDialog?.close());
+  els.savedLooksDialogBody?.addEventListener("click", async (event) => {
+    const itemButton = event.target.closest("[data-rec-item-index]");
+    if (itemButton) {
+      const card = itemButton.closest("[data-saved-look-index]");
+      const lookIndex = Number(card?.dataset.savedLookIndex || -1);
+      const savedLooks = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
+      const look = savedLooks[lookIndex];
+      const items = look ? getSavedLookDialogItems(look) : [];
+      const itemIndex = Number(itemButton.dataset.recItemIndex || -1);
+      const item = items[itemIndex];
+      if (item) {
+        recommendationDialogItemsOverride = items;
+        reopenSavedLooksAfterItemDialog = true;
+        els.savedLooksDialog?.close();
+        openRecommendationItemDialog(item, itemIndex);
+      }
+      return;
+    }
+    const retryButton = event.target.closest("[data-saved-looks-action='retry']");
+    if (retryButton) {
+      retryButton.disabled = true;
+      await loadSavedLooksFromServer({ force: true });
+      retryButton.disabled = false;
+      renderSavedLooksLibrary();
+      return;
+    }
+    const deleteButton = event.target.closest("[data-saved-looks-action='delete']");
+    if (deleteButton) {
+      els.savedLooksDialog?.close();
+      reopenSavedLooksAfterDelete = true;
+      requestDeleteSavedLook(deleteButton.dataset.savedLookId);
+    }
+  });
 }
 
 // Handle Google OAuth code in URL (web flow)
@@ -11818,6 +12808,11 @@ function init() {
 
   // Main empty-state CTA opens the normal add flow. Starter chips remain guided.
   els.addItemBtnEmpty?.addEventListener("click", () => openItemDialog(null));
+  els.wardrobeEmptyManualBtn?.addEventListener("click", () => openItemDialog(null));
+  els.wardrobeEmptyScanBtn?.addEventListener("click", () => {
+    openItemDialog(null);
+    els.itemPhoto?.click?.();
+  });
 
   els.searchBtn.addEventListener("click", () => onSearch());
   els.geoBtn.addEventListener("click", () => onUseMyLocation("today"));
@@ -11848,6 +12843,7 @@ function init() {
   updateTodayOnboardingUI(st);
   void loadSubscriptionProducts();
   void refreshSubscriptionState({ silent: true });
+  if (isLoggedIn()) void loadSavedLooksFromServer({ force: true });
   if (st.lastLocation) {
     els.placeInput.value = formatCityLevelLocation(st.lastLocation.name);
     runForLocation(st.lastLocation);

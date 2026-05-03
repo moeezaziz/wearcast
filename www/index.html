@@ -12,7 +12,7 @@
   <link rel="icon" href="icon.svg?v=19" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css?v=20" />
 </head>
-<body>
+<body data-active-tab="tabToday">
 
   <div class="notch-blur-overlay" aria-hidden="true"></div>
 
@@ -62,7 +62,7 @@
             </div>
             <button id="geoBtn" class="geo-btn" aria-label="Use my location" title="Use my location">
               <span class="geo-btn-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="4"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.33 3.62c.5-.18.97.29.79.79l-6.36 17.04c-.2.55-.98.55-1.19.01l-3.02-7.9a.22.22 0 0 0-.13-.13l-7.9-3.02c-.54-.21-.54-.99.01-1.19l17.8-5.6Z"/></svg>
               </span>
               <span class="geo-btn-spinner spinner spinner-sm" aria-hidden="true" style="display:none;"></span>
             </button>
@@ -102,6 +102,7 @@
                   </div>
                 </div>
               </div>
+              <div id="weatherCollapsedTimeline" class="weather-collapsed-timeline" aria-label="Hourly forecast for the next 15 hours"></div>
               <div id="weatherExpandedPanel" class="weather-expanded-panel" aria-live="polite"></div>
               <button id="weatherExpandToggle" class="weather-expand-toggle" type="button" aria-label="Expand weather details"></button>
             </div>
@@ -113,7 +114,10 @@
                   <p class="today-rec-expand-hint">Tap a tile to expand</p>
                 </div>
                 <button id="aiRecAdjustBtn" class="today-adjust-btn" type="button" data-rec-action="tune" aria-label="Adjust recommendation preferences">
-                  Adjust
+                  <span class="today-adjust-icon" aria-hidden="true">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                  </span>
+                  <span>Adjust</span>
                 </button>
               </div>
               <div id="aiRecLoading" class="loading-state" style="display:none;">
@@ -122,8 +126,8 @@
               </div>
               <div id="aiRecContent" class="today-rec-content"></div>
               <div id="aiRecWarnings"></div>
-              <div id="aiRecMissing"></div>
             </div>
+            <div id="aiRecMissing" class="today-rec-signal-row"></div>
 
             <div id="todayWardrobeInlineCta" class="today-inline-upgrade-card" style="display:none;">
               <button id="todayWardrobeInlineDismissBtn" class="today-inline-upgrade-dismiss" type="button" aria-label="Dismiss wardrobe reminder">&times;</button>
@@ -174,13 +178,9 @@
               <h2>My Wardrobe</h2>
               <p id="wardrobeSubtitle" class="wardrobe-subtitle">Build the closet WearCast can use in your daily outfit picks.</p>
             </div>
-            <button id="addItemBtn" class="btn-primary-sm wardrobe-add-btn" aria-label="Add wardrobe item" type="button">
-              <span class="wardrobe-add-btn-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-                  <path d="M12 5v14"></path>
-                  <path d="M5 12h14"></path>
-                </svg>
-              </span>
+            <button id="savedLooksLibraryBtn" class="wardrobe-saved-looks-btn" type="button">
+              <span>Saved looks</span>
+              <strong id="savedLooksLibraryCount">0</strong>
             </button>
           </div>
           <div id="wardrobeDashboard" class="card wardrobe-dashboard">
@@ -230,28 +230,29 @@
             <div class="empty-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46 16 2 12 5.5 8 2 3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47c.1.6.6 1.04 1.2 1.04H6v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10h1.94c.6 0 1.1-.44 1.2-1.04l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
             </div>
-            <h3>Build the closet WearCast can dress from</h3>
-            <p>Start with one bundle. Add five staples, let WearCast organize them, and unlock wardrobe-powered outfit picks that feel easier to trust.</p>
-            <div class="wardrobe-empty-bundles" aria-label="Starter bundles">
-              <button type="button" class="wardrobe-empty-bundle" data-starter-type="T-shirt">
-                <strong>Everyday basics</strong>
-                <span>Add the pieces most daily recommendations depend on first.</span>
-              </button>
-              <button type="button" class="wardrobe-empty-bundle" data-starter-type="Jacket">
-                <strong>Cold weather</strong>
-                <span>Build better layered recommendations for colder days.</span>
-              </button>
-              <button type="button" class="wardrobe-empty-bundle" data-starter-type="Boots">
-                <strong>Rain-ready</strong>
-                <span>Give WearCast a stronger fallback when weather turns messy.</span>
-              </button>
+            <h3>Add clothes you actually wear</h3>
+            <p>Add a few staples so WearCast can use clothes you actually own.</p>
+            <div class="wardrobe-empty-progress" aria-label="Starter wardrobe progress">
+              <button type="button" class="wardrobe-empty-slot" data-starter-type="Shirt"><span>Top</span><strong>Shirt</strong></button>
+              <button type="button" class="wardrobe-empty-slot" data-starter-type="Jeans"><span>Bottom</span><strong>Pants</strong></button>
+              <button type="button" class="wardrobe-empty-slot" data-starter-type="Jacket"><span>Layer</span><strong>Jacket</strong></button>
+              <button type="button" class="wardrobe-empty-slot" data-starter-type="Sneakers"><span>Shoes</span><strong>Shoes</strong></button>
+              <button type="button" class="wardrobe-empty-slot" data-starter-type="Hat"><span>Extra</span><strong>Accessory</strong></button>
             </div>
             <div class="wardrobe-empty-guides" aria-label="Starter categories">
-              <button type="button" class="wardrobe-empty-guide" data-starter-type="Shirt">Shirts</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Shirt">Shirt</button>
               <button type="button" class="wardrobe-empty-guide" data-starter-type="Jeans">Pants</button>
-              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Outerwear</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Jacket">Jacket</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Sneakers">Shoes</button>
+              <button type="button" class="wardrobe-empty-guide" data-starter-type="Hat">Accessory</button>
             </div>
-            <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Start with my first staple</button>
+            <div class="wardrobe-empty-actions">
+              <button id="addItemBtnEmpty" class="btn-primary wardrobe-empty-btn" type="button">Add first item</button>
+              <div class="wardrobe-empty-secondary-actions">
+                <button id="wardrobeEmptyScanBtn" class="btn-outline wardrobe-empty-secondary-btn" type="button">Scan photo</button>
+                <button id="wardrobeEmptyManualBtn" class="btn-ghost wardrobe-empty-secondary-btn" type="button">Add manually</button>
+              </div>
+            </div>
           </div>
           <div id="wardrobeList" class="wardrobe-sections"></div>
         </div>
@@ -295,6 +296,12 @@
             </div>
             <span class="settings-chevron">›</span>
           </button>
+          <div class="settings-row settings-row-static">
+            <div class="settings-copy">
+              <strong>Synced saved looks</strong>
+              <span id="settingsSavedLooksStatus">Sign in to save outfit references across devices.</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -402,6 +409,15 @@
     </section>
   </main>
 
+  <button id="addItemBtn" class="btn-primary-sm wardrobe-add-btn" aria-label="Add wardrobe item" type="button">
+    <span class="wardrobe-add-btn-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+      </svg>
+    </span>
+  </button>
+
   <div id="settingsFeedback" class="status-text settings-feedback" role="status" aria-live="polite"></div>
   <button id="refreshBtn" class="visually-hidden" type="button" aria-hidden="true" tabindex="-1">Refresh</button>
   <button id="privacyBtn" class="visually-hidden" type="button" aria-hidden="true" tabindex="-1">Privacy</button>
@@ -431,18 +447,18 @@
       <div class="onboarding-slides">
         <section class="onboarding-slide is-active" data-onboarding-slide="0">
           <span class="onboarding-kicker">WearCast</span>
-          <h1>What to wear today, based on the weather and your closet.</h1>
-          <p>WearCast turns live weather into a fast outfit recommendation so getting dressed feels easy.</p>
+          <h1>Know what to wear today from clothes you already own.</h1>
+          <p>WearCast turns live weather into a practical outfit recommendation you can trust.</p>
         </section>
         <section class="onboarding-slide" data-onboarding-slide="1">
           <span class="onboarding-kicker">Fast Value</span>
-          <h1>Get a recommendation in seconds.</h1>
-          <p>Check today, get a weather-smart outfit suggestion, and move on with your day.</p>
+          <h1>Start with today’s weather.</h1>
+          <p>Choose a location and get the first outfit before setting up your wardrobe.</p>
         </section>
         <section class="onboarding-slide" data-onboarding-slide="2">
           <span class="onboarding-kicker">From Your Closet</span>
-          <h1>Add your wardrobe later for better picks.</h1>
-          <p>Add a few staples and WearCast starts building recommendations from what you already own.</p>
+          <h1>Add the clothes you wear most.</h1>
+          <p>See what matches, what is missing, and how future picks use your closet.</p>
         </section>
         <section class="onboarding-slide" data-onboarding-slide="3">
           <span class="onboarding-kicker">Cut & Style</span>
@@ -604,6 +620,14 @@
           <div class="option-text">
             <strong>Device location</strong>
             <span>Enable "Use my location" button.</span>
+          </div>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="consentAnalytics" class="toggle-input" />
+          <span class="toggle-track"></span>
+          <div class="option-text">
+            <strong>Product analytics</strong>
+            <span>Help improve premium, onboarding, and wardrobe flows.</span>
           </div>
         </label>
       </div>
@@ -1122,7 +1146,7 @@
   <dialog id="deleteAccountDialog" class="dialog">
     <div class="dialog-inner">
       <h2>Delete account</h2>
-      <p class="dialog-subtitle">This will permanently remove your account and synced wardrobe from WearCast. Some preferences stored only on this device may still need to be cleared locally.</p>
+      <p class="dialog-subtitle">This will permanently remove your account, synced wardrobe, and synced saved looks from WearCast. Some preferences stored only on this device may still need to be cleared locally.</p>
       <div id="deleteAccountPrompt" class="status-text" style="margin-top:12px;">If you’re sure, confirm below.</div>
       <input id="deleteAccountPassword" type="password" class="text-input auth-input" placeholder="Current password" autocomplete="current-password" style="margin-top:12px;" />
       <input id="deleteAccountConfirmText" type="text" class="text-input auth-input" placeholder='Type DELETE if you signed in with Google' style="margin-top:10px;" />
@@ -1154,15 +1178,39 @@
         </button>
       </div>
       <div id="paywallFeatureList" class="paywall-feature-list">
-        <div class="paywall-feature">Unlimited wardrobe items</div>
-        <div class="paywall-feature">Unlimited photo scans</div>
-        <div class="paywall-feature">Smarter recommendations from your closet</div>
+        <div class="paywall-feature">Build your full digital closet</div>
+        <div class="paywall-feature">Scan without the weekly cap</div>
+        <div class="paywall-feature">Sync saved looks across devices</div>
+        <div class="paywall-feature">Better outfit picks from clothes you own</div>
       </div>
       <div class="dialog-actions paywall-actions">
         <button type="button" id="paywallPrimaryBtn" class="btn-primary">Upgrade soon</button>
         <button type="button" id="paywallSecondaryBtn" class="btn-ghost">Maybe later</button>
       </div>
       <button type="button" id="paywallRestoreBtn" class="paywall-text-btn">Restore purchases</button>
+    </div>
+  </dialog>
+
+  <dialog id="savedLookDeleteDialog" class="dialog">
+    <div class="dialog-inner">
+      <h2>Delete saved look?</h2>
+      <p id="savedLookDeleteMessage" class="dialog-subtitle">This removes the saved look from your synced outfit library.</p>
+      <div class="dialog-actions">
+        <button type="button" id="savedLookDeleteCancelBtn" class="btn-ghost">Keep look</button>
+        <button type="button" id="savedLookDeleteConfirmBtn" class="btn-danger">Delete look</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="savedLooksDialog" class="dialog saved-looks-dialog">
+    <div class="dialog-inner saved-looks-dialog-inner">
+      <button id="savedLooksDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+      <div class="saved-looks-dialog-head">
+        <span class="today-cta-kicker">Outfit memory</span>
+        <h2>Saved looks</h2>
+        <p id="savedLooksDialogSubtitle">Swipe through the outfits you saved from Today.</p>
+      </div>
+      <div id="savedLooksDialogBody" class="saved-looks-dialog-body"></div>
     </div>
   </dialog>
 
@@ -1189,7 +1237,6 @@
       document.head.appendChild(script);
     })();
   </script>
-  <script data-goatcounter="https://wearcast.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <script src="app.js?v=20" type="module"></script>
 </body>
 </html>

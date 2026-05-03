@@ -119,6 +119,7 @@ public class SubscriptionsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func buildEntitlementPayload() async throws -> [String: Any] {
         var activeProductIds: [String] = []
+        var transactions: [[String: Any]] = []
         var plan = "free"
         var trialActive = false
 
@@ -128,6 +129,10 @@ public class SubscriptionsPlugin: CAPPlugin, CAPBridgedPlugin {
             guard knownProductIds.contains(transaction.productID) else { continue }
 
             activeProductIds.append(transaction.productID)
+            transactions.append([
+                "productId": transaction.productID,
+                "signedTransactionInfo": result.jwsRepresentation,
+            ])
             if transaction.productID == annualProductId {
                 plan = "annual"
             } else if plan == "free" && transaction.productID == monthlyProductId {
@@ -152,6 +157,7 @@ public class SubscriptionsPlugin: CAPPlugin, CAPBridgedPlugin {
             "trialActive": trialActive,
             "renewalStatus": hasPremium ? "active" : "none",
             "activeProductIds": activeProductIds.sorted(),
+            "transactions": transactions,
             "products": productPayload,
         ]
     }

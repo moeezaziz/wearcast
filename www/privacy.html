@@ -76,8 +76,10 @@
           <li><strong>Account data:</strong> if you create an account, we process your email address, password hash or Google sign-in identifier, your display name, and basic account/session information.</li>
           <li><strong>Wardrobe data:</strong> if you save wardrobe items, we process item names, types, colors, materials, care notes, favorite status, and related timestamps.</li>
           <li><strong>Wardrobe photos (optional):</strong> if you upload item photos, we process the original photo and any cropped or derived image needed to support wardrobe item storage and display.</li>
+          <li><strong>Saved looks:</strong> if you save outfit recommendations while signed in, WearCast stores the outfit details, coverage, missing-item notes, location label, and timestamps so they can sync across devices.</li>
+          <li><strong>Subscription state:</strong> the app may sync signed StoreKit transaction information to the WearCast backend so WearCast can verify premium access and apply free limits consistently when you are signed in.</li>
           <li><strong>Local app data:</strong> preferences, consent choices, cached recommendations, diagnostics, and similar app state may be stored on-device.</li>
-          <li><strong>Analytics:</strong> WearCast uses GoatCounter for privacy-focused usage analytics, such as page views and basic usage information.</li>
+          <li><strong>Analytics:</strong> if you enable product analytics, WearCast uses GoatCounter and may use PostHog for product analytics such as funnel events, paywall events, and feature usage.</li>
           <li><strong>Diagnostics:</strong> WearCast may process crash reports, error messages, device/app context, and recent in-app event history to diagnose reliability problems.</li>
           <li><strong>Support communications:</strong> if you email us, we will process the information you include in your message.</li>
         </ul>
@@ -91,7 +93,8 @@
           <li>to provide live weather-based outfit recommendations</li>
           <li>to personalize recommendations using your preferences and wardrobe</li>
           <li>to create, maintain, and secure your account</li>
-          <li>to sync wardrobe items across devices when you sign in</li>
+          <li>to sync wardrobe items and saved looks across devices when you sign in</li>
+          <li>to apply free limits and premium subscription access</li>
           <li>to analyze wardrobe photos and care-tag photos when you request those features</li>
           <li>to improve product quality, reliability, and usability</li>
           <li>to respond to support requests and account issues</li>
@@ -119,6 +122,7 @@
           <li><strong>Open-Meteo</strong>: weather data provider</li>
           <li><strong>OpenStreetMap Nominatim</strong>: geocoding and reverse geocoding</li>
           <li><strong>GoatCounter</strong>: privacy-focused analytics</li>
+          <li><strong>PostHog</strong>: product analytics and subscription-funnel measurement when configured</li>
           <li><strong>Sentry</strong>: optional crash and error diagnostics when configured for the app or backend</li>
           <li><strong>Google</strong>: optional Google sign-in and OAuth user information</li>
           <li><strong>OpenRouter and underlying model providers</strong>: language model requests for recommendations and some photo-analysis workflows</li>
@@ -153,8 +157,10 @@
           <li><strong>On-device preferences and app state:</strong> remain on the device until you reset them, clear app/site storage, or remove the app.</li>
           <li><strong>Account data:</strong> retained while your account remains active, subject to operational, legal, or security needs.</li>
           <li><strong>Wardrobe items and associated saved photos:</strong> retained while they remain part of your account, unless deleted by you or removed with account deletion.</li>
+          <li><strong>Saved looks:</strong> retained while they remain part of your account, unless deleted by you or removed with account deletion.</li>
+          <li><strong>Subscription state:</strong> retained while needed to provide premium access, support restore/account flows, and diagnose billing-access issues.</li>
           <li><strong>Email verification and session data:</strong> retained for account security and session management for a limited period based on operational needs.</li>
-          <li><strong>Analytics:</strong> retained according to GoatCounter's service defaults and retention practices.</li>
+          <li><strong>Analytics:</strong> only sent after analytics consent, then retained according to GoatCounter and PostHog service settings and retention practices.</li>
           <li><strong>Support emails:</strong> retained as needed to respond to and resolve support issues.</li>
         </ul>
       </div>
@@ -194,7 +200,7 @@
       <div class="card-title"><h2>Cookies And Local Storage</h2></div>
       <div class="prose">
         <p>
-          WearCast does not use advertising cookies. The app may use local storage or similar device storage for preferences, session information, recommendation cache, diagnostics, and app functionality. Analytics is currently provided through GoatCounter.
+          WearCast does not use advertising cookies. The app may use local storage or similar device storage for preferences, session information, recommendation cache, diagnostics, and app functionality. Product analytics is currently provided through GoatCounter and, when configured, PostHog after you enable analytics consent.
         </p>
       </div>
     </section>

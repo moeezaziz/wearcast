@@ -47,6 +47,8 @@ Core features:
 - comfort and style tuning
 - wardrobe-powered daily picks
 - photo-first wardrobe capture
+- synced saved looks
+- premium full-closet, scan, and saved-look limits
 - account sync across devices
 
 ## Screenshot Plan

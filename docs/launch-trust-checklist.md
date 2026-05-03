@@ -34,7 +34,7 @@ Confirm the app exposes:
 - Support
 - account deletion
 - clear wording for synced wardrobe data
-- clear wording for local-only saved looks
+- clear wording for synced saved looks and subscription limits
 
 Current in-app touchpoints:
 
@@ -46,15 +46,16 @@ Current in-app touchpoints:
 
 Before launch, verify these statements are still true:
 
-- GoatCounter is the only analytics provider in production
+- GoatCounter and configured PostHog are the only analytics providers in production and are gated by analytics consent
 - there is no ad SDK or tracking SDK
 - Google sign-in is still optional, not required
 - email verification still uses Resend
 - backend hosting still runs through Fly.io
 - recommendation requests still go through the WearCast backend
 - wardrobe items and wardrobe photos are stored when a signed-in user saves them
-- saved looks remain local-only
-- account deletion still removes active account and synced wardrobe records
+- saved looks sync when a user is signed in
+- subscription state syncs to the backend from verified signed StoreKit transactions
+- account deletion still removes active account, synced wardrobe records, and synced saved looks
 
 If any of these change, update:
 
@@ -75,7 +76,7 @@ Before submission:
 
 Review all launch-facing copy and make sure it does not imply:
 
-- synced saved looks, if saved looks are still local-only
+- unsynced saved looks, because saved looks are now synced for signed-in users
 - perfect recommendations
 - fully automated closet organization without review
 - unsupported monetization features

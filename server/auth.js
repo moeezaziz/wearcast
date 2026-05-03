@@ -114,3 +114,23 @@ export async function optionalAuth(req, _res, next) {
   }
   next();
 }
+
+/** Optional auth with strict token handling — anonymous is allowed, invalid auth is not. */
+export async function optionalAuthStrict(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) return next();
+  if (!header.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Invalid authorization header" });
+  }
+  try {
+    const uid = verifyToken(header.slice(7)).uid;
+    const result = await pool.query("SELECT id FROM users WHERE id = $1", [uid]);
+    if (!result.rows.length) {
+      return res.status(401).json({ error: "Session expired. Please sign in again." });
+    }
+    req.userId = uid;
+    next();
+  } catch {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+}

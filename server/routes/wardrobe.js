@@ -1,6 +1,7 @@
 import { Router } from "express";
 import pool from "../db.js";
 import { requireAuth } from "../auth.js";
+import { FREE_WARDROBE_ITEM_LIMIT, limitError, userHasPremiumAccess, withUserLimitTransaction } from "../premium.js";
 
 const router = Router();
 
@@ -57,12 +58,27 @@ router.post("/", async (req, res) => {
       console.warn("/api/wardrobe: Type and name required");
       return res.status(400).json({ error: "Type and name required" });
     }
-
-    const result = await pool.query(
-      `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url, source_photo_data_url, crop_photo_data_url, crop_confidence, favorite)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [req.userId, type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), storedDisplayPhoto, normalizedSource, normalizedCrop, normalizedConfidence, !!favorite]
-    );
+    const result = await withUserLimitTransaction(req.userId, async (client) => {
+      const hasPremium = await userHasPremiumAccess(req.userId);
+      const countResult = await client.query("SELECT COUNT(*)::int AS count FROM wardrobe_items WHERE user_id = $1", [req.userId]);
+      const itemCount = Number(countResult.rows[0]?.count || 0);
+      if (!hasPremium && itemCount >= FREE_WARDROBE_ITEM_LIMIT) {
+        return { limited: true, count: itemCount };
+      }
+      return client.query(
+        `INSERT INTO wardrobe_items (user_id, type, name, color, material, care_instructions, photo_data_url, source_photo_data_url, crop_photo_data_url, crop_confidence, favorite)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+        [req.userId, type, name, color || null, material || null, JSON.stringify(normalizedCareInstructions), storedDisplayPhoto, normalizedSource, normalizedCrop, normalizedConfidence, !!favorite]
+      );
+    });
+    if (result.limited) {
+      return limitError(res, {
+        limitCode: "wardrobe_cap",
+        limit: FREE_WARDROBE_ITEM_LIMIT,
+        count: result.count,
+        error: `Free includes up to ${FREE_WARDROBE_ITEM_LIMIT} wardrobe items. Go premium to keep building your full closet.`,
+      });
+    }
     console.info("/api/wardrobe: added item", result.rows[0]?.id);
     res.json(rowToItem(result.rows[0]));
   } catch (err) {
