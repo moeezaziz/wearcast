@@ -8,10 +8,10 @@
   <link rel="icon" href="icon.svg?v=4" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css?v=4" />
 </head>
-<body>
-  <header>
+<body class="legal-page">
+  <header class="legal-header">
     <div class="brand">
-      <a href="./" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;">
+      <a class="legal-brand-link" href="./">
         <img class="logo" src="icon.svg?v=4" alt="WearCast logo" />
         <div class="title">
           <h1>WearCast</h1>
@@ -19,21 +19,39 @@
         </div>
       </a>
     </div>
-    <div class="header-actions">
-      <a class="btn secondary" href="./" style="text-decoration:none;">Back</a>
+    <div class="legal-actions">
+      <a class="btn primary" href="./">Open app</a>
     </div>
   </header>
 
-  <main>
+  <main class="legal-main">
+    <section class="legal-hero">
+      <span class="legal-kicker">Privacy</span>
+      <h1>How WearCast handles your data</h1>
+      <p>
+        WearCast uses weather, preferences, and optional wardrobe information to help you decide what to wear.
+        This policy explains what is processed, why it is needed, and the choices you control.
+      </p>
+      <div class="legal-meta-grid">
+        <div class="legal-meta"><span>Effective</span><strong><span id="effectiveDate">2026-04-24</span></strong></div>
+        <div class="legal-meta"><span>Contact</span><strong><a href="mailto:moeezazizch@gmail.com">moeezazizch@gmail.com</a></strong></div>
+        <div class="legal-meta"><span>Scope</span><strong>WearCast app and backend services</strong></div>
+      </div>
+      <nav class="legal-nav" aria-label="Related pages">
+        <a class="legal-link-chip" href="./terms.html">Terms</a>
+        <a class="legal-link-chip" href="./support.html">Support</a>
+        <a class="legal-link-chip" href="./credits.html">Image credits</a>
+      </nav>
+    </section>
+
     <section class="card">
       <div class="prose">
-        <p><strong>Effective date:</strong> <span id="effectiveDate">2026-04-24</span></p>
         <p>
           This Privacy Policy explains how WearCast ("we", "us") processes personal data when you use the app and related services.
           WearCast helps you decide what to wear today using weather data and, if you choose, your own wardrobe.
         </p>
-        <p class="muted">
-          This page is intended to reflect the app as currently built. It is product-facing information, not legal advice.
+        <p class="legal-callout">
+          Short version: location is optional, wardrobe photos are only used when you add them, and signed-in wardrobe data is synced so the app can style from your closet.
         </p>
       </div>
     </section>
@@ -58,7 +76,7 @@
           <li><strong>Account data:</strong> if you create an account, we process your email address, password hash or Google sign-in identifier, your display name, and basic account/session information.</li>
           <li><strong>Wardrobe data:</strong> if you save wardrobe items, we process item names, types, colors, materials, care notes, favorite status, and related timestamps.</li>
           <li><strong>Wardrobe photos (optional):</strong> if you upload item photos, we process the original photo and any cropped or derived image needed to support wardrobe item storage and display.</li>
-          <li><strong>Saved looks and local app data:</strong> some recommendation history, saved looks, and preferences are stored on-device in browser or app storage.</li>
+          <li><strong>Local app data:</strong> preferences, consent choices, cached recommendations, diagnostics, and similar app state may be stored on-device.</li>
           <li><strong>Analytics:</strong> WearCast uses GoatCounter for privacy-focused usage analytics, such as page views and basic usage information.</li>
           <li><strong>Diagnostics:</strong> WearCast may process crash reports, error messages, device/app context, and recent in-app event history to diagnose reliability problems.</li>
           <li><strong>Support communications:</strong> if you email us, we will process the information you include in your message.</li>
@@ -132,7 +150,7 @@
       <div class="card-title"><h2>Retention</h2></div>
       <div class="prose">
         <ul>
-          <li><strong>On-device preferences and saved looks:</strong> remain on the device until you reset them, clear app/site storage, or remove the app.</li>
+          <li><strong>On-device preferences and app state:</strong> remain on the device until you reset them, clear app/site storage, or remove the app.</li>
           <li><strong>Account data:</strong> retained while your account remains active, subject to operational, legal, or security needs.</li>
           <li><strong>Wardrobe items and associated saved photos:</strong> retained while they remain part of your account, unless deleted by you or removed with account deletion.</li>
           <li><strong>Email verification and session data:</strong> retained for account security and session management for a limited period based on operational needs.</li>
@@ -176,18 +194,18 @@
       <div class="card-title"><h2>Cookies And Local Storage</h2></div>
       <div class="prose">
         <p>
-          WearCast does not use advertising cookies. The app may use local storage or similar device storage for preferences, saved looks, session information, diagnostics, and app functionality. Analytics is currently provided through GoatCounter.
+          WearCast does not use advertising cookies. The app may use local storage or similar device storage for preferences, session information, recommendation cache, diagnostics, and app functionality. Analytics is currently provided through GoatCounter.
         </p>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="legal-footer">
     <span class="muted">WearCast • Privacy Policy</span>
-    <div class="footer-actions">
-      <a class="btn secondary" href="./terms.html" style="text-decoration:none;">Terms</a>
-      <a class="btn secondary" href="./support.html" style="text-decoration:none;">Support</a>
-      <a class="btn secondary" href="./" style="text-decoration:none;">Back</a>
+    <div class="legal-footer-actions">
+      <a class="btn" href="./terms.html">Terms</a>
+      <a class="btn" href="./support.html">Support</a>
+      <a class="btn primary" href="./">Open app</a>
     </div>
   </footer>
 </body>

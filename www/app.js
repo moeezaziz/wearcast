@@ -1442,7 +1442,7 @@ function buildPaywallContent(trigger = "generic", context = {}) {
     generic: {
       kicker: "WearCast Premium",
       title: "Unlock your full digital closet",
-      subtitle: "Get more from your wardrobe with unlimited items, more saved looks, and more scans.",
+      subtitle: "Get more from your wardrobe with unlimited items, more scans, and better closet-powered recommendations.",
     },
     manage_subscription: {
       kicker: "WearCast Premium",
@@ -1453,11 +1453,6 @@ function buildPaywallContent(trigger = "generic", context = {}) {
       kicker: "Closet full",
       title: "Keep building your full wardrobe",
       subtitle: `Free includes up to ${FREE_WARDROBE_ITEM_LIMIT} items. Go premium to keep growing the closet WearCast can style from.`,
-    },
-    saved_looks_cap: {
-      kicker: "Saved looks limit",
-      title: "Keep a bigger library of outfit references",
-      subtitle: `Free includes ${FREE_SAVED_LOOK_LIMIT} saved looks. Go premium to save more outfits and revisit them anytime.`,
     },
     scan_cap: {
       kicker: "Weekly scan limit",
@@ -1476,7 +1471,6 @@ function buildPaywallContent(trigger = "generic", context = {}) {
     features: [
       "Unlimited wardrobe items",
       "Unlimited photo scans",
-      "Unlimited saved looks",
       "Smarter recommendations from your closet",
     ],
     context,
@@ -1560,13 +1554,7 @@ async function restorePurchases() {
 }
 
 function summarizeSavedLooksStatus(state = loadState()) {
-  const count = Array.isArray(state.savedLooks) ? state.savedLooks.length : 0;
-  const remaining = getRemainingSavedLooks(state);
-  const limitText = hasPremiumAccess(state)
-    ? "Unlimited with premium."
-    : `${remaining} free save${remaining === 1 ? "" : "s"} left.`;
-  if (!count) return `Saved looks stay on this device for now. You haven’t saved any yet. ${limitText}`;
-  return `${count} saved look${count === 1 ? "" : "s"} stored on this device. These are local for now and are not removed unless you clear device data. ${limitText}`;
+  return "";
 }
 
 function summarizeProfileValidationStatus(state = loadState()) {
@@ -1574,10 +1562,10 @@ function summarizeProfileValidationStatus(state = loadState()) {
   const opens = Number(metrics.opens || 0);
   const dwellMs = Number(metrics.dwellMs || 0);
   if (!opens) {
-    return "Tracking how often people use settings so we can simplify the app over time.";
+    return "No settings activity has been recorded on this device yet.";
   }
   const avgSeconds = Math.max(1, Math.round(dwellMs / Math.max(1, opens) / 1000));
-  return `Opened ${opens} time${opens === 1 ? "" : "s"} on this device • average dwell ${avgSeconds}s. Use this to decide what settings should become simpler or more visible.`;
+  return `Settings opened ${opens} time${opens === 1 ? "" : "s"} on this device • average dwell ${avgSeconds}s. Include this only when support asks for diagnostics.`;
 }
 
 function renderSettingsDataUI() {
@@ -3836,71 +3824,16 @@ function buildLookSignature(outfit = {}) {
 
 function saveRecommendationLook(payload) {
   if (!payload) return false;
-  const state = loadState();
-  const existing = Array.isArray(state.savedLooks) ? state.savedLooks : [];
-  const signature = payload.signature || buildLookSignature(payload.outfit);
-  const isAlreadySaved = existing.some((entry) => entry.signature === signature);
-  if (!hasPremiumAccess(state) && !isAlreadySaved && existing.length >= FREE_SAVED_LOOK_LIMIT) {
-    openPaywall("saved_looks_cap", { source: "save-look" });
-    showAppToast(`Free includes ${FREE_SAVED_LOOK_LIMIT} saved looks. Go premium to keep more outfit references.`, "warning");
-    trackAnalyticsEvent("free_limit_hit", { title: "free_limit_hit:saved_looks_cap" });
-    return false;
-  }
-  const nextEntry = {
-    id: payload.id || `look-${Date.now()}`,
-    createdAt: payload.createdAt || new Date().toISOString(),
-    headline: payload.headline || "Saved look",
-    subtitle: payload.subtitle || "",
-    locationName: payload.locationName || "",
-    coverage: payload.coverage || 0,
-    missingItems: Array.isArray(payload.missingItems) ? payload.missingItems : [],
-    signature,
-    outfit: payload.outfit || {},
-  };
-  const nextLooks = [nextEntry, ...existing.filter((entry) => entry.signature !== signature)]
-    .slice(0, hasPremiumAccess(state) ? PREMIUM_SAVED_LOOK_LIMIT : FREE_SAVED_LOOK_LIMIT);
-  saveState({ savedLooks: nextLooks });
-  trackAnalyticsEvent("saved_look_added", {
-    title: "saved_look_added",
-    totalSavedLooks: nextLooks.length,
-    coverage: Number(nextEntry.coverage || 0),
-  });
-  return true;
+  showAppToast("Outfit saving is not included in this launch build.", "info");
+  return false;
 }
 
 function renderSavedLookHistory(savedLooks = []) {
-  if (!savedLooks.length) return "";
-  const visibleLooks = savedLooksExpanded ? savedLooks : savedLooks.slice(0, 2);
-  const toggleLabel = savedLooksExpanded ? "Show fewer" : `View all ${savedLooks.length}`;
-  return `
-    <section class="today-wardrobe-history">
-      <div class="today-wardrobe-history-head">
-        <span class="today-cta-kicker">Saved looks</span>
-        <strong>Recent outfit references</strong>
-        <span>Saved to this device for now so you can find them again from Today.</span>
-      </div>
-      <div class="today-wardrobe-history-list">
-        ${visibleLooks.map((look) => `
-          <div class="today-wardrobe-history-item">
-            <strong>${escapeHtml(look.headline || "Saved look")}</strong>
-            <span>${escapeHtml(look.locationName || "Saved on this device")}</span>
-          </div>
-        `).join("")}
-      </div>
-      ${savedLooks.length > 2 ? `
-        <div class="today-wardrobe-history-actions">
-          <button type="button" class="today-details-button" data-rec-action="toggle-saved-looks">${toggleLabel}</button>
-        </div>
-      ` : ""}
-    </section>
-  `;
+  return "";
 }
 
 function renderRecommendationWardrobeLoop(summary, data) {
-  const savedLooks = Array.isArray(loadState().savedLooks) ? loadState().savedLooks : [];
   const missingItems = Array.isArray(data?.missingItems) ? data.missingItems.filter(Boolean) : [];
-  const currentSignature = buildLookSignature(data?.outfit || {});
-  const isAlreadySaved = savedLooks.some((entry) => entry.signature === currentSignature);
   const matchedCount = Number(summary?.matchedCount || 0);
   const totalCount = Number(summary?.totalCount || 0);
   const missingCount = Number(summary?.missingCount || 0);
@@ -3926,7 +3859,6 @@ function renderRecommendationWardrobeLoop(summary, data) {
       </div>
       <div class="today-wardrobe-loop-actions">
         <button type="button" class="btn-primary today-wardrobe-loop-primary" data-rec-action="open-wardrobe">Open wardrobe</button>
-        <button type="button" class="today-details-button" data-rec-action="save-look">${isAlreadySaved ? "Saved to looks" : "Save this look"}</button>
       </div>
       ${missingItems.length ? `
         <div class="today-wardrobe-gap-list">
@@ -5365,12 +5297,11 @@ function renderSettingsUI() {
     els.settingsManageSubscriptionBtn.style.display = hasPremiumAccess(state) ? "" : "none";
   }
   if (els.settingsUpgradeStatus) {
-    const remainingSaves = getRemainingSavedLooks(state);
     const remainingSlots = getRemainingWardrobeSlots(loadWardrobe(), state);
     const remainingScans = getRemainingPhotoScans(state);
     els.settingsUpgradeStatus.textContent = hasPremiumAccess(state)
       ? `${planSummary}. Switch billing plans or manage cancellation from the App Store.`
-      : `${remainingSaves} save${remainingSaves === 1 ? "" : "s"} left • ${remainingSlots} item slots left • ${remainingScans} scan${remainingScans === 1 ? "" : "s"} left this week.`;
+      : `${remainingSlots} item slots left • ${remainingScans} scan${remainingScans === 1 ? "" : "s"} left this week.`;
   }
   renderSettingsDataUI();
 }
@@ -6486,7 +6417,6 @@ async function renderWardrobeItemViewer(items = null) {
     Array.isArray(currentItem.careInstructions) && currentItem.careInstructions.length ? `Care: ${currentItem.careInstructions.join(", ")}` : "",
     itemNeedsMetadataReview(currentItem) ? "Needs review before this item feels fully polished." : "",
     recommendationUsage.latestMatched ? "Last matched on Today." : "",
-    recommendationUsage.usageCount ? `Used in ${recommendationUsage.usageCount} saved look${recommendationUsage.usageCount === 1 ? "" : "s"}.` : "",
   ].filter(Boolean);
 
   els.itemDetailBody.innerHTML = `
@@ -10800,29 +10730,9 @@ function bindRecommendationControls() {
       return;
     }
 
-    const saveLookButton = event.target.closest("[data-rec-action='save-look']");
-    if (saveLookButton) {
-      let payload = null;
-      try {
-        payload = JSON.parse(els.aiRecContent?.dataset?.savedLook || "null");
-      } catch {}
-    if (payload && saveRecommendationLook(payload)) {
-      savedLooksExpanded = true;
-      saveLookButton.textContent = "Saved to looks";
-      showAppToast("Look saved to this device. Find it again from From your wardrobe.", "success");
-      }
-      return;
-    }
-
     const openWardrobeButton = event.target.closest("[data-rec-action='open-wardrobe']");
     if (openWardrobeButton) {
       switchTab("tabWardrobe", { direction: 1 });
-      return;
-    }
-
-    const toggleSavedLooksButton = event.target.closest("[data-rec-action='toggle-saved-looks']");
-    if (toggleSavedLooksButton) {
-      savedLooksExpanded = !savedLooksExpanded;
       return;
     }
 

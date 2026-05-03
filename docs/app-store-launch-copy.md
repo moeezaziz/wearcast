@@ -47,7 +47,6 @@ Core features:
 - comfort and style tuning
 - wardrobe-powered daily picks
 - photo-first wardrobe capture
-- saved looks
 - account sync across devices
 
 ## Screenshot Plan
@@ -119,16 +118,16 @@ Target screen:
 
 Headline:
 
-Save better daily outfits
+Build a closet WearCast can style
 
 Supporting line:
 
-Keep strong looks on hand and come back faster when you need them again.
+Add a few everyday staples so recommendations can use clothes you actually own.
 
 Target screen:
 
-- saved looks section
-- or recommendation save flow
+- wardrobe starter section
+- or photo-first wardrobe capture
 
 ## In-App Copy Alignment Notes
 

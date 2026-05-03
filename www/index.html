@@ -295,35 +295,6 @@
             </div>
             <span class="settings-chevron">›</span>
           </button>
-          <div class="settings-row settings-row-static">
-            <div class="settings-copy">
-              <strong>Saved looks</strong>
-              <span id="settingsSavedLooksStatus">Saved looks stay on this device for now.</span>
-            </div>
-          </div>
-          <div class="settings-row settings-row-static">
-            <div class="settings-copy">
-              <strong>App insights</strong>
-              <span id="settingsProfileValidationStatus">Tracking how often people use settings so we can simplify the experience over time.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card settings-panel">
-        <div class="card-header"><h3>Diagnostics</h3></div>
-        <div class="settings-diagnostics">
-          <div class="settings-row settings-row-static">
-            <div class="settings-copy">
-              <strong>Launch checks</strong>
-              <span id="settingsDiagnosticsStatus">Backend and subscription status will appear here.</span>
-            </div>
-          </div>
-          <div id="settingsDiagnosticsEvents" class="settings-diagnostics-events" aria-label="Recent app events"></div>
-          <div class="settings-diagnostics-actions">
-            <button id="settingsDiagnosticsRefreshBtn" class="btn-ghost-sm" type="button">Refresh</button>
-            <button id="settingsDiagnosticsCopyBtn" class="btn-primary-sm" type="button">Copy diagnostics</button>
-          </div>
         </div>
       </div>
 
@@ -337,6 +308,34 @@
             </div>
             <span class="settings-chevron">›</span>
           </button>
+          <details class="settings-support-diagnostics">
+            <summary>
+              <span>
+                <strong>Support diagnostics</strong>
+                <small>Only use this when troubleshooting with support.</small>
+              </span>
+              <span class="settings-chevron">›</span>
+            </summary>
+            <div class="settings-diagnostics">
+              <div class="settings-row settings-row-static">
+                <div class="settings-copy">
+                  <strong>App activity</strong>
+                  <span id="settingsProfileValidationStatus">Recent local app activity will appear here.</span>
+                </div>
+              </div>
+              <div class="settings-row settings-row-static">
+                <div class="settings-copy">
+                  <strong>Launch checks</strong>
+                  <span id="settingsDiagnosticsStatus">Backend and subscription status will appear here.</span>
+                </div>
+              </div>
+              <div id="settingsDiagnosticsEvents" class="settings-diagnostics-events" aria-label="Recent app events"></div>
+              <div class="settings-diagnostics-actions">
+                <button id="settingsDiagnosticsRefreshBtn" class="btn-ghost-sm" type="button">Refresh</button>
+                <button id="settingsDiagnosticsCopyBtn" class="btn-primary-sm" type="button">Copy diagnostics</button>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -345,7 +344,12 @@
         <div class="about-content">
           <p><strong>WearCast</strong> helps you decide what to wear today using live weather and, when you add it, your own wardrobe.</p>
           <p>Weather via <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open‑Meteo</a>. Geocoding via <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noreferrer">Nominatim</a>. Recommendations powered by large language models via the WearCast backend.</p>
-          <p><a href="./privacy.html">Privacy Policy</a> • <a href="./terms.html">Terms of Use</a> • <a href="./support.html">Support</a> • <a href="./credits.html">Image Credits</a></p>
+          <div class="legal-links-grid" aria-label="WearCast legal and support pages">
+            <a href="./privacy.html">Privacy Policy <span>›</span></a>
+            <a href="./terms.html">Terms of Use <span>›</span></a>
+            <a href="./support.html">Support <span>›</span></a>
+            <a href="./credits.html">Image Credits <span>›</span></a>
+          </div>
         </div>
       </div>
 
@@ -368,7 +372,7 @@
           <button id="settingsUpgradeBtn" class="settings-row" type="button">
             <div class="settings-copy">
               <strong>Upgrade to premium</strong>
-              <span id="settingsUpgradeStatus">Unlock your full closet, more saved looks, and more scans.</span>
+              <span id="settingsUpgradeStatus">Unlock your full closet, more scans, and better wardrobe-powered recommendations.</span>
             </div>
             <span class="settings-chevron">›</span>
           </button>
@@ -927,7 +931,7 @@
           <span class="toggle-track"></span>
           <div class="option-text">
             <strong>Matched to recommendations</strong>
-            <span>Only show items already used in recent or saved looks.</span>
+            <span>Only show items already used in recent recommendations.</span>
           </div>
         </label>
       </div>
@@ -1118,7 +1122,7 @@
   <dialog id="deleteAccountDialog" class="dialog">
     <div class="dialog-inner">
       <h2>Delete account</h2>
-      <p class="dialog-subtitle">This will permanently remove your account and synced wardrobe from WearCast. Saved looks and some preferences stored only on this device may still need to be cleared locally.</p>
+      <p class="dialog-subtitle">This will permanently remove your account and synced wardrobe from WearCast. Some preferences stored only on this device may still need to be cleared locally.</p>
       <div id="deleteAccountPrompt" class="status-text" style="margin-top:12px;">If you’re sure, confirm below.</div>
       <input id="deleteAccountPassword" type="password" class="text-input auth-input" placeholder="Current password" autocomplete="current-password" style="margin-top:12px;" />
       <input id="deleteAccountConfirmText" type="text" class="text-input auth-input" placeholder='Type DELETE if you signed in with Google' style="margin-top:10px;" />
@@ -1135,7 +1139,7 @@
       <button id="paywallCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
       <span id="paywallKicker" class="today-cta-kicker">WearCast Premium</span>
       <h2 id="paywallTitle" class="dialog-title">Unlock your full digital closet</h2>
-      <p id="paywallSubtitle" class="dialog-subtitle">Get more from your wardrobe with unlimited items, more saved looks, and more scans.</p>
+      <p id="paywallSubtitle" class="dialog-subtitle">Get more from your wardrobe with unlimited items, more scans, and better closet-powered recommendations.</p>
       <div class="paywall-plan-grid" aria-label="Subscription plans">
         <button type="button" class="paywall-plan-card is-featured is-selected" data-paywall-plan="annual">
           <span class="paywall-plan-badge">Best value</span>
@@ -1152,7 +1156,6 @@
       <div id="paywallFeatureList" class="paywall-feature-list">
         <div class="paywall-feature">Unlimited wardrobe items</div>
         <div class="paywall-feature">Unlimited photo scans</div>
-        <div class="paywall-feature">Unlimited saved looks</div>
         <div class="paywall-feature">Smarter recommendations from your closet</div>
       </div>
       <div class="dialog-actions paywall-actions">

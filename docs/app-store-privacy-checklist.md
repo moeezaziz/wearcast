@@ -26,7 +26,6 @@ It assumes:
 - email/password and Google sign-in are both enabled.
 - wardrobe items and wardrobe photos are synced when a user is signed in.
 - recommendation and photo-analysis requests go through the WearCast backend.
-- saved looks remain local to the device for now.
 
 This document is meant to reduce submission risk, but the final App Store Connect answers should still be reviewed carefully before submission.
 
@@ -94,7 +93,7 @@ Why:
 
 - wardrobe photos
 - care-tag photos
-- wardrobe metadata such as item names, notes, care instructions, and saved look content
+- wardrobe metadata such as item names, notes, and care instructions
 
 Likely linked to user:
 
@@ -372,7 +371,7 @@ These upcoming changes will require updating this checklist:
 - adding a subscription SDK or StoreKit-backed purchase analytics
 - adding richer product analytics
 - adding push notifications
-- syncing saved looks to backend
+- adding outfit-saving or look-history features
 - changing how wardrobe photos are stored or retained
 
 ## Bottom Line

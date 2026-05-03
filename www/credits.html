@@ -7,18 +7,11 @@
   <meta name="theme-color" content="#0b1220" />
   <link rel="icon" href="icon.svg?v=13" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css?v=13" />
-  <style>
-    table.credits { width: 100%; border-collapse: collapse; font-size: 13px; }
-    table.credits th, table.credits td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(0,0,0,0.08); vertical-align: top; }
-    table.credits th { font-weight: 700; background: rgba(0,0,0,0.03); position: sticky; top: 0; }
-    table.credits td code { font-size: 12px; word-break: break-all; }
-    .credits-summary { width: auto; min-width: 320px; margin-bottom: 16px; }
-  </style>
 </head>
-<body>
-  <header>
+<body class="legal-page">
+  <header class="legal-header">
     <div class="brand">
-      <a href="./" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;">
+      <a class="legal-brand-link" href="./">
         <img class="logo" src="icon.svg?v=13" alt="WearCast logo" />
         <div class="title">
           <h1>WearCast</h1>
@@ -26,15 +19,33 @@
         </div>
       </a>
     </div>
-    <div class="header-actions">
-      <a class="btn secondary" href="./" style="text-decoration:none;">Back</a>
+    <div class="legal-actions">
+      <a class="btn primary" href="./">Open app</a>
     </div>
   </header>
 
-  <main>
+  <main class="legal-main">
+    <section class="legal-hero">
+      <span class="legal-kicker">Credits</span>
+      <h1>Image attribution</h1>
+      <p>
+        WearCast uses openly licensed clothing reference images in recommendation cards. This page lists source files,
+        contributors, and licenses for those visual references.
+      </p>
+      <div class="legal-meta-grid">
+        <div class="legal-meta"><span>Updated</span><strong>2026-04-27</strong></div>
+        <div class="legal-meta"><span>Images</span><strong>452 catalog references</strong></div>
+        <div class="legal-meta"><span>Source</span><strong>Wikimedia Commons and open collections</strong></div>
+      </div>
+      <nav class="legal-nav" aria-label="Related pages">
+        <a class="legal-link-chip" href="./support.html">Request correction</a>
+        <a class="legal-link-chip" href="./privacy.html">Privacy</a>
+        <a class="legal-link-chip" href="./terms.html">Terms</a>
+      </nav>
+    </section>
+
     <section class="card">
       <div class="prose">
-        <p><strong>Last updated:</strong> 2026-04-27</p>
         <p>
           The clothing reference images on WearCast outfit recommendation cards are sourced from
           <a href="https://commons.wikimedia.org/" rel="noopener">Wikimedia Commons</a>
@@ -48,7 +59,10 @@
           <a href="./support.html">Support</a> page. We respond within five business days.
         </p>
 
-        <h2>Summary by license</h2>
+        <div class="credits-tools">
+          <h2>Summary by license</h2>
+          <a class="legal-link-chip" href="#all-images">Jump to full list</a>
+        </div>
         <table class="credits credits-summary">
           <thead><tr><th>License</th><th>Images</th></tr></thead>
           <tbody>
@@ -68,10 +82,11 @@
           </tbody>
         </table>
 
-        <h2>All 452 images</h2>
+        <h2 id="all-images">All 452 images</h2>
       </div>
     </section>
     <section class="card">
+      <div class="credits-table-wrap">
       <table class="credits">
         <thead><tr><th>File</th><th>License</th><th>Contributor</th><th>Source</th></tr></thead>
         <tbody>
@@ -529,7 +544,17 @@
 <tr><td><code>top-yellow-sundress-cotton-fem.jpg</code></td><td>CC BY-SA 4.0</td><td>MOs810</td><td><a href="https://commons.wikimedia.org/wiki/File:Lysy_Mlyn,_Poznan_Biedrusko_(11)_sundress_(cropped).JPG" rel="noopener">view source</a></td></tr>
         </tbody>
       </table>
+      </div>
     </section>
   </main>
+  <footer class="legal-footer">
+    <span class="muted">WearCast • Image Credits</span>
+    <div class="legal-footer-actions">
+      <a class="btn" href="./privacy.html">Privacy</a>
+      <a class="btn" href="./terms.html">Terms</a>
+      <a class="btn" href="./support.html">Support</a>
+      <a class="btn primary" href="./">Open app</a>
+    </div>
+  </footer>
 </body>
 </html>

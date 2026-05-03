@@ -8,10 +8,10 @@
   <link rel="icon" href="icon.svg?v=1" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css?v=1" />
 </head>
-<body>
-  <header>
+<body class="legal-page">
+  <header class="legal-header">
     <div class="brand">
-      <a href="./" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;">
+      <a class="legal-brand-link" href="./">
         <img class="logo" src="icon.svg?v=1" alt="WearCast logo" />
         <div class="title">
           <h1>WearCast</h1>
@@ -19,19 +19,29 @@
         </div>
       </a>
     </div>
-    <div class="header-actions">
-      <a class="btn secondary" href="./" style="text-decoration:none;">Back</a>
+    <div class="legal-actions">
+      <a class="btn primary" href="./">Open app</a>
     </div>
   </header>
 
-  <main>
-    <section class="card">
-      <div class="prose">
-        <p><strong>Effective date:</strong> 2026-04-24</p>
-        <p>
-          These Terms of Use govern your access to and use of WearCast. By using the app, you agree to these terms.
-        </p>
+  <main class="legal-main">
+    <section class="legal-hero">
+      <span class="legal-kicker">Terms</span>
+      <h1>The rules for using WearCast</h1>
+      <p>
+        These Terms of Use cover your access to WearCast, including weather-based recommendations,
+        wardrobe tools, accounts, subscriptions, and support.
+      </p>
+      <div class="legal-meta-grid">
+        <div class="legal-meta"><span>Effective</span><strong>2026-04-24</strong></div>
+        <div class="legal-meta"><span>Use</span><strong>Personal outfit planning</strong></div>
+        <div class="legal-meta"><span>Contact</span><strong><a href="mailto:moeezazizch@gmail.com">moeezazizch@gmail.com</a></strong></div>
       </div>
+      <nav class="legal-nav" aria-label="Related pages">
+        <a class="legal-link-chip" href="./privacy.html">Privacy</a>
+        <a class="legal-link-chip" href="./support.html">Support</a>
+        <a class="legal-link-chip" href="./credits.html">Image credits</a>
+      </nav>
     </section>
 
     <section class="card">
@@ -41,6 +51,18 @@
           <li>You may use WearCast for personal, non-commercial purposes unless we agree otherwise.</li>
           <li>You are responsible for the accuracy of information you submit, including wardrobe items and account details.</li>
           <li>You may not misuse the service, interfere with it, or attempt to access it in unauthorized ways.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title"><h2>Subscriptions</h2></div>
+      <div class="prose">
+        <ul>
+          <li>Premium features may be offered through auto-renewing subscriptions managed by Apple.</li>
+          <li>Prices, trials, renewal terms, and cancellation options are shown in the App Store purchase sheet before you confirm.</li>
+          <li>You can manage or cancel subscriptions through your Apple ID subscription settings.</li>
+          <li>Premium availability may depend on your account, device, region, and App Store product configuration.</li>
         </ul>
       </div>
     </section>
@@ -116,12 +138,12 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="legal-footer">
     <span class="muted">WearCast • Terms of Use</span>
-    <div class="footer-actions">
-      <a class="btn secondary" href="./privacy.html" style="text-decoration:none;">Privacy</a>
-      <a class="btn secondary" href="./support.html" style="text-decoration:none;">Support</a>
-      <a class="btn secondary" href="./" style="text-decoration:none;">Back</a>
+    <div class="legal-footer-actions">
+      <a class="btn" href="./privacy.html">Privacy</a>
+      <a class="btn" href="./support.html">Support</a>
+      <a class="btn primary" href="./">Open app</a>
     </div>
   </footer>
 </body>
